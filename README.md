@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# PetMily
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+펫밀리(pet+family) : 동물 입양 관리 사이트
 
 ## Available Scripts
 
