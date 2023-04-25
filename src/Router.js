@@ -10,13 +10,9 @@ const Router = () => {
       <Routes>
         <Route path={BROWSER_PATH.MAIN} element={<Main />} />
         <Route path={BROWSER_PATH.LOGIN} element={<Login />} />
-      </Routes>
-
-      <Routes>
-        <Route path={BROWSER_PATH.MYPAGE} element={<MyPageInfo/>}>
-          <Route path={BROWSER_PATH.MYPAGEINFO} element={<MyPageInfo/>}/>
-          <Route path={BROWSER_PATH.MODIFYINFO.toLowerCase()} element={<ModifyInfo/>}/>
-        </Route>  
+        <Route path={BROWSER_PATH.MYPAGE} element={<MyPageInfo/>}/> 
+        <Route path={BROWSER_PATH.MYPAGEINFO} element={<MyPageInfo/>}/>
+        <Route path={BROWSER_PATH.MODIFYINFO} element={<ModifyInfo/>}/>
       </Routes>
     </BrowserRouter>
   );
