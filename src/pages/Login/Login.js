@@ -20,28 +20,33 @@ function Login() {
     return pwLength;
   };
   const isValidId = (id) => {
-    const idRegExp = /^[a-zA-z0-9]{8,20}$/;
+    const idRegExp = /^[a-zA-z0-9]{6,15}$/;
     return idRegExp.test(id);
   };
   const passwordInput = document.querySelector("[name=password]");
   const pwChange = (event) => {
     setPassword((value) => event.target.value);
     console.log("pw" + event.target.value);
-    setPasswordError(
-      isValidPassword(event.target.value)
-        ? ""
-        : "비밀번호는 6~20자로 입력해주세요."
-    );
+
+    if (event.target.value) {
+      setPasswordError(
+        isValidPassword(event.target.value)
+          ? ""
+          : "비밀번호는 8~20자로 입력해주세요."
+      );
+    } else {
+      setPasswordError("");
+    }
   };
   const idChange = (event) => {
     setId((value) => event.target.value);
     console.log("id1 " + id);
     console.log("id  " + event.target.value);
-    if (id != null) {
+    if (event.target.value) {
       setIdError(
         isValidId(event.target.value)
           ? ""
-          : "아이디는 6~20자, 영문자와 숫자로 입력해주세요."
+          : "아이디는 6~15자, 영문자와 숫자로 입력해주세요."
       );
     } else {
       setIdError("");
@@ -77,24 +82,10 @@ function Login() {
       setPasswordError("비밀번호를 입력해주세요.");
       pwRef.current.focus();
     } else if (!validPassword) {
-      setPasswordError("비밀번호는 6~20자 사이여야 합니다.");
+      setPasswordError("비밀번호는 8~20자 사이여야 합니다.");
       pwRef.current.focus();
     }
   };
-  // const submitCheck = (event) => {
-  //   let validId = /^[a-zA-z0-9]{8,20}$/.test(id);
-  //   let validPassword = password.length >= 6 && password.length <= 60;
-  //   if (!id) {
-  //     alert("이메일을 입력해주세요.");
-  //   } else if (!validId) {
-  //     alert("정확한 이메일 주소를 입력해주세요.");
-  //   }
-  //   if (!password) {
-  //     alert("비밀번호를 입력해주세요.");
-  //   } else if (!validPassword) {
-  //     alert("비밀번호는 6~20자 사이여야 합니다.");
-  //   }
-  // };
   return (
     <div
       style={{
