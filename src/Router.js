@@ -6,22 +6,29 @@ import {
   Login,
   MyPageInfo,
   ModifyInfo,
+  Donate,
   FindPW,
   ChangePW,
 } from "./pages/ImportPages";
+import NotFound from "./pages/NotFound/NotFound";
+import Loading from "./components/Loading/LoadingPage";
 
 const Router = () => {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path={BROWSER_PATH.MAIN} element={<Main />} />
-        <Route path={BROWSER_PATH.LOGIN} element={<Login />} />
-        <Route path={BROWSER_PATH.FINDPW} element={<FindPW />} />
-        <Route path={BROWSER_PATH.CHANGEPW} element={<ChangePW />} />
-        <Route path={BROWSER_PATH.MYPAGE} element={<MyPageInfo />} />
-        <Route path={BROWSER_PATH.MYPAGEINFO} element={<MyPageInfo />} />
-        <Route path={BROWSER_PATH.MODIFYINFO} element={<ModifyInfo />} />
-      </Routes>
+      <React.Suspense fallback={<Loading />}>
+        <Routes>
+          <Route path={BROWSER_PATH.MAIN} element={<Main />} />
+          <Route path={BROWSER_PATH.LOGIN} element={<Login />} />
+          <Route path={BROWSER_PATH.MYPAGE} element={<MyPageInfo />} />
+          <Route path={BROWSER_PATH.MYPAGEINFO} element={<MyPageInfo />} />
+          <Route path={BROWSER_PATH.MODIFYINFO} element={<ModifyInfo />} />
+          <Route path={BROWSER_PATH.SUPPORT} element={<Donate />} />
+          <Route path={BROWSER_PATH.FINDPW} element={<FindPW />} />
+          <Route path={BROWSER_PATH.CHANGEPW} element={<ChangePW />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </React.Suspense>
     </BrowserRouter>
   );
 };
