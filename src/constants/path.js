@@ -8,6 +8,7 @@ const BROWSER_PATH = {
     MYPAGEORDER : "/mypage/orderlist", 
     FREE : "/board/free",
     FLEA : "/board/flea", // 더 추가해야함.
+    SUPPORT: "/donate",
 };
 
 export {BROWSER_PATH};
