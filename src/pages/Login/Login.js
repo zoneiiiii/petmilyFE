@@ -191,16 +191,15 @@ function Login() {
         />
         <FormHelperText sx={{ color: "red" }}>{passwordError}</FormHelperText>
       </div>
-      <Typography
+      <Button
         style={{
           color: "gray",
           fontSize: "xx-small",
-          marginTop: "10px",
         }}
-        // onClick={navigateFindPW}
+        href="/findpw"
       >
         비밀번호를 잊으셨나요?
-      </Typography>
+      </Button>
       <Button
         type="submit"
         fullWidth
@@ -209,7 +208,6 @@ function Login() {
           background: "#FBD385",
           width: "300px",
           height: "25px",
-          mt: "10px",
         }}
         onClick={submitCheck}
         // disableElevation

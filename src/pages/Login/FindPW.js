@@ -193,6 +193,7 @@ function FindPW() {
           mt: "10px",
         }}
         disabled={checkDisable()}
+        href="/changepw"
       >
         비밀번호 찾기
       </Button>
