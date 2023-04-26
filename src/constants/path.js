@@ -8,6 +8,9 @@ const BROWSER_PATH = {
     MYPAGEORDER : "/mypage/orderlist", 
     FREE : "/board/free",
     FLEA : "/board/flea", // 더 추가해야함.
+    SUPPORT: "/donate",
+    FINDPW: "/findpw", //비밀번호찾기
+    CHANGEPW: "/changepw", //비밀번호 변경
 };
 
-export {BROWSER_PATH};
+export { BROWSER_PATH };

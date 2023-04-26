@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { BROWSER_PATH } from "./constants/path";
 import {
@@ -7,12 +7,17 @@ import {
   MyPageInfo,
   ModifyInfo,
   MyPage,
+  Donate,
+  FindPW,
+  ChangePW,
 } from "./pages/ImportPages";
+import NotFound from "./pages/NotFound/NotFound";
+import Loading from "./components/Loading/LoadingPage";
 
 const Router = () => {
   return (
     <BrowserRouter>
-      <Suspense fallback={<div>Loading...</div>}>
+      <React.Suspense fallback={<Loading />}>
         <Routes>
           <Route path={BROWSER_PATH.MAIN} element={<Main />} />
           <Route path={BROWSER_PATH.LOGIN} element={<Login />} />
@@ -20,8 +25,12 @@ const Router = () => {
             <Route index element={<MyPageInfo />} />
             <Route path={BROWSER_PATH.MODIFYINFO} element={<ModifyInfo />} />
           </Route>
+          <Route path={BROWSER_PATH.SUPPORT} element={<Donate />} />
+          <Route path={BROWSER_PATH.FINDPW} element={<FindPW />} />
+          <Route path={BROWSER_PATH.CHANGEPW} element={<ChangePW />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
-      </Suspense>
+      </React.Suspense>
     </BrowserRouter>
   );
 };
