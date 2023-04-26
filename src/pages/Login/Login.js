@@ -1,9 +1,21 @@
 import React, { useState, useRef } from "react";
 import Button from "@mui/material/Button";
+import { ButtonProps } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
-
+import { useNavigate } from "react-router-dom";
+import { styled } from "@mui/material/styles";
+// const ColorButton =
+//   styled(Button) <
+//   ButtonProps >
+//   (({ theme }) => ({
+//     color: theme.palette.getContrastText("#FBD385"),
+//     backgroundColor: "#FBD385",
+//     "&:hover": {
+//       backgroundColor: "#FBD390",
+//     },
+//   }));
 function Login() {
   const [id, setId] = useState("");
   const [idError, setIdError] = useState("");
@@ -11,6 +23,8 @@ function Login() {
   const [passwordError, setPasswordError] = useState("");
   const idRef = useRef();
   const pwRef = useRef();
+  const [idAble, setIdAble] = useState(false);
+  const [pwAble, setPwAble] = useState(false);
 
   const emailLabel = "ID";
   const pwLabel = "PW";
@@ -21,19 +35,20 @@ function Login() {
   };
   const isValidId = (id) => {
     const idRegExp = /^[a-zA-z0-9]{6,15}$/;
+    console.log(idRegExp.test(id));
     return idRegExp.test(id);
   };
   const passwordInput = document.querySelector("[name=password]");
   const pwChange = (event) => {
     setPassword((value) => event.target.value);
     console.log("pw" + event.target.value);
-
     if (event.target.value) {
       setPasswordError(
         isValidPassword(event.target.value)
           ? ""
           : "비밀번호는 8~20자로 입력해주세요."
       );
+      setPwAble(isValidPassword(event.target.value) ? true : false);
     } else {
       setPasswordError("");
     }
@@ -48,6 +63,7 @@ function Login() {
           ? ""
           : "아이디는 6~15자, 영문자와 숫자로 입력해주세요."
       );
+      setIdAble(isValidId(event.target.value) ? true : false);
     } else {
       setIdError("");
     }
@@ -68,14 +84,15 @@ function Login() {
       passwordFocus();
     }
   };
+
   const submitCheck = (event) => {
-    let validId = /^[a-zA-z0-9]{8,20}$/.test(id);
-    let validPassword = password.length >= 6 && password.length <= 60;
+    let validId = /^[a-zA-z0-9]{6,15}$/.test(id);
+    let validPassword = password.length >= 8 && password.length <= 20;
     if (!id) {
-      setIdError("이메일을 입력해주세요.");
+      setIdError("아이디을 입력해주세요.");
       idRef.current.focus();
     } else if (!validId) {
-      setIdError("정확한 이메일 주소를 입력해주세요.");
+      setIdError("정확한 아이디를 입력해주세요.");
       idRef.current.focus();
     }
     if (!password) {
@@ -85,7 +102,28 @@ function Login() {
       setPasswordError("비밀번호는 8~20자 사이여야 합니다.");
       pwRef.current.focus();
     }
+
+    if (validId && validPassword) {
+    }
   };
+  const navigate = useNavigate();
+  const navigateFindPW = () => {
+    navigate("/findpw");
+  };
+  const checkDisable = () => {
+    console.log("testId =" + idAble);
+    console.log("pwAble = " + pwAble);
+    if (idAble === false || pwAble === false) {
+      return true;
+    } else if (!password) {
+      return true;
+    } else if (!id) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   return (
     <div
       style={{
@@ -108,8 +146,8 @@ function Login() {
         <TextField
           autoComplete="off"
           label={emailLabel}
-          type="email"
-          name="email"
+          type="text"
+          name="id"
           variant="standard"
           inputProps={{ style: { color: "#FBD385" } }}
           InputLabelProps={{ style: { color: "#FBD385" } }}
@@ -158,6 +196,7 @@ function Login() {
           fontSize: "xx-small",
           marginTop: "10px",
         }}
+        // onClick={navigateFindPW}
       >
         비밀번호를 잊으셨나요?
       </Typography>
@@ -165,13 +204,15 @@ function Login() {
         type="submit"
         fullWidth
         variant="contained"
-        sx={{
-          background: "#FBD385",
-          width: "300px",
-          height: "25px",
-          mt: "10px",
-        }}
+        // sx={{
+        //   background: "#FBD385",
+        //   width: "300px",
+        //   height: "25px",
+        //   mt: "10px",
+        // }}
         onClick={submitCheck}
+        // disableElevation
+        disabled={checkDisable()}
       >
         로그인
       </Button>
