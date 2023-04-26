@@ -6,16 +6,7 @@ import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
-// const ColorButton =
-//   styled(Button) <
-//   ButtonProps >
-//   (({ theme }) => ({
-//     color: theme.palette.getContrastText("#FBD385"),
-//     backgroundColor: "#FBD385",
-//     "&:hover": {
-//       backgroundColor: "#FBD390",
-//     },
-//   }));
+
 function Login() {
   const [id, setId] = useState("");
   const [idError, setIdError] = useState("");
@@ -26,7 +17,7 @@ function Login() {
   const [idAble, setIdAble] = useState(false);
   const [pwAble, setPwAble] = useState(false);
 
-  const emailLabel = "ID";
+  const idLabel = "ID";
   const pwLabel = "PW";
 
   const isValidPassword = (password) => {
@@ -38,7 +29,7 @@ function Login() {
     console.log(idRegExp.test(id));
     return idRegExp.test(id);
   };
-  const passwordInput = document.querySelector("[name=password]");
+
   const pwChange = (event) => {
     setPassword((value) => event.target.value);
     console.log("pw" + event.target.value);
@@ -68,14 +59,22 @@ function Login() {
       setIdError("");
     }
   };
-
+  const passwordInput = document.querySelector("[name=password]");
   const passwordFocus = () => {
     passwordInput.focus();
   };
 
   const checkenterSubmit = (e) => {
     if (e.key === "Enter") {
-      submitCheck();
+      if (idAble === false || pwAble === false) {
+        return true;
+      } else if (!password) {
+        return true;
+      } else if (!id) {
+        return true;
+      } else {
+        submitCheck();
+      }
     }
   };
 
@@ -88,6 +87,8 @@ function Login() {
   const submitCheck = (event) => {
     let validId = /^[a-zA-z0-9]{6,15}$/.test(id);
     let validPassword = password.length >= 8 && password.length <= 20;
+    console.log("enter");
+    alert("엔터확인");
     if (!id) {
       setIdError("아이디을 입력해주세요.");
       idRef.current.focus();
@@ -107,9 +108,9 @@ function Login() {
     }
   };
   const navigate = useNavigate();
-  const navigateFindPW = () => {
-    navigate("/findpw");
-  };
+  // const navigateFindPW = () => {
+  //   return <FindPW></FindPW>;
+  // };
   const checkDisable = () => {
     console.log("testId =" + idAble);
     console.log("pwAble = " + pwAble);
@@ -145,7 +146,7 @@ function Login() {
       <div style={{ marginTop: "10px" }}>
         <TextField
           autoComplete="off"
-          label={emailLabel}
+          label={idLabel}
           type="text"
           name="id"
           variant="standard"
@@ -204,12 +205,12 @@ function Login() {
         type="submit"
         fullWidth
         variant="contained"
-        // sx={{
-        //   background: "#FBD385",
-        //   width: "300px",
-        //   height: "25px",
-        //   mt: "10px",
-        // }}
+        sx={{
+          background: "#FBD385",
+          width: "300px",
+          height: "25px",
+          mt: "10px",
+        }}
         onClick={submitCheck}
         // disableElevation
         disabled={checkDisable()}
