@@ -24,6 +24,18 @@ const CustomTextField = styled(TextField)({
     },
   },
 });
+const StyledButton = styled(Button)`
+  background-color: #fbd385;
+  color: white;
+  width: 300px;
+  height: 25px;
+  &:hover {
+    background-color: #facc73;
+  }
+  &:focus {
+    background-color: #facc73;
+  }
+`;
 function FindPW() {
   const idLabel = "Id";
   const emailLabel = "email";
@@ -182,21 +194,18 @@ function FindPW() {
         />
         <FormHelperText sx={{ color: "red" }}>{emailError}</FormHelperText>
       </div>
-      <Button
+      <StyledButton
         type="submit"
         fullWidth
         variant="contained"
         sx={{
-          background: "#FBD385",
-          width: "300px",
-          height: "25px",
           mt: "10px",
         }}
         disabled={checkDisable()}
         href="/changepw"
       >
         비밀번호 찾기
-      </Button>
+      </StyledButton>
     </div>
   );
 }

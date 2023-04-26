@@ -24,6 +24,18 @@ const CustomTextField = styled(TextField)({
     },
   },
 });
+const StyledButton = styled(Button)`
+  background-color: #fbd385;
+  color: white;
+  width: 300px;
+  height: 25px;
+  &:hover {
+    background-color: #facc73;
+  }
+  &:focus {
+    background-color: #facc73;
+  }
+`;
 function ChangePW() {
   const pwLabel = "PW";
   const pwchangeLabel = "PW변경";
@@ -71,6 +83,8 @@ function ChangePW() {
       } else {
         setPwCheckError("비밀번호 확인이 같지 않습니다.");
       }
+    } else {
+      setPwCheckError("");
     }
   };
   const passwordInput = document.querySelector("[name=passwordcheck]");
@@ -154,21 +168,18 @@ function ChangePW() {
         />
         <FormHelperText sx={{ color: "red" }}>{pwCheckError}</FormHelperText>
       </div>
-      <Button
+      <StyledButton
         type="submit"
         fullWidth
         variant="contained"
         sx={{
-          background: "#FBD385",
-          width: "300px",
-          height: "25px",
           mt: "10px",
         }}
         onClick={submitCheck}
         disabled={checkDisable()}
       >
         비밀번호 변경
-      </Button>
+      </StyledButton>
     </div>
   );
 }

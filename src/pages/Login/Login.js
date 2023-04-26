@@ -4,9 +4,23 @@ import { ButtonProps } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
-import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 
+const StyledButton = styled(Button)`
+  background-color: #fbd385;
+  color: white;
+  width: 300px;
+  height: 25px;
+  &:hover {
+    background-color: #facc73;
+  }
+  &:focus {
+    background-color: #facc73;
+  }
+  &:onclick {
+    backgound-color: #000000;
+  }
+`;
 function Login() {
   const [id, setId] = useState("");
   const [idError, setIdError] = useState("");
@@ -107,10 +121,7 @@ function Login() {
     if (validId && validPassword) {
     }
   };
-  const navigate = useNavigate();
-  // const navigateFindPW = () => {
-  //   return <FindPW></FindPW>;
-  // };
+
   const checkDisable = () => {
     console.log("testId =" + idAble);
     console.log("pwAble = " + pwAble);
@@ -200,21 +211,16 @@ function Login() {
       >
         비밀번호를 잊으셨나요?
       </Button>
-      <Button
+      <StyledButton
         type="submit"
         fullWidth
         variant="contained"
-        sx={{
-          background: "#FBD385",
-          width: "300px",
-          height: "25px",
-        }}
         onClick={submitCheck}
         // disableElevation
         disabled={checkDisable()}
       >
         로그인
-      </Button>
+      </StyledButton>
       <div
         style={{
           display: "inline-flex",
