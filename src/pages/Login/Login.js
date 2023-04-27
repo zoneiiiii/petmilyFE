@@ -8,12 +8,10 @@ function Login() {
 =======
 import React, { useState, useRef } from "react";
 import Button from "@mui/material/Button";
-import { ButtonProps } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
-import { useNavigate } from "react-router-dom";
-import { styled } from "@mui/material/styles";
+import CustomButton from "./CustomButton";
 
 function Login() {
   const [id, setId] = useState("");
@@ -115,10 +113,7 @@ function Login() {
     if (validId && validPassword) {
     }
   };
-  const navigate = useNavigate();
-  // const navigateFindPW = () => {
-  //   return <FindPW></FindPW>;
-  // };
+
   const checkDisable = () => {
     console.log("testId =" + idAble);
     console.log("pwAble = " + pwAble);
@@ -199,32 +194,34 @@ function Login() {
         />
         <FormHelperText sx={{ color: "red" }}>{passwordError}</FormHelperText>
       </div>
-      <Typography
+      <Button
         style={{
           color: "gray",
           fontSize: "xx-small",
-          marginTop: "10px",
+          marginBottom: "-10px",
         }}
-        // onClick={navigateFindPW}
+        href="/findpw"
       >
         비밀번호를 잊으셨나요?
-      </Typography>
-      <Button
+      </Button>
+      <CustomButton
         type="submit"
+        label="로그인"
+        value="로그인"
+        onClick={submitCheck}
+        disabled={checkDisable()}
+      />
+      {/* 
         fullWidth
+        label="로그인"
+        value="로그인"
         variant="contained"
-        sx={{
-          background: "#FBD385",
-          width: "300px",
-          height: "25px",
-          mt: "10px",
-        }}
         onClick={submitCheck}
         // disableElevation
-        disabled={checkDisable()}
+        
       >
         로그인
-      </Button>
+      </CustomButton> */}
       <div
         style={{
           display: "inline-flex",
