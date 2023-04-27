@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
 import { styled } from "@mui/material/styles";
-import CustomButton from "./CustomButton";
+
 const CustomTextField = styled(TextField)({
   "& label.Mui-focused": {
     color: "#FBD385",
@@ -24,7 +24,6 @@ const CustomTextField = styled(TextField)({
     },
   },
 });
-
 function ChangePW() {
   const pwLabel = "PW";
   const pwchangeLabel = "PW변경";
@@ -72,8 +71,6 @@ function ChangePW() {
       } else {
         setPwCheckError("비밀번호 확인이 같지 않습니다.");
       }
-    } else {
-      setPwCheckError("");
     }
   };
   const passwordInput = document.querySelector("[name=passwordcheck]");
@@ -157,13 +154,15 @@ function ChangePW() {
         />
         <FormHelperText sx={{ color: "red" }}>{pwCheckError}</FormHelperText>
       </div>
-      <CustomButton
+      <Button
         type="submit"
         value="비밀번호 변경"
         label="로그인폼"
         onClick={submitCheck}
         disabled={checkDisable()}
-      />
+      >
+        비밀번호 변경
+      </Button>
     </div>
   );
 }
