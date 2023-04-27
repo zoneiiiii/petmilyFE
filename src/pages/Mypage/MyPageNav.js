@@ -70,6 +70,7 @@ const NavList = ({ title, navList, isSelected }) => {
 const MyPageNavStyle = styled.div`
   width: 160px;
   text-align: center;
+  margin: 40px;
 
   .NavTitle {
     margin-top: 20px;
