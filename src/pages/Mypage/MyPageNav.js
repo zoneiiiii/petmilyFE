@@ -34,8 +34,8 @@ const MyPageNav = () => {
             link: BROWSER_PATH.MYPAGEBOARD + "/find",
           }, // 링크없어서 마이페이지로 연결, 페이지 없음
           { linkName: "자유게시판", link: BROWSER_PATH.MYPAGEBOARD + "/free" }, // 링크없어서 마이페이지로 연결, 페이지 없음
-          { linkName: "봉사 후기", link: BROWSER_PATH.MYPAGEBOARD + "review" }, // 링크없어서 마이페이지로 연결, 페이지 없음
-          { linkName: "매매 장터", link: BROWSER_PATH.MYPAGEBOARD + "flea" }, // 링크없어서 마이페이지로 연결, 페이지 없음
+          { linkName: "봉사 후기", link: BROWSER_PATH.MYPAGEBOARD + "/review" }, // 링크없어서 마이페이지로 연결, 페이지 없음
+          { linkName: "매매 장터", link: BROWSER_PATH.MYPAGEBOARD + "/flea" }, // 링크없어서 마이페이지로 연결, 페이지 없음
         ]}
       />
       <NavList
@@ -80,11 +80,20 @@ const NavList = ({ title, navList }) => {
       <div className="NavTitle">{title}</div>
       <ul ref={ulRef}>
         {navList.map((link, index) => {
-          return (
-            <li key={index}>
-              <Link to={link.link}>{link.linkName}</Link>
-            </li>
-          );
+          if (link.link === location.pathname)
+            return (
+              <li key={index}>
+                <Link to={link.link} style={{ fontWeight: "bold" }}>
+                  {link.linkName}
+                </Link>
+              </li>
+            );
+          else
+            return (
+              <li key={index}>
+                <Link to={link.link}>{link.linkName}</Link>
+              </li>
+            );
         })}
       </ul>
     </NavListStyle>
