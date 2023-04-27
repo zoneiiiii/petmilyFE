@@ -4,14 +4,9 @@ import { ButtonProps } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
-<<<<<<< HEAD
-import { useNavigate } from "react-router-dom";
-import { styled } from "@mui/material/styles";
-=======
 import CustomButton from "./CustomButton";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
->>>>>>> ff6a5243efac71fef9d37cb7c1ce459ff9185339
 
 function Login() {
   const navigate = useNavigate();
@@ -101,12 +96,6 @@ function Login() {
       handleLogin();
     }
   };
-<<<<<<< HEAD
-  const navigate = useNavigate();
-  // const navigateFindPW = () => {
-  //   return <FindPW></FindPW>;
-  // };
-=======
   const handleLogin = () => {
     axios
       .post("http://localhost:8080/selectMember", {
@@ -139,7 +128,6 @@ function Login() {
       });
   };
 
->>>>>>> ff6a5243efac71fef9d37cb7c1ce459ff9185339
   const checkDisable = () => {
     console.log("testId =" + idAble);
     console.log("pwAble = " + pwAble);
@@ -232,22 +220,6 @@ function Login() {
       </Typography>
       <Button
         type="submit"
-<<<<<<< HEAD
-        fullWidth
-        variant="contained"
-        sx={{
-          background: "#FBD385",
-          width: "300px",
-          height: "25px",
-          mt: "10px",
-        }}
-        onClick={submitCheck}
-        // disableElevation
-        disabled={checkDisable()}
-      >
-        로그인
-      </Button>
-=======
         label="로그인"
         value="로그인폼"
         onClick={submitCheck}
@@ -256,7 +228,6 @@ function Login() {
       <FormHelperText sx={{ color: "red", mt: "10px" }}>
         {loginError}
       </FormHelperText>
->>>>>>> ff6a5243efac71fef9d37cb7c1ce459ff9185339
       <div
         style={{
           display: "inline-flex",
