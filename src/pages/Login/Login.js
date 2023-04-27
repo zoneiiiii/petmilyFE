@@ -1,17 +1,11 @@
-<<<<<<< HEAD
-import React from "react";
-
-function Login() {
-  return (
-    <div>
-      <h1>로그인 페이지 작성!</h1>
-=======
 import React, { useState, useRef } from "react";
 import Button from "@mui/material/Button";
+import { ButtonProps } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
-import CustomButton from "./CustomButton";
+import { useNavigate } from "react-router-dom";
+import { styled } from "@mui/material/styles";
 
 function Login() {
   const [id, setId] = useState("");
@@ -113,7 +107,10 @@ function Login() {
     if (validId && validPassword) {
     }
   };
-
+  const navigate = useNavigate();
+  // const navigateFindPW = () => {
+  //   return <FindPW></FindPW>;
+  // };
   const checkDisable = () => {
     console.log("testId =" + idAble);
     console.log("pwAble = " + pwAble);
@@ -194,34 +191,32 @@ function Login() {
         />
         <FormHelperText sx={{ color: "red" }}>{passwordError}</FormHelperText>
       </div>
-      <Button
+      <Typography
         style={{
           color: "gray",
           fontSize: "xx-small",
-          marginBottom: "-10px",
+          marginTop: "10px",
         }}
-        href="/findpw"
+        // onClick={navigateFindPW}
       >
         비밀번호를 잊으셨나요?
-      </Button>
-      <CustomButton
+      </Typography>
+      <Button
         type="submit"
-        label="로그인"
-        value="로그인"
-        onClick={submitCheck}
-        disabled={checkDisable()}
-      />
-      {/* 
         fullWidth
-        label="로그인"
-        value="로그인"
         variant="contained"
+        sx={{
+          background: "#FBD385",
+          width: "300px",
+          height: "25px",
+          mt: "10px",
+        }}
         onClick={submitCheck}
         // disableElevation
-        
+        disabled={checkDisable()}
       >
         로그인
-      </CustomButton> */}
+      </Button>
       <div
         style={{
           display: "inline-flex",
@@ -239,7 +234,6 @@ function Login() {
           회원가입
         </Typography>
       </div>
->>>>>>> 9383e926868c015f13c8db0443ea3978bc6ce4a0
     </div>
   );
 }
