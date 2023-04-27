@@ -65,7 +65,7 @@ const Headers = () => {
                             color: '#FFFFFF',
                             background: "#FBD385",
                             borderColor: '#FBD385',
-                            ":hover": { borderColor: "black", background: "gray" },
+                            ":hover": { borderColor: "#FFBE3F", background: "#FFBE3F" },
                         }}>로그인</Button>
                     <Button variant="outlined" size="large"
                         sx={{
