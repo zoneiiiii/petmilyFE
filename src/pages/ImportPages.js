@@ -8,8 +8,18 @@ const ModifyInfo = lazy(() => import("./Mypage/ModifyInfo"));
 const Donate = lazy(() => import("./Support/Donate"));
 const FindPW = lazy(() => import("./Login/FindPW"));
 const ChangePW = lazy(() => import("./Login/ChangePW"));
-const DonateApply = lazy(() => import("./Support/DonateApply"))
+const DonateApply = lazy(() => import("./Support/DonateApply"));
 
 //아래에 import할 페이지 함수 생성
 
-export {Main, Login, MyPage,MyPageInfo,ModifyInfo, Donate, FindPW, ChangePW, DonateApply};
+export {
+  Main,
+  Login,
+  MyPage,
+  MyPageInfo,
+  ModifyInfo,
+  Donate,
+  FindPW,
+  ChangePW,
+  DonateApply,
+};
