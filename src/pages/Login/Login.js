@@ -1,26 +1,10 @@
 import React, { useState, useRef } from "react";
 import Button from "@mui/material/Button";
-import { ButtonProps } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
-import { styled } from "@mui/material/styles";
+import CustomButton from "./CustomButton";
 
-const StyledButton = styled(Button)`
-  background-color: #fbd385;
-  color: white;
-  width: 300px;
-  height: 25px;
-  &:hover {
-    background-color: #facc73;
-  }
-  &:focus {
-    background-color: #facc73;
-  }
-  &:onclick {
-    backgound-color: #000000;
-  }
-`;
 function Login() {
   const [id, setId] = useState("");
   const [idError, setIdError] = useState("");
@@ -206,21 +190,30 @@ function Login() {
         style={{
           color: "gray",
           fontSize: "xx-small",
+          marginBottom: "-10px",
         }}
         href="/findpw"
       >
         비밀번호를 잊으셨나요?
       </Button>
-      <StyledButton
+      <CustomButton
         type="submit"
+        label="로그인"
+        value="로그인"
+        onClick={submitCheck}
+        disabled={checkDisable()}
+      />
+      {/* 
         fullWidth
+        label="로그인"
+        value="로그인"
         variant="contained"
         onClick={submitCheck}
         // disableElevation
-        disabled={checkDisable()}
+        
       >
         로그인
-      </StyledButton>
+      </CustomButton> */}
       <div
         style={{
           display: "inline-flex",

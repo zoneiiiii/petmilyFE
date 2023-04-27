@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
 import { styled } from "@mui/material/styles";
-
+import CustomButton from "./CustomButton";
 const CustomTextField = styled(TextField)({
   "& label.Mui-focused": {
     color: "#FBD385",
@@ -24,18 +24,7 @@ const CustomTextField = styled(TextField)({
     },
   },
 });
-const StyledButton = styled(Button)`
-  background-color: #fbd385;
-  color: white;
-  width: 300px;
-  height: 25px;
-  &:hover {
-    background-color: #facc73;
-  }
-  &:focus {
-    background-color: #facc73;
-  }
-`;
+
 function ChangePW() {
   const pwLabel = "PW";
   const pwchangeLabel = "PW변경";
@@ -168,18 +157,13 @@ function ChangePW() {
         />
         <FormHelperText sx={{ color: "red" }}>{pwCheckError}</FormHelperText>
       </div>
-      <StyledButton
+      <CustomButton
         type="submit"
-        fullWidth
-        variant="contained"
-        sx={{
-          mt: "10px",
-        }}
+        value="비밀번호 변경"
+        label="비밀번호 변경"
         onClick={submitCheck}
         disabled={checkDisable()}
-      >
-        비밀번호 변경
-      </StyledButton>
+      />
     </div>
   );
 }
