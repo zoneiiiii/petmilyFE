@@ -4,14 +4,23 @@ import { ButtonProps } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
+<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
+=======
+import CustomButton from "./CustomButton";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+>>>>>>> ff6a5243efac71fef9d37cb7c1ce459ff9185339
 
 function Login() {
+  const navigate = useNavigate();
   const [id, setId] = useState("");
   const [idError, setIdError] = useState("");
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [loginError, setLoginError] = useState("");
+
   const idRef = useRef();
   const pwRef = useRef();
   const [idAble, setIdAble] = useState(false);
@@ -87,30 +96,50 @@ function Login() {
   const submitCheck = (event) => {
     let validId = /^[a-zA-z0-9]{6,15}$/.test(id);
     let validPassword = password.length >= 8 && password.length <= 20;
-    console.log("enter");
-    alert("엔터확인");
-    if (!id) {
-      setIdError("아이디을 입력해주세요.");
-      idRef.current.focus();
-    } else if (!validId) {
-      setIdError("정확한 아이디를 입력해주세요.");
-      idRef.current.focus();
-    }
-    if (!password) {
-      setPasswordError("비밀번호를 입력해주세요.");
-      pwRef.current.focus();
-    } else if (!validPassword) {
-      setPasswordError("비밀번호는 8~20자 사이여야 합니다.");
-      pwRef.current.focus();
-    }
 
     if (validId && validPassword) {
+      handleLogin();
     }
   };
+<<<<<<< HEAD
   const navigate = useNavigate();
   // const navigateFindPW = () => {
   //   return <FindPW></FindPW>;
   // };
+=======
+  const handleLogin = () => {
+    axios
+      .post("http://localhost:8080/selectMember", {
+        memberId: id,
+      })
+      .then((res) => {
+        if (res.data !== "") {
+          axios
+            .post("http://localhost:8080/login", {
+              memberId: id,
+              memberPw: password,
+            })
+            .then((res) => {
+              console.log("handleLogin =>", res);
+              if (res.data === 1) {
+                navigate("/");
+              } else {
+                setLoginError("비밀번호가 다릅니다.");
+              }
+            })
+            .catch((e) => {
+              console.error(e);
+            });
+        } else {
+          setLoginError("아이디가 존재하지 않습니다.");
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
+>>>>>>> ff6a5243efac71fef9d37cb7c1ce459ff9185339
   const checkDisable = () => {
     console.log("testId =" + idAble);
     console.log("pwAble = " + pwAble);
@@ -203,6 +232,7 @@ function Login() {
       </Typography>
       <Button
         type="submit"
+<<<<<<< HEAD
         fullWidth
         variant="contained"
         sx={{
@@ -217,6 +247,16 @@ function Login() {
       >
         로그인
       </Button>
+=======
+        label="로그인"
+        value="로그인폼"
+        onClick={submitCheck}
+        disabled={checkDisable()}
+      />
+      <FormHelperText sx={{ color: "red", mt: "10px" }}>
+        {loginError}
+      </FormHelperText>
+>>>>>>> ff6a5243efac71fef9d37cb7c1ce459ff9185339
       <div
         style={{
           display: "inline-flex",

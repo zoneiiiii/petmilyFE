@@ -156,6 +156,7 @@ function ChangePW() {
       </div>
       <Button
         type="submit"
+<<<<<<< HEAD
         fullWidth
         variant="contained"
         sx={{
@@ -164,6 +165,10 @@ function ChangePW() {
           height: "25px",
           mt: "10px",
         }}
+=======
+        value="비밀번호 변경"
+        label="로그인폼"
+>>>>>>> ff6a5243efac71fef9d37cb7c1ce459ff9185339
         onClick={submitCheck}
         disabled={checkDisable()}
       >
