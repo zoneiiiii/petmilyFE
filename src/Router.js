@@ -6,10 +6,14 @@ import {
   Login,
   MyPageInfo,
   ModifyInfo,
+  MyPage,
   Donate,
   DonateApply,
   FindPW,
   ChangePW,
+  VolunteerNotice,
+  VolunteerNoticeDetail,
+  VolunteerNoticeWrite,
 } from "./pages/ImportPages";
 import NotFound from "./pages/NotFound/NotFound";
 import Loading from "./components/Loading/LoadingPage";
@@ -21,11 +25,15 @@ const Router = () => {
         <Routes>
           <Route path={BROWSER_PATH.MAIN} element={<Main />} />
           <Route path={BROWSER_PATH.LOGIN} element={<Login />} />
-          <Route path={BROWSER_PATH.MYPAGE} element={<MyPageInfo />} />
-          <Route path={BROWSER_PATH.MYPAGEINFO} element={<MyPageInfo />} />
-          <Route path={BROWSER_PATH.MODIFYINFO} element={<ModifyInfo />} />
+          <Route exact path={BROWSER_PATH.MYPAGE} element={<MyPage />}>
+            <Route index element={<MyPageInfo />} />
+            <Route path={BROWSER_PATH.MODIFYINFO} element={<ModifyInfo />} />
+          </Route>
           <Route path={BROWSER_PATH.SUPPORT} element={<Donate />} />
           <Route path={BROWSER_PATH.DONATEAPPLY} element={<DonateApply />} />
+          <Route path={BROWSER_PATH.VOLUNTEER} element={<VolunteerNotice />} />
+          <Route path={BROWSER_PATH.VOLUNTEERDETAIL} element={<VolunteerNoticeDetail />} />
+          <Route path={BROWSER_PATH.VOLUNTEERWRITE} element={<VolunteerNoticeWrite />} />
           <Route path={BROWSER_PATH.FINDPW} element={<FindPW />} />
           <Route path={BROWSER_PATH.CHANGEPW} element={<ChangePW />} />
           <Route path="*" element={<NotFound />} />
