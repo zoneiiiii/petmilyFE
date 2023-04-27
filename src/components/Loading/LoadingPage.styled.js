@@ -1,6 +1,15 @@
 // LoadingPage.styled.js
 import styled, { keyframes } from 'styled-components';
 
+const spin = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
 export const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -9,25 +18,21 @@ export const LoadingContainer = styled.div`
 `;
 
 export const LoadingText = styled.div`
-  font-size: 1.5rem;
+  font-size: 2rem;
   position: relative;
+  font-weight : bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 `;
 
-const dotFadeInOut = keyframes`
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
+export const SpinAnimation = styled.div`
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #000;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: ${spin} 1s linear infinite;
+  margin-right: 1rem;
 `;
-
-export const DotAnimation = styled.span`
-  animation: ${dotFadeInOut} 1s infinite;
-  opacity: 0;
-  ${({ delay }) => delay && `animation-delay: ${delay};`}
-`;
-
