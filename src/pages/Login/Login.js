@@ -13,6 +13,8 @@ function Login() {
   const [idError, setIdError] = useState("");
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [loginIdError, setLoginIdError] = useState("");
+  const [loginPwError, setLoginPwError] = useState("");
   const idRef = useRef();
   const pwRef = useRef();
   const [idAble, setIdAble] = useState(false);
@@ -88,7 +90,6 @@ function Login() {
   const submitCheck = (event) => {
     let validId = /^[a-zA-z0-9]{6,15}$/.test(id);
     let validPassword = password.length >= 8 && password.length <= 20;
-    console.log("enter");
 
     if (validId && validPassword) {
       handleLogin();
@@ -96,16 +97,15 @@ function Login() {
   };
   const handleLogin = () => {
     axios
-      .post("/login1", {
-        memberId: idRef.current.value,
-        memberPw: pwRef.current.value,
+      .post("http://localhost:8080/login", {
+        memberId: id,
+        memberPw: password,
       })
       .then((res) => {
         console.log("handleLogin =>", res);
         if (res.data === 1) {
           // window.sessionStorage.setItem("id", idRef.current.value); // 웹브라우저에 session상태로 정보 저장할 수 있다
           navigate("/");
-          console.log("로그인 성공");
         } else {
           console.log("err");
           alert("로그인 실패");
