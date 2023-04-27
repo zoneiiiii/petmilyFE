@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { BROWSER_PATH } from "../../constants/path";
 
@@ -18,32 +18,55 @@ const MyPageNav = () => {
       <NavList
         title={"입양 관리"}
         navList={[
-          { linkName: "입양 후기", links: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
-          { linkName: "입양 내역", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
+          { linkName: "입양 후기", link: BROWSER_PATH.MYPAGEADOPTREVIEW }, // 링크없어서 마이페이지로 연결, 페이지 없음
+          { linkName: "입양 내역", link: BROWSER_PATH.MYPAGEADOPTLIST }, // 링크없어서 마이페이지로 연결, 페이지 없음
         ]}
       />
       <NavList
         title={"쓴 글 목록"}
         navList={[
-          { linkName: "실종 동물 게시판", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
-          { linkName: "목격 제보 게시판", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
-          { linkName: "자유게시판", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
-          { linkName: "봉사 후기", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
-          { linkName: "매매 장터", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
+          {
+            linkName: "실종 동물 게시판",
+            link: BROWSER_PATH.MYPAGEBOARD + "/missing",
+          }, // 링크없어서 마이페이지로 연결, 페이지 없음
+          {
+            linkName: "목격 제보 게시판",
+            link: BROWSER_PATH.MYPAGEBOARD + "/find",
+          }, // 링크없어서 마이페이지로 연결, 페이지 없음
+          { linkName: "자유게시판", link: BROWSER_PATH.MYPAGEBOARD + "/free" }, // 링크없어서 마이페이지로 연결, 페이지 없음
+          { linkName: "봉사 후기", link: BROWSER_PATH.MYPAGEBOARD + "/review" }, // 링크없어서 마이페이지로 연결, 페이지 없음
+          { linkName: "매매 장터", link: BROWSER_PATH.MYPAGEBOARD + "/flea" }, // 링크없어서 마이페이지로 연결, 페이지 없음
+        ]}
+      />
+      <NavList
+        title={"문의하기"}
+        navList={[
+          { linkName: "1:1 문의하기", link: BROWSER_PATH.MYPAGEINQUIRY }, // 링크없어서 마이페이지로 연결, 페이지 없음
         ]}
       />
     </MyPageNavStyle>
   );
 };
 
-const NavList = ({ title, navList, isSelected }) => {
-  const [selected, setSelected] = useState(1);
+const NavList = ({ title, navList }) => {
+  const [selected, setSelected] = useState(false);
   const [height, setHeight] = useState(0);
+  const [fixed, setFixed] = useState(false);
+  const location = useLocation();
+  useEffect(() => {
+    navList.map((link) => {
+      if (link.link === location.pathname) {
+        setFixed(true);
+        const ulHeight = ulRef.current.scrollHeight;
+        setHeight(ulHeight);
+      }
+    });
+  }, [location]);
   const ulRef = useRef(null);
   const HandleMouseOver = () => {
     const ulHeight = ulRef.current.scrollHeight;
     setHeight(ulHeight);
-    setSelected(1);
+    setSelected(true);
   };
 
   return (
@@ -51,16 +74,26 @@ const NavList = ({ title, navList, isSelected }) => {
       onMouseOver={HandleMouseOver}
       onMouseOut={() => setSelected(0)}
       isSelected={selected}
+      isFixed={fixed}
       height={height}
     >
       <div className="NavTitle">{title}</div>
       <ul ref={ulRef}>
-        {navList.map((links, index) => {
-          return (
-            <li key={index}>
-              <Link to={links.link}>{links.linkName}</Link>
-            </li>
-          );
+        {navList.map((link, index) => {
+          if (link.link === location.pathname)
+            return (
+              <li key={index}>
+                <Link to={link.link} style={{ fontWeight: "bold" }}>
+                  {link.linkName}
+                </Link>
+              </li>
+            );
+          else
+            return (
+              <li key={index}>
+                <Link to={link.link}>{link.linkName}</Link>
+              </li>
+            );
         })}
       </ul>
     </NavListStyle>
@@ -96,7 +129,8 @@ const NavListStyle = styled.div`
     padding: 0px;
     list-style-type: none;
     overflow: hidden;
-    height: ${(props) => (props.isSelected === 1 ? props.height + "px" : 0)};
+    height: ${(props) =>
+      props.isFixed || props.isSelected ? props.height + "px" : 0};
     transition: height 0.5s ease-in-out;
     z-index: -1;
   }
