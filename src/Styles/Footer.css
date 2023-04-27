@@ -1,0 +1,53 @@
+.footer {
+    height: 200px;
+    width: 100%;
+    margin-top: auto;
+    background-color: #F9F9F9;
+}
+
+.footer h3 {
+    position: relative;
+    font-size: 1.5vw;
+    top: 10px;
+    left: 10px;
+}
+
+.footer_contents {
+    width: 96%;
+    max-width: 1500px;
+    max-height: 90px;
+    height: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    margin-left: auto;
+    margin-right: 10vw;
+    font-size: 1.7vh;
+}
+
+.footer_contents dt {
+    font-weight: bolder;
+    margin-left: 40px;
+}
+
+.footer_contents ex1 + ex2 {
+    margin: 80px;
+}
+
+.p_tag {
+    font-size: xx-small;
+    display: flex;
+    left: 20px;
+}
+
+.reverse_p {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-left: auto;
+    margin-right: 10vw;
+    width: 350px;
+}
+
+.reverse_p img + img {
+    margin-right: 5px;
+}
+
