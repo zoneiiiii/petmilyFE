@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { BROWSER_PATH } from "./constants/path";
 import {
   Main,
+  Join,
   Login,
   MyPageInfo,
   ModifyInfo,
@@ -21,6 +22,7 @@ const Router = () => {
       <React.Suspense fallback={<Loading />}>
         <Routes>
           <Route path={BROWSER_PATH.MAIN} element={<Main />} />
+          <Route path={BROWSER_PATH.JOIN} element={<Join />} />
           <Route path={BROWSER_PATH.LOGIN} element={<Login />} />
           <Route exact path={BROWSER_PATH.MYPAGE} element={<MyPage />}>
             <Route index element={<MyPageInfo />} />
