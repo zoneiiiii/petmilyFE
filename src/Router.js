@@ -9,6 +9,7 @@ import {
   ModifyInfo,
   MyPage,
   Donate,
+  DonateApply,
   FindPW,
   ChangePW,
 } from "./pages/ImportPages";
@@ -28,6 +29,7 @@ const Router = () => {
             <Route path={BROWSER_PATH.MODIFYINFO} element={<ModifyInfo />} />
           </Route>
           <Route path={BROWSER_PATH.SUPPORT} element={<Donate />} />
+          <Route path={BROWSER_PATH.DONATEAPPLY} element={<DonateApply />} />
           <Route path={BROWSER_PATH.FINDPW} element={<FindPW />} />
           <Route path={BROWSER_PATH.CHANGEPW} element={<ChangePW />} />
           <Route path="*" element={<NotFound />} />

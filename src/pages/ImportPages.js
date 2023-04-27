@@ -9,9 +9,11 @@ const ModifyInfo = lazy(() => import("./Mypage/ModifyInfo"));
 const Donate = lazy(() => import("./Support/Donate"));
 const FindPW = lazy(() => import("./Login/FindPW"));
 const ChangePW = lazy(() => import("./Login/ChangePW"));
+const DonateApply = lazy(() => import("./Support/DonateApply"))
 
 //아래에 import할 페이지 함수 생성
 
+<<<<<<< HEAD
 export {
   Main,
   Join,
@@ -23,3 +25,6 @@ export {
   FindPW,
   ChangePW,
 };
+=======
+export {Main, Login, MyPage,MyPageInfo,ModifyInfo, Donate, FindPW, ChangePW, DonateApply};
+>>>>>>> 31cfe7bdd2b351dbb756cbc7f61817cdc3357636
