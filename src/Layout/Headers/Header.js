@@ -5,12 +5,13 @@ import { BROWSER_PATH } from "../../constants/path";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 
-const Headers = () => {
+const Header = ({ page }) => {
+
     return (
         <HeaderNavStyle className="headerNav">
             <div className="headerLeft">
                 <div className="logo">
-                    <Link to='/main'>
+                    <Link to='/'>
                         <img alt="petmily icon" src="./../images/petmilylogo.png" />
                     </Link>
                 </div>
@@ -57,6 +58,7 @@ const Headers = () => {
                     { linkName: "봉사 후기", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
                 ]}
             />
+
             <HeadrRight className="headright">
                 <Stack className="stack" spacing={2} direction="row" >
                     <Button variant="outlined" size="large"
@@ -77,6 +79,8 @@ const Headers = () => {
                         }}>회원가입</Button>
                 </Stack>
             </HeadrRight>
+
+
         </HeaderNavStyle>
     );
 };
@@ -129,8 +133,7 @@ const HeaderNavStyle = styled.div`
   .logo {
     width: 15vw;
     margin-right: 30px
-  }
-
+    }
 
   .NavTitle {
     padding-top: 10px;
@@ -207,4 +210,4 @@ const HeadrRight = styled.div`
     }
 `;
 
-export default Headers;
+export default Header;
