@@ -1,6 +1,13 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import * as S from "./Donate.styled";
 import VolunteerActivismOutlinedIcon from "@mui/icons-material/VolunteerActivismOutlined";
+=======
+import React, {useState, useEffect} from 'react';
+import * as S from './Donate.styled';
+import VolunteerActivismOutlinedIcon from '@mui/icons-material/VolunteerActivismOutlined';
+
+>>>>>>> f6ab667e99235fc4e4a16dcd2c2c94e638510aef
 
 const Donate = () => {
   const dummyDonations = [
@@ -24,6 +31,7 @@ const Donate = () => {
     return number.toLocaleString("ko-KR", { currency: "KRW" }) + "원";
   };
 
+<<<<<<< HEAD
   return (
     <S.Container>
       <S.Banner>
@@ -60,5 +68,42 @@ const Donate = () => {
     </S.Container>
   );
 };
+=======
+      return (
+        <S.Container>
+          <S.Banner>
+            <S.DonateButton to="/donate/apply">기부하기</S.DonateButton>
+          </S.Banner>
+          <S.TotalDonation>누적 기부금 : {formatCurrency(2880000)}</S.TotalDonation>
+          <S.RecentDonations>
+            <S.DonationColumn>
+              {leftDonations.map((donation, index) => (
+                <S.DonationItem key={index}>
+                <span>{donation.date}</span> {donation.name}님{' '}
+                <span>{formatCurrency(donation.amount)}</span>
+            </S.DonationItem>
+      ))}
+    </S.DonationColumn>
+    <S.DonationColumn>
+      {rightDonations.map((donation, index) => (
+        <S.DonationItem key={index}>
+          <span>{donation.date}</span> {donation.name}님{' '}
+          <span>{formatCurrency(donation.amount)}</span>
+        </S.DonationItem>
+      ))}
+    </S.DonationColumn>
+          </S.RecentDonations>
+          <S.TransparentDisclosure>
+          <S.IconContainer>
+             <VolunteerActivismOutlinedIcon fontSize="large" />
+          </S.IconContainer>
+            저희 펫밀리는 <br/>
+            기부금 현황과 사용내역을<br/>
+            투명하게 공개합니다.
+          </S.TransparentDisclosure>
+        </S.Container>
+      );
+}
+>>>>>>> f6ab667e99235fc4e4a16dcd2c2c94e638510aef
 
 export default Donate;
