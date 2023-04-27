@@ -187,7 +187,7 @@ function FindPW() {
         type="submit"
         disabled={checkDisable()}
         label="비밀번호 찾기"
-        value="비밀번호 찾기"
+        value="로그인폼"
         href="/changepw"
       />
     </div>

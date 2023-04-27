@@ -4,8 +4,11 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
 import CustomButton from "./CustomButton";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
   const [id, setId] = useState("");
   const [idError, setIdError] = useState("");
   const [password, setPassword] = useState("");
@@ -86,24 +89,31 @@ function Login() {
     let validId = /^[a-zA-z0-9]{6,15}$/.test(id);
     let validPassword = password.length >= 8 && password.length <= 20;
     console.log("enter");
-    alert("엔터확인");
-    if (!id) {
-      setIdError("아이디을 입력해주세요.");
-      idRef.current.focus();
-    } else if (!validId) {
-      setIdError("정확한 아이디를 입력해주세요.");
-      idRef.current.focus();
-    }
-    if (!password) {
-      setPasswordError("비밀번호를 입력해주세요.");
-      pwRef.current.focus();
-    } else if (!validPassword) {
-      setPasswordError("비밀번호는 8~20자 사이여야 합니다.");
-      pwRef.current.focus();
-    }
 
     if (validId && validPassword) {
+      handleLogin();
     }
+  };
+  const handleLogin = () => {
+    axios
+      .post("/login1", {
+        memberId: idRef.current.value,
+        memberPw: pwRef.current.value,
+      })
+      .then((res) => {
+        console.log("handleLogin =>", res);
+        if (res.data === 1) {
+          // window.sessionStorage.setItem("id", idRef.current.value); // 웹브라우저에 session상태로 정보 저장할 수 있다
+          navigate("/");
+          console.log("로그인 성공");
+        } else {
+          console.log("err");
+          alert("로그인 실패");
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   };
 
   const checkDisable = () => {
@@ -199,21 +209,10 @@ function Login() {
       <CustomButton
         type="submit"
         label="로그인"
-        value="로그인"
+        value="로그인폼"
         onClick={submitCheck}
         disabled={checkDisable()}
       />
-      {/* 
-        fullWidth
-        label="로그인"
-        value="로그인"
-        variant="contained"
-        onClick={submitCheck}
-        // disableElevation
-        
-      >
-        로그인
-      </CustomButton> */}
       <div
         style={{
           display: "inline-flex",

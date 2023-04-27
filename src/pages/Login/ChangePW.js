@@ -160,7 +160,7 @@ function ChangePW() {
       <CustomButton
         type="submit"
         value="비밀번호 변경"
-        label="비밀번호 변경"
+        label="로그인폼"
         onClick={submitCheck}
         disabled={checkDisable()}
       />
