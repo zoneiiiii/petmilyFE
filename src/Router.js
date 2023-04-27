@@ -6,6 +6,7 @@ import {
   Login,
   MyPageInfo,
   ModifyInfo,
+  MyPage,
   Donate,
   DonateApply,
   FindPW,
@@ -21,9 +22,10 @@ const Router = () => {
         <Routes>
           <Route path={BROWSER_PATH.MAIN} element={<Main />} />
           <Route path={BROWSER_PATH.LOGIN} element={<Login />} />
-          <Route path={BROWSER_PATH.MYPAGE} element={<MyPageInfo />} />
-          <Route path={BROWSER_PATH.MYPAGEINFO} element={<MyPageInfo />} />
-          <Route path={BROWSER_PATH.MODIFYINFO} element={<ModifyInfo />} />
+          <Route exact path={BROWSER_PATH.MYPAGE} element={<MyPage />}>
+            <Route index element={<MyPageInfo />} />
+            <Route path={BROWSER_PATH.MODIFYINFO} element={<ModifyInfo />} />
+          </Route>
           <Route path={BROWSER_PATH.SUPPORT} element={<Donate />} />
           <Route path={BROWSER_PATH.DONATEAPPLY} element={<DonateApply />} />
           <Route path={BROWSER_PATH.FINDPW} element={<FindPW />} />
