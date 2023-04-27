@@ -13,8 +13,8 @@ function Login() {
   const [idError, setIdError] = useState("");
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [loginIdError, setLoginIdError] = useState("");
-  const [loginPwError, setLoginPwError] = useState("");
+  const [loginError, setLoginError] = useState("");
+
   const idRef = useRef();
   const pwRef = useRef();
   const [idAble, setIdAble] = useState(false);
@@ -97,18 +97,29 @@ function Login() {
   };
   const handleLogin = () => {
     axios
-      .post("http://localhost:8080/login", {
+      .post("http://localhost:8080/selectMember", {
         memberId: id,
-        memberPw: password,
       })
       .then((res) => {
-        console.log("handleLogin =>", res);
-        if (res.data === 1) {
-          // window.sessionStorage.setItem("id", idRef.current.value); // 웹브라우저에 session상태로 정보 저장할 수 있다
-          navigate("/");
+        if (res.data !== "") {
+          axios
+            .post("http://localhost:8080/login", {
+              memberId: id,
+              memberPw: password,
+            })
+            .then((res) => {
+              console.log("handleLogin =>", res);
+              if (res.data === 1) {
+                navigate("/");
+              } else {
+                setLoginError("비밀번호가 다릅니다.");
+              }
+            })
+            .catch((e) => {
+              console.error(e);
+            });
         } else {
-          console.log("err");
-          alert("로그인 실패");
+          setLoginError("아이디가 존재하지 않습니다.");
         }
       })
       .catch((e) => {
@@ -213,6 +224,9 @@ function Login() {
         onClick={submitCheck}
         disabled={checkDisable()}
       />
+      <FormHelperText sx={{ color: "red", mt: "10px" }}>
+        {loginError}
+      </FormHelperText>
       <div
         style={{
           display: "inline-flex",
