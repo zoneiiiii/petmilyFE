@@ -59,7 +59,7 @@ const NavList = ({ title, navList }) => {
     if (lastLocation !== location.pathname) {
       // 페이지 전환이 발생한 경우
       setFixed("");
-      setLastLocation(location.pathname); // 페이지 갱신
+      setLastLocation(location.pathname); // 최근 위치 state 갱신신
     } else if (
       lastLocation === location.pathname && // 최근 위치 업데이트 됨
       fixed === "" && // 메뉴 카테고리 고정 초기화 됨
