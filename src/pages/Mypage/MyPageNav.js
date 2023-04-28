@@ -18,7 +18,7 @@ const MyPageNav = () => {
       <NavList
         title={"입양 관리"}
         navList={[
-          { linkName: "입양 후기", links: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
+          { linkName: "입양 후기", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
           { linkName: "입양 내역", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
         ]}
       />

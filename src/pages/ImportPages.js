@@ -1,5 +1,6 @@
 import { lazy } from "react";
 
+const Layout = lazy(() => import("../Layout/Layout"));
 const Main = lazy(() => import("./Main/Main"));
 const Login = lazy(() => import("./Login/Login"));
 const MyPage = lazy(() => import("./Mypage/MyPage")); //마이페이지 들어갔을때 기본적으로 회원정보 표시하기 위함.
@@ -12,6 +13,7 @@ const ChangePW = lazy(() => import("./Login/ChangePW"));
 //아래에 import할 페이지 함수 생성
 
 export {
+  Layout,
   Main,
   Login,
   MyPage,

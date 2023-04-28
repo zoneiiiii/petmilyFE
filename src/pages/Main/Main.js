@@ -79,6 +79,7 @@ const Main = () => {
         />
       </S.CardContainer>
     </S.Container>
+
   );
 };
 
