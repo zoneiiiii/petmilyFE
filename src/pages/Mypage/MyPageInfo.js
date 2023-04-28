@@ -18,7 +18,7 @@ function MyPageInfo() {
   const member = {
     num: 1,
     id: "PetLove",
-    pw: "*******",
+    pw: "12345678",
     nickname: "",
     email: "asdf@naver.com",
     name: "이기자",
@@ -44,7 +44,7 @@ function MyPageInfo() {
           <td className="infoType" width={columnWidth}>
             PW
           </td>
-          <td> {member.pw}</td>
+          <td> {"*".repeat(member.pw.length)}</td>
         </tr>
         <tr>
           <td className="infoType" width={columnWidth}>
