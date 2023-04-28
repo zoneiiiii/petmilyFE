@@ -1,10 +1,12 @@
 import React, { useState, useRef } from "react";
-import Button from "@mui/material/Button";
+
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
 import { styled } from "@mui/material/styles";
 import CustomButton from "./CustomButton";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const CustomTextField = styled(TextField)({
   "& label.Mui-focused": {
@@ -26,6 +28,7 @@ const CustomTextField = styled(TextField)({
   },
 });
 function FindPW() {
+  const navigate = useNavigate();
   const idLabel = "Id";
   const emailLabel = "email";
   const [id, setId] = useState("");
@@ -36,6 +39,8 @@ function FindPW() {
   const emailRef = useRef();
   const [idAble, setIdAble] = useState(false);
   const [emailAble, setEmailable] = useState(false);
+  const [findError, setFindError] = useState(false);
+  const [pwSearch, setPwSearch] = useState(false);
 
   const isValidEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -115,16 +120,43 @@ function FindPW() {
 
   const submitCheck = (event) => {
     let validId = /^[a-zA-z0-9]{6,15}$/.test(id);
-    // let validPassword = password.length >= 8 && password.length <= 20;
-    console.log("enter");
-    alert("엔터확인");
-    if (!id) {
-      setIdError("아이디을 입력해주세요.");
-      idRef.current.focus();
-    } else if (!validId) {
-      setIdError("정확한 아이디를 입력해주세요.");
-      idRef.current.focus();
+    let validEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (validId && validEmail) {
+      handleChangePw();
     }
+  };
+  const handleChangePw = () => {
+    axios
+      .post("http://localhost:8080/selectMember", {
+        memberId: id,
+      })
+      .then((res) => {
+        if (res.data !== "") {
+          axios
+            .post("http://localhost:8080/findpw", {
+              memberId: id,
+              memberEmail: email,
+            })
+            .then((res) => {
+              console.log("handleLogin =>", res.data);
+              if (res.data === 1) {
+                navigate("/changepw", { state: id });
+                // navigate("/changepw");
+              } else {
+                setFindError("이메일이 존재하지 않습니다.");
+              }
+            })
+            .catch((e) => {
+              console.error(e);
+            });
+        } else {
+          setFindError("아이디가 존재하지 않습니다.");
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   };
 
   return (
@@ -188,8 +220,10 @@ function FindPW() {
         disabled={checkDisable()}
         label="비밀번호 찾기"
         value="로그인폼"
-        href="/changepw"
+        onClick={submitCheck}
       />
+      {/* {pwSearch ? <ChangePw passwordChangeEmail={id}></ChangePw> : null} */}
+      <FormHelperText sx={{ color: "red" }}>{findError}</FormHelperText>
     </div>
   );
 }

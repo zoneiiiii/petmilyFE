@@ -5,6 +5,8 @@ import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
 import { styled } from "@mui/material/styles";
 import CustomButton from "./CustomButton";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 const CustomTextField = styled(TextField)({
   "& label.Mui-focused": {
     color: "#FBD385",
@@ -26,8 +28,10 @@ const CustomTextField = styled(TextField)({
 });
 
 function ChangePW() {
-  const pwLabel = "PW";
-  const pwchangeLabel = "PW변경";
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  const pwLabel = "변경할 PW";
+  const pwchangeLabel = "변경할 PW확인";
   const pwRef = useRef();
   const pwcheckRef = useRef();
   const [password, setPassword] = useState("");
@@ -36,18 +40,21 @@ function ChangePW() {
   const [pwCheckError, setPwCheckError] = useState("");
   const [pwAble, setPwAble] = useState(false);
   const [pwchkAble, setPwchkAble] = useState(false);
+  const [id, setId] = useState(state);
 
   const isValidPassword = (password) => {
     const pwLength = password.length >= 8 && password.length <= 20;
     return pwLength;
   };
   const isValidPwCheck = (pwCheck) => {
+    console.log(id);
     if (pwCheck === password) {
       return true;
     } else {
       return false;
     }
   };
+
   const pwChange = (event) => {
     setPassword((value) => event.target.value);
     if (event.target.value) {
@@ -57,7 +64,6 @@ function ChangePW() {
           : "비밀번호는 8~20자로 입력해주세요."
       );
       setPwAble(isValidPassword(event.target.value) ? true : false);
-      console.log("pwable" + pwAble);
     } else {
       setPasswordError("");
     }
@@ -87,10 +93,19 @@ function ChangePW() {
   };
   const checkenterSubmit = (e) => {
     if (e.key === "Enter") {
-      submitCheck();
+      if (pwchkAble === false || pwAble === false) {
+        return true;
+      } else if (!password) {
+        return true;
+      } else if (!pwCheck) {
+        return true;
+      } else {
+        submitCheck();
+      }
     }
   };
   const submitCheck = () => {
+    handlePwUpdate();
     console.log("enter");
   };
   const checkDisable = () => {
@@ -102,6 +117,28 @@ function ChangePW() {
       return true;
     } else {
       return false;
+    }
+  };
+  const handlePwUpdate = () => {
+    console.log("id pw = " + password + " " + id);
+    if (isValidPassword(password)) {
+      axios
+        .post("http://localhost:8080/changepw", {
+          memberId: id,
+          memberPw: password,
+        })
+        .then((res) => {
+          console.log("passwordUpdate =>", res.data);
+          if (res.data === 1) {
+            console.log("성공");
+            navigate("/login");
+          } else {
+            console.log("실패");
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+        });
     }
   };
   return (
@@ -159,8 +196,8 @@ function ChangePW() {
       </div>
       <CustomButton
         type="submit"
-        value="비밀번호 변경"
-        label="로그인폼"
+        value="로그인폼"
+        label="비밀번호 변경"
         onClick={submitCheck}
         disabled={checkDisable()}
       />
