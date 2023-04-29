@@ -4,7 +4,6 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
 import { styled } from "@mui/material/styles";
-import CustomButton from "./CustomButton";
 
 const CustomTextField = styled(TextField)({
   "& label.Mui-focused": {
@@ -183,8 +182,16 @@ function FindPW() {
         />
         <FormHelperText sx={{ color: "red" }}>{emailError}</FormHelperText>
       </div>
-      <CustomButton
+      <Button
         type="submit"
+        fullWidth
+        variant="contained"
+        sx={{
+          background: "#FBD385",
+          width: "300px",
+          height: "25px",
+          mt: "10px",
+        }}
         disabled={checkDisable()}
         label="비밀번호 찾기"
         value="로그인폼"

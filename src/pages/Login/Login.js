@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import Button from "@mui/material/Button";
+import { ButtonProps } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
@@ -207,17 +208,17 @@ function Login() {
         />
         <FormHelperText sx={{ color: "red" }}>{passwordError}</FormHelperText>
       </div>
-      <Button
+      <Typography
         style={{
           color: "gray",
           fontSize: "xx-small",
-          marginBottom: "-10px",
+          marginTop: "10px",
         }}
-        href="/findpw"
+        // onClick={navigateFindPW}
       >
         비밀번호를 잊으셨나요?
-      </Button>
-      <CustomButton
+      </Typography>
+      <Button
         type="submit"
         label="로그인"
         value="로그인폼"
