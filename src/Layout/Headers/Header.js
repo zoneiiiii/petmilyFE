@@ -129,6 +129,7 @@ const HeaderNavStyle = styled.div`
   user-select: none;
   background: rgb(255, 255, 238);
   box-shadow: 0px 2px 0px rgb(167, 165, 165);
+  z-index : 1000;
 
   .logo {
     width: 15vw;

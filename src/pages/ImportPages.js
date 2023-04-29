@@ -1,5 +1,6 @@
 import { lazy } from "react";
 
+const Layout = lazy(() => import("../Layout"));
 const Main = lazy(() => import("./Main/Main"));
 const Join = lazy(() => import("./Join/Join"));
 const Login = lazy(() => import("./Login/Login"));
@@ -16,5 +17,5 @@ const VolunteerNoticeDetail = lazy(() => import("./Support/Volunteer/VolunteerNo
 
 //아래에 import할 페이지 함수 생성
 
-export {Main, Login,Join, MyPage,MyPageInfo,ModifyInfo, Donate, FindPW, ChangePW, DonateApply,
+export {Layout,Main, Login,Join, MyPage,MyPageInfo,ModifyInfo, Donate, FindPW, ChangePW, DonateApply,
         VolunteerNotice,VolunteerNoticeWrite,VolunteerNoticeDetail};

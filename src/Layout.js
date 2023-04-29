@@ -1,7 +1,8 @@
 import Header from "./Layout/Headers/Header";
 import Footer from "./Layout/Footers/Footer";
-import "./Styles/Layout.css";
+import "./styles/Layout.css";
 import styled from "styled-components";
+import { Outlet } from "react-router-dom";
 
 
 const Layout = (props) => {
@@ -10,7 +11,7 @@ const Layout = (props) => {
             <Header />
 
             <main className="main">
-                {props.children}
+                <Outlet/>
             </main>
 
             <Footer />
