@@ -10,14 +10,16 @@ const BROWSER_PATH = {
   MYPAGEADOPTLIST: "/mypage/adoptlist", // 입양 내역
   MYPAGEBOARD: "/mypage/board", // 게시판 쓴 글 목록, boardId: 게시판 id(free, missing, ...)
   MYPAGEINQUIRY: "/mypage/inquiry", // 1:1 문의
+  MYPAGEQNA: "/mypage/inquiryqna", // 문의하기 작성
+  MYPAGEQNADETAIL: "/mypage/inquirydetail", //문의하기 상세
   FREE: "/board/free",
   FLEA: "/board/flea", // 더 추가해야함.
   SUPPORT: "/donate",
   DONATEAPPLY: "/donate/apply",
   FINDPW: "/findpw", //비밀번호찾기
   CHANGEPW: "/changepw", //비밀번호 변경
-  MISSING: "/missing",  // 실종 동물 게시판
-  FREEBOARD: "/freeboard",  // 자유 게시판
+  MISSING: "/missing", // 실종 동물 게시판
+  FREEBOARD: "/freeboard", // 자유 게시판
 };
 
 export { BROWSER_PATH };
