@@ -1,8 +1,12 @@
-import { Link, Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import MyPageNav from "./MyPageNav";
 import styled from "styled-components";
+import { MYPAGE } from "../../constants/PageURL";
+
+const NotShowNickName = [MYPAGE.MODIFY_INFO, MYPAGE.INQUIRY];
 
 const MyPage = () => {
+  const location = useLocation();
   const member = {
     name: "이기자",
     nickname: "NickName",
@@ -11,9 +15,11 @@ const MyPage = () => {
     <MyPageLayout className="MyPageLayout">
       <MyPageNav />
       <MyPageContainer className="MyPageContainer">
-        <MyPageNickname className="MyPageNickname">
-          <h1>{member.nickname === "" ? member.name : member.nickname}</h1>
-        </MyPageNickname>
+        {!NotShowNickName.some((path) => path === location.pathname) && (
+          <MyPageNickname className="MyPageNickname">
+            <h1>{member.nickname === "" ? member.name : member.nickname}</h1>
+          </MyPageNickname>
+        )}
         <Outlet />
       </MyPageContainer>
     </MyPageLayout>
@@ -22,7 +28,10 @@ const MyPage = () => {
 
 const MyPageLayout = styled.div`
   display: flex;
-  flex-wrap: wrap;
+
+  .MyPageNav {
+    flex-shrink: 0;
+  }
 `;
 
 const MyPageNickname = styled.div`
@@ -42,6 +51,7 @@ const MyPageNickname = styled.div`
 
 const MyPageContainer = styled.div`
   margin: 40px;
+  flex-grow: 1;
 `;
 
 export default MyPage;
