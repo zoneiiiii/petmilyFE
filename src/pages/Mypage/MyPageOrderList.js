@@ -13,7 +13,7 @@ import { CustomDatePicker } from "../../components/common/CustomDatePicker";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { MYPAGE } from "../../constants/PageURL";
 
-const OrderList = () => {
+const MyPageOrderList = () => {
   const pageLimit = 10;
   const navigate = useNavigate();
   const [startDate, setStartDate] = useState(
@@ -227,4 +227,4 @@ const orderlist = [
   },
 ];
 
-export default OrderList;
+export default MyPageOrderList;

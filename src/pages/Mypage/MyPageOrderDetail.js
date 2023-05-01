@@ -15,7 +15,7 @@ import { BROWSER_PATH } from "../../constants/path";
 import { MYPAGE } from "../../constants/PageURL";
 import { useEffect, useState } from "react";
 
-const OrderDetail = () => {
+const MyPageOrderDetail = () => {
   const navigate = useNavigate();
   const { orderNum } = useParams();
   const [orderData, setOrderData] = useState(dummy);
@@ -226,4 +226,4 @@ const member = {
   role: "user",
 };
 
-export default OrderDetail;
+export default MyPageOrderDetail;
