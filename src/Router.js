@@ -18,6 +18,7 @@ import {
   DonateApply,
   FindPW,
   ChangePW,
+  HospitalLocation,
   Product,
   Missing,
   FreeBoard,
@@ -34,6 +35,10 @@ const Router = () => {
             <Route index element={<Main />} />
             <Route path={BROWSER_PATH.JOIN} element={<Join />} />
             <Route path={BROWSER_PATH.LOGIN} element={<Login />} />
+            <Route
+              path={BROWSER_PATH.HOSPITALLOCATION}
+              element={<HospitalLocation />}
+            />
             <Route exact path={BROWSER_PATH.MYPAGE} element={<MyPage />}>
               <Route index element={<MyPageInfo />} />
               <Route path={BROWSER_PATH.MODIFYINFO} element={<ModifyInfo />} />
