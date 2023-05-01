@@ -54,8 +54,8 @@ const Header = ({ page }) => {
         navList={[
           { linkName: "기부 내역", link: BROWSER_PATH.SUPPORT },
           { linkName: "기부하기", link: BROWSER_PATH.DONATEAPPLY },
-          { linkName: "봉사하기", link: BROWSER_PATH.MYPAGE }, // 페이지 없음
-          { linkName: "봉사 후기", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
+          { linkName: "봉사하기", link: BROWSER_PATH.VOLUNTEER }, // 페이지 없음
+          { linkName: "봉사 후기", link: BROWSER_PATH.VOLUNTEER }, // 링크없어서 마이페이지로 연결, 페이지 없음
         ]}
       />
       <HeaderRight />
