@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from "styled-components";
+import '../Styles/ReturnTop.css';
 
 const ReturnTop = () => {
     const [ScrollY, setScrollY] = useState(0);
@@ -44,9 +45,9 @@ const ReturnTop = () => {
 const ScrollTop = styled.div`
     .returnTop {
         position: fixed;
-        bottom: 30px;
+        bottom: 80px;
         right: 30px;
-        background-image: url("../../../public/images/ReturnTop.png");
+        background-image: url("../../public/images/navigator/upArrow.png");
         background-size: cover;
         cursor: pointer;
         opacity: 0;
