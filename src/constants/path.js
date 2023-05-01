@@ -3,6 +3,7 @@ const BROWSER_PATH = {
   LOGIN: "/login", // 로그인페이지
   JOIN: "/join", // 회원가입
   MYPAGE: "/mypage", // 마이페이지
+  HOSPITALLOCATION: "/hospital", //병원위치정보
   MYPAGEINFO: "/mypage/info", //마이페이지 정보
   MODIFYINFO: "/mypage/modifyinfo", // 회원 정보 수정
   MYPAGEORDER: "/mypage/orderlist",

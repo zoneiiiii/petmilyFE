@@ -12,6 +12,7 @@ import {
   DonateApply,
   FindPW,
   ChangePW,
+  HospitalLocation,
 } from "./pages/ImportPages";
 import NotFound from "./pages/NotFound/NotFound";
 import Loading from "./components/Loading/LoadingPage";
@@ -24,6 +25,10 @@ const Router = () => {
           <Route path={BROWSER_PATH.MAIN} element={<Main />} />
           <Route path={BROWSER_PATH.JOIN} element={<Join />} />
           <Route path={BROWSER_PATH.LOGIN} element={<Login />} />
+          <Route
+            path={BROWSER_PATH.HOSPITALLOCATION}
+            element={<HospitalLocation />}
+          />
           <Route exact path={BROWSER_PATH.MYPAGE} element={<MyPage />}>
             <Route index element={<MyPageInfo />} />
             <Route path={BROWSER_PATH.MODIFYINFO} element={<ModifyInfo />} />

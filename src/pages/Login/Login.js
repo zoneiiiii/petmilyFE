@@ -110,6 +110,7 @@ function Login() {
             .then((res) => {
               console.log("handleLogin =>", res);
               if (res.data === 1) {
+                sessionStorage.setItem("id", id);
                 navigate("/");
               } else {
                 setLoginError("비밀번호가 다릅니다.");
