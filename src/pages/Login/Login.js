@@ -48,6 +48,7 @@ function Login() {
       setPasswordError("");
     }
   };
+
   const idChange = (event) => {
     setId((value) => event.target.value);
     console.log("id1 " + id);
@@ -63,6 +64,7 @@ function Login() {
       setIdError("");
     }
   };
+
   const passwordInput = document.querySelector("[name=password]");
   const passwordFocus = () => {
     passwordInput.focus();

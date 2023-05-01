@@ -18,6 +18,7 @@ import {
   DonateApply,
   FindPW,
   ChangePW,
+  Product,
   Missing,
   FreeBoard,
 } from "./pages/ImportPages";
@@ -62,6 +63,12 @@ const Router = () => {
             <Route path={BROWSER_PATH.FREEBOARD} element={<FreeBoard />} />
             <Route path="*" element={<NotFound />} />
           </Route>
+          <Route path={BROWSER_PATH.SUPPORT} element={<Donate />} />
+          <Route path={BROWSER_PATH.DONATEAPPLY} element={<DonateApply />} />
+          <Route path={BROWSER_PATH.FINDPW} element={<FindPW />} />
+          <Route path={BROWSER_PATH.CHANGEPW} element={<ChangePW />} />
+          <Route path={BROWSER_PATH.PRODUCT} element={<Product />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </React.Suspense>
     </BrowserRouter>
