@@ -12,7 +12,8 @@ const Header = ({ page }) => {
             <div className="headerLeft">
                 <div className="logo">
                     <Link to='/'>
-                        <img alt="petmily icon" src="./../images/petmilylogo.png" />
+                        <img alt="petmily icon" src="/images/petmilylogo.png" /> 
+                        {/* 상대경로 절대경로로 바꿈. ./../images/petmilylogo.png -> /images/petmilylogo.png*/}
                     </Link>
                 </div>
             </div>
@@ -53,9 +54,9 @@ const Header = ({ page }) => {
             <NavList
                 title={"후원"}
                 navList={[
-                    { linkName: "기부 내역", link: BROWSER_PATH.MYPAGE },
-                    { linkName: "봉사하기", link: BROWSER_PATH.MYPAGEORDER }, // 페이지 없음
-                    { linkName: "봉사 후기", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
+                    { linkName: "기부 내역", link: BROWSER_PATH.SUPPORT },
+                    { linkName: "봉사하기", link: BROWSER_PATH.VOLUNTEER }, // 페이지 없음
+                    { linkName: "봉사 후기", link: BROWSER_PATH.VOLUNTEER }, // 링크없어서 마이페이지로 연결, 페이지 없음
                 ]}
             />
 
