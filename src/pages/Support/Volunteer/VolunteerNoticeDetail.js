@@ -6,6 +6,7 @@ import axios from 'axios';
 import NotFound from "../../NotFound/NotFound";
 import Loading from "../../../components/Loading/LoadingPage";
 import MapModal from '../../../components/Map/MapModal';
+import Comment from '../../../components/Comment/Comment';
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -79,7 +80,7 @@ const handleClose = () => { // 닫기 버튼 클릭시 닫기
             sx={{
               color: "#FBD385",
               height: "50%",
-              ":hover": { backgroundColor: "#FBD385", color: "#FFF"}}}>지도보기</Button>
+              "&:hover": { backgroundColor: "#FBD385", color: "#FFF"},}}>지도보기</Button>
           </p>
         </S.DetailInfo>
       </S.DetailTop>
@@ -93,6 +94,9 @@ const handleClose = () => { // 닫기 버튼 클릭시 닫기
       <S.DetailBottom>
         <hr/>
         <p>댓글 </p>
+        <div style={{width: '100%'}}>
+        <Comment/>
+        </div>
       </S.DetailBottom>
         </S.DetailContainer>
         <Popover
@@ -110,36 +114,6 @@ const handleClose = () => { // 닫기 버튼 클릭시 닫기
         {isMapVisible && <MapModal address={post.volunteerAddr} onClose={handleClose} />}
         </Popover>
     </>
-  //       <S.DetailContainer>
-  //     <S.DetailTop>
-  //       <S.Thumbnail src="https://via.placeholder.com/300" alt="Thumbnail" />
-  //       <S.DetailInfo>
-  //         <h1>제목</h1>
-  //         <p>활동기간: 날짜</p>
-  //         <p>모집인원: 인원</p>
-  //         <p>나이제한: 제한</p>
-  //         <p>
-  //           주소: 주소정보
-  //           <button>지도보기</button>
-  //         </p>
-  //       </S.DetailInfo>
-  //     </S.DetailTop>
-  //     <hr />
-  //     <S.DetailMiddle>
-  //       <h2>활동 상세</h2>
-  //       <p>활동 상세 내용...</p>
-  //       <h2>준비물</h2>
-  //       <p>준비물 내용...</p>
-  //       <h2>문의</h2>
-  //       <p>문의 내용...</p>
-  //     </S.DetailMiddle>
-
-  //     {/* Div 3 */}
-  //     <S.DetailBottom>
-  //       <hr/>
-  //       <p>댓글 </p>
-  //     </S.DetailBottom>
-  // </S.DetailContainer>
   )
 
 }

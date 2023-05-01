@@ -19,8 +19,8 @@ const DetailTop = styled.div`
 // `;
 
 const Thumbnail = styled.img`
-  width: 30%;
-  height: 30%;
+  width: 25%;
+  height: 25%;
 `;
 
 const DetailInfo = styled.div`
