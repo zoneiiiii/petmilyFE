@@ -14,7 +14,7 @@ const BROWSER_PATH = {
     FLEA : "/board/flea", // 플리마켓
     VOLUNTEER : "/board/volunteer", // 봉사 게시판
     VOLUNTEERWRITE : "/board/volunteer/write", //봉사 게시판 글작성
-    VOLUNTEERDETAIL : "/board/volunteer/detail", // 봉사 게시판 Detail
+    VOLUNTEERDETAIL : "/board/volunteer/:id", // 봉사 게시판 Detail
     SUPPORT: "/donate", //기부
     DONATEAPPLY : "/donate/apply", // 기부 신청
     FINDPW: "/findpw", //비밀번호찾기
