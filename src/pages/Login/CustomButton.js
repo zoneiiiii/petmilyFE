@@ -40,6 +40,40 @@ const SubmitButton = styled(Button)`
     background-color: #facc73;
   }
 `;
+
+const QuestionButton = styled(Button)`
+  background-color: #fbd385;
+  color: white;
+  font-weight: bold;
+  width: 90px;
+  height: 30px;
+  margin-top: 10px;
+  margin-right: 10px;
+  float: right;
+  &:hover {
+    background-color: #facc73;
+  }
+  &:focus {
+    background-color: #facc73;
+  }
+`;
+
+const ResetButton = styled(Button)`
+  background-color: #bfbfbf;
+  color: white;
+  font-weight: bold;
+  width: 90px;
+  height: 30px;
+  margin-top: 10px;
+  float: right;
+  &:hover {
+    background-color: #b2b0b0;
+  }
+  &:focus {
+    background-color: #b2b0b0;
+  }
+`;
+
 export default function CustomButton(props) {
   const { value, label } = props;
 
@@ -65,6 +99,28 @@ export default function CustomButton(props) {
         >
           {props.label}
         </CustomizedButton>
+      ) : value === "문의하기" ? (
+        <QuestionButton value={value} variant="contained" fullWidth>
+          {props.label}
+        </QuestionButton>
+      ) : value === "1:1문의작성" ? (
+        <QuestionButton
+          value={value}
+          variant="contained"
+          fullWidth
+          onClick={props.onClick}
+        >
+          {props.label}
+        </QuestionButton>
+      ) : value === "작성취소" ? (
+        <ResetButton
+          value={value}
+          variant="contained"
+          onClick={props.onClick}
+          fullWidth
+        >
+          {props.label}
+        </ResetButton>
       ) : value === "병원검색" ? (
         <SubmitButton
           value={value}

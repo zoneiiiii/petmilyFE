@@ -3,21 +3,21 @@ import Carousel from 'react-material-ui-carousel';
 import { Paper, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-const CarouselMain = ({images}) => {
-    return (
-        <Carousel      
-        indicatorContainerProps={{
-            style: {
-              position: 'absolute',
-              bottom: '10px',
-              zIndex: 2,
-              width: '100%',
-            },
-          }}>
-            {images.map((image, index) =>(
-                <Paper key={index} elevation={0}>
-                    <img src={image} alt={`Slide ${index}`} style={{ maxHeight: '100%', width: '100%', objectFit: 'cover' }}/>
-                    <Link to="/animallist">
+const CarouselMain = ({ images }) => {
+  return (
+    <Carousel
+      indicatorContainerProps={{
+        style: {
+          position: 'absolute',
+          bottom: '10px',
+          zIndex: 2,
+          width: '100%',
+        },
+      }}>
+      {images.map((image, index) => (
+        <Paper key={index} elevation={0}>
+          <img src={image} alt={`Slide ${index}`} style={{ maxHeight: '100%', width: '100%', objectFit: 'cover' }} />
+          <Link to="/animallist">
             <Button
               variant="contained"
               color="warning"
@@ -35,10 +35,10 @@ const CarouselMain = ({images}) => {
               보호소에 아이들 보러 가기
             </Button>
           </Link>
-                </Paper>
-            ))}
-        </Carousel>
-    )
+        </Paper>
+      ))}
+    </Carousel>
+  )
 }
 
 export default CarouselMain;
