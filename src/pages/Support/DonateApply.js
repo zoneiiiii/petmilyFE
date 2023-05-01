@@ -82,13 +82,31 @@ const DonateApply = () => {
         <S.Field>
           <S.Label>결제 수단</S.Label>
           <S.PaymentButtons>
-            <Button variant={paymentMethod === '신용카드' ? 'contained' : 'outlined'} onClick={() => paymentSelect('신용카드')}>
+            <Button variant={paymentMethod === '신용카드' ? 'contained' : 'outlined'} onClick={() => paymentSelect('신용카드')}
+            sx={{
+              borderColor: '#FBD385',
+              color: paymentMethod === '신용카드' ? '#FFFFFF' : '#FBD385',
+              backgroundColor: paymentMethod === '신용카드' ? '#FBD385' : '',
+              ":hover": { borderColor: "#FBD385", backgroundColor: '#FBD385', color: '#FFFFFF'},
+            }}>
               신용카드
             </Button>
-            <Button variant={paymentMethod === '계좌이체' ? 'contained' : 'outlined'} onClick={() => paymentSelect('계좌이체')}>
+            <Button variant={paymentMethod === '계좌이체' ? 'contained' : 'outlined'} onClick={() => paymentSelect('계좌이체')}
+            sx={{
+              borderColor: '#FBD385',
+              color: paymentMethod === '계좌이체' ? '#FFFFFF' : '#FBD385',
+              backgroundColor: paymentMethod === '계좌이체' ? '#FBD385' : '',
+              ":hover": { borderColor: "#FBD385", backgroundColor: '#FBD385', color: '#FFFFFF'},
+            }}>
               계좌이체
             </Button>
-            <Button variant={paymentMethod === '카카오페이' ? 'contained' : 'outlined'} size="small" onClick={() => paymentSelect('카카오페이')}>
+            <Button variant={paymentMethod === '카카오페이' ? 'contained' : 'outlined'} size="small" onClick={() => paymentSelect('카카오페이')}
+            sx={{
+              borderColor: '#FBD385',
+              color: paymentMethod === '카카오페이' ? '#FFFFFF' : '#FBD385',
+              backgroundColor: paymentMethod === '카카오페이' ? '#FBD385' : '',
+              ":hover": { borderColor: "#FBD385", backgroundColor: '#FBD385', color: '#FFFFFF'},
+            }}>
               카카오페이
             </Button>
           </S.PaymentButtons>

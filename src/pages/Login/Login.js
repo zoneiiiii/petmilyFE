@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import Button from "@mui/material/Button";
-import { ButtonProps } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
@@ -48,6 +47,7 @@ function Login() {
       setPasswordError("");
     }
   };
+
   const idChange = (event) => {
     setId((value) => event.target.value);
     console.log("id1 " + id);
@@ -63,6 +63,7 @@ function Login() {
       setIdError("");
     }
   };
+
   const passwordInput = document.querySelector("[name=password]");
   const passwordFocus = () => {
     passwordInput.focus();
@@ -111,6 +112,7 @@ function Login() {
             .then((res) => {
               console.log("handleLogin =>", res);
               if (res.data === 1) {
+                sessionStorage.setItem("id", id);
                 navigate("/");
               } else {
                 setLoginError("비밀번호가 다릅니다.");
@@ -208,17 +210,17 @@ function Login() {
         />
         <FormHelperText sx={{ color: "red" }}>{passwordError}</FormHelperText>
       </div>
-      <Typography
+      <Button
         style={{
           color: "gray",
           fontSize: "xx-small",
-          marginTop: "10px",
+          marginBottom: "-10px",
         }}
-        // onClick={navigateFindPW}
+        href="/findpw"
       >
         비밀번호를 잊으셨나요?
-      </Typography>
-      <Button
+      </Button>
+      <CustomButton
         type="submit"
         label="로그인"
         value="로그인폼"

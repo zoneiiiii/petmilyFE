@@ -1,4 +1,20 @@
 import { lazy } from "react";
+
+const HospitalLocation = lazy(() => import("./Adopt/HospitalLocation"));
+const MyPageQnA = lazy(() => import("./Mypage/MyPageQnA"));
+const MyPageQnADetail = lazy(() => import("./Mypage/MyPageQnADetail"));
+const VolunteerNotice = lazy(() =>
+  import("./Support/Volunteer/VolunteerNotice")
+);
+const VolunteerNoticeWrite = lazy(() =>
+  import("./Support/Volunteer/VolunteerNoticeWrite")
+);
+const VolunteerNoticeDetail = lazy(() =>
+  import("./Support/Volunteer/VolunteerNoticeDetail")
+);
+const Product = lazy(() => import("./Shop/Product"));
+const Missing = lazy(() => import("./Community/Missing/Missing"));
+const FreeBoard = lazy(() => import("./Community/FreeBoard/FreeBoard"));
 export const Layout = lazy(() => import("../Layout"));
 export const Main = lazy(() => import("./Main/Main"));
 export const Join = lazy(() => import("./Join/Join"));
@@ -21,24 +37,3 @@ export const DonateApply = lazy(() => import("./Support/DonateApply"));
 
 export const Loading = lazy(() => import("./Loading/LoadingPage"));
 export const NotFound = lazy(() => import("./NotFound/NotFound"));
-
-//아래에 import할 페이지 함수 생성
-
-// export {
-//   Layout,
-//   Main,
-//   Join,
-//   Login,
-//   MyPageList,
-//   MyPage,
-//   MyPageInfo,
-//   ModifyInfo,
-//   MyPageOrder,
-//   MyPageOrderDetail,
-//   MyPageAdoptList,
-//   MyPageAdoptReview,
-//   Donate,
-//   FindPW,
-//   ChangePW,
-//   DonateApply,
-// };

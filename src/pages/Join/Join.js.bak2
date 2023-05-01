@@ -6,9 +6,6 @@ import TextField from "@mui/material/TextField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
 
 const Button = styled.button`
   width: 300px;
@@ -56,10 +53,6 @@ const Inputbox = styled.div`
   padding: 0px 25px;
 `;
 
-const InputRadio = styled.div`
-  vertical-align: middle;
-`;
-
 const Join = () => {
   const IDRef = useRef();
   const passwordRef = useRef();
@@ -73,46 +66,33 @@ const Join = () => {
   const genderRef = useRef();
 
   const handleFormSubmit = () => {
-    axios
-      .post("/register", {
-        memberId: IDRef?.current?.querySelector("input").value,
-        memberPw: passwordRef?.current?.querySelector("input").value,
-        memberNickname: nicknameRef?.current?.querySelector("input").value,
-        memberEmail: emailRef?.current?.querySelector("input").value,
-        memberName: nameRef?.current?.querySelector("input").value,
-        memberBirth: dateOfBirthRef?.current?.querySelector("input").value,
-        memberTel: phonenumberRef?.current?.querySelector("input").value,
-        memberAddr: addressRef?.current?.querySelector("input").value,
-        memberGender: genderRef?.current?.querySelector("input").value,
-      })
-      .then((res) => {
-        const { data } = res;
-        if (data === 0) {
-          alert("이미 사용 중인 아이디입니다.");
-          IDRef.current.querySelector("input").value = "";
-        } else {
-          alert("회원가입이 완료되었습니다.\n로그인 화면으로 이동합니다.");
-          window.location.href = "/login";
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    // axios
+    //   .post("/registerProcess", {
+    //     email: emailRef.current.value,
+    //     password: passwordRef.current.value,
+    //     name: nameRef.current.value,
+    //     nickname: nicknameRef.current.value,
+    //     birthday: dateOfBirthRef.current.value,
+    //   })
+    //   .then((res) => {
+    //     const { data } = res;
+    //     if (data === 0) {
+    //       alert("이미 사용 중인 아이디입니다.");
+    //       IDRef.current.value = "";
+    //       IDRef.current.focus();
+    //     } else {
+    //       alert("회원가입이 완료되었습니다.\n로그인 화면으로 이동합니다.");
+    //       window.location.href = "http://localhost:3000/login";
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //   });
+    alert("회원가입이 완료되었습니다.\n로그인 화면으로 이동합니다.");
+    window.location.href = "http://localhost:3000/login";
   };
 
   const handleButtonClick = (e) => {
-    // console.log(
-    //   IDRef.current.querySelector("input").value,
-    //   passwordRef.current.querySelector("input").value,
-    //   confirmPasswordRef.current.querySelector("input").value,
-    //   emailRef.current.querySelector("input").value,
-    //   nameRef.current.querySelector("input").value,
-    //   nicknameRef.current.querySelector("input").value,
-    //   dateOfBirthRef.current.querySelector("input").value,
-    //   phonenumberRef.current.querySelector("input").value,
-    //   addressRef.current.querySelector("input").value,
-    //   genderRef.current.querySelector("input").value
-    // );
     if (
       !IDRef?.current?.querySelector("input").value ||
       !passwordRef?.current?.querySelector("input").value ||
@@ -288,7 +268,6 @@ const Join = () => {
                   <DatePicker
                     className="input-item default-date"
                     ref={dateOfBirthRef}
-                    format="YYYY-MM-DD"
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         const target =
@@ -338,25 +317,20 @@ const Join = () => {
             >
               <InputName>성별</InputName>
               <Inputbox>
-                <RadioGroup
-                  aria-labelledby="demo-radio-buttons-group-label"
-                  defaultValue="male"
-                  name="radio-buttons-group"
-                  ref={genderRef}
-                >
-                  <InputRadio>
-                    <FormControlLabel
-                      value="male"
-                      control={<Radio />}
-                      label="남"
-                    />
-                    <FormControlLabel
-                      value="female"
-                      control={<Radio />}
-                      label="여"
-                    />
-                  </InputRadio>
-                </RadioGroup>
+                <label>
+                  남
+                  <input
+                    type="radio"
+                    name="gender"
+                    ref={genderRef}
+                    value="male"
+                    defaultChecked={true}
+                  />
+                </label>
+
+                <label>
+                  여<input type="radio" name="gender" value="female" />
+                </label>
               </Inputbox>
             </InputContainer>
           </div>

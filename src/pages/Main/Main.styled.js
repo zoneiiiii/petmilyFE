@@ -8,6 +8,7 @@ background-color : ;
 const CarouselContainer = styled.div`
 width: 100%;
 margin: 0 auto;
+position: relative;
 `;
 
 const CardContainer = styled.div`
@@ -47,4 +48,4 @@ font-size : 18px;
 margin-bottom : 5%;
 `;
 
-export {Container, CarouselContainer, CardContainer,CardContainer2, SectionContainer, TextContainer};
+export { Container, CarouselContainer, CardContainer, CardContainer2, SectionContainer, TextContainer };
