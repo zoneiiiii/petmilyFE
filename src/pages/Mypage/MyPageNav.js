@@ -130,7 +130,7 @@ const NavListStyle = styled.div`
     list-style-type: none;
     overflow: hidden;
     height: ${(props) =>
-      props.isFixed || props.isSelected ? props.height + "px" : 0};
+    props.isFixed || props.isSelected ? props.height + "px" : 0};
     transition: height 0.5s ease-in-out;
     z-index: -1;
   }
