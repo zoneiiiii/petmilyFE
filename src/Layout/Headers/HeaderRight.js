@@ -8,8 +8,8 @@ const HeaderRight = ({ page }) => {
     const navigate = useNavigate();
 
     //임시 sessionStorage
-    sessionStorage.setItem('id', 'admin');
-    sessionStorage.setItem('name', '관리자');
+    // sessionStorage.setItem('id', 'admin');
+    // sessionStorage.setItem('name', '관리자');
     // alert(sessionStorage.getItem('id'));
 
     const loginId = window.sessionStorage.getItem('id');
@@ -30,14 +30,14 @@ const HeaderRight = ({ page }) => {
         }
     }
 
-    // 로그인 버튼
-    const loginClick = () => {
-        return navigate('/login');  // 로그인 페이지로 이동.
-    }
-
     // 회원가입 버튼
     const joinClick = () => {
         return navigate('/join');  // 회원가입 페이지로 이동.
+    }
+
+    // 로그인 버튼
+    const loginClick = () => {
+        return navigate('/login');  // 로그인 페이지로 이동.
     }
 
     // 로그인 상태일때

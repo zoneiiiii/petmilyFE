@@ -193,9 +193,10 @@ function FindPW() {
           mt: "10px",
         }}
         disabled={checkDisable()}
-      >
-        비밀번호 찾기
-      </Button>
+        label="비밀번호 찾기"
+        value="로그인폼"
+        href="/changepw"
+      />
     </div>
   );
 }

@@ -6,19 +6,3 @@
     padding-top: 80px;
     min-height: calc(100vh - 180px);
 }
-
-.rooftop {
-    position: fixed;
-    width: 50px;
-    height: 50px;
-    bottom: 300px;
-    right: 30px;
-    background-image: url("../../public/images/navigator/upArrow.png");
-    /* background-image: url("./upArrow.png"); */
-    background-size: cover;
-    cursor: pointer;
-    opacity: 0;
-    /* visibility: hidden; */
-    transition: all 0.3s ease-in-out;
-    z-index: 2000;
-}

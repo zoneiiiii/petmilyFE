@@ -36,9 +36,9 @@ const Header = ({ page }) => {
             <NavList
                 title={"커뮤니티"}
                 navList={[
-                    { linkName: "실종 동물 게시판", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
+                    { linkName: "실종 동물 게시판", link: BROWSER_PATH.MISSING },
                     { linkName: "목격 제보 게시판", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
-                    { linkName: "자유게시판", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
+                    { linkName: "자유게시판", link: BROWSER_PATH.FREEBOARD },
                     { linkName: "매매 장터", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
                 ]}
             />
@@ -46,18 +46,18 @@ const Header = ({ page }) => {
                 title={"SHOP"}
                 navList={[
                     { linkName: "상품", link: BROWSER_PATH.MYPAGE },
-                    { linkName: "장바구니", link: BROWSER_PATH.MYPAGEORDER }, // 페이지 없음
+                    { linkName: "장바구니", link: BROWSER_PATH.MYPAGE }, // 페이지 없음
                 ]}
             />
             <NavList
                 title={"후원"}
                 navList={[
-                    { linkName: "기부 내역", link: BROWSER_PATH.MYPAGE },
-                    { linkName: "봉사하기", link: BROWSER_PATH.MYPAGEORDER }, // 페이지 없음
+                    { linkName: "기부 내역", link: BROWSER_PATH.SUPPORT },
+                    { linkName: "기부하기", link: BROWSER_PATH.DONATEAPPLY },
+                    { linkName: "봉사하기", link: BROWSER_PATH.MYPAGE }, // 페이지 없음
                     { linkName: "봉사 후기", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
                 ]}
             />
-
             <HeaderRight />
         </HeaderNavStyle>
     );
