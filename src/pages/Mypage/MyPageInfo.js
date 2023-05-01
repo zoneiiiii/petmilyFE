@@ -32,78 +32,80 @@ function MyPageInfo() {
 
   const columnWidth = 100;
   return (
-    <MyPageInfoTable>
-      <tbody>
-        <tr>
-          <td className="infoType" width={columnWidth}>
-            ID
-          </td>
-          <td> {member.id}</td>
-        </tr>
-        <tr>
-          <td className="infoType" width={columnWidth}>
-            PW
-          </td>
-          <td> {member.pw}</td>
-        </tr>
-        <tr>
-          <td className="infoType" width={columnWidth}>
-            이름
-          </td>
-          <td> {member.name}</td>
-        </tr>
-        <tr>
-          <td className="infoType" width={columnWidth}>
-            성별
-          </td>
-          <td> {member.gender}</td>
-        </tr>
-        <tr>
-          <td className="infoType" width={columnWidth}>
-            생일
-          </td>
-          <td> {member.birth}</td>
-        </tr>
-        <tr>
-          <td className="infoType" width={columnWidth}>
-            연락처
-          </td>
-          <td> {member.tel}</td>
-        </tr>
-        <tr>
-          <td className="infoType" width={columnWidth}>
-            이메일
-          </td>
-          <td> {member.email}</td>
-        </tr>
-        <tr>
-          <td className="infoType" width={columnWidth}>
-            주소
-          </td>
-          <td> {member.addr}</td>
-        </tr>
-        <tr className="btn">
-          <td colSpan={2}>
-            <ThemeProvider theme={theme}>
-              <Button
-                variant="contained"
-                sx={{
-                  mt: 2,
-                  mb: 1,
-                  fontWeight: "bold",
-                  width: 100,
-                  height: 40,
-                }}
-                color="fdb385"
-                onClick={() => navigate(BROWSER_PATH.MODIFYINFO)}
-              >
-                수정
-              </Button>
-            </ThemeProvider>
-          </td>
-        </tr>
-      </tbody>
-    </MyPageInfoTable>
+    <>
+      <MyPageInfoTable>
+        <tbody>
+          <tr>
+            <td className="infoType" width={columnWidth}>
+              ID
+            </td>
+            <td> {member.id}</td>
+          </tr>
+          <tr>
+            <td className="infoType" width={columnWidth}>
+              PW
+            </td>
+            <td> {member.pw}</td>
+          </tr>
+          <tr>
+            <td className="infoType" width={columnWidth}>
+              이름
+            </td>
+            <td> {member.name}</td>
+          </tr>
+          <tr>
+            <td className="infoType" width={columnWidth}>
+              성별
+            </td>
+            <td> {member.gender}</td>
+          </tr>
+          <tr>
+            <td className="infoType" width={columnWidth}>
+              생일
+            </td>
+            <td> {member.birth}</td>
+          </tr>
+          <tr>
+            <td className="infoType" width={columnWidth}>
+              연락처
+            </td>
+            <td> {member.tel}</td>
+          </tr>
+          <tr>
+            <td className="infoType" width={columnWidth}>
+              이메일
+            </td>
+            <td> {member.email}</td>
+          </tr>
+          <tr>
+            <td className="infoType" width={columnWidth}>
+              주소
+            </td>
+            <td> {member.addr}</td>
+          </tr>
+          <tr className="btn">
+            <td colSpan={2}>
+              <ThemeProvider theme={theme}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    mt: 2,
+                    mb: 1,
+                    fontWeight: "bold",
+                    width: 100,
+                    height: 40,
+                  }}
+                  color="fdb385"
+                  onClick={() => navigate(BROWSER_PATH.MODIFYINFO)}
+                >
+                  수정
+                </Button>
+              </ThemeProvider>
+            </td>
+          </tr>
+        </tbody>
+      </MyPageInfoTable>
+    </>
   );
 }
 
