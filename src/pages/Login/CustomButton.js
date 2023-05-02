@@ -74,6 +74,21 @@ const ResetButton = styled(Button)`
   }
 `;
 
+const WriteButton = styled(Button)`
+  background-color: #fbd385;
+  color: white;
+  width: 90px;
+  height: 30px;
+  margin-top: 10px;
+  margin-right: 10px;
+  float: right;
+  &:hover {
+    background-color: #facc73;
+  }
+  &:focus {
+    background-color: #facc73;
+  }`
+
 export default function CustomButton(props) {
   const { value, label } = props;
 
@@ -130,6 +145,15 @@ export default function CustomButton(props) {
         >
           {props.label}
         </SubmitButton>
+      ) : value === "글쓰기" ? (
+        <WriteButton
+          value={value}
+          variant="contained"
+          onClick={props.onClick}
+          fullWidth
+        >
+          {props.label}
+        </WriteButton>
       ) : (
         ""
       )}

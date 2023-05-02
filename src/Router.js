@@ -23,6 +23,10 @@ import {
   ProductDetail,
   Missing,
   FreeBoard,
+  FreeWrite,
+  FreeDetail,
+  FindBoard,
+  FleaBoard,
   VolunteerNotice,
   VolunteerNoticeDetail,
   VolunteerNoticeWrite,
@@ -85,15 +89,21 @@ const Router = () => {
             <Route path={BROWSER_PATH.PRODUCT} element={<Product />} />
             <Route path={BROWSER_PATH.CART} element={<Cart />} />
             <Route path={BROWSER_PATH.ORDER} element={<Order />} />
+            <Route path={BROWSER_PATH.SUPPORT} element={<Donate />} />
+            <Route path={BROWSER_PATH.DONATEAPPLY} element={<DonateApply />} />
+            <Route path={BROWSER_PATH.FINDPW} element={<FindPW />} />
+            <Route path={BROWSER_PATH.CHANGEPW} element={<ChangePW />} />
+            <Route path={BROWSER_PATH.PRODUCT} element={<Product />} />
+            <Route path={BROWSER_PATH.PRODUCTDETAIL} element={<ProductDetail />} />
+            <Route path={BROWSER_PATH.MISSING} element={<Missing />} />
+            <Route path={BROWSER_PATH.FREEBOARD} element={<FreeBoard />} />
+            <Route path={BROWSER_PATH.FREEWRITE} element={<FreeWrite />} />
+            <Route path={BROWSER_PATH.FREEDETAIL} element={<FreeDetail />} />
+            <Route path={BROWSER_PATH.FINDBOARD} element={<FindBoard />} />
+            <Route path={BROWSER_PATH.FLEABOARD} element={<FleaBoard />} />
             <Route path="*" element={<NotFound />} />
           </Route>
-          <Route path={BROWSER_PATH.SUPPORT} element={<Donate />} />
-          <Route path={BROWSER_PATH.DONATEAPPLY} element={<DonateApply />} />
-          <Route path={BROWSER_PATH.FINDPW} element={<FindPW />} />
-          <Route path={BROWSER_PATH.CHANGEPW} element={<ChangePW />} />
-          <Route path={BROWSER_PATH.PRODUCT} element={<Product />} />
-          <Route path={BROWSER_PATH.PRODUCT} element={<ProductDetail />} />
-          <Route path="*" element={<NotFound />} />
+
         </Routes>
       </React.Suspense>
     </BrowserRouter>

@@ -31,6 +31,11 @@ const Missing = lazy(() => import("./Community/Missing/Missing"));
 const FreeBoard = lazy(() => import("./Community/FreeBoard/FreeBoard"));
 const Cart = lazy(() => import("./Shop/Cart"));
 const Order = lazy(() => import("./Shop/Order"));
+const FreeWrite = lazy(() => import("./Community/FreeBoard/FreeWrite"));
+const FreeDetail = lazy(() => import("./Community/FreeBoard/FreeDetail"));
+const FindBoard = lazy(() => import("./Community/FindBoard/FindBoard"));
+const FleaBoard = lazy(() => import("./Community/FleaBoard/FleaBoard"));
+
 //아래에 import할 페이지 함수 생성
 
 export {
@@ -55,6 +60,10 @@ export {
   ProductDetail,
   Missing,
   FreeBoard,
+  FreeWrite,
+  FreeDetail,
+  FindBoard,
+  FleaBoard,
   VolunteerNotice,
   VolunteerNoticeWrite,
   VolunteerNoticeDetail,
