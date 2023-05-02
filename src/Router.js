@@ -20,6 +20,7 @@ import {
   ChangePW,
   HospitalLocation,
   Product,
+  ProductDetail,
   Missing,
   FreeBoard,
   VolunteerNotice,
@@ -86,6 +87,13 @@ const Router = () => {
             <Route path={BROWSER_PATH.ORDER} element={<Order />} />
             <Route path="*" element={<NotFound />} />
           </Route>
+          <Route path={BROWSER_PATH.SUPPORT} element={<Donate />} />
+          <Route path={BROWSER_PATH.DONATEAPPLY} element={<DonateApply />} />
+          <Route path={BROWSER_PATH.FINDPW} element={<FindPW />} />
+          <Route path={BROWSER_PATH.CHANGEPW} element={<ChangePW />} />
+          <Route path={BROWSER_PATH.PRODUCT} element={<Product />} />
+          <Route path={BROWSER_PATH.PRODUCT} element={<ProductDetail />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </React.Suspense>
     </BrowserRouter>

@@ -26,6 +26,7 @@ const VolunteerNoticeDetail = lazy(() =>
   import("./Support/Volunteer/VolunteerNoticeDetail")
 );
 const Product = lazy(() => import("./Shop/Product"));
+const ProductDetail = lazy(() => import("./Shop/ProductDetail"));
 const Missing = lazy(() => import("./Community/Missing/Missing"));
 const FreeBoard = lazy(() => import("./Community/FreeBoard/FreeBoard"));
 const Cart = lazy(() => import("./Shop/Cart"));
@@ -51,6 +52,7 @@ export {
   DonateApply,
   HospitalLocation,
   Product,
+  ProductDetail,
   Missing,
   FreeBoard,
   VolunteerNotice,
