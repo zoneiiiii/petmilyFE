@@ -39,8 +39,8 @@ export const MYPAGE = {
    * @return "/mypage/order/" + orderNum (orderNum존재)
    **/
   ORDER_DETAIL: (orderNum) => {
-    if (orderNum === undefined) return "/mypage/order/list?orderNum=:orderNum";
-    else return "/mypage/order/list?orderNum=" + orderNum;
+    if (orderNum === undefined) return "/mypage/order/:orderNum";
+    else return "/mypage/order/" + orderNum;
   },
   /**입양 후기 페이지 URL
    * @return "/mypage/adoptreview"
