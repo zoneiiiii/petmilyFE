@@ -19,6 +19,7 @@ import {
   FindPW,
   ChangePW,
   Product,
+  ProductDetail,
   Missing,
   FreeBoard,
 } from "./pages/ImportPages";
@@ -68,6 +69,7 @@ const Router = () => {
           <Route path={BROWSER_PATH.FINDPW} element={<FindPW />} />
           <Route path={BROWSER_PATH.CHANGEPW} element={<ChangePW />} />
           <Route path={BROWSER_PATH.PRODUCT} element={<Product />} />
+          <Route path={BROWSER_PATH.PRODUCT} element={<ProductDetail />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </React.Suspense>

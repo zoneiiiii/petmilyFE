@@ -19,6 +19,7 @@ const BROWSER_PATH = {
   FINDPW: "/findpw", //비밀번호찾기
   CHANGEPW: "/changepw", //비밀번호 변경
   PRODUCT: "/product", //shop 상품리스트
+  PRODUCTDETAIL: "/productdetail", //shop 상품 상세페이지
   MISSING: "/missing", // 실종 동물 게시판
   FREEBOARD: "/freeboard", // 자유 게시판
 };

@@ -16,6 +16,7 @@ const FindPW = lazy(() => import("./Login/FindPW"));
 const ChangePW = lazy(() => import("./Login/ChangePW"));
 const DonateApply = lazy(() => import("./Support/DonateApply"));
 const Product = lazy(() => import("./Shop/Product"));
+const ProductDetail = lazy(() => import("./Shop/ProductDetail"));
 const Missing = lazy(() => import("./Community/Missing/Missing"));
 const FreeBoard = lazy(() => import("./Community/FreeBoard/FreeBoard"));
 
@@ -39,6 +40,7 @@ export {
   ChangePW,
   DonateApply,
   Product,
+  ProductDetail,
   Missing,
   FreeBoard,
 };

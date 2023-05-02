@@ -19,6 +19,7 @@ const Button = styled.button`
   border-radius: 4px;
   border: 2px solid #ffbd59;
   margin-top: 40px;
+  cursor: pointer;
 `;
 
 const Joinup = styled.h1`
