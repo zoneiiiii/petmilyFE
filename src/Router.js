@@ -25,6 +25,8 @@ import {
   VolunteerNotice,
   VolunteerNoticeDetail,
   VolunteerNoticeWrite,
+  Cart,
+  Order,
 } from "./pages/ImportPages";
 import NotFound from "./pages/NotFound/NotFound";
 import Loading from "./components/Loading/LoadingPage";
@@ -80,6 +82,8 @@ const Router = () => {
             <Route path={BROWSER_PATH.FINDPW} element={<FindPW />} />
             <Route path={BROWSER_PATH.CHANGEPW} element={<ChangePW />} />
             <Route path={BROWSER_PATH.PRODUCT} element={<Product />} />
+            <Route path={BROWSER_PATH.CART} element={<Cart />} />
+            <Route path={BROWSER_PATH.ORDER} element={<Order />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

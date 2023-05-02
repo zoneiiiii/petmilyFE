@@ -5,13 +5,12 @@ import { BROWSER_PATH } from "../../constants/path";
 import HeaderRight from "./HeaderRight";
 
 const Header = ({ page }) => {
-
   return (
     <HeaderNavStyle className="headerNav">
       <div className="headerLeft">
         <div className="logo">
           <Link to="/">
-            <img alt="petmily icon" src="/images/petmilylogo.png" />
+            <img alt="petmily icon" src="./../images/petmilylogo.png" />
           </Link>
         </div>
       </div>
@@ -45,8 +44,8 @@ const Header = ({ page }) => {
       <NavList
         title={"SHOP"}
         navList={[
-          { linkName: "상품", link: BROWSER_PATH.MYPAGE },
-          { linkName: "장바구니", link: BROWSER_PATH.MYPAGE }, // 페이지 없음
+          { linkName: "상품", link: BROWSER_PATH.PRODUCT },
+          { linkName: "장바구니", link: BROWSER_PATH.CART },
         ]}
       />
       <NavList
@@ -54,8 +53,8 @@ const Header = ({ page }) => {
         navList={[
           { linkName: "기부 내역", link: BROWSER_PATH.SUPPORT },
           { linkName: "기부하기", link: BROWSER_PATH.DONATEAPPLY },
-          { linkName: "봉사하기", link: BROWSER_PATH.VOLUNTEER }, // 페이지 없음
-          { linkName: "봉사 후기", link: BROWSER_PATH.VOLUNTEER }, // 링크없어서 마이페이지로 연결, 페이지 없음
+          { linkName: "봉사하기", link: BROWSER_PATH.MYPAGE }, // 페이지 없음
+          { linkName: "봉사 후기", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
         ]}
       />
       <HeaderRight />
@@ -108,12 +107,14 @@ const HeaderNavStyle = styled.div`
   background: rgb(255, 255, 238);
   box-shadow: 0px 2px 0px rgb(167, 165, 165);
   z-index: 1000;
+
   .logo {
     width: 15vw;
     margin-right: 30px;
     margin-top: 5px;
     object-fit: cover;
   }
+
   .NavTitle {
     padding: 10px 0 0 0;
   }
@@ -135,9 +136,11 @@ const NavListStyle = styled.div`
     border: 1px solid #E8E8E8;
     border-radius: 15px 15px / 15px 15px;
   }
+
   li:hover {
     background-color: #E8E8E8;
   }
+
   ul {
     margin: auto;
     padding-left: 0px;
