@@ -1,57 +1,136 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import * as PAGE_URL from "./constants/PageURL";
 import * as Page from "./pages/ImportPages";
-import NotFound from "./pages/NotFound/NotFound";
-import Loading from "./components/Loading/LoadingPage";
+import * as BROWSER_PATH from "./constants/PageURL";
 
 const Router = () => {
   return (
     <BrowserRouter>
-      <React.Suspense fallback={<Loading />}>
+      <React.Suspense fallback={<Page.Loading />}>
         <Routes>
-          <Route path={PAGE_URL.MAIN} element={<Page.Layout />}>
+          <Route path={BROWSER_PATH.MAIN} element={<Page.Layout />}>
             <Route index element={<Page.Main />} />
-            <Route path={PAGE_URL.ACCOUNT.JOIN} element={<Page.Join />} />
-            <Route path={PAGE_URL.ACCOUNT.LOGIN} element={<Page.Login />} />
             <Route
-              path={PAGE_URL.MYPAGE.MODIFY_INFO}
+              path={BROWSER_PATH.ACCOUNT.JOIN}
+              element={<Page.Account.Join />}
+            />
+            <Route
+              path={BROWSER_PATH.ACCOUNT.LOGIN}
+              element={<Page.Account.Login />}
+            />
+            <Route
+              path={BROWSER_PATH.ACCOUNT.FIND_PW}
+              element={<Page.Account.FindPW />}
+            />
+            <Route
+              path={BROWSER_PATH.ACCOUNT.CHANGE_PW}
+              element={<Page.Account.ChangePW />}
+            />
+            <Route
+              path={BROWSER_PATH.MYPAGE.MODIFY_INFO}
               element={<Page.MyPage.ModifyInfo />}
             />
             <Route
               exact
-              path={PAGE_URL.MYPAGE.INFO}
+              path={BROWSER_PATH.MYPAGE.INFO}
               element={<Page.MyPage.MyPage />}
             >
-              <Route index element={<Page.MyPage.MyInfo />} />
+              <Route index element={<Page.MyPage.MyPageInfo />} />
               <Route
-                path={PAGE_URL.MYPAGE.ORDER}
-                element={<Page.MyPage.MyOrderList />}
+                path={BROWSER_PATH.MYPAGE.ORDERLIST}
+                element={<Page.MyPage.MyPageOrderList />}
               />
               <Route
-                path={PAGE_URL.MYPAGE.ORDER_DETAIL()}
-                element={<Page.MyPage.MyOrderDetail />}
+                path={BROWSER_PATH.MYPAGE.ORDER_DETAIL()}
+                element={<Page.MyPage.MyPageOrderDetail />}
               />
               <Route
-                path={PAGE_URL.MYPAGE.ADOPT}
-                element={<Page.MyPage.MyAdoptList />}
+                path={BROWSER_PATH.MYPAGE.ADOPT_REVIEW}
+                element={<Page.MyPage.MyPageAdoptReview />}
               />
               <Route
-                path={PAGE_URL.MYPAGE.ADOPT_REVIEW}
-                element={<Page.MyPage.MyAdoptReview />}
+                path={BROWSER_PATH.MYPAGE.BOARD()}
+                element={<Page.MyPage.MyPageBoard />}
+              />
+              <Route
+                path={BROWSER_PATH.MYPAGE.QNA}
+                element={<Page.MyPage.MyPageInquiry />}
+              />
+              <Route
+                path={BROWSER_PATH.MYPAGE.QNA_WRITE}
+                element={<Page.MyPage.MyPageQnA />}
+              />
+              <Route
+                path={BROWSER_PATH.MYPAGE.QNA_DETAIL}
+                element={<Page.MyPage.MyPageQnADetail />}
               />
             </Route>
-            <Route path={PAGE_URL.SUPPORT.DONATE} element={<Page.Donate />} />
             <Route
-              path={PAGE_URL.SUPPORT.APPLY}
-              element={<Page.DonateApply />}
+              path={BROWSER_PATH.ABOUT.ABOUT}
+              elememt={<Page.About.About />}
             />
-            <Route path={PAGE_URL.ACCOUNT.FIND_PW} element={<Page.FindPW />} />
             <Route
-              path={PAGE_URL.ACCOUNT.CHANGE_PW}
-              element={<Page.ChangePW />}
+              path={BROWSER_PATH.ABOUT.ACTIVITY}
+              elememt={<Page.About.Activity />}
             />
-            <Route path="*" element={<NotFound />} />
+            <Route
+              path={BROWSER_PATH.ABOUT.ACTIVITY_DETAIL()}
+              elememt={<Page.About.ActivityDetail />}
+            />
+            <Route
+              path={BROWSER_PATH.ABOUT.ADOPT_PROCESS}
+              elememt={<Page.About.AdoptProcess />}
+            />
+            <Route
+              path={BROWSER_PATH.ABOUT.ABOUT}
+              elememt={<Page.About.ApplicationForm />}
+            />
+            <Route
+              path={BROWSER_PATH.ABOUT.ABOUT}
+              elememt={<Page.About.About />}
+            />
+            <Route path={BROWSER_PATH.ABOUT.FAQ} elememt={<Page.About.FAQ />} />
+            <Route
+              path={BROWSER_PATH.ABOUT.NOTICE}
+              elememt={<Page.About.Notice />}
+            />
+            <Route
+              path={BROWSER_PATH.ABOUT.NOTICE_DETAIL()}
+              elememt={<Page.About.NoticeDetail />}
+            />
+            <Route
+              path={BROWSER_PATH.ABOUT.NOTICE_WRITE}
+              elememt={<Page.About.NoticeWrite />}
+            />
+            <Route
+              path={BROWSER_PATH.ADOPT.HOSPITAL_LOCATION}
+              element={<Page.Adopt.HospitalLocation />}
+            />
+            <Route
+              path={BROWSER_PATH.SUPPORT.DONATE}
+              element={<Page.Support.Donate />}
+            />
+            <Route
+              path={BROWSER_PATH.SUPPORT.APPLY}
+              element={<Page.Support.DonateApply />}
+            />
+            <Route
+              path={BROWSER_PATH.SUPPORT.VOLUNTEER}
+              element={<Page.Support.VolunteerNotice />}
+            />
+            <Route
+              path={BROWSER_PATH.SUPPORT.VOLUNTEER_DETAIL}
+              element={<Page.Support.VolunteerNoticeDetail />}
+            />
+            <Route
+              path={BROWSER_PATH.SUPPORT.VOLUNTEER_WRITE}
+              element={<Page.Support.VolunteerNoticeWrite />}
+            />
+            <Route
+              path={BROWSER_PATH.SHOP.PRODUCT}
+              element={<Page.Shop.Product />}
+            />
+            <Route path="*" element={<Page.NotFound />} />
           </Route>
         </Routes>
       </React.Suspense>
