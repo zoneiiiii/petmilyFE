@@ -9,6 +9,7 @@ import CustomButton from "../Login/CustomButton";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { MYPAGE } from "../../constants/PageURL";
 
 //제목, 내용, 멤버num, 답변상태, boardid, boardnum, 이미지, 날짜
 // const [data, setData] = useState({
@@ -95,7 +96,7 @@ const MyPageQnADetail = () => {
         </TableRow>
 
         <CustomButton label="문의취소" value="작성취소" />
-        <Link to="/mypage/inquiry" style={{ textDecoration: "none" }}>
+        <Link to={MYPAGE.QNA} style={{ textDecoration: "none" }}>
           <CustomButton label="목록으로" value="1:1문의작성" />
         </Link>
       </Table>

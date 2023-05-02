@@ -17,14 +17,12 @@ import { useEffect, useState } from "react";
 
 const MyPageOrderDetail = () => {
   const navigate = useNavigate();
-  const { orderNum } = useParams();
+  const { id } = useParams();
   const [orderData, setOrderData] = useState(dummy);
 
   useEffect(() => {
-    setOrderData(
-      dummy.filter((data) => data.orderNum === parseInt(orderNum))[0]
-    );
-  }, [orderNum]);
+    setOrderData(dummy.filter((data) => data.orderNum === parseInt(id))[0]);
+  }, [id]);
   return (
     <ThemeProvider theme={CustomTheme}>
       <Typography
@@ -113,7 +111,7 @@ const MyPageOrderDetail = () => {
             variant="contained"
             color="fbd385"
             sx={{ m: 2, width: "100px" }}
-            onClick={() => navigate(MYPAGE.ORDER)}
+            onClick={() => navigate(MYPAGE.ORDERLIST)}
           >
             목록
           </Button>

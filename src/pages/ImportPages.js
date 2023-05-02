@@ -179,6 +179,6 @@ export const Admin = {
   AdminMember: lazy(() => import("./Admin/AdminMember")),
   AdminOrder: lazy(() => import("./Admin/AdminOrder")),
   AdminProduct: lazy(() => import("./Admin/AdminProduct")),
-  AdminProductWrite: lazy(() => import("./Admin/AdimProductWrite")),
+  AdminProductWrite: lazy(() => import("./Admin/AdminProductWrite")),
   AdminQnA: lazy(() => import("./Admin/AdminQnA")),
 };

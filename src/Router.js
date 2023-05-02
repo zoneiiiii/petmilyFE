@@ -67,7 +67,7 @@ const Router = () => {
                 element={<Page.MyPage.MyPageQnAWrite />}
               />
               <Route
-                path={BROWSER_PATH.MYPAGE.QNA_DETAIL}
+                path={BROWSER_PATH.MYPAGE.QNA_DETAIL()}
                 element={<Page.MyPage.MyPageQnADetail />}
               />
             </Route>
@@ -111,7 +111,7 @@ const Router = () => {
               elememt={<Page.Adopt.AnimalList />}
             />
             <Route
-              path={BROWSER_PATH.ADOPT.ANIMAL_LIST_DETAIL}
+              path={BROWSER_PATH.ADOPT.ANIMAL_LIST_DETAIL()}
               elememt={<Page.Adopt.AnimalListDetail />}
             />
             <Route
@@ -127,15 +127,15 @@ const Router = () => {
               element={<Page.Adopt.ShelterLocation />}
             />
             <Route
-              path={BROWSER_PATH.ADOPT.ADOPT_REVIEW}
+              path={BROWSER_PATH.ADOPT.REVIEW}
               elememt={<Page.Adopt.AdoptReview />}
             />
             <Route
-              path={BROWSER_PATH.ADOPT.ADOPT_REVIEW_DETAIL}
+              path={BROWSER_PATH.ADOPT.REVIEW_DETAIL()}
               elememt={<Page.Adopt.AdoptReviewDetail />}
             />
             <Route
-              path={BROWSER_PATH.ADOPT.ADOPT_REVIEW_WRITE}
+              path={BROWSER_PATH.ADOPT.REVIEW_WRITE}
               elememt={<Page.Adopt.AdoptReviewWrite />}
             />
             {/* Shop */}
@@ -144,7 +144,7 @@ const Router = () => {
               element={<Page.Shop.Product />}
             />
             <Route
-              path={BROWSER_PATH.SHOP.PRODUCT_DETAIL}
+              path={BROWSER_PATH.SHOP.PRODUCT_DETAIL()}
               element={<Page.Shop.ProductDetail />}
             />
             <Route path={BROWSER_PATH.SHOP.CART} element={<Page.Shop.Cart />} />
@@ -170,7 +170,7 @@ const Router = () => {
               element={<Page.Support.VolunteerNotice />}
             />
             <Route
-              path={BROWSER_PATH.SUPPORT.VOLUNTEER_NOTICE_DETAIL}
+              path={BROWSER_PATH.SUPPORT.VOLUNTEER_NOTICE_DETAIL()}
               element={<Page.Support.VolunteerNoticeDetail />}
             />
             <Route
@@ -182,7 +182,7 @@ const Router = () => {
               element={<Page.Support.VolunteerReview />}
             />
             <Route
-              path={BROWSER_PATH.SUPPORT.VOLUNTEER_REVIEW_DETAIL}
+              path={BROWSER_PATH.SUPPORT.VOLUNTEER_REVIEW_DETAIL()}
               element={<Page.Support.VolunteerReviewDetail />}
             />
             <Route
@@ -195,7 +195,7 @@ const Router = () => {
               element={<Page.Community.FindBoard />}
             />
             <Route
-              path={BROWSER_PATH.COMMUNITY.FIND_DETAIL}
+              path={BROWSER_PATH.COMMUNITY.FIND_DETAIL()}
               element={<Page.Community.FindDetail />}
             />
             <Route
@@ -207,7 +207,7 @@ const Router = () => {
               element={<Page.Community.FleaBoard />}
             />
             <Route
-              path={BROWSER_PATH.COMMUNITY.FLEA_DETAIL}
+              path={BROWSER_PATH.COMMUNITY.FLEA_DETAIL()}
               element={<Page.Community.FleaDetail />}
             />
             <Route
@@ -219,7 +219,7 @@ const Router = () => {
               element={<Page.Community.FreeBoard />}
             />
             <Route
-              path={BROWSER_PATH.COMMUNITY.FREE_DETAIL}
+              path={BROWSER_PATH.COMMUNITY.FREE_DETAIL()}
               element={<Page.Community.FreeDetail />}
             />
             <Route
@@ -231,7 +231,7 @@ const Router = () => {
               element={<Page.Community.Missing />}
             />
             <Route
-              path={BROWSER_PATH.COMMUNITY.MISSING_DETAIL}
+              path={BROWSER_PATH.COMMUNITY.MISSING_DETAIL()}
               element={<Page.Community.MissingDetail />}
             />
             <Route
@@ -264,14 +264,13 @@ const Router = () => {
               element={<Page.Admin.AdminProduct />}
             />
             <Route
-              path={BROWSER_PATH.ADMIN.PRODUCTFORM}
+              path={BROWSER_PATH.ADMIN.PRODUCT_WRITE}
               element={<Page.Admin.AdminProductWrite />}
             />
             <Route
               path={BROWSER_PATH.ADMIN.QNA}
               element={<Page.Admin.AdminQnA />}
             />
-
             <Route path="*" element={<Page.NotFound />} />
           </Route>
         </Routes>
