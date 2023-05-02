@@ -28,6 +28,18 @@ const CustomizedButton = styled(Button)`
     background-color: #facc73;
   }
 `;
+const SubmitButton = styled(Button)`
+  background-color: #fbd385;
+  color: white;
+  width: 90px;
+  height: 30px;
+  &:hover {
+    background-color: #facc73;
+  }
+  &:focus {
+    background-color: #facc73;
+  }
+`;
 
 const QuestionButton = styled(Button)`
   background-color: #fbd385;
@@ -109,6 +121,15 @@ export default function CustomButton(props) {
         >
           {props.label}
         </ResetButton>
+      ) : value === "병원검색" ? (
+        <SubmitButton
+          value={value}
+          variant="contained"
+          onClick={props.onClick}
+          fullWidth
+        >
+          {props.label}
+        </SubmitButton>
       ) : (
         ""
       )}

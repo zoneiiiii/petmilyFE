@@ -3,6 +3,7 @@ const BROWSER_PATH = {
   LOGIN: "/login", // 로그인페이지
   JOIN: "/join", // 회원가입
   MYPAGE: "/mypage", // 마이페이지
+  HOSPITALLOCATION: "/hospital", //병원위치정보
   MYPAGEINFO: "/mypage/info", //마이페이지 정보
   MODIFYINFO: "/mypage/modifyinfo", // 회원 정보 수정
   MYPAGEORDER: "/mypage/orderlist", // 구매 내역
@@ -14,6 +15,9 @@ const BROWSER_PATH = {
   MYPAGEQNADETAIL: "/mypage/inquirydetail", //문의하기 상세
   FREE: "/board/free",
   FLEA: "/board/flea", // 더 추가해야함.
+  VOLUNTEER: "/board/volunteer", // 봉사 게시판
+  VOLUNTEERWRITE: "/board/volunteer/write", //봉사 게시판 글작성
+  VOLUNTEERDETAIL: "/board/volunteer/:id", // 봉사 게시판 Detail
   SUPPORT: "/donate",
   DONATEAPPLY: "/donate/apply",
   FINDPW: "/findpw", //비밀번호찾기
@@ -22,6 +26,8 @@ const BROWSER_PATH = {
   PRODUCTDETAIL: "/productdetail", //shop 상품 상세페이지
   MISSING: "/missing", // 실종 동물 게시판
   FREEBOARD: "/freeboard", // 자유 게시판
+  CART: "/product/cart", //장바구니
+  ORDER: "/product/order", //주문/결제
 };
 
 export { BROWSER_PATH };

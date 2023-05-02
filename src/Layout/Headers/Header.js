@@ -45,7 +45,7 @@ const Header = ({ page }) => {
         title={"SHOP"}
         navList={[
           { linkName: "상품", link: BROWSER_PATH.PRODUCT },
-          { linkName: "장바구니", link: BROWSER_PATH.MYPAGE }, // 페이지 없음
+          { linkName: "장바구니", link: BROWSER_PATH.CART },
         ]}
       />
       <NavList
