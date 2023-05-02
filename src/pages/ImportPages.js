@@ -15,13 +15,22 @@ const MyPageQnADetail = lazy(() => import("./Mypage/MyPageQnADetail"));
 const Donate = lazy(() => import("./Support/Donate"));
 const FindPW = lazy(() => import("./Login/FindPW"));
 const ChangePW = lazy(() => import("./Login/ChangePW"));
-const DonateApply = lazy(() => import("./Support/DonateApply"))
-const VolunteerNotice = lazy(() => import("./Support/Volunteer/VolunteerNotice"));
-const VolunteerNoticeWrite = lazy(() => import("./Support/Volunteer/VolunteerNoticeWrite"));
-const VolunteerNoticeDetail = lazy(() => import("./Support/Volunteer/VolunteerNoticeDetail"));
+const DonateApply = lazy(() => import("./Support/DonateApply"));
+const VolunteerNotice = lazy(() =>
+  import("./Support/Volunteer/VolunteerNotice")
+);
+const VolunteerNoticeWrite = lazy(() =>
+  import("./Support/Volunteer/VolunteerNoticeWrite")
+);
+const VolunteerNoticeDetail = lazy(() =>
+  import("./Support/Volunteer/VolunteerNoticeDetail")
+);
 const Product = lazy(() => import("./Shop/Product"));
+const ProductDetail = lazy(() => import("./Shop/ProductDetail"));
 const Missing = lazy(() => import("./Community/Missing/Missing"));
 const FreeBoard = lazy(() => import("./Community/FreeBoard/FreeBoard"));
+const Cart = lazy(() => import("./Shop/Cart"));
+const Order = lazy(() => import("./Shop/Order"));
 const FreeWrite = lazy(() => import("./Community/FreeBoard/FreeWrite"));
 const FreeDetail = lazy(() => import("./Community/FreeBoard/FreeDetail"));
 const FindBoard = lazy(() => import("./Community/FindBoard/FindBoard"));
@@ -30,29 +39,34 @@ const FleaBoard = lazy(() => import("./Community/FleaBoard/FleaBoard"));
 //아래에 import할 페이지 함수 생성
 
 export {
-    Layout,
-    Main,
-    Join,
-    Login,
-    MyPage,
-    MyPageInfo,
-    ModifyInfo,
-    MyPageAdoptReview,
-    MyPageBoard,
-    MyPageInquiry,
-    MyPageQnA,
-    MyPageQnADetail,
-    Donate,
-    FindPW,
-    ChangePW,
-    DonateApply,
-    HospitalLocation,
-    Product,
-    Missing,
-    FreeBoard,
-    FreeWrite,
-    FreeDetail,
-    FindBoard,
-    FleaBoard,
-    VolunteerNotice, VolunteerNoticeWrite, VolunteerNoticeDetail
+  Layout,
+  Main,
+  Join,
+  Login,
+  MyPage,
+  MyPageInfo,
+  ModifyInfo,
+  MyPageAdoptReview,
+  MyPageBoard,
+  MyPageInquiry,
+  MyPageQnA,
+  MyPageQnADetail,
+  Donate,
+  FindPW,
+  ChangePW,
+  DonateApply,
+  HospitalLocation,
+  Product,
+  ProductDetail,
+  Missing,
+  FreeBoard,
+  FreeWrite,
+  FreeDetail,
+  FindBoard,
+  FleaBoard,
+  VolunteerNotice,
+  VolunteerNoticeWrite,
+  VolunteerNoticeDetail,
+  Cart,
+  Order,
 };

@@ -1,13 +1,11 @@
-import React from 'react';
+import React from "react";
 
-function VolunteerNoticeWrite() {
-  
-
+const VolunteerNoticeWrite = () => {
   return (
     <div>
-    <h1>봉사 작성 게시판!</h1>
+      <h1>봉사 게시글 작성 폼</h1>
     </div>
-  )
-}
+  );
+};
 
 export default VolunteerNoticeWrite;
