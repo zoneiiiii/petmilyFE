@@ -15,14 +15,21 @@ const MyPageQnADetail = lazy(() => import("./Mypage/MyPageQnADetail"));
 const Donate = lazy(() => import("./Support/Donate"));
 const FindPW = lazy(() => import("./Login/FindPW"));
 const ChangePW = lazy(() => import("./Login/ChangePW"));
-const DonateApply = lazy(() => import("./Support/DonateApply"))
-const VolunteerNotice = lazy(() => import("./Support/Volunteer/VolunteerNotice"));
-const VolunteerNoticeWrite = lazy(() => import("./Support/Volunteer/VolunteerNoticeWrite"));
-const VolunteerNoticeDetail = lazy(() => import("./Support/Volunteer/VolunteerNoticeDetail"));
+const DonateApply = lazy(() => import("./Support/DonateApply"));
+const VolunteerNotice = lazy(() =>
+  import("./Support/Volunteer/VolunteerNotice")
+);
+const VolunteerNoticeWrite = lazy(() =>
+  import("./Support/Volunteer/VolunteerNoticeWrite")
+);
+const VolunteerNoticeDetail = lazy(() =>
+  import("./Support/Volunteer/VolunteerNoticeDetail")
+);
 const Product = lazy(() => import("./Shop/Product"));
 const Missing = lazy(() => import("./Community/Missing/Missing"));
 const FreeBoard = lazy(() => import("./Community/FreeBoard/FreeBoard"));
-
+const Cart = lazy(() => import("./Shop/Cart"));
+const Order = lazy(() => import("./Shop/Order"));
 //아래에 import할 페이지 함수 생성
 
 export {
@@ -46,5 +53,9 @@ export {
   Product,
   Missing,
   FreeBoard,
-  VolunteerNotice,VolunteerNoticeWrite,VolunteerNoticeDetail
+  VolunteerNotice,
+  VolunteerNoticeWrite,
+  VolunteerNoticeDetail,
+  Cart,
+  Order,
 };
