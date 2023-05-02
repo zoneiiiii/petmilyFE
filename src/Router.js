@@ -196,11 +196,11 @@ const Router = () => {
             />
             <Route
               path={BROWSER_PATH.COMMUNITY.FIND_DETAIL}
-              element={<Page.Community.FindBoardDetail />}
+              element={<Page.Community.FindDetail />}
             />
             <Route
               path={BROWSER_PATH.COMMUNITY.FIND_WRITE}
-              element={<Page.Community.FindBoardWrite />}
+              element={<Page.Community.FindWrite />}
             />
             <Route
               path={BROWSER_PATH.COMMUNITY.FLEA}
@@ -208,11 +208,11 @@ const Router = () => {
             />
             <Route
               path={BROWSER_PATH.COMMUNITY.FLEA_DETAIL}
-              element={<Page.Community.FleaBoardDetail />}
+              element={<Page.Community.FleaDetail />}
             />
             <Route
               path={BROWSER_PATH.COMMUNITY.FLEA_WRITE}
-              element={<Page.Community.FleaBoardWrite />}
+              element={<Page.Community.FleaWrite />}
             />
             <Route
               path={BROWSER_PATH.COMMUNITY.FREE}
@@ -220,11 +220,11 @@ const Router = () => {
             />
             <Route
               path={BROWSER_PATH.COMMUNITY.FREE_DETAIL}
-              element={<Page.Community.FreeBoardDetail />}
+              element={<Page.Community.FreeDetail />}
             />
             <Route
               path={BROWSER_PATH.COMMUNITY.FREE_WRITE}
-              element={<Page.Community.FreeBoardWrite />}
+              element={<Page.Community.FreeWrite />}
             />
             <Route
               path={BROWSER_PATH.COMMUNITY.MISSING}
