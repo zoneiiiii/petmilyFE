@@ -1,29 +1,81 @@
-import react, { useEffect, useState } from "react";
+import react, { useEffect, useLayoutEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import CustomButton from "../Login/CustomButton";
 import { styled } from "@mui/material/styles";
 
 const { kakao } = window;
-
+let curLatitude = "";
+let curLongitude = "";
 const HospitalLocation = () => {
   const [inputText, setInputText] = useState("");
   const [place, setPlace] = useState("");
+  const [dragend, setDragend] = useState(false);
+  const [currentPosition, setCurrentPosition] = useState({
+    latitude: curLatitude,
+    longtitude: curLongitude,
+  });
 
-  let curLatitude = 37.553836;
-  let curLongtitude = 126.969652;
+  function getLocation() {
+    if (navigator.geolocation) {
+      // GPS를 지원하면
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          console.log("position.coords" + position.coords);
+          const { latitude, longitude } = position.coords;
+          setCurrentPosition({ latitude, longitude });
+          curLatitude = position.coords.latitude;
+          curLongitude = position.coords.longitude;
+          console.log("current" + curLatitude + " " + curLongitude);
+        },
+        function (error) {
+          console.error(error);
+        },
+        {
+          enableHighAccuracy: false,
+          maximumAge: 0,
+          timeout: Infinity,
+        }
+      );
+    } else {
+      alert("GPS를 지원하지 않습니다");
+    }
+  }
+
+  useLayoutEffect(() => {
+    getLocation();
+  }, []);
 
   useEffect(() => {
+    console.log("current1 " + curLatitude + " " + curLongitude);
     const container = document.getElementById("map");
     const options = {
-      center: new kakao.maps.LatLng(curLatitude, curLongtitude),
+      center: new kakao.maps.LatLng(curLatitude, curLongitude),
       level: 3,
     };
     const map = new kakao.maps.Map(container, options);
 
     // 장소 검색 객체를 생성
     const ps = new kakao.maps.services.Places();
-    ps.keywordSearch(place, placesSearchCB);
+    // ps.keywordSearch(place, placesSearchCB);
+    if (place === "") {
+      ps.keywordSearch("동물병원", placesSearchCB, {
+        location: new kakao.maps.LatLng(curLatitude, curLongitude),
+      });
+    } else {
+      ps.keywordSearch(place, placesSearchCB);
+    }
+    function getCenter() {
+      kakao.map.event.addListener(map, "dragend", function () {
+        setDragend(!dragend);
+        var latlng = map.getCenter();
+        const latitude = latlng.getLat;
+        const longitude = latlng.getLng;
+        setCurrentPosition({ latitude, longitude });
+        curLatitude = latlng.getLat;
+        curLongitude = latlng.getLat;
+      });
+    }
     // 키워드 검색 완료 시 호출되는 콜백함수
     function placesSearchCB(data, status, pagination) {
       if (status === kakao.maps.services.Status.OK) {
@@ -60,7 +112,7 @@ const HospitalLocation = () => {
         infowindow.open(map, marker);
       });
     }
-  }, [place]);
+  }, [place, dragend]);
 
   const onChange = (e) => {
     setInputText(e.target.value);
