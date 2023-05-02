@@ -1,24 +1,24 @@
-import { Button, ThemeProvider, createTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  ThemeProvider,
+} from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { BROWSER_PATH } from "../../constants/path";
+// import styled from "styled-components";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
+import { MYPAGE } from "../../constants/PageURL";
 
-const theme = createTheme({
-  palette: {
-    type: "mainColor",
-    fdb385: {
-      main: "#FBD385",
-    },
-  },
-});
-
-function MyPageInfo() {
+function MyInfo() {
   const navigate = useNavigate();
   const member = {
     num: 1,
     id: "PetLove",
-    pw: "*******",
+    pw: "12345678",
     nickname: "",
     email: "asdf@naver.com",
     name: "이기자",
@@ -30,107 +30,71 @@ function MyPageInfo() {
     role: "user",
   };
 
-  const columnWidth = 100;
+  // const columnWidth = 100;
   return (
-    <>
-      <MyPageInfoTable>
-        <tbody>
-          <tr>
-            <td className="infoType" width={columnWidth}>
-              ID
-            </td>
-            <td> {member.id}</td>
-          </tr>
-          <tr>
-            <td className="infoType" width={columnWidth}>
-              PW
-            </td>
-            <td> {member.pw}</td>
-          </tr>
-          <tr>
-            <td className="infoType" width={columnWidth}>
-              이름
-            </td>
-            <td> {member.name}</td>
-          </tr>
-          <tr>
-            <td className="infoType" width={columnWidth}>
-              성별
-            </td>
-            <td> {member.gender}</td>
-          </tr>
-          <tr>
-            <td className="infoType" width={columnWidth}>
-              생일
-            </td>
-            <td> {member.birth}</td>
-          </tr>
-          <tr>
-            <td className="infoType" width={columnWidth}>
-              연락처
-            </td>
-            <td> {member.tel}</td>
-          </tr>
-          <tr>
-            <td className="infoType" width={columnWidth}>
-              이메일
-            </td>
-            <td> {member.email}</td>
-          </tr>
-          <tr>
-            <td className="infoType" width={columnWidth}>
-              주소
-            </td>
-            <td> {member.addr}</td>
-          </tr>
-          <tr className="btn">
-            <td colSpan={2}>
-              <ThemeProvider theme={theme}>
-                <Button
-                  variant="contained"
-                  sx={{
-                    mt: 2,
-                    mb: 1,
-                    fontWeight: "bold",
-                    width: 100,
-                    height: 40,
-                  }}
-                  color="fdb385"
-                  onClick={() => navigate(BROWSER_PATH.MODIFYINFO)}
-                >
-                  수정
-                </Button>
-              </ThemeProvider>
-            </td>
-          </tr>
-        </tbody>
-      </MyPageInfoTable>
-    </>
+    <ThemeProvider theme={CustomTheme}>
+      <Box p={2} border={3} borderRadius={2} borderColor="fbd385.main">
+        <Table
+          size="small"
+          padding="normal"
+          sx={{ minWidth: "800px", borderBottomColor: "fbd385.main" }}
+        >
+          <TableBody>
+            <TableRow>
+              <TableCell sx={tdSx}>ID</TableCell>
+              <TableCell sx={tdSx}>{member.id}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell sx={tdSx}>PW</TableCell>
+              <TableCell sx={tdSx}>{"*".repeat(member.pw.length)}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell sx={tdSx}>이름</TableCell>
+              <TableCell sx={tdSx}>{member.name}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell sx={tdSx}>성별</TableCell>
+              <TableCell sx={tdSx}>{member.gender}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell sx={tdSx}>생일</TableCell>
+              <TableCell sx={tdSx}>{member.birth}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell sx={tdSx}>연락처</TableCell>
+              <TableCell sx={tdSx}>{member.tel}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell sx={tdSx}>이메일</TableCell>
+              <TableCell sx={tdSx}>{member.email}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell sx={tdSx}>주소</TableCell>
+              <TableCell sx={tdSx}>{member.addr}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button
+            variant="contained"
+            color="fbd385"
+            sx={{ m: 2, width: "100px" }}
+            onClick={() => navigate(MYPAGE.MODIFY_INFO)}
+          >
+            수정
+          </Button>
+        </Box>
+      </Box>
+    </ThemeProvider>
   );
 }
 
-const MyPageInfoTable = styled.table`
-  border-collapse: collapse;
-  width: 60vw;
-  tr {
-    height: 50px;
-    border-bottom: 3px solid #ffbd59;
-  }
+const tdSx = {
+  fontStyle: "normal",
+  fontWeight: "bold",
+  fontSize: "1.5rem",
+  lineHeight: "50px",
+  borderBottom: "1px solid #fbd385",
+};
 
-  .btn {
-    border: none;
-    text-align: right;
-    height: 5rem;
-    vertical-align: bottom;
-  }
-
-  .infoType {
-    font-weight: bold;
-  }
-  th,
-  td {
-    font-size: 1.5rem;
-  }
-`;
-
-export default MyPageInfo;
+export default MyInfo;

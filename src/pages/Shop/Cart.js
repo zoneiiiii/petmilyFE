@@ -12,6 +12,7 @@ import { Button, Checkbox } from "@material-ui/core";
 import { useState } from "react";
 import { AddCircle, RemoveCircle } from "@material-ui/icons";
 import CustomButton from "../Login/CustomButton";
+import { SHOP } from "../../constants/PageURL";
 
 const Cart = () => {
   //데이터 초기값 설정
@@ -242,10 +243,10 @@ const Cart = () => {
             textAlign: "center",
           }}
         >
-          <Link to="/product" style={{ textDecoration: "none" }}>
+          <Link to={SHOP.PRODUCT} style={{ textDecoration: "none" }}>
             <Button className="continue">계속 쇼핑하기</Button>
           </Link>
-          <Link to="/product/order" style={{ textDecoration: "none" }}>
+          <Link to={SHOP.ORDER} style={{ textDecoration: "none" }}>
             <Button className="order">구매하기</Button>
           </Link>
         </div>
