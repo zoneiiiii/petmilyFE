@@ -19,14 +19,14 @@ const MyPageNav = () => {
         title={"My Page"}
         navList={[
           { linkName: "회원 정보", link: MYPAGE.INFO },
-          { linkName: "주문 내역", link: MYPAGE.ORDER },
+          { linkName: "주문 내역", link: MYPAGE.ORDERLIST },
         ]}
       />
       <NavList
         title={"입양 관리"}
         navList={[
           { linkName: "입양 후기", link: MYPAGE.ADOPT_REVIEW },
-          { linkName: "입양 내역", link: MYPAGE.ADOPT }, // 페이지 없음
+          { linkName: "입양 내역", link: MYPAGE.ADOPTLIST }, // 페이지 없음
         ]}
       />
       <NavList
@@ -48,7 +48,7 @@ const MyPageNav = () => {
       <NavList
         title={"문의하기"}
         navList={[
-          { linkName: "1:1 문의하기", link: MYPAGE.INQUIRY }, // 페이지 없음
+          { linkName: "1:1 문의하기", link: MYPAGE.QNA }, // 페이지 없음
         ]}
       />
     </MyPageNavStyle>
