@@ -44,6 +44,7 @@ const HospitalLocation = () => {
 
   useLayoutEffect(() => {
     getLocation();
+    console.log("1");
   }, []);
 
   useEffect(() => {

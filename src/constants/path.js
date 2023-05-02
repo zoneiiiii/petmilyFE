@@ -15,6 +15,9 @@ const BROWSER_PATH = {
   MYPAGEQNADETAIL: "/mypage/inquirydetail", //문의하기 상세
   FREE: "/board/free",
   FLEA: "/board/flea", // 더 추가해야함.
+  VOLUNTEER : "/board/volunteer", // 봉사 게시판
+  VOLUNTEERWRITE : "/board/volunteer/write", //봉사 게시판 글작성
+  VOLUNTEERDETAIL : "/board/volunteer/:id", // 봉사 게시판 Detail
   SUPPORT: "/donate",
   DONATEAPPLY: "/donate/apply",
   FINDPW: "/findpw", //비밀번호찾기

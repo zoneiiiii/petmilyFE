@@ -22,6 +22,9 @@ import {
   Product,
   Missing,
   FreeBoard,
+  VolunteerNotice,
+  VolunteerNoticeDetail,
+  VolunteerNoticeWrite,
 } from "./pages/ImportPages";
 import NotFound from "./pages/NotFound/NotFound";
 import Loading from "./components/Loading/LoadingPage";
@@ -31,7 +34,7 @@ const Router = () => {
     <BrowserRouter>
       <React.Suspense fallback={<Loading />}>
         <Routes>
-          <Route path={BROWSER_PATH.MAIN} element={<Layout />}>
+        <Route path={BROWSER_PATH.MAIN} element={<Layout />}>
             <Route index element={<Main />} />
             <Route path={BROWSER_PATH.JOIN} element={<Join />} />
             <Route path={BROWSER_PATH.LOGIN} element={<Login />} />
@@ -60,20 +63,16 @@ const Router = () => {
                 element={<MyPageQnADetail />}
               />
             </Route>
-            <Route path={BROWSER_PATH.SUPPORT} element={<Donate />} />
-            <Route path={BROWSER_PATH.DONATEAPPLY} element={<DonateApply />} />
-            <Route path={BROWSER_PATH.FINDPW} element={<FindPW />} />
-            <Route path={BROWSER_PATH.CHANGEPW} element={<ChangePW />} />
-            <Route path={BROWSER_PATH.MISSING} element={<Missing />} />
-            <Route path={BROWSER_PATH.FREEBOARD} element={<FreeBoard />} />
-            <Route path="*" element={<NotFound />} />
-          </Route>
           <Route path={BROWSER_PATH.SUPPORT} element={<Donate />} />
           <Route path={BROWSER_PATH.DONATEAPPLY} element={<DonateApply />} />
+          <Route path={BROWSER_PATH.VOLUNTEER} element={<VolunteerNotice />} />
+          <Route path={BROWSER_PATH.VOLUNTEERDETAIL} element={<VolunteerNoticeDetail />} />
+          <Route path={BROWSER_PATH.VOLUNTEERWRITE} element={<VolunteerNoticeWrite />} />
           <Route path={BROWSER_PATH.FINDPW} element={<FindPW />} />
           <Route path={BROWSER_PATH.CHANGEPW} element={<ChangePW />} />
           <Route path={BROWSER_PATH.PRODUCT} element={<Product />} />
           <Route path="*" element={<NotFound />} />
+          </Route>
         </Routes>
       </React.Suspense>
     </BrowserRouter>
