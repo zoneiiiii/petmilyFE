@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const Container = styled.div`
   display: flex;
@@ -31,7 +31,6 @@ export const Title = styled.h4`
   margin: 0.5rem 0;
 `;
 
-
 export const Date = styled.p`
   font-size: 0.8rem;
   margin: 0.5rem 0;
@@ -42,9 +41,31 @@ export const CountWrapper = styled.div`
   width: 100%;
   text-align: right;
   margin-top: 0.5rem;
-  margin-right : 0.5rem;
+  margin-right: 0.5rem;
 `;
 
 export const Count = styled.span`
   font-size: 0.8rem;
+`;
+
+export const ClosedContainer = styled.div`
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 1rem;
+  width: calc(100% / 1.5 - 1rem); // 카드 가로 크기 조정
+  min-width: 250px; // 최소 너비 설정
+  background-color: #d3d3d3;
+`;
+
+export const ClosedLabel = styled.span`
+  position: absolute;
+  bottom: 150px;
+  right: 85px;
+  color: red;
+  font-weight: bold;
+  font-size: 30px;
 `;
