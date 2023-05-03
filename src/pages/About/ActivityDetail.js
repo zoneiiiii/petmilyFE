@@ -1,3 +1,3 @@
 export const ActivityDetail = () => {
-	return <div>about</div>;
+  return <div>activitydetail</div>;
 };

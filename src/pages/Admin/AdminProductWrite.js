@@ -1,3 +1,5 @@
-export const AdminProductWrite = () => {
+const AdminProductWrite = () => {
   return <div>AdminProductWrite</div>;
 };
+
+export default AdminProductWrite;
