@@ -1,3 +1,5 @@
-export const AdminAdopt = () => {
+const AdminAdopt = () => {
   return <div>AdminAdopt</div>;
 };
+
+export default AdminAdopt;
