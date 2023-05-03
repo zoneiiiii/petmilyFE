@@ -1,8 +1,8 @@
 .layout {
-    padding-top: 10px;
+  padding-top: 83px;
 }
 
 .main {
-    padding-top: 5px;
-    min-height: calc(100vh - 180px);
+  padding-top: 5px;
+  min-height: calc(100vh - 180px);
 }
