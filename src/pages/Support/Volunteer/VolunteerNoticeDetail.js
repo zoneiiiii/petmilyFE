@@ -7,15 +7,14 @@ import NotFound from "../../NotFound/NotFound";
 import Loading from "../../../components/Loading/LoadingPage";
 import MapModal from "../../../components/Map/MapModal";
 import Comment from "../../../components/Comment/Comment";
+import { SUPPORT } from "../../../constants/PageURL";
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
-  const hour = String(date.getHours()).padStart(2, "0");
-  const minute = String(date.getMinutes()).padStart(2, "0");
-  return `${year}년 ${month}월 ${day}일 ${hour}시 ${minute}분`;
+  return `${year}년 ${month}월 ${day}일`;
 };
 
 const VolunteerNoticeDetail = () => {
@@ -79,9 +78,13 @@ const VolunteerNoticeDetail = () => {
             <h1>{post.volunteerSubject}</h1>
             {/* <p>조회수 : {post.volunteerCount}</p> */}
             <p>보호소 : {post.shelterName}</p>
-            <p>활동기간: {formatDate(post.volunteerDate)}</p>
+            <p>
+              활동기간: {formatDate(post.volunteerStartPeriod)} ~{" "}
+              {formatDate(post.volunteerEndPeriod)}
+            </p>
             <p>모집인원: {post.volunteerNumber} 명</p>
             <p>나이제한: {post.volunteerAge}</p>
+            <p>모집상태: {post.volunteerStatus ? "모집중" : "모집완료"}</p>
             <p>
               주소: {post.volunteerAddr}
               <Button
