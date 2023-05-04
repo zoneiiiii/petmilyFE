@@ -1,25 +1,32 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { BROWSER_PATH } from "../../constants/path";
+import { MYPAGE } from "../../constants/PageURL";
 
-const ProfileSrc = "/images/emptyProfile.png";
+const ProfileSrc = "/images/product.png";
 const MyPageNav = () => {
   return (
     <MyPageNavStyle className="MyPageNav">
-      <img className="ProfileImg" src={ProfileSrc} alt="profile" />
+      <img
+        className="ProfileImg"
+        src={ProfileSrc}
+        alt="profile"
+        width={"160px"}
+        height={"160px"}
+        style={{ borderRadius: "50%" }}
+      />
       <NavList
         title={"My Page"}
         navList={[
-          { linkName: "회원 정보", link: BROWSER_PATH.MYPAGE },
-          { linkName: "주문 내역", link: BROWSER_PATH.MYPAGEORDER },
+          { linkName: "회원 정보", link: MYPAGE.INFO },
+          { linkName: "주문 내역", link: MYPAGE.ORDERLIST },
         ]}
       />
       <NavList
         title={"입양 관리"}
         navList={[
-          { linkName: "입양 후기", link: BROWSER_PATH.MYPAGEADOPTREVIEW },
-          { linkName: "입양 내역", link: BROWSER_PATH.MYPAGEADOPTLIST }, // 페이지 없음
+          { linkName: "입양 후기", link: MYPAGE.ADOPT_REVIEW },
+          { linkName: "입양 내역", link: MYPAGE.ADOPTLIST }, // 페이지 없음
         ]}
       />
       <NavList
@@ -27,21 +34,21 @@ const MyPageNav = () => {
         navList={[
           {
             linkName: "실종 동물 게시판",
-            link: BROWSER_PATH.MYPAGEBOARD + "/missing",
+            link: MYPAGE.BOARD("missing"),
           }, // 페이지 없음
           {
             linkName: "목격 제보 게시판",
-            link: BROWSER_PATH.MYPAGEBOARD + "/find",
+            link: MYPAGE.BOARD("find"),
           }, // 페이지 없음
-          { linkName: "자유게시판", link: BROWSER_PATH.MYPAGEBOARD + "/free" }, // 페이지 없음
-          { linkName: "봉사 후기", link: BROWSER_PATH.MYPAGEBOARD + "/review" }, // 페이지 없음
-          { linkName: "매매 장터", link: BROWSER_PATH.MYPAGEBOARD + "/flea" }, // 페이지 없음
+          { linkName: "자유게시판", link: MYPAGE.BOARD("free") }, // 페이지 없음
+          { linkName: "봉사 후기", link: MYPAGE.BOARD("review") }, // 페이지 없음
+          { linkName: "매매 장터", link: MYPAGE.BOARD("flea") }, // 페이지 없음
         ]}
       />
       <NavList
         title={"문의하기"}
         navList={[
-          { linkName: "1:1 문의하기", link: BROWSER_PATH.MYPAGEINQUIRY },
+          { linkName: "1:1 문의하기", link: MYPAGE.QNA }, // 페이지 없음
         ]}
       />
     </MyPageNavStyle>
@@ -59,7 +66,7 @@ const NavList = ({ title, navList }) => {
     if (lastLocation !== location.pathname) {
       // 페이지 전환이 발생한 경우
       setFixed("");
-      setLastLocation(location.pathname); // 페이지 갱신
+      setLastLocation(location.pathname); // 최근 위치 state 갱신신
     } else if (
       lastLocation === location.pathname && // 최근 위치 업데이트 됨
       fixed === "" && // 메뉴 카테고리 고정 초기화 됨
@@ -126,8 +133,9 @@ const NavListStyle = styled.div`
   .NavTitle {
     width: 160px;
     height: 40px;
-    background: rgba(251, 211, 133, 0.58);
-    border: 1px solid #fbd385;
+    // background: rgba(251, 211, 133, 0.58);
+    background: #fbd385;
+    border: 1px solid #ffbd59;
     font-weight: 400;
     font-size: 18px;
     line-height: 36px;
@@ -148,7 +156,7 @@ const NavListStyle = styled.div`
 
   li {
     height: 40px;
-    border-bottom: 1px solid #fbd385;
+    border-bottom: 2px solid #ffbd59;
     margin: 5px;
     display: flex;
     align-items: center;

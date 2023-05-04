@@ -3,97 +3,100 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { BROWSER_PATH } from "../../constants/path";
 import HeaderRight from "./HeaderRight";
+import { ABOUT, ADOPT, COMMUNITY, MYPAGE, SHOP, SUPPORT } from "../../constants/PageURL";
 
 const Header = ({ page }) => {
 
-  return (
-    <HeaderNavStyle className="headerNav">
-      <div className="headerLeft">
-        <div className="logo">
-          <Link to="/">
-            <img alt="petmily icon" src="/images/petmilylogo.png" />
-          </Link>
-        </div>
-      </div>
-      <NavList
-        title={"소개"}
-        navList={[
-          { linkName: "공지사항", link: BROWSER_PATH.MYPAGE }, // 페이지 없음
-          { linkName: "프로젝트 소개", link: BROWSER_PATH.MYPAGEORDER }, // 페이지 없음
-          { linkName: "활동내역", link: BROWSER_PATH.MYPAGE }, // 페이지 없음
-          { linkName: "입양절차", link: BROWSER_PATH.MYPAGE }, // 페이지 없음
-        ]}
-      />
-      <NavList
-        title={"입양"}
-        navList={[
-          { linkName: "보호 동물", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
-          { linkName: "입양 후기 게시판", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
-          { linkName: "동물 병원 정보", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
-          { linkName: "보호소 위치", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
-        ]}
-      />
-      <NavList
-        title={"커뮤니티"}
-        navList={[
-          { linkName: "실종 동물 게시판", link: BROWSER_PATH.MISSING },
-          { linkName: "목격 제보 게시판", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
-          { linkName: "자유게시판", link: BROWSER_PATH.FREEBOARD },
-          { linkName: "매매 장터", link: BROWSER_PATH.MYPAGE }, // 링크없어서 마이페이지로 연결, 페이지 없음
-        ]}
-      />
-      <NavList
-        title={"SHOP"}
-        navList={[
-          { linkName: "상품", link: BROWSER_PATH.MYPAGE },
-          { linkName: "장바구니", link: BROWSER_PATH.MYPAGE }, // 페이지 없음
-        ]}
-      />
-      <NavList
-        title={"후원"}
-        navList={[
-          { linkName: "기부 내역", link: BROWSER_PATH.SUPPORT },
-          { linkName: "기부하기", link: BROWSER_PATH.DONATEAPPLY },
-          { linkName: "봉사하기", link: BROWSER_PATH.VOLUNTEER }, // 페이지 없음
-          { linkName: "봉사 후기", link: BROWSER_PATH.VOLUNTEER }, // 링크없어서 마이페이지로 연결, 페이지 없음
-        ]}
-      />
-      <HeaderRight />
-    </HeaderNavStyle>
-  );
+    return (
+        <HeaderNavStyle className="headerNav">
+            <div className="headerLeft">
+                <div className="logo">
+                    <Link to="/">
+                        <img alt="petmily icon" src="./../images/petmilylogo.png" />
+                    </Link>
+                </div>
+            </div>
+            <NavList
+                title={"소개"}
+                navList={[
+                    { linkName: "공지사항", link: ABOUT.NOTICE },
+                    { linkName: "프로젝트 소개", link: ABOUT.ABOUT },
+                    { linkName: "활동내역", link: ABOUT.ACTIVITY },
+                    { linkName: "입양절차", link: ABOUT.ADOPT_PROCESS },
+                    { linkName: "자주 묻는 질문", link: ABOUT.FAQ },
+                    { linkName: "마이페이지", link: MYPAGE.INFO },  // 임시로 확인하기 편하게 추가(이후 삭제)
+                ]}
+            />
+            <NavList
+                title={"입양"}
+                navList={[
+                    { linkName: "보호 동물", link: ADOPT.ANIMAL_LIST },
+                    { linkName: "입양 후기 게시판", link: ADOPT.REVIEW },
+                    { linkName: "동물 병원 정보", link: ADOPT.HOSPITAL_LOCATION },
+                    { linkName: "보호소 위치", link: ADOPT.SHELTER_LOCATION },
+                ]}
+            />
+            <NavList
+                title={"커뮤니티"}
+                navList={[
+                    { linkName: "실종 동물 게시판", link: COMMUNITY.MISSING },
+                    { linkName: "목격 제보 게시판", link: COMMUNITY.FIND },
+                    { linkName: "자유게시판", link: COMMUNITY.FREE },
+                    { linkName: "매매 장터", link: COMMUNITY.FLEA },
+                ]}
+            />
+            <NavList
+                title={"SHOP"}
+                navList={[
+                    { linkName: "상품", link: SHOP.PRODUCT },
+                    { linkName: "장바구니", link: SHOP.CART },
+                ]}
+            />
+            <NavList
+                title={"후원"}
+                navList={[
+                    { linkName: "기부 내역", link: SUPPORT.DONATE },
+                    { linkName: "기부하기", link: SUPPORT.APPLY },
+                    { linkName: "봉사하기", link: SUPPORT.VOLUNTEER_NOTICE },
+                    { linkName: "봉사 후기", link: SUPPORT.VOLUNTEER_REVIEW },
+                ]}
+            />
+            <HeaderRight />
+        </HeaderNavStyle>
+    );
 };
 
 const NavList = ({ title, navList, isSelected }) => {
-  const [selected, setSelected] = useState(1);
-  const [height, setHeight] = useState(0);
-  // const [color, setColor] = useState(0);
-  const ulRef = useRef(null);
+    const [selected, setSelected] = useState(1);
+    const [height, setHeight] = useState(0);
+    // const [color, setColor] = useState(0);
+    const ulRef = useRef(null);
 
-  const HandleMouseOver = () => {
-    const ulHeight = ulRef.current.scrollHeight;
-    setHeight(ulHeight);
-    setSelected(1);
-  };
+    const HandleMouseOver = () => {
+        const ulHeight = ulRef.current.scrollHeight;
+        setHeight(ulHeight);
+        setSelected(1);
+    };
 
-  return (
-    <NavListStyle
-      onMouseOver={HandleMouseOver}
-      onMouseOut={() => setSelected(0)}
-      isSelected={selected}
-      height={height}
-    >
-      <div className="NavTitle">{title}</div>
-      <ul ref={ulRef}>
-        {navList.map((links, index) => {
-          return (
-            <li key={index}>
-              <Link to={links.link}>{links.linkName}</Link>
-            </li>
-          );
-        })}
-      </ul>
-    </NavListStyle>
-  );
+    return (
+        <NavListStyle
+            onMouseOver={HandleMouseOver}
+            onMouseOut={() => setSelected(0)}
+            isSelected={selected}
+            height={height}
+        >
+            <div className="NavTitle">{title}</div>
+            <ul ref={ulRef}>
+                {navList.map((links, index) => {
+                    return (
+                        <li key={index}>
+                            <Link to={links.link}>{links.linkName}</Link>
+                        </li>
+                    );
+                })}
+            </ul>
+        </NavListStyle>
+    );
 };
 
 const HeaderNavStyle = styled.div`
@@ -108,12 +111,14 @@ const HeaderNavStyle = styled.div`
   background: rgb(255, 255, 238);
   box-shadow: 0px 2px 0px rgb(167, 165, 165);
   z-index: 1000;
+
   .logo {
     width: 15vw;
     margin-right: 30px;
     margin-top: 5px;
     object-fit: cover;
   }
+
   .NavTitle {
     padding: 10px 0 0 0;
   }
@@ -135,9 +140,11 @@ const NavListStyle = styled.div`
     border: 1px solid #E8E8E8;
     border-radius: 15px 15px / 15px 15px;
   }
+
   li:hover {
     background-color: #E8E8E8;
   }
+
   ul {
     margin: auto;
     padding-left: 0px;

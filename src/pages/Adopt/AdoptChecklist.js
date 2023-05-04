@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Typography from "@mui/material/Typography";
 function AdoptCheckList() {
   return (
@@ -125,3 +126,9 @@ function AdoptCheckList() {
   );
 }
 export default AdoptCheckList;
+=======
+const AdoptChecklist = () => {
+  return <div>AdoptChecklist</div>;
+};
+export default AdoptChecklist;
+>>>>>>> 0123a7eebdddad5dd0624d6116664558afeec39c
