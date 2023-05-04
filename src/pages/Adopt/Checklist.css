@@ -1,0 +1,12 @@
+#content {
+  padding-left: 20px;
+}
+
+#checklist {
+  padding: 5px 10px 10px 10px;
+  width: 80%;
+  background-color: #f5f5ed;
+  text-align: left;
+  border-radius: 5px;
+  height: 550px;
+}
