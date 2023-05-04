@@ -6,6 +6,8 @@ import CustomButton from "../../Login/CustomButton";
 import Modal from "@mui/material/Modal";
 import Alert from "@mui/material/Alert";
 import axios from "axios";
+import { left } from "@popperjs/core";
+import { padding } from "@mui/system";
 
 const modalStyle = {
     position: "absolute",
@@ -38,27 +40,30 @@ const FreeWrite = () => {
             setOpen(true);
             console.log(subjectRef.current.value);
             console.log(contentRef.current.value);
-            document.location.href = "/freeboard";
+            document.location.href = "/board/free";
         }
     };
     const handleReset = () => {
         subjectRef.current.value = "";
         contentRef.current.value = "";
-        document.location.href = "/freeboard";
+        document.location.href = "/board/free";
     };
 
     return (
         <>
+            <Board>게시글 작성</Board>
             <Grid sx={{ minWidth: 700, mt: 5, }}>
-                <div style={{ justifyContent: 'center' }}>
-                    <h1>게시글 작성</h1>
+                <div style={{ margin: 'auto 30vw', maxWidth: '800px' }}>
                     <InputContainer>
                         <p className="title">제목</p>
                         <input type="text" ref={subjectRef} style={{ width: 700 }} />
                     </InputContainer>
                     <FileContainer>
-                        <p>첨부파일</p>
-                        <input type="file" style={{ marginTop: "10px" }} />
+                        <p className="title">첨부파일</p>
+                        <label for="file">
+                            <div class="btn-upload">파일 선택</div>
+                        </label>
+                        <input type="file" multiple className="file" id="file" />
                     </FileContainer>
                     <InputContainer>
                         <p className="title">내용</p>
@@ -98,6 +103,9 @@ const FreeWrite = () => {
         </>
     );
 };
+const Board = styled.h1`
+    text-align: center;
+`;
 
 const InputContainer = styled.div`
   display: flex;
@@ -105,7 +113,19 @@ const InputContainer = styled.div`
   align-items: flex;
   margin-bottom: 10px;
 
+  .title {
+    min-Width: 70px;
+  }
+
+  input:hover {
+    outline: none !important;
+    border: 2px solid #fbd385;
+  }
   input:focus {
+    outline: none !important;
+    border: 2px solid #fbd385;
+  }
+  textarea:hover {
     outline: none !important;
     border: 2px solid #fbd385;
   }
@@ -121,12 +141,35 @@ const InputContainer = styled.div`
 const FileContainer = styled.div`
   display: flex;
   gap: 1rem;
-  align-items: flex;
+  align-items: center;
   margin-bottom: 10px;
-  p {
+
+  .title {
     font-weight: bold;
     color: #474747;
+    margin-right: 40px;
   }
+
+.btn-upload {
+    width: 150px;
+    height: 30px;
+    background: #ffffff;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover {
+        background: #fbd385;
+        border: 1px solid #fbd385;
+        color: #fff;
+    }
+}
+.file {
+    display: none;
+}
 `;
 
 export default FreeWrite;

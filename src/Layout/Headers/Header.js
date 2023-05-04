@@ -12,7 +12,7 @@ const Header = ({ page }) => {
             <div className="headerLeft">
                 <div className="logo">
                     <Link to="/">
-                        <img alt="petmily icon" src="./../images/petmilylogo.png" />
+                        <img alt="petmily icon" src="/images/petmilylogo.png" />
                     </Link>
                 </div>
             </div>

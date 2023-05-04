@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 
-export const SearchBar = () => {
+const SearchBar = () => {
   return (
     <ThemeProvider theme={CustomTheme}>
       <Box>
@@ -52,3 +52,5 @@ export const SearchBar = () => {
     </ThemeProvider>
   );
 };
+
+export default SearchBar;

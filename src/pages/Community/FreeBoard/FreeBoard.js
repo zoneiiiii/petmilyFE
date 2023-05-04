@@ -16,6 +16,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 // import axios from "axios";
 import CustomButton from "../../Login/CustomButton";
+import { COMMUNITY } from '../../../constants/PageURL';
 
 const theme = createTheme({
     palette: {
@@ -28,7 +29,7 @@ const theme = createTheme({
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-        backgroundColor: theme.palette.common.white,
+        backgroundColor: theme.palette.primary.main,
         color: theme.palette.common.black,
         fontWeight: "bold",
         fontSize: 16,
@@ -229,7 +230,7 @@ export default function CustomizedTables() {
                                                 return (
                                                     <StyledTableCell key={column.id} align={column.align}>
                                                         <Link
-                                                            to="/freeboard/detail"
+                                                            to="/board/free/1"
                                                             style={{ textDecoration: "none", color: "black" }}
                                                         >
                                                             {value}
@@ -242,18 +243,19 @@ export default function CustomizedTables() {
                                 })}
                         </TableBody>
                         <TableFooter>
-
+                            <TableRow>
+                                <TableCell /><TableCell /><TableCell /><TableCell />
+                                <TableCell>
+                                    <Link className={classes.writelink} to={COMMUNITY.FREE_WRITE}>
+                                        <CustomButton label="글쓰기" value="글쓰기">
+                                            글쓰기
+                                        </CustomButton>
+                                    </Link>
+                                </TableCell>
+                            </TableRow>
                         </TableFooter>
-
                     </Table>
                 </TableContainer>
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Link className={classes.writelink} to="/freeboard/write">
-                        <CustomButton label="글쓰기" value="글쓰기">
-                            글쓰기
-                        </CustomButton>
-                    </Link>
-                </div>
                 <br />
                 <Stack spacing={2} sx={{ mt: 0 }}>
                     <Pagination
@@ -267,30 +269,9 @@ export default function CustomizedTables() {
                     />
                 </Stack>
                 <br />
-            </ThemeProvider>
+            </ThemeProvider >
         </>
 
 
     );
 }
-
-{/* <Link className={classes.writebtn} to="/freeboard/write">
-                        <WriteButton label="글쓰기" value="글쓰기">
-                            글쓰기
-                        </WriteButton>
-                    </Link>
-                    <TableFooter>
-                        <TableRow>
-                            <Stack spacing={2} sx={{ mt: 2 }}>
-                                <Pagination
-                                    className={classes.pagination}
-                                    color="primary"
-                                    page={page}
-                                    onChange={handleChangePage}
-                                    // onChangeRowsPerPage={handleChangeRowsPerPage}
-                                    component="div"
-                                    count={Math.ceil(rows.length / rowsPerPage)}
-                                />
-                            </Stack>
-                        </TableRow>
-                    </TableFooter> */}
