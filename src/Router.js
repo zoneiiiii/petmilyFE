@@ -71,26 +71,6 @@ const Router = () => {
                 element={<Page.MyPage.MyPageQnADetail />}
               />
             </Route>
-<<<<<<< HEAD
-            <Route path={BROWSER_PATH.SUPPORT} element={<Donate />} />
-            <Route path={BROWSER_PATH.DONATEAPPLY} element={<DonateApply />} />
-            <Route
-              path={BROWSER_PATH.VOLUNTEER}
-              element={<VolunteerNotice />}
-            />
-            <Route
-              path={BROWSER_PATH.VOLUNTEERDETAIL}
-              element={<VolunteerNoticeDetail />}
-            />
-            <Route
-              path={BROWSER_PATH.VOLUNTEERWRITE}
-              element={<VolunteerNoticeWrite />}
-            />
-            <Route path={BROWSER_PATH.FINDPW} element={<FindPW />} />
-            <Route path={BROWSER_PATH.CHANGEPW} element={<ChangePW />} />
-            <Route path={BROWSER_PATH.PRODUCT} element={<Product />} />
-            <Route path="*" element={<NotFound />} />
-=======
             {/* About */}
             <Route
               path={BROWSER_PATH.ABOUT.ABOUT}
@@ -292,7 +272,6 @@ const Router = () => {
               element={<Page.Admin.AdminQnA />}
             />
             <Route path="*" element={<Page.NotFound />} />
->>>>>>> 0123a7eebdddad5dd0624d6116664558afeec39c
           </Route>
         </Routes>
       </React.Suspense>
