@@ -1,1 +1,3 @@
-export const OrderComplete = () => {};
+const OrderComplete = () => {};
+
+export default OrderComplete;

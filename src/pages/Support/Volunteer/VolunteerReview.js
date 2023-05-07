@@ -1,3 +1,5 @@
-export const VolunteerReview = () => {
+const VolunteerReview = () => {
   return <div>volunteerReview</div>;
 };
+
+export default VolunteerReview;
