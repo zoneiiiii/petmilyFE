@@ -1282,6 +1282,13 @@
   dependencies:
     ckeditor5 "^37.1.0"
 
+"@ckeditor/ckeditor5-react@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-react/-/ckeditor5-react-6.0.0.tgz#a04721f5d1208bd06615fc4cca355c91c1c4b88c"
+  integrity sha512-Yw0MlWfUXelGJ7qcFCYlaRlDEsEr0Lh7Wa2NGDT4+kscwcck9x8F1qm7xmjwJZ9bj79GC9rnCxsIqmq2etmZFA==
+  dependencies:
+    prop-types "^15.7.2"
+
 "@ckeditor/ckeditor5-select-all@^37.1.0":
   version "37.1.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-select-all/-/ckeditor5-select-all-37.1.0.tgz#1edb6579ef77c72c50ec442dff0e2dd4b089aaa0"
