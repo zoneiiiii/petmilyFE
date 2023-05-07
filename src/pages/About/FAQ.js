@@ -1,3 +1,5 @@
-export const FAQ = () => {
-	return <div>about</div>;
+const FAQ = () => {
+  return <div>about</div>;
 };
+
+export default FAQ;

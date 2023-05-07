@@ -1,3 +1,5 @@
-export const AdminBoard = () => {
+const AdminBoard = () => {
   return <div>AdminBoard</div>;
 };
+
+export default AdminBoard;

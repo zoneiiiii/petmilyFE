@@ -74,49 +74,49 @@ const Router = () => {
             {/* About */}
             <Route
               path={BROWSER_PATH.ABOUT.ABOUT}
-              elememt={<Page.About.About />}
+              element={<Page.About.About />}
             />
             <Route
               path={BROWSER_PATH.ABOUT.ADOPT_PROCESS}
-              elememt={<Page.About.AdoptProcess />}
+              element={<Page.About.AdoptProcess />}
             />
             <Route
               path={BROWSER_PATH.ABOUT.ACTIVITY}
-              elememt={<Page.About.Activity />}
+              element={<Page.About.Activity />}
             />
             <Route
               path={BROWSER_PATH.ABOUT.ACTIVITY_DETAIL()}
-              elememt={<Page.About.ActivityDetail />}
+              element={<Page.About.ActivityDetail />}
             />
-            <Route path={BROWSER_PATH.ABOUT.FAQ} elememt={<Page.About.FAQ />} />
+            <Route path={BROWSER_PATH.ABOUT.FAQ} element={<Page.About.FAQ />} />
             <Route
               path={BROWSER_PATH.ABOUT.NOTICE}
-              elememt={<Page.About.Notice />}
+              element={<Page.About.Notice />}
             />
             <Route
               path={BROWSER_PATH.ABOUT.NOTICE_DETAIL()}
-              elememt={<Page.About.NoticeDetail />}
+              element={<Page.About.NoticeDetail />}
             />
             <Route
               path={BROWSER_PATH.ABOUT.NOTICE_WRITE}
-              elememt={<Page.About.NoticeWrite />}
+              element={<Page.About.NoticeWrite />}
             />
             {/* Adopt */}
             <Route
               path={BROWSER_PATH.ADOPT.CHECKLIST}
-              elememt={<Page.Adopt.AdoptChecklist />}
+              element={<Page.Adopt.AdoptChecklist />}
             />
             <Route
               path={BROWSER_PATH.ADOPT.ANIMAL_LIST}
-              elememt={<Page.Adopt.AnimalList />}
+              element={<Page.Adopt.AnimalList />}
             />
             <Route
               path={BROWSER_PATH.ADOPT.ANIMAL_LIST_DETAIL()}
-              elememt={<Page.Adopt.AnimalListDetail />}
+              element={<Page.Adopt.AnimalListDetail />}
             />
             <Route
               path={BROWSER_PATH.ADOPT.APPLICATION}
-              elememt={<Page.Adopt.AdoptApplication />}
+              element={<Page.Adopt.AdoptApplication />}
             />
             <Route
               path={BROWSER_PATH.ADOPT.HOSPITAL_LOCATION}
@@ -128,15 +128,15 @@ const Router = () => {
             />
             <Route
               path={BROWSER_PATH.ADOPT.REVIEW}
-              elememt={<Page.Adopt.AdoptReview />}
+              element={<Page.Adopt.AdoptReview />}
             />
             <Route
               path={BROWSER_PATH.ADOPT.REVIEW_DETAIL()}
-              elememt={<Page.Adopt.AdoptReviewDetail />}
+              element={<Page.Adopt.AdoptReviewDetail />}
             />
             <Route
               path={BROWSER_PATH.ADOPT.REVIEW_WRITE}
-              elememt={<Page.Adopt.AdoptReviewWrite />}
+              element={<Page.Adopt.AdoptReviewWrite />}
             />
             {/* Shop */}
             <Route
