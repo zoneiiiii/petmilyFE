@@ -11,7 +11,7 @@ import { COMMUNITY } from "../../../constants/PageURL";
 
 const FreeDetail = () => {
     return (
-        <>
+        <Container>
             <Top>자유게시판</Top>
             <Head>
                 <hr />
@@ -50,10 +50,14 @@ const FreeDetail = () => {
                 <p className="comment">댓글</p>
                 <Comment />
             </Comments>
-        </>
+        </Container>
     );
 }
 
+const Container = styled.div`
+max-width: 65vw;
+margin: auto;
+`;
 
 const Top = styled.h1`
     font-size: 2rem;
@@ -63,8 +67,6 @@ const Top = styled.h1`
 `;
 
 const Head = styled.div`
-    margin: auto;
-    max-width: 70vw;
 
     .title {
         font-size: 1.5rem;
@@ -92,7 +94,6 @@ const Head = styled.div`
 
 const Body = styled.div`
     margin: auto;
-    max-width: 70vw;
 `;
 
 const Comments = styled.div`
