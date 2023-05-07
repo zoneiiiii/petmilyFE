@@ -1,9 +1,109 @@
-import { lazy } from "react";
-// default
-export const Layout = lazy(() => import("../Layout/Layout"));
-export const Main = lazy(() => import("./Main/Main"));
-export const Loading = lazy(() => import("./Loading/LoadingPage"));
-export const NotFound = lazy(() => import("./NotFound/NotFound"));
+// import { lazy } from "react";
+// Main
+import Layout from "../Layout";
+import MainPage from "./Main/Main";
+import Loading from "./Loading/LoadingPage";
+import NotFound from "./NotFound/NotFound";
+
+// Account
+import ChangePWPage from "./Login/ChangePW";
+import FindPWPage from "./Login/FindPW";
+import LoginPage from "./Login/Login";
+import JoinPage from "./Join/Join";
+
+// MyPage
+import ModifyInfo from "./Mypage/ModifyInfo";
+import MyPageLayout from "./Mypage/MyPage";
+import MyPageAdoptList from "./Mypage/MyPageAdoptList";
+import MyPageAdoptReview from "./Mypage/MyPageAdoptReview";
+import MyPageBoard from "./Mypage/MyPageBoard";
+import MyPageInfo from "./Mypage/MyPageInfo";
+import MyPageOrderDetail from "./Mypage/MyPageOrderDetail";
+import MyPageOrderList from "./Mypage/MyPageOrderList";
+import MyPageQnA from "./Mypage/MyPageQnA";
+import MyPageQnADetail from "./Mypage/MyPageQnADetail";
+import MyPageQnAWrite from "./Mypage/MyPageQnAWrite";
+
+// About
+import AboutLayout from "./About/AboutLayout";
+import AboutMain from "./About/About";
+import Activity from "./About/Activity";
+import ActivityDetail from "./About/ActivityDetail";
+import AdoptProcess from "./About/AdoptProcess";
+import Notice from "./About/Notice";
+import NoticeDetail from "./About/NoticeDetail";
+import NoticeWrite from "./About/NoticeWrite";
+import FAQ from "./About/FAQ";
+
+// Adopt
+import AdoptApplication from "./Adopt/AdoptApplication";
+import AdoptChecklist from "./Adopt/AdoptChecklist";
+import AdoptReview from "./Adopt/AdoptReview";
+import AdoptReviewDetail from "./Adopt/AdoptReviewDetail";
+import AdoptReviewWrite from "./Adopt/AdoptReviewWrite";
+import AnimalList from "./Adopt/AnimalList";
+import AnimalListDetail from "./Adopt/AnimalListDetail";
+import HospitalLocation from "./Adopt/HospitalLocation";
+import ShelterLocation from "./Adopt/ShelterLocation";
+
+// Shop
+import Cart from "./Shop/Cart";
+import Order from "./Shop/Order";
+import OrderComplete from "./Shop/OrderComplete";
+import Product from "./Shop/Product";
+import ProductDetail from "./Shop/ProductDetail";
+
+// Support
+import Donate from "./Support/Donate";
+import DonateApply from "./Support/DonateApply";
+import VolunteerNotice from "./Support/Volunteer/VolunteerNotice";
+import VolunteerNoticeDetail from "./Support/Volunteer/VolunteerNoticeDetail";
+import VolunteerNoticeWrite from "./Support/Volunteer/VolunteerNoticeWrite";
+import VolunteerReview from "./Support/Volunteer/VolunteerReview";
+import VolunteerReviewDetail from "./Support/Volunteer/VolunteerReview";
+import VolunteerReviewWrite from "./Support/Volunteer/VolunteerReview";
+
+// Community
+import FindBoard from "./Community/FindBoard/FindBoard";
+import FindDetail from "./Community/FindBoard/FindDetail";
+import FindWrite from "./Community/FindBoard/FindWrite";
+import FleaBoard from "./Community/FleaBoard/FleaBoard";
+import FleaDetail from "./Community/FleaBoard/FleaDetail";
+import FleaWrite from "./Community/FleaBoard/FleaWrite";
+import FreeBoard from "./Community/FreeBoard/FreeBoard";
+import FreeDetail from "./Community/FreeBoard/FreeDetail";
+import FreeWrite from "./Community/FreeBoard/FreeWrite";
+import Missing from "./Community/Missing/MissingBoard";
+import MissingDetail from "./Community/Missing/MissingDetail";
+import MissingWrite from "./Community/Missing/MissingWrite";
+
+// Admin
+import AdminAdopt from "./Admin/AdminAdopt";
+import AdminBoard from "./Admin/AdminBoard";
+import AdminDashBoard from "./Admin/AdminDashBoard";
+import AdminMember from "./Admin/AdminMember";
+import AdminOrder from "./Admin/AdminOrder";
+import AdminProduct from "./Admin/AdminProduct";
+import AdminProductWrite from "./Admin/AdminProductWrite";
+import AdminQnA from "./Admin/AdminQnA";
+
+/**
+ ** Layout
+ ** Main
+ ** Loading
+ ** NotFound
+ */
+export const Main = {
+  Layout: Layout,
+  Main: MainPage,
+  Loading: Loading,
+  NotFound: NotFound,
+};
+
+// export const Layout = lazy(() => import("../Layout/Layout"));
+// export const Main = lazy(() => import("./Main/Main"));
+// export const Loading = lazy(() => import("./Loading/LoadingPage"));
+// export const NotFound = lazy(() => import("./NotFound/NotFound"));
 
 /**
  **ChangePW
@@ -12,10 +112,14 @@ export const NotFound = lazy(() => import("./NotFound/NotFound"));
  **Join
  */
 export const Account = {
-  ChangePW: lazy(() => import("./Login/ChangePW")),
-  FindPW: lazy(() => import("./Login/FindPW")),
-  Login: lazy(() => import("./Login/Login")),
-  Join: lazy(() => import("./Join/Join")),
+  ChangePW: ChangePWPage,
+  FindPW: FindPWPage,
+  Login: LoginPage,
+  Join: JoinPage,
+  // ChangePW: lazy(() => import("./Login/ChangePW")),
+  // FindPW: lazy(() => import("./Login/FindPW")),
+  // Login: lazy(() => import("./Login/Login")),
+  // Join: lazy(() => import("./Join/Join")),
 };
 
 /**
@@ -32,17 +136,28 @@ export const Account = {
  ** MyPageQnAWrite
  */
 export const MyPage = {
-  ModifyInfo: lazy(() => import("./Mypage/ModifyInfo")),
-  MyPage: lazy(() => import("./Mypage/MyPage")),
-  MyPageAdoptList: lazy(() => import("./Mypage/MyPageAdoptList")),
-  MyPageAdoptReview: lazy(() => import("./Mypage/MyPageAdoptReview")),
-  MyPageBoard: lazy(() => import("./Mypage/MyPageBoard")),
-  MyPageInfo: lazy(() => import("./Mypage/MyPageInfo")),
-  MyPageOrderDetail: lazy(() => import("./Mypage/MyPageOrderDetail")),
-  MyPageOrderList: lazy(() => import("./Mypage/MyPageOrderList")),
-  MyPageQnA: lazy(() => import("./Mypage/MyPageQnA")),
-  MyPageQnADetail: lazy(() => import("./Mypage/MyPageQnADetail")),
-  MyPageQnAWrite: lazy(() => import("./Mypage/MyPageQnAWrite")),
+  ModifyInfo: ModifyInfo,
+  MyPage: MyPageLayout,
+  MyPageAdoptList: MyPageAdoptList,
+  MyPageAdoptReview: MyPageAdoptReview,
+  MyPageBoard: MyPageBoard,
+  MyPageInfo: MyPageInfo,
+  MyPageOrderDetail: MyPageOrderDetail,
+  MyPageOrderList: MyPageOrderList,
+  MyPageQnA: MyPageQnA,
+  MyPageQnADetail: MyPageQnADetail,
+  MyPageQnAWrite: MyPageQnAWrite,
+  // ModifyInfo: lazy(() => import("./Mypage/ModifyInfo")),
+  // MyPage: lazy(() => import("./Mypage/MyPage")),
+  // MyPageAdoptList: lazy(() => import("./Mypage/MyPageAdoptList")),
+  // MyPageAdoptReview: lazy(() => import("./Mypage/MyPageAdoptReview")),
+  // MyPageBoard: lazy(() => import("./Mypage/MyPageBoard")),
+  // MyPageInfo: lazy(() => import("./Mypage/MyPageInfo")),
+  // MyPageOrderDetail: lazy(() => import("./Mypage/MyPageOrderDetail")),
+  // MyPageOrderList: lazy(() => import("./Mypage/MyPageOrderList")),
+  // MyPageQnA: lazy(() => import("./Mypage/MyPageQnA")),
+  // MyPageQnADetail: lazy(() => import("./Mypage/MyPageQnADetail")),
+  // MyPageQnAWrite: lazy(() => import("./Mypage/MyPageQnAWrite")),
 };
 
 /**
@@ -56,14 +171,24 @@ export const MyPage = {
  ** FAQ
  */
 export const About = {
-  About: lazy(() => import("./About/About")),
-  Activity: lazy(() => import("./About/Activity")),
-  ActivityDetail: lazy(() => import("./About/ActivityDetail")),
-  AdoptProcess: lazy(() => import("./About/AdoptProcess")),
-  Notice: lazy(() => import("./About/Notice")),
-  NoticeDetail: lazy(() => import("./About/NoticeDetail")),
-  NoticeWrite: lazy(() => import("./About/NoticeWrite")),
-  FAQ: lazy(() => import("./About/FAQ")),
+  Layout: AboutLayout,
+  About: AboutMain,
+  Activity: Activity,
+  ActivityDetail: ActivityDetail,
+  AdoptProcess: AdoptProcess,
+  Notice: Notice,
+  NoticeDetail: NoticeDetail,
+  NoticeWrite: NoticeWrite,
+  FAQ: FAQ,
+  // Layout: lazy(() => import("./About/AboutLayout")),
+  // About: lazy(() => import("./About/About")),
+  // Activity: lazy(() => import("./About/Activity")),
+  // ActivityDetail: lazy(() => import("./About/ActivityDetail")),
+  // AdoptProcess: lazy(() => import("./About/AdoptProcess")),
+  // Notice: lazy(() => import("./About/Notice")),
+  // NoticeDetail: lazy(() => import("./About/NoticeDetail")),
+  // NoticeWrite: lazy(() => import("./About/NoticeWrite")),
+  // FAQ: lazy(() => import("./About/FAQ")),
 };
 
 /**
@@ -78,15 +203,24 @@ export const About = {
  ** ShelterLocation
  */
 export const Adopt = {
-  AdoptApplication: lazy(() => import("./Adopt/AdoptApplication")),
-  AdoptChecklist: lazy(() => import("./Adopt/AdoptChecklist")),
-  AdoptReview: lazy(() => import("./Adopt/AdoptReview")),
-  AdoptReviewDetail: lazy(() => import("./Adopt/AdoptReviewDetail")),
-  AdoptReviewWrite: lazy(() => import("./Adopt/AdoptReviewWrite")),
-  AnimalList: lazy(() => import("./Adopt/AnimalList")),
-  AnimalListDetail: lazy(() => import("./Adopt/AnimalListDetail")),
-  HospitalLocation: lazy(() => import("./Adopt/HospitalLocation")),
-  ShelterLocation: lazy(() => import("./Adopt/ShelterLocation")),
+  AdoptApplication: AdoptApplication,
+  AdoptChecklist: AdoptChecklist,
+  AdoptReview: AdoptReview,
+  AdoptReviewDetail: AdoptReviewDetail,
+  AdoptReviewWrite: AdoptReviewWrite,
+  AnimalList: AnimalList,
+  AnimalListDetail: AnimalListDetail,
+  HospitalLocation: HospitalLocation,
+  ShelterLocation: ShelterLocation,
+  // AdoptApplication: lazy(() => import("./Adopt/AdoptApplication")),
+  // AdoptChecklist: lazy(() => import("./Adopt/AdoptChecklist")),
+  // AdoptReview: lazy(() => import("./Adopt/AdoptReview")),
+  // AdoptReviewDetail: lazy(() => import("./Adopt/AdoptReviewDetail")),
+  // AdoptReviewWrite: lazy(() => import("./Adopt/AdoptReviewWrite")),
+  // AnimalList: lazy(() => import("./Adopt/AnimalList")),
+  // AnimalListDetail: lazy(() => import("./Adopt/AnimalListDetail")),
+  // HospitalLocation: lazy(() => import("./Adopt/HospitalLocation")),
+  // ShelterLocation: lazy(() => import("./Adopt/ShelterLocation")),
 };
 
 /**
@@ -97,11 +231,16 @@ export const Adopt = {
  ** ProductDetail
  */
 export const Shop = {
-  Cart: lazy(() => import("./Shop/Cart")),
-  Order: lazy(() => import("./Shop/Order")),
-  OrderComplete: lazy(() => import("./Shop/OrderComplete")),
-  Product: lazy(() => import("./Shop/Product")),
-  ProductDetail: lazy(() => import("./Shop/ProductDetail")),
+  Cart: Cart,
+  Order: Order,
+  OrderComplete: OrderComplete,
+  Product: Product,
+  ProductDetail: ProductDetail,
+  // Cart: lazy(() => import("./Shop/Cart")),
+  // Order: lazy(() => import("./Shop/Order")),
+  // OrderComplete: lazy(() => import("./Shop/OrderComplete")),
+  // Product: lazy(() => import("./Shop/Product")),
+  // ProductDetail: lazy(() => import("./Shop/ProductDetail")),
 };
 
 /**
@@ -115,22 +254,22 @@ export const Shop = {
  ** VolunteerReviewWrite
  */
 export const Support = {
-  Donate: lazy(() => import("./Support/Donate")),
-  DonateApply: lazy(() => import("./Support/DonateApply")),
-  VolunteerNotice: lazy(() => import("./Support/Volunteer/VolunteerNotice")),
-  VolunteerNoticeDetail: lazy(() =>
-    import("./Support/Volunteer/VolunteerNoticeDetail")
-  ),
-  VolunteerNoticeWrite: lazy(() =>
-    import("./Support/Volunteer/VolunteerNoticeWrite")
-  ),
-  VolunteerReview: lazy(() => import("./Support/Volunteer/VolunteerReview")),
-  VolunteerReviewDetail: lazy(() =>
-    import("./Support/Volunteer/VolunteerReview")
-  ),
-  VolunteerReviewWrite: lazy(() =>
-    import("./Support/Volunteer/VolunteerReview")
-  ),
+  Donate: Donate,
+  DonateApply: DonateApply,
+  VolunteerNotice: VolunteerNotice,
+  VolunteerNoticeDetail: VolunteerNoticeDetail,
+  VolunteerNoticeWrite: VolunteerNoticeWrite,
+  VolunteerReview: VolunteerReview,
+  VolunteerReviewDetail: VolunteerReviewDetail,
+  VolunteerReviewWrite: VolunteerReviewWrite,
+  // Donate: lazy(() => import("./Support/Donate")),
+  // DonateApply: lazy(() => import("./Support/DonateApply")),
+  // VolunteerNotice: lazy(() => import("./Support/Volunteer/VolunteerNotice")),
+  // VolunteerNoticeDetail: lazy(() => import("./Support/Volunteer/VolunteerNoticeDetail")),
+  // VolunteerNoticeWrite: lazy(() => import("./Support/Volunteer/VolunteerNoticeWrite")),
+  // VolunteerReview: lazy(() => import("./Support/Volunteer/VolunteerReview")),
+  // VolunteerReviewDetail: lazy(() => import("./Support/Volunteer/VolunteerReview")),
+  // VolunteerReviewWrite: lazy(() => import("./Support/Volunteer/VolunteerReview")),
 };
 
 /**
@@ -148,18 +287,18 @@ export const Support = {
  ** MissingWrite
  */
 export const Community = {
-  FindBoard: lazy(() => import("./Community/FindBoard/FindBoard")),
-  FindDetail: lazy(() => import("./Community/FindBoard/FindDetail")),
-  FindWrite: lazy(() => import("./Community/FindBoard/FindWrite")),
-  FleaBoard: lazy(() => import("./Community/FleaBoard/FleaBoard")),
-  FleaDetail: lazy(() => import("./Community/FleaBoard/FleaDetail")),
-  FleaWrite: lazy(() => import("./Community/FleaBoard/FleaWrite")),
-  FreeBoard: lazy(() => import("./Community/FreeBoard/FreeBoard")),
-  FreeDetail: lazy(() => import("./Community/FreeBoard/FreeDetail")),
-  FreeWrite: lazy(() => import("./Community/FreeBoard/FreeWrite")),
-  Missing: lazy(() => import("./Community/Missing/MissingBoard")),
-  MissingDetail: lazy(() => import("./Community/Missing/MissingDetail")),
-  MissingWrite: lazy(() => import("./Community/Missing/MissingWrite")),
+  FindBoard: FindBoard,
+  FindDetail: FindDetail,
+  FindWrite: FindWrite,
+  FleaBoard: FleaBoard,
+  FleaDetail: FleaDetail,
+  FleaWrite: FleaWrite,
+  FreeBoard: FreeBoard,
+  FreeDetail: FreeDetail,
+  FreeWrite: FreeWrite,
+  Missing: Missing,
+  MissingDetail: MissingDetail,
+  MissingWrite: MissingWrite,
 };
 
 /**
@@ -173,12 +312,12 @@ export const Community = {
  ** AdminQnA
  */
 export const Admin = {
-  AdminAdopt: lazy(() => import("./Admin/AdminAdopt")),
-  AdminBoard: lazy(() => import("./Admin/AdminBoard")),
-  AdminDashBoard: lazy(() => import("./Admin/AdminDashBoard")),
-  AdminMember: lazy(() => import("./Admin/AdminMember")),
-  AdminOrder: lazy(() => import("./Admin/AdminOrder")),
-  AdminProduct: lazy(() => import("./Admin/AdminProduct")),
-  AdminProductWrite: lazy(() => import("./Admin/AdminProductWrite")),
-  AdminQnA: lazy(() => import("./Admin/AdminQnA")),
+  AdminAdopt: AdminAdopt,
+  AdminBoard: AdminBoard,
+  AdminDashBoard: AdminDashBoard,
+  AdminMember: AdminMember,
+  AdminOrder: AdminOrder,
+  AdminProduct: AdminProduct,
+  AdminProductWrite: AdminProductWrite,
+  AdminQnA: AdminQnA,
 };

@@ -6,11 +6,11 @@ import * as BROWSER_PATH from "./constants/PageURL";
 const Router = () => {
   return (
     <BrowserRouter>
-      <ScrollToTop />
-      <React.Suspense fallback={<Page.Loading />}>
+      <React.Suspense fallback={<Page.Main.Loading />}>
+        <ScrollToTop />
         <Routes>
-          <Route path={BROWSER_PATH.MAIN} element={<Page.Layout />}>
-            <Route index element={<Page.Main />} />
+          <Route path={BROWSER_PATH.MAIN} element={<Page.Main.Layout />}>
+            <Route index element={<Page.Main.Main />} />
             <Route
               path={BROWSER_PATH.ACCOUNT.JOIN}
               element={<Page.Account.Join />}
@@ -73,34 +73,40 @@ const Router = () => {
             </Route>
             {/* About */}
             <Route
+              exact
               path={BROWSER_PATH.ABOUT.ABOUT}
-              element={<Page.About.About />}
-            />
-            <Route
-              path={BROWSER_PATH.ABOUT.ADOPT_PROCESS}
-              element={<Page.About.AdoptProcess />}
-            />
-            <Route
-              path={BROWSER_PATH.ABOUT.ACTIVITY}
-              element={<Page.About.Activity />}
-            />
-            <Route
-              path={BROWSER_PATH.ABOUT.ACTIVITY_DETAIL()}
-              element={<Page.About.ActivityDetail />}
-            />
-            <Route path={BROWSER_PATH.ABOUT.FAQ} element={<Page.About.FAQ />} />
-            <Route
-              path={BROWSER_PATH.ABOUT.NOTICE}
-              element={<Page.About.Notice />}
-            />
-            <Route
-              path={BROWSER_PATH.ABOUT.NOTICE_DETAIL()}
-              element={<Page.About.NoticeDetail />}
-            />
-            <Route
-              path={BROWSER_PATH.ABOUT.NOTICE_WRITE}
-              element={<Page.About.NoticeWrite />}
-            />
+              element={<Page.About.Layout />}
+            >
+              <Route index element={<Page.About.About />} />
+              <Route
+                path={BROWSER_PATH.ABOUT.ADOPT_PROCESS}
+                element={<Page.About.AdoptProcess />}
+              />
+              <Route
+                path={BROWSER_PATH.ABOUT.ACTIVITY()}
+                element={<Page.About.Activity />}
+              />
+              <Route
+                path={BROWSER_PATH.ABOUT.ACTIVITY_DETAIL()}
+                element={<Page.About.ActivityDetail />}
+              />
+              <Route
+                path={BROWSER_PATH.ABOUT.FAQ}
+                element={<Page.About.FAQ />}
+              />
+              <Route
+                path={BROWSER_PATH.ABOUT.NOTICE}
+                element={<Page.About.Notice />}
+              />
+              <Route
+                path={BROWSER_PATH.ABOUT.NOTICE_DETAIL()}
+                element={<Page.About.NoticeDetail />}
+              />
+              <Route
+                path={BROWSER_PATH.ABOUT.NOTICE_WRITE}
+                element={<Page.About.NoticeWrite />}
+              />
+            </Route>
             {/* Adopt */}
             <Route
               path={BROWSER_PATH.ADOPT.CHECKLIST}
@@ -271,7 +277,7 @@ const Router = () => {
               path={BROWSER_PATH.ADMIN.QNA}
               element={<Page.Admin.AdminQnA />}
             />
-            <Route path="*" element={<Page.NotFound />} />
+            <Route path="*" element={<Page.Main.NotFound />} />
           </Route>
         </Routes>
       </React.Suspense>
