@@ -76,36 +76,36 @@ const Header = ({ page }) => {
 };
 
 const NavList = ({ title, navList, isSelected }) => {
-    const [selected, setSelected] = useState(1);
-    const [height, setHeight] = useState(0);
-    // const [color, setColor] = useState(0);
-    const ulRef = useRef(null);
+  const [selected, setSelected] = useState(1);
+  const [height, setHeight] = useState(0);
+  // const [color, setColor] = useState(0);
+  const ulRef = useRef(null);
 
-    const HandleMouseOver = () => {
-        const ulHeight = ulRef.current.scrollHeight;
-        setHeight(ulHeight);
-        setSelected(1);
-    };
+  const HandleMouseOver = () => {
+    const ulHeight = ulRef.current.scrollHeight;
+    setHeight(ulHeight);
+    setSelected(1);
+  };
 
-    return (
-        <NavListStyle
-            onMouseOver={HandleMouseOver}
-            onMouseOut={() => setSelected(0)}
-            isSelected={selected}
-            height={height}
-        >
-            <div className="NavTitle">{title}</div>
-            <ul ref={ulRef}>
-                {navList.map((links, index) => {
-                    return (
-                        <li key={index}>
-                            <Link to={links.link}>{links.linkName}</Link>
-                        </li>
-                    );
-                })}
-            </ul>
-        </NavListStyle>
-    );
+  return (
+    <NavListStyle
+      onMouseOver={HandleMouseOver}
+      onMouseOut={() => setSelected(0)}
+      isSelected={selected}
+      height={height}
+    >
+      <div className="NavTitle">{title}</div>
+      <ul ref={ulRef}>
+        {navList.map((links, index) => {
+          return (
+            <li key={index}>
+              <Link to={links.link}>{links.linkName}</Link>
+            </li>
+          );
+        })}
+      </ul>
+    </NavListStyle>
+  );
 };
 
 const HeaderNavStyle = styled.div`

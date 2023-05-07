@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import * as S from "./Comment.styled";
 import Pagination from "../Support/Volunteer/VolunteerPagination";
+import DOMPurify from "dompurify"; //XSS 공격 방어 검증 라이브러리
 
 const Comment = () => {
   const [comments, setComments] = useState([]);
@@ -17,6 +18,10 @@ const Comment = () => {
     (page - 1) * itemsPerPage,
     page * itemsPerPage
   );
+
+  const encodedInputValue = inputValue
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
 
   const formatDate = (dateString) => {
     //날짜 변환함수
@@ -44,7 +49,7 @@ const Comment = () => {
       memberNum: 1, // 임시로 사용자 번호를 1로 설정
       boardId: "volunteer", // 예시로 사용하는 게시판 ID
       boardNum: 1, // 예시로 사용하는 게시글 번호
-      commentContent: inputValue,
+      commentContent: DOMPurify.sanitize(encodedInputValue), //XSS 검증
       commentCreate: new Date().toISOString(),
       commentUpdate: new Date().toISOString(),
       commentPnum: null,
@@ -59,6 +64,9 @@ const Comment = () => {
     e.preventDefault();
     const newComments = [...comments];
     const replyInputValue = e.target.replyInput.value;
+    const encodedreplyInputValue = replyInputValue
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
 
     if (replyInputValue.trim() === "") return;
 
@@ -68,7 +76,7 @@ const Comment = () => {
       memberNum: 1, // 임시로 사용자 번호를 1로 설정
       boardId: "volunteer", // 예시로 사용하는 게시판 ID
       boardNum: 1, // 예시로 사용하는 게시글 번호
-      commentContent: replyInputValue,
+      commentContent: DOMPurify.sanitize(encodedreplyInputValue),
       commentCreate: new Date().toISOString(),
       commentUpdate: new Date().toISOString(),
       commentPnum: comments[index].commentNum, // 부모 댓글 번호 설정
@@ -98,6 +106,17 @@ const Comment = () => {
     // 수정 클릭시 수정 폼 표시
     const newComments = [...comments];
     newComments[index].showEditForm = !newComments[index].showEditForm;
+    if (newComments[index].showEditForm) {
+      // 인코딩된 값을 수정 폼에 사용하도록 변경
+      newComments[index].commentContent = newComments[index].commentContent
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">");
+    } else {
+      // 취소 버튼 클릭시 다시 인코딩된 값을 사용하도록 변경
+      newComments[index].commentContent = newComments[index].commentContent
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
     setComments(newComments);
   };
 
@@ -106,10 +125,15 @@ const Comment = () => {
     e.preventDefault();
     const newComments = [...comments];
     const editInputValue = e.target.editInput.value;
+    const encodedEditInputValue = editInputValue
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
 
     if (editInputValue.trim() === "") return;
 
-    newComments[index].commentContent = editInputValue;
+    newComments[index].commentContent = DOMPurify.sanitize(
+      encodedEditInputValue
+    );
     newComments[index].commentUpdate = new Date().toISOString();
     newComments[index].showEditForm = false; // 수정 폼 닫기
     setComments(newComments);
@@ -179,8 +203,6 @@ const Comment = () => {
                 </S.ReplyButton>
                 <S.ReplyButtonSpace />
                 <S.ReplyButton onClick={() => handleDeleteClick(index)}>
-                  {" "}
-                  {/* handleDelete(index)*/}
                   삭제
                 </S.ReplyButton>
               </S.Reply>

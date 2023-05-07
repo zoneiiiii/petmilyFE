@@ -124,6 +124,9 @@ export const Support = {
   VolunteerNoticeWrite: lazy(() =>
     import("./Support/Volunteer/VolunteerNoticeWrite")
   ),
+  VolunteerNoticeModify: lazy(() =>
+    import("./Support/Volunteer/VolunteerNoticeModify")
+  ),
   VolunteerReview: lazy(() => import("./Support/Volunteer/VolunteerReview")),
   VolunteerReviewDetail: lazy(() =>
     import("./Support/Volunteer/VolunteerReview")
