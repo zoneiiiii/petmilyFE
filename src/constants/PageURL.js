@@ -100,29 +100,51 @@ export const ABOUT = {
   ADOPT_PROCESS: "/about/adoptprocess",
 
   /**공지사항 페이지 URL
-   * @return "/notice" */
-  NOTICE: "/notice",
+   * @return "/about/notice" */
+  NOTICE: "/about/notice",
 
   /**
    ** 공지사항 상세 페이지 URL
    ** 사용법: ABOUT.NOTICE_DETAIL(id)
-   * @return "/notice/:id" (id 없음)
-   * @return "/notice/" + id (id 존재)
+   * @return "/about/notice/:id" (id 없음)
+   * @return "/about/notice/" + id (id 존재)
    **/
   NOTICE_DETAIL: (id) => {
-    if (id === undefined) return "/notice/:id";
-    else return "/notice/" + id;
+    if (id === undefined) return "/about/notice/:id";
+    else return "/about/notice/" + id;
   },
 
   /**공지사항 작성 페이지 URL
-   * @return "/notice/write"
+   * @return "/about/notice/write"
    */
-  NOTICE_WRITE: "/notice/write",
+  NOTICE_WRITE: "/about/notice/write",
 
   /**활동내역 페이지 URL
-   * @return "/notice/write"
-   */
-  ACTIVITY: "/activity",
+   ** 사용법: ABOUT.ACTIVITY(page, limit, search)
+   ** parameter 우선순위: page > limit = search
+   * @return "/about/activity/list" (parameter 없음)
+   * @return "/about/notice/list?page=" + page (page만 존재)
+   * @return "/about/activity/list?page=" + page + "&search=" + search (page, search 존재)
+   * @return "/about/activity/list?page=" + page + "&limit=" + limit (page, limit 존재)
+   * @return "/about/activity/list?page=" + page + "&limit=" + limit + "&search=" + search + page (모두 존재)
+   **/
+  ACTIVITY: (page, limit, search) => {
+    if (page === undefined) return "/about/activity/list";
+    else if (limit === undefined) {
+      if (search === undefined) return "/about/activity/list?page=" + page;
+      else return "/about/activity/list?page=" + page + "&search=" + search;
+    } else if (search === undefined)
+      return "/about/activity/list?page=" + page + "&limit=" + limit;
+    else
+      return (
+        "/about/activity/list?page=" +
+        page +
+        "&limit=" +
+        limit +
+        "&search=" +
+        search
+      );
+  },
 
   /**
    ** 활동내역 상세페이지 URL
@@ -131,14 +153,19 @@ export const ABOUT = {
    * @return "/activity/" + id (id 존재)
    **/
   ACTIVITY_DETAIL: (id) => {
-    if (id === undefined) return "/activity/:id";
-    else return "/activity/" + id;
+    if (id === undefined) return "/about/activity/detail/:id";
+    else return "/about/activity/detail/" + id;
   },
+
+  /**활동내역 작성페이지 URL
+   * @return "/notice/write"
+   */
+  ACTIVITY_WRITE: "/about/activity/write",
 
   /**FAQ페이지 URL
    * @return "/faq"
    */
-  FAQ: "/faq", // FAQ
+  FAQ: "/about/faq", // FAQ
 };
 
 /** ADOPT: 입양 관련 URL 리스트*/
@@ -262,6 +289,16 @@ export const SUPPORT = {
   VOLUNTEER_NOTICE_DETAIL: (id) => {
     if (id === undefined) return "/donate/volunteer/notice/:id";
     else return "/donate/volunteer/notice/" + id;
+  },
+
+  /**봉사 게시판 수정 페이지 URL
+   ** 사용법: SUPPORT.VOLUNTEER_NOTICE_MODIFY(id)
+   * @return "/donate/volunteer/notice/modify:id" (id 없음)
+   * @return "/donate/volunteer/notice/modify/" + id (id 존재)
+   */
+  VOLUNTEER_NOTICE_MODIFY: (id) => {
+    if (id === undefined) return "/donate/volunteer/notice/modify/:id";
+    else return "/donate/volunteer/notice/modify/" + id;
   },
 
   /**봉사 후기 게시판 페이지 URL

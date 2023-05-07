@@ -4,6 +4,7 @@ import * as S from "./VolunteerNotice.styled";
 import VolunteerCard from "../../../components/Support/Volunteer/VolunteerCard";
 import VolunteerPagination from "../../../components/Support/Volunteer/VolunteerPagination";
 import axios from "axios";
+import { SUPPORT } from "../../../constants/PageURL";
 
 const VolunteerNotice = () => {
   const [data, setData] = useState([]); // DB 데이터 가져오는 변수
@@ -50,7 +51,7 @@ const VolunteerNotice = () => {
         onChange={handleChange}
       />
       <S.ButtonContainer>
-        <Link to="/board/volunteer/write">
+        <Link to={SUPPORT.VOLUNTEER_NOTICE_WRITE}>
           <S.VolunteerButton>글 작성</S.VolunteerButton>
         </Link>
       </S.ButtonContainer>

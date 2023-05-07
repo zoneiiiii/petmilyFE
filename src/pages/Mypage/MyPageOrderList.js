@@ -5,7 +5,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { ThemeProvider, Typography, Box, Button } from "@mui/material";
-import { SearchBar } from "../../components/common/SearchBar";
+import SearchBar from "../../components/common/SearchBar";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
@@ -20,17 +20,19 @@ const MyPageOrderList = () => {
     dayjs(dayjs().subtract(6, "month").toDate())
   );
   const [endDate, setEndDate] = useState(dayjs());
+  const [value, setValue] = useState();
   const resetDate = () => {
     setStartDate(dayjs(dayjs().subtract(6, "month").toDate()));
     setEndDate(dayjs());
   };
   useEffect(() => {
+    value && console.log(value);
     //  console.log(startDate.format("YYYY-MM-DD"), endDate.format("YYYY-MM-DD"));
-  }, [startDate, endDate]);
+  }, [startDate, endDate, value]);
 
   const dateList = [...new Set(orderlist.map((product) => product.orderDate))];
 
-  const ShowMore = () => {};
+  const ShowMore = () => { };
 
   return (
     <ThemeProvider theme={CustomTheme}>
@@ -70,7 +72,7 @@ const MyPageOrderList = () => {
             <AutorenewIcon onClick={resetDate} />
           </Button>
         </Box>
-        <SearchBar theme={CustomTheme} />
+        <SearchBar theme={CustomTheme} setValue={setValue} value={value} />
       </Box>
       {dateList.map((date, index) => {
         return (

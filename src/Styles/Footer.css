@@ -1,6 +1,7 @@
 .footer {
     height: 200px;
     width: 100%;
+    min-width: 1000px;
     background-color: #F9F9F9;
     z-index: 1000;
 }
