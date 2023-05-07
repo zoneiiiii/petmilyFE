@@ -82,19 +82,9 @@ export const WriteButton = styled(Button)`
   }
 `;
 
-export const InputTextField = styled(TextField)({
-  inputProps: {
-    style: { color: "#FBD385" },
-  },
-  InputLabelProps: {
-    style: { color: "#FBD385" },
-  },
-  sx: {
-    borderBottom: "solid 1px #FBD385",
-    width: "300px",
-    background: "white",
-  },
-  InputProps: {
-    disableUnderline: true,
-  },
-});
+export const EditorWrapper = styled.div`
+  .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
+    min-height: 500px;
+    width: 700px;
+  }
+`;

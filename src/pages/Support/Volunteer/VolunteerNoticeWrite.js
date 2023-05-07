@@ -15,6 +15,9 @@ import {
 } from "@mui/material";
 import { CustomDatePicker } from "../../../components/common/CustomDatePicker";
 import { SUPPORT } from "../../../constants/PageURL";
+import dayjs from "dayjs";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
 
 const VolunteerNoticeWrite = () => {
   const navigate = useNavigate();
@@ -83,7 +86,7 @@ const VolunteerNoticeWrite = () => {
             <S.FormRow2>
               <CustomDatePicker
                 label="활동 시작 기간"
-                value={volunteerStartPeriod}
+                value={dayjs(volunteerStartPeriod)}
                 sx={{
                   "& label": {
                     color: "#ccc",
@@ -101,7 +104,7 @@ const VolunteerNoticeWrite = () => {
               />
               <CustomDatePicker
                 label="활동 종료 기간"
-                value={volunteerEndPeriod}
+                value={dayjs(volunteerEndPeriod)}
                 sx={{
                   "& label": {
                     color: "#ccc",
@@ -128,9 +131,7 @@ const VolunteerNoticeWrite = () => {
                 InputProps={{ readOnly: true }}
               />
               <S.ButtonSpace />
-              <S.WriteButton onClick={handlePostcodeOpen} Width={"50%"}>
-                검색
-              </S.WriteButton>
+              <S.WriteButton onClick={handlePostcodeOpen}>검색</S.WriteButton>
               <Dialog
                 open={isPostcodeOpen}
                 onClose={handlePostcodeClose}
@@ -200,14 +201,38 @@ const VolunteerNoticeWrite = () => {
             </S.FormRow>
 
             <S.FormRow>
-              <TextField
-                label="내용"
-                multiline
-                rows={12}
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                fullWidth
-              />
+              <S.EditorWrapper>
+                <CKEditor
+                  editor={ClassicEditor}
+                  data={content}
+                  onChange={(event, editor) => {
+                    const data = editor.getData();
+                    setContent(data);
+                  }}
+                  config={{
+                    toolbar: [
+                      "heading",
+                      "|",
+                      "bold",
+                      "italic",
+                      "link",
+                      "bulletedList",
+                      "numberedList",
+                      "|",
+                      "indent",
+                      "outdent",
+                      "|",
+                      "blockQuote",
+                      "insertTable",
+                      "mediaEmbed",
+                      "undo",
+                      "redo",
+                    ],
+                    className: "WriteEditor",
+                    placeholder: "내용을 입력하세요.",
+                  }}
+                />
+              </S.EditorWrapper>
             </S.FormRow>
 
             <S.FormRow>
