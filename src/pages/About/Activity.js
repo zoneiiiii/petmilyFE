@@ -9,7 +9,7 @@ import {
   TableRow,
   ThemeProvider,
 } from "@mui/material";
-import { SearchBar } from "../../components/common/SearchBar";
+import SearchBar from "../../components/common/SearchBar";
 import { useEffect, useState } from "react";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
