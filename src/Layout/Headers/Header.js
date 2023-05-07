@@ -3,7 +3,14 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { BROWSER_PATH } from "../../constants/path";
 import HeaderRight from "./HeaderRight";
-import { ABOUT, ADOPT, COMMUNITY, MYPAGE, SHOP, SUPPORT } from "../../constants/PageURL";
+import {
+    ABOUT,
+    ADOPT,
+    COMMUNITY,
+    MYPAGE,
+    SHOP,
+    SUPPORT,
+} from "../../constants/PageURL";
 
 const Header = ({ page }) => {
 

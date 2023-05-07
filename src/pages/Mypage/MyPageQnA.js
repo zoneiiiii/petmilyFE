@@ -3,16 +3,14 @@ import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
+import Grid from "@mui/material/Grid";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import { tableCellClasses } from "@mui/material/TableCell";
 import { Pagination } from "@mui/material";
 import Stack from "@mui/material/Stack";
-import { styled } from "@mui/material/styles";
 import CustomButton from "../Login/CustomButton";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { MYPAGE } from "../../constants/PageURL";
 
@@ -40,45 +38,54 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
+  "td,th": {
+    border: "1px solid lightgray",
   },
 }));
 
-const columns = [
-  { id: "num", label: "No.", minWidth: 20, align: "center" },
+const qnaList = [
   {
-    id: "subject",
-    label: "제목",
-    minWidth: 170,
-    align: "center",
+    num: 7,
+    subject: "환불 문의드립니다.",
+    date: "2023-02-02",
+    qnaStatus: "진행중",
   },
   {
-    id: "date",
-    label: "작성날짜 ",
-    minWidth: 30,
-    align: "center",
+    num: 6,
+    subject: "환불 문의드립니다.",
+    date: "2023-02-02",
+    qnaStatus: "진행중",
   },
   {
-    id: "qnaStatus",
-    label: "답변상태",
-    minWidth: 10,
-    align: "center",
+    num: 5,
+    subject: "환불 문의드립니다.",
+    date: "2023-02-02",
+    qnaStatus: "진행중",
   },
-];
-function createData(num, subject, date, qnaStatus) {
-  return { num, subject, date, qnaStatus };
-}
-
-const rows = [
-  createData(7, "환불 문의드립니다.", "2023-02-02", "진행중"),
-  createData(6, "환불 문의드립니다.", "2023-02-02", "진행중"),
-  createData(5, "환불 문의드립니다.", "2023-02-02", "진행중"),
-  createData(4, "환불 문의드립니다.", "2023-02-02", "진행중"),
-  createData(3, "환불 문의드립니다.", "2023-02-02", "진행중"),
-  createData(2, "입양 절차 문의드립니다.", "2023-02-02", "답변완료"),
-  createData(1, "배송 문의드립니다.", "2023-02-02", "답변완료"),
+  {
+    num: 4,
+    subject: "환불 문의드립니다.",
+    date: "2023-02-02",
+    qnaStatus: "진행중",
+  },
+  {
+    num: 3,
+    subject: "환불 문의드립니다.",
+    date: "2023-02-02",
+    qnaStatus: "진행중",
+  },
+  {
+    num: 2,
+    subject: "입양 절차 문의드립니다.",
+    date: "2023-02-02",
+    qnaStatus: "답변완료",
+  },
+  {
+    num: 1,
+    subject: "배송 문의드립니다.",
+    date: "2023-02-02",
+    qnaStatus: "답변완료",
+  },
 ];
 
 const MyPageQnA = () => {
@@ -96,76 +103,97 @@ const MyPageQnA = () => {
             <h5>1:1 문의</h5>
           </div>
         </MyPageStyle>
-        <TableContainer
-          component={Paper}
-          sx={{
-            mt: 5,
-          }}
-        >
+        <Grid style={{ width: 1000 }}>
           <Table
-            sx={{ minWidth: 900 }}
+            sx={{
+              mt: 5,
+              border: "1px solid lightgray",
+            }}
             aria-label="caption table"
             overflow="hidden"
           >
             <TableHead>
               <StyledTableRow>
-                {columns.map((column) => (
-                  <StyledTableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                  >
-                    {column.label}
-                  </StyledTableCell>
-                ))}
+                <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                  No.
+                </StyledTableCell>
+                <StyledTableCell align="center" sx={{ minWidth: 300 }}>
+                  제목
+                </StyledTableCell>
+                <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                  작성날짜
+                </StyledTableCell>
+                <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                  답변상태
+                </StyledTableCell>
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {rows
+              {qnaList
                 .slice(
                   (page - 1) * rowsPerPage,
                   (page - 1) * rowsPerPage + rowsPerPage
                 )
-                .map((row) => {
-                  return (
-                    <StyledTableRow key={row.num}>
-                      {columns.map((column) => {
-                        const value = row[column.id];
-                        return (
-                          <StyledTableCell key={column.id} align={column.align}>
-                            <Link
-                              to={MYPAGE.QNA_DETAIL}
-                              style={{ textDecoration: "none", color: "black" }}
-                            >
-                              {value}
-                            </Link>
-                          </StyledTableCell>
-                        );
-                      })}
-                    </StyledTableRow>
-                  );
-                })}
+                .map((qna) => (
+                  <StyledTableRow key={qna.num}>
+                    <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                      {qna.num}
+                    </StyledTableCell>
+                    <StyledTableCell align="center" sx={{ minWidth: 300 }}>
+                      <Link
+                        to={MYPAGE.QNA_DETAIL(qna.num)}
+                        style={{ textDecoration: "none", color: "black" }}
+                      >
+                        {qna.subject}
+                      </Link>
+                    </StyledTableCell>
+                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                      {qna.date}
+                    </StyledTableCell>
+                    {qna.qnaStatus === "진행중" ? (
+                      <StyledTableCell
+                        align="center"
+                        sx={{
+                          minWidth: 10,
+                          color: "blue",
+                        }}
+                      >
+                        {qna.qnaStatus}
+                      </StyledTableCell>
+                    ) : (
+                      <StyledTableCell
+                        align="center"
+                        sx={{
+                          minWidth: 10,
+                          color: "red",
+                        }}
+                      >
+                        {qna.qnaStatus}
+                      </StyledTableCell>
+                    )}
+                  </StyledTableRow>
+                ))}
             </TableBody>
           </Table>
-        </TableContainer>
-        <Link to={MYPAGE.QNA_WRITE} style={{ textDecoration: "none" }}>
-          <CustomButton label="문의하기" value="문의하기">
-            문의하기
-          </CustomButton>
-        </Link>
-        <Stack spacing={2} sx={{ mt: 5 }}>
-          <Pagination
-            color="primary"
-            page={page}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-            onChange={handleChangePage}
-            component="div"
-            count={Math.ceil(rows.length / rowsPerPage)}
-          />
-        </Stack>
+          <Link to={MYPAGE.QNA_WRITE} style={{ textDecoration: "none" }}>
+            <CustomButton label="문의하기" value="문의하기">
+              문의하기
+            </CustomButton>
+          </Link>
+          <Stack spacing={2} sx={{ mt: 5 }}>
+            <Pagination
+              color="primary"
+              page={page}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+              onChange={handleChangePage}
+              component="div"
+              count={Math.ceil(qnaList.length / rowsPerPage)}
+            />
+          </Stack>
+        </Grid>
       </ThemeProvider>
     </>
   );

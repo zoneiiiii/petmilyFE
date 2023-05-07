@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { ADOPT } from "../../constants/PageURL";
 
 const MyPageAdoptReview = () => {
   const [Image, setImage] = useState(
@@ -25,10 +26,11 @@ const MyPageAdoptReview = () => {
 
       <Grid maxWidth="xl">
         {/* End hero unit */}
-        <Link to="/" style={{ textDecoration: "none" }}>
-          <Grid container spacing={3}>
-            {cards.map((card) => (
-              <Grid item key={card}>
+
+        <Grid container spacing={3}>
+          {cards.map((card) => (
+            <Grid item key={card}>
+              <Link to={ADOPT.REVIEW_DETAIL} style={{ textDecoration: "none" }}>
                 <Card sx={{ backgroundColor: "#F5F5ED", mt: 5 }}>
                   <CardMedia
                     component="img"
@@ -53,10 +55,10 @@ const MyPageAdoptReview = () => {
                     subheader="September 14, 2016"
                   ></CardHeader>
                 </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Link>
+              </Link>
+            </Grid>
+          ))}
+        </Grid>
       </Grid>
     </>
   );
