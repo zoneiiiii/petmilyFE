@@ -1,5 +1,6 @@
 .layout {
-    padding-top: 85px;
+    margin-top: 83px;
+    min-width: 1000px;
 }
 
 .main {

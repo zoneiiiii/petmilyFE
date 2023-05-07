@@ -48,6 +48,7 @@ const HeaderRight = ({ page }) => {
                     <Button onClick={logoutClick} variant="outlined" size="large"
                         sx={{
                             m: 1,
+                            minWidth: "100",
                             color: "#FFFFFF",
                             background: "#FF8282",
                             borderColor: "#FF8282",
@@ -75,6 +76,7 @@ const HeaderRight = ({ page }) => {
                         sx={{
                             m: 1,
                             color: "#FFFFFF",
+                            minWidth: "100",
                             background: "#BFBFBF",
                             borderColor: "#BFBFBF",
                             ":hover": { borderColor: "gray", background: "gray" },
@@ -97,7 +99,7 @@ const HeaderRight = ({ page }) => {
 const HeadrRight = styled.div`
 
     .stack {
-        width: 20vw;
+        width: 250px;
         padding-top: 15px;
         align-items: center;
         justify-content: center;
