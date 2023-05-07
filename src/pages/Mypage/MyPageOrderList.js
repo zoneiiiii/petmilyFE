@@ -5,7 +5,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { ThemeProvider, Typography, Box, Button } from "@mui/material";
-import { SearchBar } from "../../components/common/SearchBar";
+import SearchBar from "../../components/common/SearchBar";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
@@ -32,7 +32,7 @@ const MyPageOrderList = () => {
 
   const dateList = [...new Set(orderlist.map((product) => product.orderDate))];
 
-  const ShowMore = () => {};
+  const ShowMore = () => { };
 
   return (
     <ThemeProvider theme={CustomTheme}>

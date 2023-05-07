@@ -1,4 +1,4 @@
-// import { lazy } from "react";
+import { lazy } from "react";
 // Main
 import Layout from "../Layout";
 import MainPage from "./Main/Main";
@@ -262,11 +262,15 @@ export const Support = {
   VolunteerReview: VolunteerReview,
   VolunteerReviewDetail: VolunteerReviewDetail,
   VolunteerReviewWrite: VolunteerReviewWrite,
+  VolunteerNoticeModify: lazy(() =>
+    import("./Support/Volunteer/VolunteerNoticeModify")
+  ),
   // Donate: lazy(() => import("./Support/Donate")),
   // DonateApply: lazy(() => import("./Support/DonateApply")),
   // VolunteerNotice: lazy(() => import("./Support/Volunteer/VolunteerNotice")),
   // VolunteerNoticeDetail: lazy(() => import("./Support/Volunteer/VolunteerNoticeDetail")),
   // VolunteerNoticeWrite: lazy(() => import("./Support/Volunteer/VolunteerNoticeWrite")),
+  // VolunteerNoticeModify: lazy(() => import("./Support/Volunteer/VolunteerNoticeModify")),
   // VolunteerReview: lazy(() => import("./Support/Volunteer/VolunteerReview")),
   // VolunteerReviewDetail: lazy(() => import("./Support/Volunteer/VolunteerReview")),
   // VolunteerReviewWrite: lazy(() => import("./Support/Volunteer/VolunteerReview")),

@@ -9,7 +9,7 @@ import {
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { useState } from "react";
 
-export const SearchBar = ({ setValue, value, onClick }) => {
+const SearchBar = ({ setValue, value, onClick }) => {
   const [textValue, setTextValue] = useState(value ? value : "");
   const handleChange = (event) => {
     setTextValue(event.target.value);
@@ -72,3 +72,5 @@ export const SearchBar = ({ setValue, value, onClick }) => {
     </ThemeProvider>
   );
 };
+
+export default SearchBar;

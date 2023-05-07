@@ -1,12 +1,13 @@
-import styled from 'styled-components';
+import styled from "styled-components";
+import { Button } from "@mui/material";
 
-const DetailContainer = styled.div`
+export const DetailContainer = styled.div`
   width: 80%;
   margin: 0 auto;
-  margin-top : 3%;
+  margin-top: 3%;
 `;
 
-const DetailTop = styled.div`
+export const DetailTop = styled.div`
   display: flex;
 `;
 
@@ -18,20 +19,45 @@ const DetailTop = styled.div`
 
 // `;
 
-const Thumbnail = styled.img`
+export const Thumbnail = styled.img`
   width: 25%;
   height: 25%;
 `;
 
-const DetailInfo = styled.div`
+export const DetailInfo = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   margin-left: 20px;
 `;
 
-const DetailMiddle = styled.div``;
+export const DetailMiddle = styled.div``;
 
-const DetailBottom = styled.div``;
+export const DetailBottom = styled.div``;
 
-export {DetailBottom,DetailContainer,DetailInfo,DetailMiddle,DetailTop,Thumbnail}
+export const ButtonsContainer = styled.div`
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export const ButtonsSpace = styled.div`
+  width: 4px;
+  height: auto;
+  display: inline-block;
+`;
+
+export const Buttons = styled(Button)`
+  && {
+    color: #fff;
+    background-color: #fbd385;
+    width: auto;
+    height: 30px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    &:hover {
+      background-color: #ffbe3f;
+    }
+  }
+`;

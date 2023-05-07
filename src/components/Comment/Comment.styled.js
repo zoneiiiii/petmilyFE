@@ -65,10 +65,7 @@ export const CommentNickname = styled.span`
 `;
 
 export const CommentContent = styled.span`
-  margin-left: 20px;
-  margin-top: 20px;
   white-space: pre-line;
-  // border: 1px solid #ccc;
 `;
 
 export const CommentButton = styled(Button)`
@@ -133,6 +130,7 @@ export const ReplyButton = styled(Button)`
     color: #fff;
     background-color: #fbd385;
     width: auto;
+    height: 30px;
     margin-left: auto;
     margin-top: 8px;
     &:hover {
@@ -178,4 +176,8 @@ export const EditInput = styled(CommentInput)`
 
 export const EditButton = styled(ReplyButton)``;
 
-export const CommentContentWrapper = styled.div``;
+export const CommentContentWrapper = styled.div`
+  margin-top: 10px;
+  margin-left: 20px;
+  // border: 1px solid #ccc;
+`;
