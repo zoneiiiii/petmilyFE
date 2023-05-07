@@ -1,4 +1,4 @@
-import react, { useEffect, useLayoutEffect, useState } from "react";
+import react, { useEffect, useLayoutEffect, useState, useRef } from "react";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import CustomButton from "../Login/CustomButton";
@@ -10,7 +10,9 @@ let curLongitude = "";
 const HospitalLocation = () => {
   const [inputText, setInputText] = useState("");
   const [place, setPlace] = useState("");
+  const [data, setData] = useState("");
   const [dragend, setDragend] = useState(false);
+  const [usefirst, setUseFirst] = useState(false);
   const [currentPosition, setCurrentPosition] = useState({
     latitude: curLatitude,
     longtitude: curLongitude,
@@ -27,6 +29,7 @@ const HospitalLocation = () => {
           curLatitude = position.coords.latitude;
           curLongitude = position.coords.longitude;
           console.log("current" + curLatitude + " " + curLongitude);
+          setData("1");
         },
         function (error) {
           console.error(error);
@@ -41,6 +44,7 @@ const HospitalLocation = () => {
       alert("GPS를 지원하지 않습니다");
     }
   }
+  const mounted = useRef(false);
 
   useLayoutEffect(() => {
     getLocation();
@@ -113,7 +117,7 @@ const HospitalLocation = () => {
         infowindow.open(map, marker);
       });
     }
-  }, [place, dragend]);
+  }, [place, data]);
 
   const onChange = (e) => {
     setInputText(e.target.value);
