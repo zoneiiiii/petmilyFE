@@ -55,10 +55,10 @@ const MyPageQnAWrite = () => {
           <h5>문의하기</h5>
         </div>
       </MyPageStyle>
-      <Grid sx={{ minWidth: 700, mt: 5 }}>
+      <Grid sx={{ width: 900, mt: 5 }}>
         <InputContainer>
           <p className="title">제목</p>
-          <input type="text" ref={subjectRef} style={{ width: 700 }} />
+          <input type="text" ref={subjectRef} style={{ width: 810 }} />
         </InputContainer>
         <FileContainer>
           <p>첨부파일</p>
@@ -68,7 +68,7 @@ const MyPageQnAWrite = () => {
           <p className="title">내용</p>
           <textarea
             rows={13}
-            style={{ width: 700 }}
+            style={{ width: 810 }}
             placeholder="문의사항을 남겨주세요."
             ref={contentRef}
           />

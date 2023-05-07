@@ -1,18 +1,20 @@
 import styled from "styled-components";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import { Link } from "react-router-dom";
+import { SHOP } from "../../constants/PageURL";
 import * as React from "react";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import { Button, Checkbox } from "@material-ui/core";
 import { useState } from "react";
 import { AddCircle, RemoveCircle } from "@material-ui/icons";
-import CustomButton from "../Login/CustomButton";
-import { SHOP } from "../../constants/PageURL";
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableCell,
+  TableRow,
+  Typography,
+  IconButton,
+  Button,
+  Checkbox,
+} from "@mui/material";
 
 const Cart = () => {
   //데이터 초기값 설정
@@ -115,11 +117,9 @@ const Cart = () => {
     <>
       <CartStyle>
         <h1>🛒 장바구니</h1>
-        <CustomButton
-          label="선택삭제"
-          value="1:1문의작성"
-          onClick={handleDeleteSelected}
-        />
+        <Button className="prodDelete" onClick={handleDeleteSelected}>
+          선택상품 삭제
+        </Button>
         <Table>
           <TableHead>
             <TableRow>
@@ -138,7 +138,7 @@ const Cart = () => {
               </TableCell>
 
               <TableCell align="center" sx={{ fontWeight: "bold" }}>
-                상품명 {/*상품 상세 링크 연결해야함*/}
+                상품명
               </TableCell>
               <TableCell align="center" sx={{ fontWeight: "bold" }}>
                 수량
@@ -174,7 +174,7 @@ const Cart = () => {
                       <React.Fragment>
                         <IconButton
                           size="small"
-                          sx={{ color: "#FF8282" }}
+                          className="plus_minus"
                           onClick={() =>
                             handleQuantityChange(item.id, item.quantity - 1)
                           }
@@ -184,6 +184,7 @@ const Cart = () => {
                         {` ${item.quantity} `}
                         <IconButton
                           size="small"
+                          className="plus_minus"
                           sx={{ color: "#FF8282" }}
                           onClick={() =>
                             handleQuantityChange(item.id, item.quantity + 1)
@@ -210,33 +211,36 @@ const Cart = () => {
           </TableBody>
         </Table>
         <Table sx={{ mt: 3 }}>
-          <TableRow>
-            <TableCell />
-          </TableRow>
-          <TableRow>
-            <TableCell
-              colSpan={2}
-              sx={{ height: 100, color: "black", fontSize: "18px" }}
-              align="center"
-            >
-              총 주문금액 :{" "}
-              <span>
-                {totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-              </span>
-              원 + 배송비{" "}
-              <span>
-                {shippingCost.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-              </span>
-              원 =
-              <span>
-                {" "}
-                {(totalPrice + shippingCost)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-              </span>
-              원
-            </TableCell>
-          </TableRow>{" "}
+          <TableBody>
+            <TableRow>
+              <TableCell />
+            </TableRow>
+            <TableRow>
+              <TableCell
+                colSpan={2}
+                sx={{ height: 150, color: "black", fontSize: "18px" }}
+                align="center"
+              >
+                총 주문금액 :
+                <span>
+                  {totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </span>
+                원 + 배송비
+                <span>
+                  {shippingCost
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </span>
+                원 =
+                <span>
+                  {(totalPrice + shippingCost)
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </span>
+                원
+              </TableCell>
+            </TableRow>
+          </TableBody>
         </Table>
         <div
           style={{
@@ -274,6 +278,7 @@ const CartStyle = styled.div`
       background-color: #ffffff;
       color: #ffc149;
     }
+    font-weight: bold;
   }
   .order {
     width: 300px;
@@ -286,6 +291,23 @@ const CartStyle = styled.div`
     &:focus {
       background-color: #facc73;
     }
+    font-weight: bold;
+  }
+  .prodDelete {
+    float: right;
+    background-color: #fbd385;
+    color: white;
+    margin-bottom: -20px;
+    &:hover {
+      background-color: #facc73;
+    }
+    &:focus {
+      background-color: #facc73;
+    }
+    font-weight: bold;
+  }
+  .plus_minus {
+    color: #ff8282;
   }
 `;
 export default Cart;
