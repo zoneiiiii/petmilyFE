@@ -26,6 +26,10 @@ const BROWSER_PATH = {
   PRODUCTDETAIL: "/productdetail", //shop 상품 상세페이지
   MISSING: "/missing", // 실종 동물 게시판
   FREEBOARD: "/freeboard", // 자유 게시판
+  FREEWRITE: "/freeboard/write", //자유 게시판 작성
+  FREEDETAIL: "/freeboard/detail", //자유 게시판 상세보기
+  FINDBOARD: "/findboard",  // 목격 제보 게시판
+  FLEABOARD: "/fleaboard", // 매매장터 게시판
   CART: "/product/cart", //장바구니
   ORDER: "/product/order", //주문/결제
 };

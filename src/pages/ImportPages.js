@@ -1,63 +1,187 @@
 import { lazy } from "react";
-const Layout = lazy(() => import("../Layout/Layout"));
-const Main = lazy(() => import("./Main/Main"));
-const Join = lazy(() => import("./Join/Join"));
-const Login = lazy(() => import("./Login/Login"));
-const HospitalLocation = lazy(() => import("./Adopt/HospitalLocation"));
-const MyPage = lazy(() => import("./Mypage/MyPage")); //마이페이지 들어갔을때 기본적으로 회원정보 표시하기 위함.
-const MyPageInfo = lazy(() => import("./Mypage/MyPageInfo"));
-const ModifyInfo = lazy(() => import("./Mypage/ModifyInfo"));
-const MyPageAdoptReview = lazy(() => import("./Mypage/MyPageAdoptReview"));
-const MyPageBoard = lazy(() => import("./Mypage/MyPageBoard"));
-const MyPageInquiry = lazy(() => import("./Mypage/MyPageInquiry"));
-const MyPageQnA = lazy(() => import("./Mypage/MyPageQnA"));
-const MyPageQnADetail = lazy(() => import("./Mypage/MyPageQnADetail"));
-const Donate = lazy(() => import("./Support/Donate"));
-const FindPW = lazy(() => import("./Login/FindPW"));
-const ChangePW = lazy(() => import("./Login/ChangePW"));
-const DonateApply = lazy(() => import("./Support/DonateApply"));
-const VolunteerNotice = lazy(() =>
-  import("./Support/Volunteer/VolunteerNotice")
-);
-const VolunteerNoticeWrite = lazy(() =>
-  import("./Support/Volunteer/VolunteerNoticeWrite")
-);
-const VolunteerNoticeDetail = lazy(() =>
-  import("./Support/Volunteer/VolunteerNoticeDetail")
-);
-const Product = lazy(() => import("./Shop/Product"));
-const ProductDetail = lazy(() => import("./Shop/ProductDetail"));
-const Missing = lazy(() => import("./Community/Missing/Missing"));
-const FreeBoard = lazy(() => import("./Community/FreeBoard/FreeBoard"));
-const Cart = lazy(() => import("./Shop/Cart"));
-const Order = lazy(() => import("./Shop/Order"));
-//아래에 import할 페이지 함수 생성
+// default
+export const Layout = lazy(() => import("../Layout/Layout"));
+export const Main = lazy(() => import("./Main/Main"));
+export const Loading = lazy(() => import("./Loading/LoadingPage"));
+export const NotFound = lazy(() => import("./NotFound/NotFound"));
 
-export {
-  Layout,
-  Main,
-  Join,
-  Login,
-  MyPage,
-  MyPageInfo,
-  ModifyInfo,
-  MyPageAdoptReview,
-  MyPageBoard,
-  MyPageInquiry,
-  MyPageQnA,
-  MyPageQnADetail,
-  Donate,
-  FindPW,
-  ChangePW,
-  DonateApply,
-  HospitalLocation,
-  Product,
-  ProductDetail,
-  Missing,
-  FreeBoard,
-  VolunteerNotice,
-  VolunteerNoticeWrite,
-  VolunteerNoticeDetail,
-  Cart,
-  Order,
+/**
+ **ChangePW
+ **FindPW
+ **Login
+ **Join
+ */
+export const Account = {
+  ChangePW: lazy(() => import("./Login/ChangePW")),
+  FindPW: lazy(() => import("./Login/FindPW")),
+  Login: lazy(() => import("./Login/Login")),
+  Join: lazy(() => import("./Join/Join")),
+};
+
+/**
+ ** ModifyInfo
+ ** MyPage
+ ** MyPageAdoptList
+ ** MyPageAdoptReview
+ ** MyPageBoard
+ ** MyPageInfo
+ ** MyPageOrderDetail
+ ** MyPageOrderList
+ ** MyPageQnA
+ ** MyPageQnADetail
+ ** MyPageQnAWrite
+ */
+export const MyPage = {
+  ModifyInfo: lazy(() => import("./Mypage/ModifyInfo")),
+  MyPage: lazy(() => import("./Mypage/MyPage")),
+  MyPageAdoptList: lazy(() => import("./Mypage/MyPageAdoptList")),
+  MyPageAdoptReview: lazy(() => import("./Mypage/MyPageAdoptReview")),
+  MyPageBoard: lazy(() => import("./Mypage/MyPageBoard")),
+  MyPageInfo: lazy(() => import("./Mypage/MyPageInfo")),
+  MyPageOrderDetail: lazy(() => import("./Mypage/MyPageOrderDetail")),
+  MyPageOrderList: lazy(() => import("./Mypage/MyPageOrderList")),
+  MyPageQnA: lazy(() => import("./Mypage/MyPageQnA")),
+  MyPageQnADetail: lazy(() => import("./Mypage/MyPageQnADetail")),
+  MyPageQnAWrite: lazy(() => import("./Mypage/MyPageQnAWrite")),
+};
+
+/**
+ ** About
+ ** Process
+ ** Notice
+ ** NoticeDetail
+ ** NoticeWrite
+ ** Activity
+ ** ActivityDetail
+ ** FAQ
+ */
+export const About = {
+  About: lazy(() => import("./About/About")),
+  Activity: lazy(() => import("./About/Activity")),
+  ActivityDetail: lazy(() => import("./About/ActivityDetail")),
+  AdoptProcess: lazy(() => import("./About/AdoptProcess")),
+  Notice: lazy(() => import("./About/Notice")),
+  NoticeDetail: lazy(() => import("./About/NoticeDetail")),
+  NoticeWrite: lazy(() => import("./About/NoticeWrite")),
+  FAQ: lazy(() => import("./About/FAQ")),
+};
+
+/**
+ ** AdoptApplication
+ ** AdoptChecklist
+ ** AdoptReview
+ ** AdoptReviewDetail
+ ** AdoptReviewWrite
+ ** AnimalList
+ ** AnimalListDetail
+ ** HospitalLocation
+ ** ShelterLocation
+ */
+export const Adopt = {
+  AdoptApplication: lazy(() => import("./Adopt/AdoptApplication")),
+  AdoptChecklist: lazy(() => import("./Adopt/AdoptChecklist")),
+  AdoptReview: lazy(() => import("./Adopt/AdoptReview")),
+  AdoptReviewDetail: lazy(() => import("./Adopt/AdoptReviewDetail")),
+  AdoptReviewWrite: lazy(() => import("./Adopt/AdoptReviewWrite")),
+  AnimalList: lazy(() => import("./Adopt/AnimalList")),
+  AnimalListDetail: lazy(() => import("./Adopt/AnimalListDetail")),
+  HospitalLocation: lazy(() => import("./Adopt/HospitalLocation")),
+  ShelterLocation: lazy(() => import("./Adopt/ShelterLocation")),
+};
+
+/**
+ ** Cart
+ ** Order
+ ** OrderComplete
+ ** Product
+ ** ProductDetail
+ */
+export const Shop = {
+  Cart: lazy(() => import("./Shop/Cart")),
+  Order: lazy(() => import("./Shop/Order")),
+  OrderComplete: lazy(() => import("./Shop/OrderComplete")),
+  Product: lazy(() => import("./Shop/Product")),
+  ProductDetail: lazy(() => import("./Shop/ProductDetail")),
+};
+
+/**
+ ** Donate
+ ** DonateApply
+ ** VolunteerNotice
+ ** VolunteerNoticeDetail
+ ** VolunteerNoticeWrite
+ ** VolunteerReview
+ ** VolunteerReviewDetail
+ ** VolunteerReviewWrite
+ */
+export const Support = {
+  Donate: lazy(() => import("./Support/Donate")),
+  DonateApply: lazy(() => import("./Support/DonateApply")),
+  VolunteerNotice: lazy(() => import("./Support/Volunteer/VolunteerNotice")),
+  VolunteerNoticeDetail: lazy(() =>
+    import("./Support/Volunteer/VolunteerNoticeDetail")
+  ),
+  VolunteerNoticeWrite: lazy(() =>
+    import("./Support/Volunteer/VolunteerNoticeWrite")
+  ),
+  VolunteerNoticeModify: lazy(() =>
+    import("./Support/Volunteer/VolunteerNoticeModify")
+  ),
+  VolunteerReview: lazy(() => import("./Support/Volunteer/VolunteerReview")),
+  VolunteerReviewDetail: lazy(() =>
+    import("./Support/Volunteer/VolunteerReview")
+  ),
+  VolunteerReviewWrite: lazy(() =>
+    import("./Support/Volunteer/VolunteerReview")
+  ),
+};
+
+/**
+ ** FindBoard
+ ** FindDetail
+ ** FindWrite
+ ** FleaBoard
+ ** FleaDetail
+ ** FleaWrite
+ ** FreeBoard
+ ** FreeDetail
+ ** FreeWrite
+ ** Missing
+ ** MissingDetail
+ ** MissingWrite
+ */
+export const Community = {
+  FindBoard: lazy(() => import("./Community/FindBoard/FindBoard")),
+  FindDetail: lazy(() => import("./Community/FindBoard/FindDetail")),
+  FindWrite: lazy(() => import("./Community/FindBoard/FindWrite")),
+  FleaBoard: lazy(() => import("./Community/FleaBoard/FleaBoard")),
+  FleaDetail: lazy(() => import("./Community/FleaBoard/FleaDetail")),
+  FleaWrite: lazy(() => import("./Community/FleaBoard/FleaWrite")),
+  FreeBoard: lazy(() => import("./Community/FreeBoard/FreeBoard")),
+  FreeDetail: lazy(() => import("./Community/FreeBoard/FreeDetail")),
+  FreeWrite: lazy(() => import("./Community/FreeBoard/FreeWrite")),
+  Missing: lazy(() => import("./Community/Missing/MissingBoard")),
+  MissingDetail: lazy(() => import("./Community/Missing/MissingDetail")),
+  MissingWrite: lazy(() => import("./Community/Missing/MissingWrite")),
+};
+
+/**
+ ** AdminAdopt
+ ** AdminBoard
+ ** AdminDashBoard
+ ** AdminMember
+ ** AdminOrder
+ ** AdminProduct
+ ** AdminProductWrite
+ ** AdminQnA
+ */
+export const Admin = {
+  AdminAdopt: lazy(() => import("./Admin/AdminAdopt")),
+  AdminBoard: lazy(() => import("./Admin/AdminBoard")),
+  AdminDashBoard: lazy(() => import("./Admin/AdminDashBoard")),
+  AdminMember: lazy(() => import("./Admin/AdminMember")),
+  AdminOrder: lazy(() => import("./Admin/AdminOrder")),
+  AdminProduct: lazy(() => import("./Admin/AdminProduct")),
+  AdminProductWrite: lazy(() => import("./Admin/AdminProductWrite")),
+  AdminQnA: lazy(() => import("./Admin/AdminQnA")),
 };

@@ -1,135 +1,205 @@
+import styleds from "styled-components";
 import * as React from "react";
-import styled from "styled-components";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
 import Grid from "@mui/material/Grid";
-import { useRef, useState } from "react";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import { tableCellClasses } from "@mui/material/TableCell";
+import { Pagination } from "@mui/material";
+import Stack from "@mui/material/Stack";
 import CustomButton from "../Login/CustomButton";
-import Modal from "@mui/material/Modal";
-import Alert from "@mui/material/Alert";
-import axios from "axios";
+import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
+import { Link } from "react-router-dom";
+import { MYPAGE } from "../../constants/PageURL";
 
-const modalStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-};
+const theme = createTheme({
+  palette: {
+    type: "light",
+    primary: {
+      main: "#FBD385",
+    },
+  },
+});
 
-const MyPageInquiryWrite = () => {
-  const subjectRef = useRef(null);
-  const contentRef = useRef(null);
-  const [formAble, setFormAble] = useState(false);
-  const [open, setOpen] = useState(false);
-  const handleClose = () => setOpen(false);
-  const handleOpen = () => {
-    if (
-      subjectRef.current.value === undefined ||
-      subjectRef.current.value === "" ||
-      contentRef.current.value === undefined ||
-      contentRef.current.value === ""
-    ) {
-      setFormAble(false);
-      setOpen(true);
-    } else {
-      setFormAble(true);
-      setOpen(true);
-      console.log(subjectRef.current.value);
-      console.log(contentRef.current.value);
-      document.location.href = "/mypage/inquiry";
-    }
-  };
-  const handleReset = () => {
-    subjectRef.current.value = "";
-    contentRef.current.value = "";
-    document.location.href = "/mypage/inquiry";
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.white,
+    color: theme.palette.common.black,
+    fontWeight: "bold",
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  "td,th": {
+    border: "1px solid lightgray",
+  },
+}));
+
+const qnaList = [
+  {
+    num: 7,
+    subject: "환불 문의드립니다.",
+    date: "2023-02-02",
+    qnaStatus: "진행중",
+  },
+  {
+    num: 6,
+    subject: "환불 문의드립니다.",
+    date: "2023-02-02",
+    qnaStatus: "진행중",
+  },
+  {
+    num: 5,
+    subject: "환불 문의드립니다.",
+    date: "2023-02-02",
+    qnaStatus: "진행중",
+  },
+  {
+    num: 4,
+    subject: "환불 문의드립니다.",
+    date: "2023-02-02",
+    qnaStatus: "진행중",
+  },
+  {
+    num: 3,
+    subject: "환불 문의드립니다.",
+    date: "2023-02-02",
+    qnaStatus: "진행중",
+  },
+  {
+    num: 2,
+    subject: "입양 절차 문의드립니다.",
+    date: "2023-02-02",
+    qnaStatus: "답변완료",
+  },
+  {
+    num: 1,
+    subject: "배송 문의드립니다.",
+    date: "2023-02-02",
+    qnaStatus: "답변완료",
+  },
+];
+
+const MyPageQnA = () => {
+  const [page, setPage] = React.useState(1);
+  const rowsPerPage = 5;
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
 
   return (
     <>
-      <MyPageStyle>
-        <div className="navTitle">
-          <h5>문의하기</h5>
-        </div>
-      </MyPageStyle>
-      <Grid sx={{ minWidth: 700, mt: 5 }}>
-        <InputContainer>
-          <p className="title">제목</p>
-          <input type="text" ref={subjectRef} style={{ width: 700 }} />
-        </InputContainer>
-        <FileContainer>
-          <p>첨부파일</p>
-          <input type="file" style={{ marginTop: "10px" }} />
-        </FileContainer>
-        <InputContainer>
-          <p className="title">내용</p>
-          <textarea
-            rows={13}
-            style={{ width: 700 }}
-            placeholder="문의사항을 남겨주세요."
-            ref={contentRef}
-          />
-        </InputContainer>
-        <br />
-        <CustomButton
-          label="취소"
-          value="작성취소"
-          onClick={handleReset}
-        ></CustomButton>
-        <CustomButton label="글쓰기" value="1:1문의작성" onClick={handleOpen} />
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          {formAble ? (
-            <Alert sx={modalStyle} severity="success">
-              작성 완료!
-            </Alert>
-          ) : (
-            <Alert sx={modalStyle} severity="warning">
-              제목과 내용을 모두 입력해주세요.
-            </Alert>
-          )}
-        </Modal>
-      </Grid>
+      <ThemeProvider theme={theme}>
+        <MyPageStyle>
+          <div className="navTitle">
+            <h5>1:1 문의</h5>
+          </div>
+        </MyPageStyle>
+        <Grid style={{ width: 1000 }}>
+          <Table
+            sx={{
+              mt: 5,
+              border: "1px solid lightgray",
+            }}
+            aria-label="caption table"
+            overflow="hidden"
+          >
+            <TableHead>
+              <StyledTableRow>
+                <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                  No.
+                </StyledTableCell>
+                <StyledTableCell align="center" sx={{ minWidth: 300 }}>
+                  제목
+                </StyledTableCell>
+                <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                  작성날짜
+                </StyledTableCell>
+                <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                  답변상태
+                </StyledTableCell>
+              </StyledTableRow>
+            </TableHead>
+            <TableBody>
+              {qnaList
+                .slice(
+                  (page - 1) * rowsPerPage,
+                  (page - 1) * rowsPerPage + rowsPerPage
+                )
+                .map((qna) => (
+                  <StyledTableRow key={qna.num}>
+                    <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                      {qna.num}
+                    </StyledTableCell>
+                    <StyledTableCell align="center" sx={{ minWidth: 300 }}>
+                      <Link
+                        to={MYPAGE.QNA_DETAIL(qna.num)}
+                        style={{ textDecoration: "none", color: "black" }}
+                      >
+                        {qna.subject}
+                      </Link>
+                    </StyledTableCell>
+                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                      {qna.date}
+                    </StyledTableCell>
+                    {qna.qnaStatus === "진행중" ? (
+                      <StyledTableCell
+                        align="center"
+                        sx={{
+                          minWidth: 10,
+                          color: "blue",
+                        }}
+                      >
+                        {qna.qnaStatus}
+                      </StyledTableCell>
+                    ) : (
+                      <StyledTableCell
+                        align="center"
+                        sx={{
+                          minWidth: 10,
+                          color: "red",
+                        }}
+                      >
+                        {qna.qnaStatus}
+                      </StyledTableCell>
+                    )}
+                  </StyledTableRow>
+                ))}
+            </TableBody>
+          </Table>
+          <Link to={MYPAGE.QNA_WRITE} style={{ textDecoration: "none" }}>
+            <CustomButton label="문의하기" value="문의하기">
+              문의하기
+            </CustomButton>
+          </Link>
+          <Stack spacing={2} sx={{ mt: 5 }}>
+            <Pagination
+              color="primary"
+              page={page}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+              onChange={handleChangePage}
+              component="div"
+              count={Math.ceil(qnaList.length / rowsPerPage)}
+            />
+          </Stack>
+        </Grid>
+      </ThemeProvider>
     </>
   );
 };
 
-const InputContainer = styled.div`
-  display: flex;
-  gap: 3rem;
-  align-items: flex;
-  margin-bottom: 10px;
-
-  input:focus {
-    outline: none !important;
-    border: 2px solid #fbd385;
-  }
-  textarea:focus {
-    outline: none !important;
-    border: 2px solid #fbd385;
-  }
-  p {
-    font-weight: bold;
-    color: #474747;
-  }
-`;
-const FileContainer = styled.div`
-  display: flex;
-  gap: 1rem;
-  align-items: flex;
-  margin-bottom: 10px;
-  p {
-    font-weight: bold;
-    color: #474747;
-  }
-`;
-const MyPageStyle = styled.div`
+const MyPageStyle = styleds.div`
   .navTitle {
     border: 1px solid #fbd385;
     width: 200px;
@@ -140,4 +210,4 @@ const MyPageStyle = styled.div`
   }
 `;
 
-export default MyPageInquiryWrite;
+export default MyPageQnA;
