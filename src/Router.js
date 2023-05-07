@@ -178,6 +178,11 @@ const Router = () => {
               element={<Page.Support.VolunteerNoticeWrite />}
             />
             <Route
+              path={BROWSER_PATH.SUPPORT.VOLUNTEER_NOTICE_MODIFY()}
+              element={<Page.Support.VolunteerNoticeModify />}
+            />
+
+            <Route
               path={BROWSER_PATH.SUPPORT.VOLUNTEER_REVIEW}
               element={<Page.Support.VolunteerReview />}
             />

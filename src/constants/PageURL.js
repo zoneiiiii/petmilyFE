@@ -264,6 +264,16 @@ export const SUPPORT = {
     else return "/donate/volunteer/notice/" + id;
   },
 
+  /**봉사 게시판 수정 페이지 URL
+   ** 사용법: SUPPORT.VOLUNTEER_NOTICE_MODIFY(id)
+   * @return "/donate/volunteer/notice/modify:id" (id 없음)
+   * @return "/donate/volunteer/notice/modify/" + id (id 존재)
+   */
+  VOLUNTEER_NOTICE_MODIFY: (id) => {
+    if (id === undefined) return "/donate/volunteer/notice/modify/:id";
+    else return "/donate/volunteer/notice/modify/" + id;
+  },
+
   /**봉사 후기 게시판 페이지 URL
    * @return "/donate/volunteer/review"
    */
