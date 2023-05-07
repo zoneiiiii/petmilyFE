@@ -163,7 +163,10 @@ const Product = () => {
                   }
                   return (
                     <Grid item key={idx} xs={10} sm={6} md={2}>
-                      <Link to="/productdetail">
+                      <Link
+                        to="/productdetail"
+                        style={{ textDecoration: "none" }}
+                      >
                         <Card
                           sx={{
                             height: "100%",
