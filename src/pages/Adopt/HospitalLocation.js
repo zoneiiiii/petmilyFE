@@ -10,6 +10,7 @@ let curLongitude = "";
 const HospitalLocation = () => {
   const [inputText, setInputText] = useState("");
   const [place, setPlace] = useState("");
+  const [data, setData] = useState("");
   const [dragend, setDragend] = useState(false);
   const [usefirst, setUseFirst] = useState(false);
   const [currentPosition, setCurrentPosition] = useState({
@@ -28,6 +29,7 @@ const HospitalLocation = () => {
           curLatitude = position.coords.latitude;
           curLongitude = position.coords.longitude;
           console.log("current" + curLatitude + " " + curLongitude);
+          setData("1");
         },
         function (error) {
           console.error(error);
@@ -115,7 +117,7 @@ const HospitalLocation = () => {
         infowindow.open(map, marker);
       });
     }
-  }, [place, dragend]);
+  }, [place, data]);
 
   const onChange = (e) => {
     setInputText(e.target.value);
