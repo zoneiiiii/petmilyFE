@@ -7,8 +7,23 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
+import { useState } from "react";
 
-export const SearchBar = () => {
+export const SearchBar = ({ setValue, value, onClick }) => {
+  const [textValue, setTextValue] = useState(value ? value : "");
+  const handleChange = (event) => {
+    setTextValue(event.target.value);
+  };
+  const handleClick = () => {
+    setValue(textValue);
+    if (onClick) onClick(textValue);
+  };
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleClick();
+    }
+  };
+
   return (
     <ThemeProvider theme={CustomTheme}>
       <Box>
@@ -16,6 +31,9 @@ export const SearchBar = () => {
           variant="outlined"
           size="small"
           placeholder="Search..."
+          value={textValue}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -45,6 +63,8 @@ export const SearchBar = () => {
           theme={CustomTheme}
           color="fbd385"
           style={{ marginLeft: "10px" }}
+          onKeyDown={handleKeyDown}
+          onClick={handleClick}
         >
           검색
         </Button>
