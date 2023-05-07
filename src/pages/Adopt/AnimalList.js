@@ -22,8 +22,8 @@ const AnimalList = () => {
         "http://apis.data.go.kr/1543061/abandonmentPublicSrvc/abandonmentPublic?bgnde=20230101&endde=20230507&pageNo=1&numOfRows=1&serviceKey=AhrFaZaAefMdQ7n5tWepAOM5tzLw5%2BCiT3stOXtEl3uTyXNtr0xlgtAn6WZppVVYaZdAuyqJvj%2FS65SSV4iapw%3D%3D"
       );
       setData(response.data);
-      console.log("1" + response.data);
-      console.log("2" + data.response.body);
+      console.log("1 " + response.data);
+      console.log("2" + response.data.body.items.item);
     } catch (e) {
       setError(e);
     }
