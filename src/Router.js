@@ -278,19 +278,6 @@ const Router = () => {
             />
             <Route path="*" element={<Page.NotFound />} />
           </Route>
-<<<<<<< HEAD
-          <Route path={BROWSER_PATH.SUPPORT} element={<Donate />} />
-          <Route path={BROWSER_PATH.DONATEAPPLY} element={<DonateApply />} />
-          <Route path={BROWSER_PATH.FINDPW} element={<FindPW />} />
-          <Route path={BROWSER_PATH.CHANGEPW} element={<ChangePW />} />
-          <Route path={BROWSER_PATH.PRODUCT} element={<Product />} />
-          <Route
-            path={BROWSER_PATH.PRODUCTDETAIL}
-            element={<ProductDetail />}
-          />
-          <Route path="*" element={<NotFound />} />
-=======
->>>>>>> 8695d56c1f257ab7e9cbb7dadd6e7152090da833
         </Routes>
       </React.Suspense>
     </BrowserRouter>
