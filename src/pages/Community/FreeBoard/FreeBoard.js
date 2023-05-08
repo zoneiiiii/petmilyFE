@@ -7,10 +7,11 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
+import { TableHead, TableFooter } from '@material-ui/core';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { makeStyles, TableFooter } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
+import TableSortLabel from '@mui/material/TableSortLabel';
 // import TableSortLabel from "@material-ui/core/TableSortLabel";
 import { Pagination } from '@mui/material';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -92,39 +93,6 @@ const useStyles = makeStyles({  // 게시글 목록 css
     },
 });
 
-const columns = [
-    {
-        id: "num",
-        label: "No.",
-        minWidth: 10,
-        align: "left"
-    },
-    {
-        id: "subject",
-        label: "제목",
-        minWidth: 400,
-        align: "center",
-    },
-    {
-        id: "writer",
-        label: "작성자 ",
-        minWidth: 50,
-        align: "right",
-    },
-    {
-        id: "views",
-        label: "조회수",
-        minWidth: 50,
-        align: "right",
-    },
-    {
-        id: "date",
-        label: "작성날짜 ",
-        minWidth: 60,
-        align: "right",
-    },
-];
-
 function createData(num, subject, writer, views, date) {
     return { num, subject, writer, views, date };
 }
@@ -138,6 +106,22 @@ const rows = [
     createData('006', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.27'),
     createData('007', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.28'),
     createData('008', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.29'),
+    createData('009', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.19'),
+    createData('0010', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.19'),
+    createData('011', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.22'),
+    createData('012', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.23'),
+    createData('013', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.24'),
+    createData('014', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.27'),
+    createData('015', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.28'),
+    createData('016', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.29'),
+    createData('017', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.19'),
+    createData('018', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.19'),
+    createData('019', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.22'),
+    createData('020', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.23'),
+    createData('021', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.24'),
+    createData('022', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.27'),
+    createData('023', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.28'),
+    createData('024', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.29'),
 ];
 
 export default function CustomizedTables() {
@@ -172,17 +156,12 @@ export default function CustomizedTables() {
 
     /* pagenation start */
     const [page, setPage] = React.useState(1)
-    const rowsPerPage = 5;
+    const rowsPerPage = 10;
     // const [rowsPerPage, setRowsPerPage] = useState(5)
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage)
     }
-
-    // const handleChangeRowsPerPage = (event) => {
-    //     setRowsPerPage(parseInt(event.target.value, 10))
-    //     setPage(0)
-    // }
     /* pagenation end */
 
     /* axios start */
@@ -213,7 +192,7 @@ export default function CustomizedTables() {
 
                         <Table aria-label="customized table" className={classes.table}>
                             <TableHead>
-                                <StyledTableRow>
+                                {/* <StyledTableRow>
                                     {columns.map((column) => (
                                         <StyledTableCell
                                             key={column.id}
@@ -224,16 +203,18 @@ export default function CustomizedTables() {
                                             {column.label}
                                         </StyledTableCell>
                                     ))}
+                                </StyledTableRow> */}
+                                <StyledTableRow>
+                                    <StyledTableCell align="left" sx={{ minWidth: 10, background: '#FBD385' }}>No.</StyledTableCell>
+                                    <StyledTableCell align="center" sx={{ minWidth: 700, background: '#FBD385' }}>제목</StyledTableCell>
+                                    <StyledTableCell align="right" sx={{ minWidth: 50, background: '#FBD385' }}>작성자</StyledTableCell>
+                                    <StyledTableCell align="right" sx={{ minWidth: 50, background: '#FBD385' }}>조회수</StyledTableCell>
+                                    <StyledTableCell align="center" sx={{ minWidth: 10, background: '#FBD385' }} onClick={handleSortRequest}>
+                                        <TableSortLabel active={false} direction={orderDirection}>
+                                            작성일
+                                        </TableSortLabel>
+                                    </StyledTableCell>
                                 </StyledTableRow>
-                                {/* <StyledTableCell>No.</StyledTableCell>
-                            <StyledTableCell align="center" style={{ fontSize: 15 }}>제목</StyledTableCell>
-                            <StyledTableCell align="right">작성자</StyledTableCell>
-                            <StyledTableCell align="right">조회수</StyledTableCell>
-                            <StyledTableCell align="right" onClick={handleSortRequest}>
-                                <TableSortLabel active={false} direction={orderDirection}>
-                                    작성일
-                                </TableSortLabel>
-                            </StyledTableCell> */}
                             </TableHead>
                             <TableBody>
                                 {rows
@@ -241,23 +222,45 @@ export default function CustomizedTables() {
                                         (page - 1) * rowsPerPage,
                                         (page - 1) * rowsPerPage + rowsPerPage
                                     )
-                                    .map((row) => {
+                                    .map((rows) => {
                                         return (
-                                            <StyledTableRow key={row.num}>
-                                                {columns.map((column) => {
-                                                    const value = row[column.id];
-                                                    return (
-                                                        <StyledTableCell key={column.id} align={column.align}>
-                                                            <Link
-                                                                to="/board/free/1"
-                                                                style={{ textDecoration: "none", color: "black" }}
-                                                            >
-                                                                {value}
-                                                            </Link>
-                                                        </StyledTableCell>
-                                                    );
-                                                })}
+                                            <StyledTableRow key={rows.num}>
+                                                <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                                                    {rows.num}
+                                                </StyledTableCell>
+                                                <StyledTableCell align="center" sx={{ minWidth: 300 }}>
+                                                    <Link
+                                                        to={COMMUNITY.FREE_DETAIL(rows.num)}
+                                                        style={{ textDecoration: "none", color: "black" }}
+                                                    >
+                                                        {rows.subject}
+                                                    </Link>
+                                                </StyledTableCell>
+                                                <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                                                    {rows.writer}
+                                                </StyledTableCell>
+                                                <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                                                    {rows.views}
+                                                </StyledTableCell>
+                                                <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                                                    {rows.date}
+                                                </StyledTableCell>
                                             </StyledTableRow>
+                                            // <StyledTableRow key={row.num}>
+                                            //     {columns.map((column) => {
+                                            //         const value = row[column.id];
+                                            //         return (
+                                            //             <StyledTableCell key={column.id} align={column.align}>
+                                            //                 <Link
+                                            //                     to="/board/free/1"
+                                            //                     style={{ textDecoration: "none", color: "black" }}
+                                            //                 >
+                                            //                     {value}
+                                            //                 </Link>
+                                            //             </StyledTableCell>
+                                            //         );
+                                            //     })}
+                                            // </StyledTableRow>
                                         );
                                     })}
                             </TableBody>

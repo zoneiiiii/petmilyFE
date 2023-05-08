@@ -128,10 +128,6 @@ const HeaderNavStyle = styled.div`
     margin-top: 5px;
     object-fit: cover;
   }
-
-  .NavTitle {
-    padding: 10px 0 0 0;
-  }
 `;
 
 const Section = styled.div`
@@ -141,7 +137,6 @@ const Section = styled.div`
 const NavListStyle = styled.div`
   width: 12vw;
   .NavTitle {
-    width: 11vw;
     height: 30px;
     margin: 25px auto 10px auto;
     font-weight: 550;
