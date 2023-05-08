@@ -1,7 +1,10 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import DaumPostcode from "react-daum-postcode";
-import * as S from "./VolunteerNoticeWrite.styled";
+import Loading from "../../../components/Loading/LoadingPage";
+import axios from "axios";
+import * as S from "./VolunteerNoticeModify.styled";
+import dayjs from "dayjs";
 import {
   TextField,
   Typography,
@@ -15,12 +18,16 @@ import {
 } from "@mui/material";
 import { CustomDatePicker } from "../../../components/common/CustomDatePicker";
 import { SUPPORT } from "../../../constants/PageURL";
-import dayjs from "dayjs";
+
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 
-const VolunteerNoticeWrite = () => {
+const VolunteerNoticeModify = () => {
+  const [post, setPost] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const { id } = useParams();
   const navigate = useNavigate();
+
   const [volunteerStartPeriod, setVolunteerStartPeriod] = useState(null);
   const [volunteerEndPeriod, setVolunteerEndPeriod] = useState(null);
   const [title, setTitle] = useState("");
@@ -31,6 +38,33 @@ const VolunteerNoticeWrite = () => {
   const [status, setStatus] = useState("모집중");
   const [content, setContent] = useState("");
   const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
+
+  useEffect(() => {
+    //게시글 Detail 호출
+    const fetchPost = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/board/volunteer/${id}`
+        ); //게시글 Detail 데이터  호출
+        const data = response.data;
+        setPost(data);
+        setVolunteerStartPeriod(data.volunteerStartPeriod);
+        setVolunteerEndPeriod(data.volunteerEndPeriod);
+        setTitle(data.volunteerSubject);
+        setAgeLimit(data.volunteerAge);
+        setAddress(data.volunteerAddr);
+        setAddressDetail(data.volunteerAddrDetail);
+        setRecruitmentNumber(data.volunteerNumber);
+        setStatus(data.volunteerStatus ? "모집중" : "마감");
+        setContent(data.volunteerContent);
+      } catch (error) {
+        console.error("Error fetching data : ", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchPost();
+  }, [id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -64,10 +98,14 @@ const VolunteerNoticeWrite = () => {
     }
   };
 
+  if (isLoading) {
+    return <Loading />; // 로딩 중일 때 표시할 컴포넌트
+  }
+
   return (
     <>
       <S.TitleContainer>
-        <S.Title>✍ 게시글 작성</S.Title>
+        <S.Title>✍ 게시글 수정</S.Title>
         <Typography variant="subtitle3">봉사 모집 게시판</Typography>
       </S.TitleContainer>
       <S.Container>
@@ -101,6 +139,7 @@ const VolunteerNoticeWrite = () => {
                   },
                 }}
                 onChange={(newValue) => setVolunteerStartPeriod(newValue)}
+                // inputProps={{ value: volunteerStartPeriod }}
               />
               <CustomDatePicker
                 label="활동 종료 기간"
@@ -119,6 +158,7 @@ const VolunteerNoticeWrite = () => {
                   },
                 }}
                 onChange={(newValue) => setVolunteerEndPeriod(newValue)}
+                // inputProps={{ value: volunteerEndPeriod }}
               />
             </S.FormRow2>
 
@@ -233,6 +273,14 @@ const VolunteerNoticeWrite = () => {
                   }}
                 />
               </S.EditorWrapper>
+              {/* <TextField
+                label="내용"
+                multiline
+                rows={12}
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                fullWidth
+              /> */}
             </S.FormRow>
 
             <S.FormRow>
@@ -253,4 +301,4 @@ const VolunteerNoticeWrite = () => {
   );
 };
 
-export default VolunteerNoticeWrite;
+export default VolunteerNoticeModify;

@@ -20,13 +20,15 @@ const MyPageOrderList = () => {
     dayjs(dayjs().subtract(6, "month").toDate())
   );
   const [endDate, setEndDate] = useState(dayjs());
+  const [value, setValue] = useState();
   const resetDate = () => {
     setStartDate(dayjs(dayjs().subtract(6, "month").toDate()));
     setEndDate(dayjs());
   };
   useEffect(() => {
+    value && console.log(value);
     //  console.log(startDate.format("YYYY-MM-DD"), endDate.format("YYYY-MM-DD"));
-  }, [startDate, endDate]);
+  }, [startDate, endDate, value]);
 
   const dateList = [...new Set(orderlist.map((product) => product.orderDate))];
 
@@ -70,7 +72,7 @@ const MyPageOrderList = () => {
             <AutorenewIcon onClick={resetDate} />
           </Button>
         </Box>
-        <SearchBar theme={CustomTheme} />
+        <SearchBar theme={CustomTheme} setValue={setValue} value={value} />
       </Box>
       {dateList.map((date, index) => {
         return (

@@ -84,7 +84,7 @@ export const WriteButton = styled(Button)`
 
 export const EditorWrapper = styled.div`
   .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
-    min-height: 500px;
     width: 700px;
+    min-height: 500px;
   }
 `;

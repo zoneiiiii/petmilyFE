@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
 import * as S from "./VolunteerNoticeDetail.styled";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Popover, Button } from "@mui/material";
 import axios from "axios";
 import NotFound from "../../NotFound/NotFound";
 import Loading from "../../../components/Loading/LoadingPage";
 import MapModal from "../../../components/Map/MapModal";
 import Comment from "../../../components/Comment/Comment";
+import { SUPPORT } from "../../../constants/PageURL";
+import DOMPurify from "dompurify";
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
-  const hour = String(date.getHours()).padStart(2, "0");
-  const minute = String(date.getMinutes()).padStart(2, "0");
-  return `${year}년 ${month}월 ${day}일 ${hour}시 ${minute}분`;
+  return `${year}년 ${month}월 ${day}일`;
 };
 
 const VolunteerNoticeDetail = () => {
@@ -24,6 +24,7 @@ const VolunteerNoticeDetail = () => {
   const { id } = useParams(); //게시글 id
   const [isMapVisible, setIsMapVisible] = useState(false); // 맵 모달 상태 (열림, 닫힘)
   const [anchorEl, setAnchorEl] = useState(null); //클릭 위치에 모달 띄우기 위한 상태값
+  const navigate = useNavigate();
 
   useEffect(() => {
     //게시글 Detail 호출
@@ -70,6 +71,31 @@ const VolunteerNoticeDetail = () => {
     toggleMapModal();
   };
 
+  const handleEdit = () => {
+    //수정
+    navigate(SUPPORT.VOLUNTEER_NOTICE_MODIFY(id));
+  };
+
+  const handleDelete = async () => {
+    // 삭제
+    const result = window.confirm("정말 삭제하시겠습니까?");
+    if (result) {
+      try {
+        await axios.delete(`http://localhost:8080/board/volunteer/${id}`);
+        alert("게시물이 삭제되었습니다.");
+        navigate(SUPPORT.VOLUNTEER_NOTICE);
+      } catch (error) {
+        console.error("Error deleting post: ", error);
+      }
+    }
+  };
+
+  const createMarkup = (html) => {
+    return {
+      __html: DOMPurify.sanitize(html),
+    };
+  };
+
   return (
     <>
       <S.DetailContainer>
@@ -79,9 +105,13 @@ const VolunteerNoticeDetail = () => {
             <h1>{post.volunteerSubject}</h1>
             {/* <p>조회수 : {post.volunteerCount}</p> */}
             <p>보호소 : {post.shelterName}</p>
-            <p>활동기간: {formatDate(post.volunteerDate)}</p>
+            <p>
+              활동기간: {formatDate(post.volunteerStartPeriod)} ~{" "}
+              {formatDate(post.volunteerEndPeriod)}
+            </p>
             <p>모집인원: {post.volunteerNumber} 명</p>
             <p>나이제한: {post.volunteerAge}</p>
+            <p>모집상태: {post.volunteerStatus ? "모집중" : "모집완료"}</p>
             <p>
               주소: {post.volunteerAddr}
               <Button
@@ -99,9 +129,17 @@ const VolunteerNoticeDetail = () => {
         </S.DetailTop>
         <hr />
         <S.DetailMiddle>
-          <h2>글 내용</h2>
-          <p>{post.volunteerContent}</p>
+          <div dangerouslySetInnerHTML={createMarkup(post.volunteerContent)} />
         </S.DetailMiddle>
+        <S.ButtonsContainer>
+          <S.Buttons onClick={handleEdit} variant="contained">
+            수정
+          </S.Buttons>
+          <S.ButtonsSpace />
+          <S.Buttons onClick={handleDelete} variant="contained">
+            삭제
+          </S.Buttons>
+        </S.ButtonsContainer>
 
         {/* Div 3 */}
         <S.DetailBottom>
