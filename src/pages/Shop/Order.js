@@ -1,5 +1,5 @@
 import { SHOP } from "../../constants/PageURL";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import React from "react";
 import { useState, useCallback } from "react";
 import styled from "styled-components";
@@ -29,12 +29,6 @@ const theme = createTheme({
 });
 
 const Order = () => {
-  //결제방식 선택
-  const [paymentMethod, setPaymentMethod] = useState("");
-  const paymentSelect = (method) => {
-    setPaymentMethod(method);
-  };
-
   //필수 항목 입력 상태 확인
   const [receiverName, setReceiverName] = useState("");
   const [receiverPhone, setReceiverPhone] = useState("");
@@ -46,7 +40,6 @@ const Order = () => {
   const onChangeName = useCallback(
     (e) => {
       const nameRegex = /^[가-힣]{2,4}$/;
-      console.log("name", e.target.value);
       setReceiverName(e.target.value);
       if (!nameRegex.test(receiverName)) {
         setNameError("한글 2글자 이상 4글자 이하로 입력해주세요.");
@@ -79,9 +72,24 @@ const Order = () => {
     }
     if (!zipcode || !address || !detailAddress) {
       setAddressError("주소를 모두 입력해주세요.");
+    } else {
+      setAddressError("");
     }
     if (!paymentMethod) {
       setPayError("결제 수단을 선택하세요.");
+    } else {
+      setPayError("");
+    }
+
+    if (
+      receiverName &&
+      receiverPhone &&
+      zipcode &&
+      address &&
+      detailAddress &&
+      paymentMethod
+    ) {
+      handlePayment();
     }
   };
 
@@ -142,6 +150,108 @@ const Order = () => {
   }, 0);
   //배송비 설정
   const shippingCost = totalPrice >= 50000 ? 0 : 2500;
+  //결제방식
+  const [orderCompleted, setOrderCompleted] = useState(false);
+  const [orderDate, setOrderDate] = useState("");
+  const [formattedAmount, setFormattedAmount] = useState(""); //원화 표시 상태
+  const [paymentMethod, setPaymentMethod] = useState("");
+
+  const paymentSelect = (method) => {
+    setPaymentMethod(method);
+  };
+
+  function onClickPayment() {
+    //아임포트 NHN kpc pg사 api 연동
+    /* 가맹점 식별하기 */
+    const { IMP } = window;
+    const merchant_uid = `PAYMENT-C-${Date.now()}`;
+    IMP.init("imp15870417");
+    const data = {
+      //결제 데이터 정의하기
+      pg: "kcp",
+      pay_method: "card",
+      merchant_uid: merchant_uid,
+      name: "펫밀리 상품 결제",
+      amount: totalPrice,
+      buyer_email: member[0].email,
+      buyer_name: member[0].name,
+      buyer_tel: member[0].phone,
+      buyer_addr: address + ", " + detailAddress,
+      buyer_postcode: zipcode,
+    };
+    IMP.request_pay(data, callback);
+  }
+  const navigate = useNavigate();
+  function callback(response) {
+    //콜백함수 정의하기
+    const { success, merchant_uid, error_msg } = response;
+
+    if (success) {
+      //alert("결제 성공");
+      navigate(SHOP.ORDER_COMPLETE, { state: { orderState: orderCompleted } });
+      setOrderDate(new Date().toLocaleDateString());
+      setOrderCompleted(true);
+    } else {
+      navigate(SHOP.ORDER_COMPLETE, {
+        state: { orderState: orderCompleted, error_msg: error_msg },
+      });
+      //alert(`결제 실패: ${error_msg}`);
+    }
+  }
+
+  function onClickVbankPayment() {
+    //아임포트 nice pg사 api 연동
+    /* 가맹점 식별하기 */
+    const { IMP } = window;
+    const merchant_uid = `PAYMENT-V-${Date.now()}`;
+    IMP.init("imp15870417");
+    const data = {
+      //결제 데이터 정의하기
+      pg: "nice",
+      pay_method: "trans",
+      merchant_uid: merchant_uid,
+      name: "펫밀리 상품 결제",
+      amount: totalPrice,
+      buyer_email: member[0].email,
+      buyer_name: member[0].name,
+      buyer_tel: member[0].phone,
+      buyer_addr: address + ", " + detailAddress,
+      buyer_postcode: zipcode,
+    };
+    IMP.request_pay(data, callback);
+  }
+
+  function onClickKAKAOPayment() {
+    //아임포트 카카오페이 pg사 api 연동
+    /* 가맹점 식별하기 */
+    const { IMP } = window;
+    IMP.init("imp15870417");
+    const merchant_uid = `PAYMENT-K-${Date.now()}`;
+    const data = {
+      //결제 데이터 정의하기
+      pg: "kakaopay.TC0ONETIME",
+      pay_method: "kakaopay",
+      merchant_uid: merchant_uid,
+      name: "펫밀리 상품 결제",
+      amount: totalPrice,
+      buyer_email: member[0].email,
+      buyer_name: member[0].name,
+      buyer_tel: member[0].phone,
+      buyer_addr: address + ", " + detailAddress,
+      buyer_postcode: zipcode,
+    };
+    IMP.request_pay(data, callback);
+  }
+
+  const handlePayment = () => {
+    if (paymentMethod === "신용카드") {
+      onClickPayment();
+    } else if (paymentMethod === "카카오페이") {
+      onClickKAKAOPayment();
+    } else if (paymentMethod === "계좌이체") {
+      onClickVbankPayment();
+    }
+  };
 
   return (
     <>
@@ -219,6 +329,7 @@ const Order = () => {
                   <TextField
                     id="outlined-basic"
                     variant="outlined"
+                    autoComplete="off"
                     size="small"
                     value={receiverName}
                     onChange={onChangeName}
@@ -234,6 +345,7 @@ const Order = () => {
                   <TextField
                     id="outlined-basic"
                     variant="outlined"
+                    autoComplete="off"
                     size="small"
                     value={receiverPhone}
                     onChange={onChangePhone}
@@ -249,6 +361,7 @@ const Order = () => {
                   <TextField
                     id="outlined-basic"
                     variant="outlined"
+                    autoComplete="off"
                     sx={{ mb: 3 }}
                     size="small"
                     value={zipcode}
@@ -262,6 +375,7 @@ const Order = () => {
                     className="inputPlace"
                     id="outlined-basic"
                     variant="outlined"
+                    autoComplete="off"
                     placeholder="주소"
                     size="small"
                     sx={{ width: "500px" }}
@@ -273,6 +387,7 @@ const Order = () => {
                     id="outlined-basic"
                     variant="outlined"
                     placeholder="상세주소"
+                    autoComplete="off"
                     size="small"
                     sx={{ width: "500px" }}
                     value={detailAddress}
@@ -475,6 +590,7 @@ const member = [
     email: "hong@email.com",
   },
 ];
+
 const items = [
   {
     id: 1,
