@@ -29,7 +29,7 @@ const Header = ({ page }) => {
             { linkName: "프로젝트 소개", link: ABOUT.ABOUT },
             { linkName: "입양절차", link: ABOUT.ADOPT_PROCESS },
             { linkName: "활동내역", link: ABOUT.ACTIVITY() },
-            { linkName: "공지사항", link: ABOUT.NOTICE },
+            { linkName: "공지사항", link: ABOUT.NOTICE() },
             { linkName: "자주 묻는 질문", link: ABOUT.FAQ },
             { linkName: "마이페이지", link: MYPAGE.INFO }, // 임시로 확인하기 편하게 추가(이후 삭제)
           ]}
@@ -37,10 +37,12 @@ const Header = ({ page }) => {
         <NavList
           title={"입양"}
           navList={[
-            { linkName: "보호 동물", link: ADOPT.ANIMAL_LIST },
+            { linkName: "보호 동물", link: ADOPT.ADOPT },
             { linkName: "입양 후기 게시판", link: ADOPT.REVIEW },
             { linkName: "동물 병원 정보", link: ADOPT.HOSPITAL_LOCATION },
             { linkName: "보호소 위치", link: ADOPT.SHELTER_LOCATION },
+            { linkName: "입양 신청", link: ADOPT.APPLICATION },
+            { linkName: "입양 체크리스트", link: ADOPT.CHECKLIST },
           ]}
         />
         <NavList
@@ -106,7 +108,6 @@ const NavList = ({ title, navList, isSelected }) => {
     </NavListStyle>
   );
 };
-
 const HeaderNavStyle = styled.div`
   position: fixed;
   display: flex;
