@@ -1,13 +1,20 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import * as S from "./VolunteerNoticeWrite.styled";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import Loading from "../../../components/Loading/LoadingPage";
+import axios from "axios";
+import * as S from "./VolunteerNoticeModify.styled";
 import { TextField, Typography } from "@mui/material";
 import { SUPPORT } from "../../../constants/PageURL";
+
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 
-const VolunteerReviewWrite = () => {
+const VolunteerReviewModify = () => {
+  const [post, setPost] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const { id } = useParams();
   const navigate = useNavigate();
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [file, setFile] = useState(null);
@@ -26,19 +33,43 @@ const VolunteerReviewWrite = () => {
     }
   };
 
+  useEffect(() => {
+    //게시글 Detail 호출
+    const fetchPost = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/donate/volunteer/review/${id}`
+        ); //게시글 Detail 데이터  호출
+        const data = response.data;
+        setPost(data);
+        setTitle(data.reviewSubject);
+        setContent(data.reviewContent);
+      } catch (error) {
+        console.error("Error fetching data : ", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchPost();
+  }, [id]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     // 전송 로직 구현
   };
 
   const handleCancel = () => {
-    navigate(SUPPORT.VOLUNTEER_REVIEW);
+    navigate(SUPPORT.VOLUNTEER_REVIEW_DETAIL(id));
   };
+
+  if (isLoading) {
+    return <Loading />; // 로딩 중일 때 표시할 컴포넌트
+  }
 
   return (
     <>
       <S.TitleContainer>
-        <S.Title>✍ 게시글 작성</S.Title>
+        <S.Title>✍ 게시글 수정</S.Title>
         <Typography variant="subtitle3">봉사 후기 게시판</Typography>
       </S.TitleContainer>
       <S.Container>
@@ -64,6 +95,7 @@ const VolunteerReviewWrite = () => {
                 </S.CommonButton>
               </S.ImageWrapper>
             </S.FormRow>
+
             <S.FormRow>
               {previewUrl && (
                 <S.PreviewWrapper>
@@ -129,4 +161,4 @@ const VolunteerReviewWrite = () => {
   );
 };
 
-export default VolunteerReviewWrite;
+export default VolunteerReviewModify;

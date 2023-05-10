@@ -200,6 +200,10 @@ const Router = () => {
               path={BROWSER_PATH.SUPPORT.VOLUNTEER_REVIEW_WRITE}
               element={<Page.Support.VolunteerReviewWrite />}
             />
+            <Route
+              path={BROWSER_PATH.SUPPORT.VOLUNTEER_REVIEW_MODIFY()}
+              element={<Page.Support.VolunteerReviewModify />}
+            />
             {/* Community */}
             <Route
               path={BROWSER_PATH.COMMUNITY.FIND}

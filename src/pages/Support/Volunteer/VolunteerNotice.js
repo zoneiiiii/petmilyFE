@@ -26,6 +26,10 @@ const VolunteerNotice = () => {
       });
   }, []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0); // 페이지네이션 클릭시 화면을 맨 위로 스크롤함
+  }, [page]);
+
   const handleChange = (event, value) => {
     //페이지 변경 시 호출, 새 페이지의 번호를 value에 저장함.
     setPage(value);
