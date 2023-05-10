@@ -1,11 +1,12 @@
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import BannerImg from '../../assets/images/Support/Donate/card1.jpg';
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import BannerImg from "../../assets/images/Support/Donate/card1.jpg";
 
 const Container = styled.div`
-  width: 80%;
+  // width: 80%;
+  width: 70vw;
   margin: 0 auto;
-  margin-top : 3%;
+  margin-top: 3%;
 `;
 
 const Banner = styled.div`
@@ -22,8 +23,8 @@ const DonateButton = styled(Link)`
   right: 20px;
   bottom: 20px;
   padding: 10px 20px;
-  background-color: #FBD385;
-  color: #FFFFFF;
+  background-color: #fbd385;
+  color: #ffffff;
   text-decoration: none;
   border-radius: 5px;
 `;
@@ -62,9 +63,9 @@ const TransparentDisclosure = styled.div`
   align-items: center;
   text-align: center;
   margin: 40px 0;
-  font-size : 20px;
-  font-weight : bold;
-  margin-top : 5%
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 5%;
 `;
 
 const IconContainer = styled.div`
@@ -84,5 +85,5 @@ export {
   DonationColumn,
   DonationItem,
   TransparentDisclosure,
-  IconContainer
+  IconContainer,
 };

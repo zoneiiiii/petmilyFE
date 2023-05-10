@@ -5,9 +5,8 @@ import * as S from "./VolunteerNoticeWrite.styled";
 import {
   TextField,
   Typography,
-  Select,
-  MenuItem,
-  InputLabel,
+  ToggleButtonGroup,
+  ToggleButton,
   FormControl,
   Dialog,
   DialogTitle,
@@ -21,16 +20,33 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 
 const VolunteerNoticeWrite = () => {
   const navigate = useNavigate();
-  const [volunteerStartPeriod, setVolunteerStartPeriod] = useState(null);
-  const [volunteerEndPeriod, setVolunteerEndPeriod] = useState(null);
+  const [volunteerStartPeriod, setVolunteerStartPeriod] = useState(dayjs());
+  const [volunteerEndPeriod, setVolunteerEndPeriod] = useState(
+    dayjs().add(1, "day")
+  );
   const [title, setTitle] = useState("");
   const [ageLimit, setAgeLimit] = useState("");
   const [address, setAddress] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
   const [recruitmentNumber, setRecruitmentNumber] = useState("");
-  const [status, setStatus] = useState("모집중");
+  const [selectedStatus, setSelectedStatus] = useState("모집중");
   const [content, setContent] = useState("");
   const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
+
+  // 사진 미리보기
+  const [file, setFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setPreviewUrl(event.target.result);
+      };
+      reader.readAsDataURL(selectedFile);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -88,6 +104,7 @@ const VolunteerNoticeWrite = () => {
                 label="활동 시작 기간"
                 value={dayjs(volunteerStartPeriod)}
                 sx={{
+                  width: "50%",
                   "& label": {
                     color: "#ccc",
                   },
@@ -106,6 +123,7 @@ const VolunteerNoticeWrite = () => {
                 label="활동 종료 기간"
                 value={dayjs(volunteerEndPeriod)}
                 sx={{
+                  width: "50%",
                   "& label": {
                     color: "#ccc",
                   },
@@ -181,23 +199,70 @@ const VolunteerNoticeWrite = () => {
             </S.FormRow>
 
             <S.FormRow>
-              <span>이미지 첨부</span>
-              <S.CommonButton component="label">
-                사진 업로드
-                <input type="file" hidden />
-              </S.CommonButton>
-              모집 상태
-              <FormControl>
-                <InputLabel>상태</InputLabel>
-                <Select
-                  size="small"
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                >
-                  <MenuItem value="모집중">모집중</MenuItem>
-                  <MenuItem value="마감">마감</MenuItem>
-                </Select>
-              </FormControl>
+              <S.ImageWrapper>
+                <span>이미지 첨부</span>
+                <S.CommonSpace />
+                <S.CommonButton component="label">
+                  사진 업로드
+                  <input type="file" hidden onChange={handleFileChange} />
+                </S.CommonButton>
+              </S.ImageWrapper>
+              <S.StatusWrapper>
+                모집 상태
+                <S.CommonSpace />
+                <FormControl>
+                  <ToggleButtonGroup
+                    size="small"
+                    value={selectedStatus}
+                    exclusive
+                    onChange={(e, value) => setSelectedStatus(value)}
+                  >
+                    <ToggleButton
+                      value="모집중"
+                      sx={{
+                        width: "80px",
+                        "&.Mui-selected": {
+                          backgroundColor: "#fbd385",
+                          color: "#fff",
+                        },
+                        "&.Mui-selected:hover": {
+                          backgroundColor: "#ffbe3f",
+                          color: "#fff",
+                        },
+                      }}
+                    >
+                      모집중
+                    </ToggleButton>
+                    <ToggleButton
+                      value="마감"
+                      sx={{
+                        width: "80px",
+                        "&.Mui-selected": {
+                          backgroundColor: "#fbd385",
+                          color: "#fff",
+                        },
+                        "&.Mui-selected:hover": {
+                          backgroundColor: "#ffbe3f",
+                          color: "#fff",
+                        },
+                      }}
+                    >
+                      마감
+                    </ToggleButton>
+                  </ToggleButtonGroup>
+                </FormControl>
+              </S.StatusWrapper>
+            </S.FormRow>
+            <S.FormRow>
+              {previewUrl && (
+                <S.PreviewWrapper>
+                  <img
+                    src={previewUrl}
+                    alt="미리보기"
+                    style={{ width: "150px" }}
+                  />
+                </S.PreviewWrapper>
+              )}
             </S.FormRow>
 
             <S.FormRow>

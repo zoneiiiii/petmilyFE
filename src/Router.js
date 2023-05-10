@@ -95,7 +95,7 @@ const Router = () => {
                 element={<Page.About.FAQ />}
               />
               <Route
-                path={BROWSER_PATH.ABOUT.NOTICE}
+                path={BROWSER_PATH.ABOUT.NOTICE()}
                 element={<Page.About.Notice />}
               />
               <Route
@@ -208,6 +208,10 @@ const Router = () => {
               path={BROWSER_PATH.SUPPORT.VOLUNTEER_REVIEW_WRITE}
               element={<Page.Support.VolunteerReviewWrite />}
             />
+            <Route
+              path={BROWSER_PATH.SUPPORT.VOLUNTEER_REVIEW_MODIFY()}
+              element={<Page.Support.VolunteerReviewModify />}
+            />
             {/* Community */}
             <Route
               path={BROWSER_PATH.COMMUNITY.FIND}
@@ -299,11 +303,11 @@ const Router = () => {
 };
 
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const location = useLocation();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [pathname]);
+  }, [location]);
 
   return null;
 }

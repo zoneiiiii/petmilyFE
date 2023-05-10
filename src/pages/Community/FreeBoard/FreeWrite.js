@@ -5,9 +5,9 @@ import { useRef, useState } from "react";
 import CustomButton from "../../Login/CustomButton";
 import Modal from "@mui/material/Modal";
 import Alert from "@mui/material/Alert";
-import axios from "axios";
-import { Button } from "@mui/material";
-import { type } from "@testing-library/user-event/dist/type";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+// import axios from "axios";
 
 const modalStyle = {
     position: "absolute",
@@ -23,6 +23,7 @@ const modalStyle = {
 const FreeWrite = () => {
     const subjectRef = useRef(null);
     const contentRef = useRef(null);
+    const [content, setContent] = useState("");
     const [formAble, setFormAble] = useState(false);
     const [open, setOpen] = useState(false);
     const handleClose = () => setOpen(false);
@@ -30,8 +31,8 @@ const FreeWrite = () => {
         if (
             subjectRef.current.value === undefined ||
             subjectRef.current.value === "" ||
-            contentRef.current.value === undefined ||
-            contentRef.current.value === ""
+            content === "" ||
+            content === undefined
         ) {
             setFormAble(false);
             setOpen(true);
@@ -45,7 +46,7 @@ const FreeWrite = () => {
     };
     const handleReset = () => {
         subjectRef.current.value = "";
-        contentRef.current.value = "";
+        setContent("");
         document.location.href = "/board/free";
     };
 
@@ -129,7 +130,7 @@ const FreeWrite = () => {
                         <img alt="" width={'40%'} src={imageSrcs} />
                     </FileContainer3>
 
-                    <InputContainer>
+                    {/* <InputContainer>
                         <p className="title">내용</p>
                         <textarea
                             rows={13}
@@ -137,7 +138,42 @@ const FreeWrite = () => {
                             placeholder="내용을 작성해주세요."
                             ref={contentRef}
                         />
-                    </InputContainer>
+                    </InputContainer> */}
+                    <FormRow>
+                        <EditorWrapper>
+                            <CKEditor
+                                editor={ClassicEditor}
+                                ref={contentRef}
+                                data={content}
+                                onChange={(event, editor) => {
+                                    const data = editor.getData();
+                                    setContent(data);
+                                }}
+                                config={{
+                                    toolbar: [
+                                        "heading",
+                                        "|",
+                                        "bold",
+                                        "italic",
+                                        "link",
+                                        "bulletedList",
+                                        "numberedList",
+                                        "|",
+                                        "indent",
+                                        "outdent",
+                                        "|",
+                                        "blockQuote",
+                                        "insertTable",
+                                        "mediaEmbed",
+                                        "undo",
+                                        "redo",
+                                    ],
+                                    className: "WriteEditor",
+                                    placeholder: "내용을 입력하세요.",
+                                }}
+                            />
+                        </EditorWrapper>
+                    </FormRow>
                     <br />
                     <CustomButton
                         label="취소"
@@ -173,34 +209,38 @@ const Board = styled.h1`
 
 const InputContainer = styled.div`
                 display: flex;
-                gap: 3rem;
-                align-items: flex;
-                margin-bottom: 10px;
-
+                gap: 2rem;
+                align-items: center;
+                margin-bottom: 15px;
+                height: 60px;
+              
                 .title {
-                    min-Width: 80px;
-  }
-
+                    min-Width: 70px;
+                }
+                input {
+                  height: 30px;
+                }
+              
                 input:hover {
                     outline: none !important;
                 border: 2px solid #fbd385;
-  }
+                }
                 input:focus {
                     outline: none !important;
                 border: 2px solid #fbd385;
-  }
+                }
                 textarea:hover {
                     outline: none !important;
                 border: 2px solid #fbd385;
-  }
+                }
                 textarea:focus {
                     outline: none !important;
                 border: 2px solid #fbd385;
-  }
-                p {
-                    font-weight: bold;
-                color: #474747;
-  }
+                }
+                  p {
+                      font-weight: bold;
+                  color: #474747;
+                }
                 `;
 const FileContainer = styled.div`
         display: flex;
@@ -281,6 +321,21 @@ const FileContainer2 = styled.div`
         border: 0;
     }
 `
+
+const FormRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 16px;
+  align-items: center;
+`;
+
+const EditorWrapper = styled.div`
+  .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
+    min-height: 500px;
+    width: 800px;
+  }
+`;
 
 const FileContainer3 = styled.div``
 

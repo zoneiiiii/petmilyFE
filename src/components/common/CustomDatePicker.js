@@ -1,6 +1,7 @@
 import { ThemeProvider, createTheme } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
 
 export const CustomDatePicker = ({
   label,
@@ -14,7 +15,7 @@ export const CustomDatePicker = ({
 }) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <ThemeProvider theme={DatePickerTheme}>
+      <ThemeProvider theme={CustomTheme}>
         <DatePicker
           label={label}
           value={value}
@@ -63,31 +64,31 @@ export const CustomDatePicker = ({
   );
 };
 
-const DatePickerTheme = createTheme({
-  palette: {
-    // primary: {
-    //   main: "#fbd385",
-    // },
-    secondary: {
-      main: "#ff8282",
-    },
-    text: {
-      hint: "#fbd385",
-    },
-    action: {
-      active: "#fbd385",
-      // hover: "#fbd385",
-      // hoverOpacity: 0.8,
-      // selected: "blue",
-      // selectedOpacity: 0.8,
-      // disabled: "#fbd385",
-      // disabledBackground: "#fbd385",
-      // disabledOpacity: 0.3,
-      // focus: "#fbd385",
-      // focusOpacity: 0.8,
-      // activatedOpacity: 0.8,
-    },
-    divider: "#fbd385",
-    actionDisabled: "#fbd385",
-  },
-});
+// const DatePickerTheme = createTheme({
+//   palette: {
+//     // primary: {
+//     //   main: "#fbd385",
+//     // },
+//     secondary: {
+//       main: "#ff8282",
+//     },
+//     text: {
+//       hint: "#fbd385",
+//     },
+//     action: {
+//       active: "#fbd385",
+//       // hover: "#fbd385",
+//       // hoverOpacity: 0.8,
+//       // selected: "blue",
+//       // selectedOpacity: 0.8,
+//       // disabled: "#fbd385",
+//       // disabledBackground: "#fbd385",
+//       // disabledOpacity: 0.3,
+//       // focus: "#fbd385",
+//       // focusOpacity: 0.8,
+//       // activatedOpacity: 0.8,
+//     },
+//     divider: "#fbd385",
+//     actionDisabled: "#fbd385",
+//   },
+// });

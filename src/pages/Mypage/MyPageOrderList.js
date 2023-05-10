@@ -32,7 +32,7 @@ const MyPageOrderList = () => {
 
   const dateList = [...new Set(orderlist.map((product) => product.orderDate))];
 
-  const ShowMore = () => { };
+  const ShowMore = () => {};
 
   return (
     <ThemeProvider theme={CustomTheme}>
@@ -72,7 +72,7 @@ const MyPageOrderList = () => {
             <AutorenewIcon onClick={resetDate} />
           </Button>
         </Box>
-        <SearchBar theme={CustomTheme} setValue={setValue} value={value} />
+        <SearchBar setValue={setValue} value={value} />
       </Box>
       {dateList.map((date, index) => {
         return (

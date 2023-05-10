@@ -37,7 +37,7 @@ const dummy = [
 const MissingBoard = () => {
   const [data, setData] = useState([]); // DB 데이터 가져오는 변수
   const [page, setPage] = useState(1); // 현재 페이지 관리하는 상태 변수
-  const itemsPerPage = 10; // 한페이지에 보여줄 페이지의 개수
+  const itemsPerPage = 12; // 한페이지에 보여줄 페이지의 개수
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const cards = data.slice(startIndex, endIndex); // 현재 페이지에 해당하는 카드 데이터 계산
@@ -81,7 +81,7 @@ const MissingBoard = () => {
           <SearchContainer>
             <SearchBar />
           </SearchContainer>
-          <Grid container spacing={2} columns={10}>
+          <Grid container spacing={4} columns={8}>
             {dummy.map((card, index) => {
               if (
                 page * itemsPerPage <= index ||
@@ -91,7 +91,7 @@ const MissingBoard = () => {
               }
               return (
                 <Grid item xs={10} sm={6} md={2}>
-                  <Link to="/board/missing/1">
+                  <Link to="/board/missing/1" style={{ textDecoration: "none" }}>
                     <Card
                       key={card.id}
                       sx={{
@@ -101,8 +101,11 @@ const MissingBoard = () => {
                       }}
                     >
                       <CardImage src="http://placeimg.com/300/300/animals/sepia" />
-                      <CardTitle>{card.title}</CardTitle>
-                      <Cardname>{card.writter}</Cardname>
+                      <div>
+                        <CardTitle>{card.title}</CardTitle>
+                        <CardWritter>{card.writter}</CardWritter>
+                        <CardCount>조회 {card.count}</CardCount>
+                      </div>
                     </Card>
                   </Link>
                 </Grid>
@@ -110,9 +113,7 @@ const MissingBoard = () => {
             })}
           </Grid>
           <Link className="button" to={COMMUNITY.MISSING_WRITE}>
-            <CustomButton label="글쓰기" value="글쓰기">
-              글쓰기
-            </CustomButton>
+            <CustomButton label="글쓰기" value="글쓰기" />
           </Link>
         </Container>
         <Pagination
@@ -161,12 +162,28 @@ const CardTitle = styled.p`
       font-weight: bold;
       font-size: 16px;
       margin-bottom: 5px;
-      `;
+      line-height: 1.4em;
+      height: 2.8em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+        `;
 
-const Cardname = styled.p`
+const CardWritter = styled.p`
       font-size: 14px;
       color: #888;
+      float: left;
+      margin-left: 10px
       `;
+
+const CardCount = styled.p`
+font-size: 14px;
+color: #888;
+float: right;
+margin-right: 10px;
+`
 
 const ContainerBox = styled.div`
 `

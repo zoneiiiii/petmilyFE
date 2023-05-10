@@ -37,13 +37,6 @@ export const FormRow = styled.div`
   align-items: center;
 `;
 
-export const FormRow2 = styled.div`
-  display: flex;
-  width: 100%;
-  margin-bottom: 16px;
-  align-items: center;
-`;
-
 export const ButtonGroup = styled.div`
   font-size: 0.8rem;
   color: gray;
@@ -56,13 +49,6 @@ export const ButtonGroup = styled.div`
 export const ImageWrapper = styled.div`
   display: flex;
   align-items: center;
-`;
-
-export const StatusWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-grow: 1;
 `;
 
 export const PreviewWrapper = styled.div`

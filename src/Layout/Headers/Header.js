@@ -29,7 +29,7 @@ const Header = ({ page }) => {
             { linkName: "프로젝트 소개", link: ABOUT.ABOUT },
             { linkName: "입양절차", link: ABOUT.ADOPT_PROCESS },
             { linkName: "활동내역", link: ABOUT.ACTIVITY() },
-            { linkName: "공지사항", link: ABOUT.NOTICE },
+            { linkName: "공지사항", link: ABOUT.NOTICE() },
             { linkName: "자주 묻는 질문", link: ABOUT.FAQ },
             { linkName: "마이페이지", link: MYPAGE.INFO }, // 임시로 확인하기 편하게 추가(이후 삭제)
           ]}
@@ -129,10 +129,6 @@ const HeaderNavStyle = styled.div`
     margin-top: 5px;
     object-fit: cover;
   }
-
-  .NavTitle {
-    padding: 10px 0 0 0;
-  }
 `;
 
 const Section = styled.div`
@@ -142,7 +138,6 @@ const Section = styled.div`
 const NavListStyle = styled.div`
   width: 12vw;
   .NavTitle {
-    width: 11vw;
     height: 30px;
     margin: 25px auto 10px auto;
     font-weight: 550;
