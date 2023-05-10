@@ -6,7 +6,9 @@ import Logo from "../../assets/images/LOGO/Logo.png";
 import DonateApplyComplete from "./DonateApplyComplete";
 
 const DonateApply = () => {
-  const [donationCompleted, setDonationCompleted] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [donationCompleted, setDonationCompleted] = useState(false); //danateApplyComplete 렌더함수
   const [donationDate, setDonationDate] = useState("");
   const [amount, setAmount] = useState("");
   const [formattedAmount, setFormattedAmount] = useState(""); //원화 표시 상태
@@ -15,6 +17,13 @@ const DonateApply = () => {
   const [name, setName] = useState("");
   const [tel, setTel] = useState("");
   const [email, setEmail] = useState("");
+
+  const reset = () => {
+    // 결제 실패시 상태 초기화
+    setDonationCompleted(false);
+    setIsSuccess(false);
+    setErrorMsg("");
+  };
 
   useEffect(() => {
     // 기본 결제 수단을 신용카드로 설정
@@ -37,21 +46,26 @@ const DonateApply = () => {
       buyer_email: email,
       buyer_name: name,
       buyer_tel: tel,
-      buyer_addr: "서울특별시 강남구 신사동",
-      buyer_postcode: "01181",
+      // buyer_addr: "서울특별시 강남구 신사동",
+      // buyer_postcode: "01181",
     };
     IMP.request_pay(data, callback);
   }
+
   function callback(response) {
     //콜백함수 정의하기
     const { success, merchant_uid, error_msg } = response;
 
     if (success) {
-      alert("결제 성공");
-      setDonationCompleted(new Date().toLocaleDateString());
+      // alert("결제 성공");
+      setDonationDate(new Date().toLocaleDateString());
       setDonationCompleted(true);
+      setIsSuccess(true);
     } else {
-      alert(`결제 실패: ${error_msg}`);
+      // alert(`결제 실패: ${error_msg}`);
+      setErrorMsg(error_msg);
+      setDonationCompleted(true);
+      setIsSuccess(false);
     }
   }
 
@@ -71,22 +85,32 @@ const DonateApply = () => {
       buyer_email: email,
       buyer_name: name,
       buyer_tel: tel,
-      buyer_addr: "서울특별시 강남구 신사동",
-      buyer_postcode: "01181",
+      // buyer_addr: "서울특별시 강남구 신사동",
+      // buyer_postcode: "01181",
     };
     IMP.request_pay(data, callback);
   }
-  function callback(response) {
-    //콜백함수 정의하기
-    const { success, merchant_uid, error_msg } = response;
 
-    if (success) {
-      alert("결제 성공");
-      setDonationCompleted(new Date().toLocaleDateString());
-      setDonationCompleted(true);
-    } else {
-      alert(`결제 실패: ${error_msg}`);
-    }
+  function onClickVbankPayment() {
+    //아임포트 nice pg사 api 연동
+    /* 1. 가맹점 식별하기 */
+    const { IMP } = window;
+    const merchant_uid = `DONATION-C-${Date.now()}`;
+    IMP.init("imp83178746");
+    const data = {
+      //결제 데이터 정의하기
+      pg: "nice",
+      pay_method: "trans",
+      merchant_uid: merchant_uid,
+      name: "펫밀리 기부",
+      amount: amount,
+      buyer_email: email,
+      buyer_name: name,
+      buyer_tel: tel,
+      // buyer_addr: "서울특별시 강남구 신사동",
+      // buyer_postcode: "01181",
+    };
+    IMP.request_pay(data, callback);
   }
 
   const handleAmountChange = (e) => {
@@ -117,6 +141,8 @@ const DonateApply = () => {
       onClickPayment();
     } else if (paymentMethod === "카카오페이") {
       onClickKAKAOPayment();
+    } else if (paymentMethod === "계좌이체") {
+      onClickVbankPayment();
     }
   };
 
@@ -127,6 +153,9 @@ const DonateApply = () => {
         name={name}
         amount={amount}
         donationDate={donationDate}
+        isSuccess={isSuccess}
+        errorMsg={errorMsg}
+        reset={reset}
       />
     );
   }

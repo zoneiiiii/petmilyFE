@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const Container = styled.div`
   display: flex;
@@ -13,7 +13,7 @@ export const Logo = styled.img`
 `;
 
 export const Line = styled.hr`
-  width: 100%;
+  width: 70vw;
   border: 1px solid #cccccc;
   margin: 1.5rem 0;
 `;

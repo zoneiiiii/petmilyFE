@@ -9,11 +9,13 @@ export const Container = styled.div`
 
 export const Title = styled.h1`
   font-size: 2rem;
-  margin-bottom: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 `;
 
 export const Line = styled.hr`
   width: 80%;
+  margin-top: 2rem;
   margin-bottom: 1rem;
 `;
 
@@ -23,7 +25,7 @@ export const Message = styled.p`
 `;
 export const Message2 = styled.p`
   font-size: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 `;
 
 export const Name = styled.span`
