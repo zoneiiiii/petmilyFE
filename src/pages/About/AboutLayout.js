@@ -9,10 +9,17 @@ const AboutLayout = () => {
   const [title, setTitle] = useState("");
   // useEffect(() => console.log(setTitle));
   return (
-    <>
+    <Box
+      display={"flex"}
+      justifyContent={"center"}
+      flexWrap={"wrap"}
+      alignContent={"space-between"}
+    >
       <AboutNav title={title} />
-      <Outlet setTitle={setTitle} />
-    </>
+      <Box width={"70vw"} display={"flex"} justifyContent={"center"}>
+        <Outlet />
+      </Box>
+    </Box>
   );
 };
 
@@ -20,8 +27,11 @@ const pages = [
   { title: "프로젝트 소개", link: ABOUT.ABOUT },
   { title: "입양 절차", link: ABOUT.ADOPT_PROCESS },
   { title: "활동 내역", link: ABOUT.ACTIVITY() },
-  { title: "공지사항", link: ABOUT.NOTICE },
-  { title: "자주 묻는 질문", link: ABOUT.FAQ },
+  { title: "활동 내역", link: ABOUT.ACTIVITY_DETAIL("") },
+  { title: "공지사항", link: ABOUT.NOTICE() },
+  { title: "공지사항", link: ABOUT.NOTICE_DETAIL() },
+  { title: "공지사항", link: ABOUT.NOTICE_WRITE },
+  { title: "자주 하는 질문", link: ABOUT.FAQ },
 ];
 
 const AboutNav = () => {
@@ -40,17 +50,17 @@ const AboutNav = () => {
     //   console.log(
     //     pathname,
     //     page.link,
-    //     pathname === ABOUT.ABOUT,
+    //     pathname === page.link,
     //     page.link !== ABOUT.ABOUT && pathname.includes(page.link)
     //   );
     // });
-    // setValue(
-    //   pages.find(
-    //     (page) =>
-    //       pathname === page.link ||
-    //       (pathname !== ABOUT.ABOUT && pathname.includes(page.link))
-    //   ).title
-    // );
+    setValue(
+      pages.find(
+        (page) =>
+          pathname === page.link ||
+          (page.link !== ABOUT.ABOUT && pathname.includes(page.link))
+      ).title
+    );
   }, [pathname]);
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -58,7 +68,7 @@ const AboutNav = () => {
 
   return (
     <ThemeProvider theme={CustomTheme}>
-      <Box bgcolor={"#f8f8f8"} pt={10} pb={10}>
+      <Box bgcolor={"#f8f8f8"} pt={5} pb={5} width={"100vw"}>
         <Box display={"flex"} justifyContent={"center"}>
           <Typography
             fontSize={"3rem"}
@@ -91,10 +101,14 @@ const AboutNav = () => {
               value={"활동 내역"}
               link={ABOUT.ACTIVITY()}
             />
-            <LinkTab label="공지사항" value={"공지사항"} link={ABOUT.NOTICE} />
             <LinkTab
-              label="자주 묻는 질문"
-              value={"자주 묻는 질문"}
+              label="공지사항"
+              value={"공지사항"}
+              link={ABOUT.NOTICE()}
+            />
+            <LinkTab
+              label="자주 하는 질문"
+              value={"자주 하는 질문"}
               link={ABOUT.FAQ}
             />
           </StyledTabs>
