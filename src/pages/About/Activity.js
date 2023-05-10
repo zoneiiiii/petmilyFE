@@ -1,7 +1,10 @@
 import {
   Box,
   Button,
+  FormControl,
+  MenuItem,
   Pagination,
+  Select,
   Table,
   TableBody,
   TableCell,
@@ -12,9 +15,11 @@ import {
 import SearchBar from "../../components/common/SearchBar";
 import { useEffect, useState } from "react";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ABOUT } from "../../constants/PageURL";
 import styled from "styled-components";
+
+const pageWidth = "100%";
 
 const Activity = () => {
   const location = useLocation();
@@ -24,80 +29,141 @@ const Activity = () => {
   const search = searchParams.get("search");
 
   const navigate = useNavigate();
-  // const { page } = useParams();
-  const [nowPage, setNowPage] = useState(page ? parseInt(page) : 1);
+  const [nowPage, setNowPage] = useState(1);
   const [searchKeyWord, setSearchKeyWord] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(limit ? parseInt(limit) : 20);
-  const [foundData, setFoundData] = useState(
-    search
-      ? dummy.filter(
-          (activity) =>
-            activity.subject.includes(search) ||
-            activity.contents.includes(search) ||
-            activity.writer.includes(search)
-        )
-      : dummy
-  );
-  const [pagedData, setPagedData] = useState(
-    foundData.slice((nowPage - 1) * rowsPerPage, nowPage * rowsPerPage)
-  );
-  const handleChangePage = (event, newPage) => {
-    console.log(newPage);
+  const [searchMode, setSearchMode] = useState();
+  const [rowsPerPage, setRowsPerPage] = useState(20);
+  const [foundData, setFoundData] = useState(dummy);
+  const [pagedData, setPagedData] = useState(dummy.slice(0, 20));
 
-    navigate(ABOUT.ACTIVITY(newPage));
+  const searchOption = {
+    subject_contents: 0,
+    subject: 1,
+    contents: 2,
+    writer: 3,
   };
+
+  // 초기 세팅
   useEffect(() => {
-    console.log(foundData);
-    if (page && nowPage !== parseInt(page)) {
-      setNowPage(parseInt(page));
-      setPagedData(
-        foundData.slice(
-          (parseInt(page) - 1) * rowsPerPage,
-          parseInt(page) * rowsPerPage
-        )
-      );
-    }
-    console.log("page:", page, "nowPage:", nowPage, "limitedData:", pagedData);
-  }, [page, nowPage, pagedData, foundData]);
+    setNowPage(page ? parseInt(page) : 1);
+    setSearchKeyWord(search ? search : "");
+    setRowsPerPage(limit ? parseInt(limit) : 20);
+    search && findDataByMode(search);
+  }, [limit, page, search]);
 
-  // // const handleChangeRowsPerPage = (event) => {
-  // //   setRowsPerPage(parseInt(event.target.value, 10));
-  // // };
-
-  const handleSearch = (value) => {
-    console.log(value);
-
-    dummy.map(
-      (activity, index) =>
-        activity.subject.includes(value) ||
-        activity.contents.includes(value) ||
-        activity.writer.includes(value)
+  // 페이지 표시 데이터 갱신
+  useEffect(() => {
+    setPagedData(
+      foundData.slice((nowPage - 1) * rowsPerPage, nowPage * rowsPerPage)
     );
-    navigate(ABOUT.ACTIVITY(1, value));
-    // setFoundData(
-    //   dummy.filter(
-    //     (activity) =>
-    //       activity.subject.includes(value) ||
-    //       activity.contents.includes(value) ||
-    //       activity.writer.includes(value)
-    //   )
-    // );
+  }, [nowPage, rowsPerPage, foundData]);
+
+  const handleChangePage = (event, newPage) => {
+    navigate(
+      ABOUT.ACTIVITY({
+        page: newPage,
+        limit: limit,
+        search: search,
+      })
+    );
   };
+
+  // 페이지 표시 데이터수 변경
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value));
+    navigate(
+      ABOUT.ACTIVITY({
+        page: nowPage,
+        limit: event.target.value,
+        search: searchKeyWord,
+      })
+    );
+  };
+
+  // 검색 방식 변경
+  const handleChangeSearchMode = (event) => {
+    console.log(event.target.value);
+    setSearchMode(event.target.value);
+  };
+
+  // 검색
+  const handleSearch = (value) => {
+    setNowPage(1);
+    findDataByMode(value, searchMode);
+    navigate(
+      ABOUT.ACTIVITY({
+        page: 1,
+        limit: rowsPerPage,
+        search: value,
+      })
+    );
+  };
+
+  function findDataByMode(value, searchMode) {
+    switch (searchMode) {
+      case searchOption.subject_contents:
+        setFoundData(
+          dummy.filter(
+            (activity, index) =>
+              activity.subject.includes(value) ||
+              activity.contents.includes(value)
+          )
+        );
+        break;
+      case searchOption.subject:
+        setFoundData(
+          dummy.filter((activity, index) => activity.subject.includes(value))
+        );
+        break;
+      case searchOption.contents:
+        setFoundData(
+          dummy.filter((activity, index) => activity.contents.includes(value))
+        );
+        break;
+      case searchOption.writer:
+        setFoundData(
+          dummy.filter((activity, index) => activity.writer.includes(value))
+        );
+        break;
+      default:
+    }
+  }
 
   return (
     <ThemeProvider theme={CustomTheme}>
-      <Box
-        display={"flex"}
-        width={"100vw"}
-        justifyContent={"center"}
-        flexWrap={"wrap"}
-      >
-        <Box width={"80vw"} display={"flex"} justifyContent={"flex-end"} m={2}>
-          <SearchBar
-            setValue={setSearchKeyWord}
-            value={searchKeyWord}
-            onClick={handleSearch}
-          />
+      <Box width={pageWidth}>
+        <Box
+          width={pageWidth}
+          display={"flex"}
+          justifyContent={"space-between"}
+          mt={2}
+          mb={2}
+        >
+          <FormControl sx={FormControlSx} size="small" color="text">
+            <Select value={rowsPerPage} onChange={handleChangeRowsPerPage}>
+              <MenuItem value={10}>10개</MenuItem>
+              <MenuItem value={20}>20개</MenuItem>
+              <MenuItem value={50}>50개</MenuItem>
+              <MenuItem value={100}>100개</MenuItem>
+            </Select>
+          </FormControl>
+          <Box display={"flex"} justifyContent={"flex-end"}>
+            <FormControl sx={FormControlSx} size="small">
+              <Select defaultValue={0} onChange={handleChangeSearchMode}>
+                <MenuItem value={searchOption.subject_contents}>
+                  제목 + 내용
+                </MenuItem>
+                <MenuItem value={searchOption.subject}>제목</MenuItem>
+                <MenuItem value={searchOption.contents}>내용</MenuItem>
+                <MenuItem value={searchOption.writer}>작성자</MenuItem>
+              </Select>
+            </FormControl>
+            <SearchBar
+              setValue={setSearchKeyWord}
+              value={searchKeyWord}
+              onClick={handleSearch}
+            />
+          </Box>
         </Box>
         <Table sx={TableSx}>
           <TableHead>
@@ -113,27 +179,40 @@ const Activity = () => {
             {pagedData.map((activity, index) => {
               return (
                 <TableRow key={index}>
-                  <TableCell sx={tdSx}>{activity.no}</TableCell>
+                  <TableCell sx={{ ...tdSx, minWidth: "40px" }}>
+                    {activity.no}
+                  </TableCell>
                   <TableCell
                     sx={{
                       ...tdSx,
                       textAlign: "left",
-                      width: "50vw",
+                      width: "60%",
                     }}
                   >
                     <StyledLink to={ABOUT.ACTIVITY_DETAIL(activity.no)}>
                       {activity.subject}
                     </StyledLink>
                   </TableCell>
-                  <TableCell sx={tdSx}>{activity.writer}</TableCell>
-                  <TableCell sx={tdSx}>{activity.count}</TableCell>
-                  <TableCell sx={tdSx}>{activity.postData}</TableCell>
+                  <TableCell sx={{ ...tdSx, minWidth: "100px" }}>
+                    {activity.writer}
+                  </TableCell>
+                  <TableCell sx={{ ...tdSx, minWidth: "50px" }}>
+                    {activity.count}
+                  </TableCell>
+                  <TableCell sx={{ ...tdSx, minWidth: "100px" }}>
+                    {activity.postData}
+                  </TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
-        <Box width={"80vw"} display={"flex"} justifyContent={"flex-end"} mt={2}>
+        <Box
+          width={pageWidth}
+          display={"flex"}
+          justifyContent={"flex-end"}
+          mt={2}
+        >
           <Button
             variant="contained"
             sx={{ mr: 3, width: "100px" }}
@@ -142,7 +221,7 @@ const Activity = () => {
             글쓰기
           </Button>
         </Box>
-        <Box width={"80vw"} display={"flex"} justifyContent={"center"} m={2}>
+        <Box width={pageWidth} display={"flex"} justifyContent={"center"} m={2}>
           <Pagination
             count={Math.ceil(foundData.length / rowsPerPage)}
             defaultPage={page ? parseInt(page) : 1}
@@ -158,9 +237,31 @@ const Activity = () => {
   );
 };
 
-const TableSx = { width: "80vw" };
+const FormControlSx = {
+  mr: 2,
+  minWidth: 120,
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      // 평상시의 테두리
+      borderColor: "#fbd385",
+    },
+    "&:hover fieldset": {
+      // 마우스 올린 상태의 테두리
+      borderColor: "#1976d2",
+    },
+    // "&.Mui-focused fieldset": { // 클릭된 상태의 테두리
+    //   borderColor: "#fbd385",
+    // },
+  },
+};
+
+const TableSx = { width: pageWidth };
 const thSx = { fontSize: "1rem", fontWeight: 600, textAlign: "center" };
-const tdSx = { fontSize: "1rem", fontWeight: 500, textAlign: "center" };
+const tdSx = {
+  fontSize: "1rem",
+  fontWeight: 500,
+  textAlign: "center",
+};
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: black;
@@ -176,7 +277,7 @@ const dummy = [
   {
     no: "001",
     subject: "유기동물 구조활동",
-    writer: "펫밀리",
+    writer: "펫밀리펫밀리",
     count: 31,
     postData: "2023-05-05",
     contents: "유기동물을 열심히 구조했습니다!",

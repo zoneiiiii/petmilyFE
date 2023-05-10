@@ -7,10 +7,13 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const SearchBar = ({ setValue, value, onClick }) => {
-  const [textValue, setTextValue] = useState(value ? value : "");
+  const [textValue, setTextValue] = useState("");
+  useEffect(() => {
+    value && setTextValue(value);
+  }, [value]);
   const handleChange = (event) => {
     setTextValue(event.target.value);
   };

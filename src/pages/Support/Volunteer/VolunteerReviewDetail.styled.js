@@ -2,31 +2,22 @@ import styled from "styled-components";
 import { Button } from "@mui/material";
 
 export const DetailContainer = styled.div`
-  width: 75%;
+  width: 70vw;
   margin: 0 auto;
   margin-top: 3%;
+`;
+export const Title = styled.h1`
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
 `;
 
 export const DetailTop = styled.div`
   display: flex;
-  height: 40vh;
-  min-height: 400px;
-  min-width: 1050px;
+  min-width: 70vw;
   border-top: 1px solid #ccc;
   padding-top: 7px;
-`;
-
-export const ImageSection = styled.div`
-  width: 50%;
-  display: flex;
-  justify-content: left;
-  align-items: center;
-`;
-
-export const TitleSection = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: center;
 `;
 
 export const horizon = styled.hr`
@@ -34,40 +25,47 @@ export const horizon = styled.hr`
   border-style: solid;
   color: #ccc;
   height: 1px;
-  min-width: 1050px;
+  min-width: 70vw;
 `;
 
-export const InfoSection = styled.div`
-  width: 50%;
-`;
-
-export const Thumbnail = styled.img`
-  width: 90%;
-  height: 90%;
-  object-fit: cover;
-`;
-
-export const DetailInfo = styled.div`
+export const TopInfo = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-left: 20px;
+  padding-top: 7px;
+  border-top: 1px solid #ccc;
+`;
+
+export const TopNickname = styled.div``;
+
+export const TopDate = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 16px;
+  gap: 4px;
+  font-size: 13px;
+`;
+
+export const TopViewCount = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 4px;
+  font-size: 13px;
 `;
 
 export const DetailMiddle = styled.div`
   padding-top: 15px;
   min-height: 300px;
-  min-width: 1050px;
+  min-width: 70vw;
 `;
 
 export const DetailBottom = styled.div`
-  min-width: 1050px;
+  min-width: 70vw;
 `;
 
 export const ButtonsContainer = styled.div`
   margin-top: 10px;
   margin-bottom: 10px;
-  min-width: 1050px;
+  min-width: 70vw;
   display: flex;
   justify-content: flex-end;
 `;

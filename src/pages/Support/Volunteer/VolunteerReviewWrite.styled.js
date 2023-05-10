@@ -31,14 +31,6 @@ export const FormWrapper = styled.div`
 
 export const FormRow = styled.div`
   display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 16px;
-  align-items: center;
-`;
-
-export const FormRow2 = styled.div`
-  display: flex;
   width: 100%;
   margin-bottom: 16px;
   align-items: center;
@@ -56,13 +48,6 @@ export const ButtonGroup = styled.div`
 export const ImageWrapper = styled.div`
   display: flex;
   align-items: center;
-`;
-
-export const StatusWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-grow: 1;
 `;
 
 export const PreviewWrapper = styled.div`
@@ -108,7 +93,7 @@ export const WriteButton = styled(Button)`
 
 export const EditorWrapper = styled.div`
   .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
-    width: 700px;
     min-height: 500px;
+    width: 700px;
   }
 `;

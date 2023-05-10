@@ -99,7 +99,8 @@ const HeaderRight = ({ page }) => {
 const HeadrRight = styled.div`
 
     .stack {
-        width: 250px;
+        width: 20vw;
+        min-width: 250px;
         padding-top: 15px;
         align-items: center;
         justify-content: center;

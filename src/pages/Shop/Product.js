@@ -6,12 +6,14 @@ import Pagination from "@mui/material/Pagination";
 import { useEffect, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
+import { SHOP } from "../../constants/PageURL";
 
 const Section = styled.section`
   text-align: center;
 `;
 
 const Title = styled.h1`
+  margin-top: 30px;
   margin-bottom: 20px;
 `;
 
@@ -57,7 +59,7 @@ const ProductPrice = styled.p`
 const Line = styled.hr`
   border: 1px solid rgba(224, 224, 224, 1);
   width: 95%;
-  max-width: 1300px;
+  max-width: 1350px;
 `;
 
 const categories = ["사료", "간식", "외출용품", "목욕/미용", "굿즈"];
@@ -163,7 +165,10 @@ const Product = () => {
                   }
                   return (
                     <Grid item key={idx} xs={10} sm={6} md={2}>
-                      <Link to="/productdetail">
+                      <Link
+                        to={SHOP.PRODUCT_DETAIL()}
+                        style={{ textDecoration: "none" }}
+                      >
                         <Card
                           sx={{
                             height: "100%",
