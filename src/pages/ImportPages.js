@@ -60,8 +60,8 @@ import VolunteerNotice from "./Support/Volunteer/VolunteerNotice";
 import VolunteerNoticeDetail from "./Support/Volunteer/VolunteerNoticeDetail";
 import VolunteerNoticeWrite from "./Support/Volunteer/VolunteerNoticeWrite";
 import VolunteerReview from "./Support/Volunteer/VolunteerReview";
-import VolunteerReviewDetail from "./Support/Volunteer/VolunteerReview";
-import VolunteerReviewWrite from "./Support/Volunteer/VolunteerReview";
+import VolunteerReviewDetail from "./Support/Volunteer/VolunteerReviewDetail";
+import VolunteerReviewWrite from "./Support/Volunteer/VolunteerReviewWrite";
 
 // Community
 import FindBoard from "./Community/FindBoard/FindBoard";
@@ -264,6 +264,9 @@ export const Support = {
   VolunteerReviewWrite: VolunteerReviewWrite,
   VolunteerNoticeModify: lazy(() =>
     import("./Support/Volunteer/VolunteerNoticeModify")
+  ),
+  VolunteerReviewModify: lazy(() =>
+    import("./Support/Volunteer/VolunteerReviewModify")
   ),
   // Donate: lazy(() => import("./Support/Donate")),
   // DonateApply: lazy(() => import("./Support/DonateApply")),
