@@ -42,9 +42,12 @@ import AdoptReview from "./Adopt/AdoptReview";
 import AdoptReviewDetail from "./Adopt/AdoptReviewDetail";
 import AdoptReviewWrite from "./Adopt/AdoptReviewWrite";
 import AnimalList from "./Adopt/AnimalList";
+import ShelterAnimal from "./Adopt/ShelterAnimal";
 import AnimalListDetail from "./Adopt/AnimalListDetail";
 import HospitalLocation from "./Adopt/HospitalLocation";
 import ShelterLocation from "./Adopt/ShelterLocation";
+import AdoptInfo from "./Adopt/AdoptInfo";
+import AnimalListNav from "./Adopt/AnimalListNav";
 
 // Shop
 import Cart from "./Shop/Cart";
@@ -209,9 +212,12 @@ export const Adopt = {
   AdoptReviewDetail: AdoptReviewDetail,
   AdoptReviewWrite: AdoptReviewWrite,
   AnimalList: AnimalList,
+  ShelterAnimal: ShelterAnimal,
   AnimalListDetail: AnimalListDetail,
   HospitalLocation: HospitalLocation,
   ShelterLocation: ShelterLocation,
+  AdoptInfo: AdoptInfo,
+  AnimalListNav: AnimalListNav,
   // AdoptApplication: lazy(() => import("./Adopt/AdoptApplication")),
   // AdoptChecklist: lazy(() => import("./Adopt/AdoptChecklist")),
   // AdoptReview: lazy(() => import("./Adopt/AdoptReview")),

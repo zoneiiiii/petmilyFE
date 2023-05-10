@@ -113,9 +113,17 @@ const Router = () => {
               element={<Page.Adopt.AdoptChecklist />}
             />
             <Route
-              path={BROWSER_PATH.ADOPT.ANIMAL_LIST}
+              exact
+              path={BROWSER_PATH.ADOPT.ADOPT}
               element={<Page.Adopt.AnimalList />}
-            />
+            >
+              <Route index element={<Page.Adopt.AdoptInfo />} />
+              <Route
+                path={BROWSER_PATH.ADOPT.ANIMAL_LIST()}
+                element={<Page.Adopt.ShelterAnimal />}
+              />
+            </Route>
+
             <Route
               path={BROWSER_PATH.ADOPT.ANIMAL_LIST_DETAIL()}
               element={<Page.Adopt.AnimalListDetail />}

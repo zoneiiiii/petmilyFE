@@ -37,7 +37,7 @@ const Header = ({ page }) => {
         <NavList
           title={"입양"}
           navList={[
-            { linkName: "보호 동물", link: ADOPT.ANIMAL_LIST },
+            { linkName: "보호 동물", link: ADOPT.ADOPT },
             { linkName: "입양 후기 게시판", link: ADOPT.REVIEW },
             { linkName: "동물 병원 정보", link: ADOPT.HOSPITAL_LOCATION },
             { linkName: "보호소 위치", link: ADOPT.SHELTER_LOCATION },
