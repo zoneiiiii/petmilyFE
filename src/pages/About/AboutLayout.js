@@ -6,20 +6,21 @@ import { ThemeProvider } from "styled-components";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 
 const AboutLayout = () => {
-  const [title, setTitle] = useState("");
   // useEffect(() => console.log(setTitle));
   return (
-    <Box
-      display={"flex"}
-      justifyContent={"center"}
-      flexWrap={"wrap"}
-      alignContent={"space-between"}
-    >
-      <AboutNav title={title} />
-      <Box width={"70vw"} display={"flex"} justifyContent={"center"}>
-        <Outlet />
+    <ThemeProvider theme={CustomTheme}>
+      <Box
+        display={"flex"}
+        justifyContent={"center"}
+        flexWrap={"wrap"}
+        alignContent={"space-between"}
+      >
+        <AboutNav />
+        <Box width={"70vw"} display={"flex"} justifyContent={"center"}>
+          <Outlet />
+        </Box>
       </Box>
-    </Box>
+    </ThemeProvider>
   );
 };
 

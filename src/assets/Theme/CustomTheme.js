@@ -1,6 +1,10 @@
 import { createTheme } from "@mui/material";
 
 export const CustomTheme = createTheme({
+  typography: {
+    fontFamily: "GmarketSansMedium",
+    // 다른 폰트 스타일 속성도 추가할 수 있습니다.
+  },
   palette: {
     primary: {
       main: "#FBD385",
