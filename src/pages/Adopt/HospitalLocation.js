@@ -136,7 +136,6 @@ const HospitalLocation = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        margin: "0 auto",
       }}
     >
       <div style={{ display: "flex", alignItems: "center" }}>
@@ -188,7 +187,7 @@ const HospitalLocation = () => {
         style={{
           marginTop: "20px",
           border: "solid 1px #FBD385",
-          width: "1000px",
+          width: "70vw",
           height: "500px",
         }}
       ></div>

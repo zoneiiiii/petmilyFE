@@ -253,6 +253,8 @@ export const ADOPT = {
    */
   REVIEW: "/adopt/review",
 
+  ADOPT: "/adopt",
+
   /**입양 후기 상세 페이지 URL
    * 사용법: ADOPT.REVIEW_DETAIL(id)
    * @return "/adopt/review/:id" (id 없음)
@@ -291,7 +293,10 @@ export const ADOPT = {
   /**유기동물 리스트 페이지 URL
    * @return "/adopt/animal"
    */
-  ANIMAL_LIST: "/adopt/animal",
+  ANIMAL_LIST: (id) => {
+    if (id === undefined) return "/adopt/shelteranimal/:id";
+    else return "/adopt/shelteranimal/" + id;
+  },
 
   /**유기동물 리스트 상세 페이지 URL
    ** 사용법: ADOPT.ANIMAL_LIST_DETAIL(id)
