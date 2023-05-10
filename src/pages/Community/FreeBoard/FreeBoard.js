@@ -12,7 +12,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { makeStyles } from '@material-ui/core';
 import TableSortLabel from '@mui/material/TableSortLabel';
-// import TableSortLabel from "@material-ui/core/TableSortLabel";
 import { Pagination } from '@mui/material';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
