@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 import * as S from "./VolunteerNoticeDetail.styled";
 import { useParams, useNavigate } from "react-router-dom";
-import { Popover, Button } from "@mui/material";
+import {
+  Popover,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+} from "@mui/material";
 import axios from "axios";
 import NotFound from "../../NotFound/NotFound";
 import Loading from "../../../components/Loading/LoadingPage";
@@ -100,34 +108,97 @@ const VolunteerNoticeDetail = () => {
     <>
       <S.DetailContainer>
         <S.DetailTop>
-          <S.Thumbnail src={post.imgThumbnail} alt="Thumbnail" />
-          <S.DetailInfo>
-            <h1>{post.volunteerSubject}</h1>
-            {/* <p>조회수 : {post.volunteerCount}</p> */}
-            <p>보호소 : {post.shelterName}</p>
-            <p>
-              활동기간: {formatDate(post.volunteerStartPeriod)} ~{" "}
-              {formatDate(post.volunteerEndPeriod)}
-            </p>
-            <p>모집인원: {post.volunteerNumber} 명</p>
-            <p>나이제한: {post.volunteerAge}</p>
-            <p>모집상태: {post.volunteerStatus ? "모집중" : "모집완료"}</p>
-            <p>
-              주소: {post.volunteerAddr}
-              <Button
-                onClick={handleMapButtonClick}
-                sx={{
-                  color: "#FBD385",
-                  height: "50%",
-                  "&:hover": { backgroundColor: "#FBD385", color: "#FFF" },
-                }}
-              >
-                지도보기
-              </Button>
-            </p>
-          </S.DetailInfo>
+          <S.ImageSection>
+            <S.Thumbnail src={post.imgThumbnail} alt="Thumbnail" />
+          </S.ImageSection>
+          <S.InfoSection>
+            <S.DetailInfo>
+              <S.TitleSection>
+                <h1>{post.volunteerSubject}</h1>
+              </S.TitleSection>
+              <TableContainer align="center" sx={{ width: "100%" }}>
+                <Table sx={{ maxWidth: 700 }}>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          fontWeight: "bold",
+                          width: "100px",
+                        }}
+                      >
+                        보호소
+                      </TableCell>
+                      <TableCell>{post.shelterName}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                        활동기간
+                      </TableCell>
+                      <TableCell>
+                        {formatDate(post.volunteerStartPeriod)} ~{" "}
+                        {formatDate(post.volunteerEndPeriod)}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                        모집인원
+                      </TableCell>
+                      <TableCell>{post.volunteerNumber} 명</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                        나이제한
+                      </TableCell>
+                      <TableCell>{post.volunteerAge}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                        모집상태
+                      </TableCell>
+                      <TableCell>
+                        {post.volunteerStatus ? "모집중" : "모집완료"}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          fontWeight: "bold",
+                          borderBottom: "none",
+                        }}
+                      >
+                        주소
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          borderBottom: "none",
+                        }}
+                      >
+                        {post.volunteerAddr} &nbsp;&nbsp;
+                        <Button
+                          onClick={handleMapButtonClick}
+                          size="small"
+                          sx={{
+                            color: "#FBD385",
+                            height: "50%",
+                            "&:hover": {
+                              backgroundColor: "#FBD385",
+                              color: "#FFF",
+                            },
+                          }}
+                        >
+                          지도보기
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </S.DetailInfo>
+          </S.InfoSection>
         </S.DetailTop>
-        <hr />
+        <S.horizon />
         <S.DetailMiddle>
           <div dangerouslySetInnerHTML={createMarkup(post.volunteerContent)} />
         </S.DetailMiddle>
@@ -141,11 +212,10 @@ const VolunteerNoticeDetail = () => {
           </S.Buttons>
         </S.ButtonsContainer>
 
-        {/* Div 3 */}
         <S.DetailBottom>
-          <hr />
+          <S.horizon />
           <h2>댓글 </h2>
-          <hr />
+          <S.horizon />
           <div style={{ width: "100%" }}>
             <Comment />
           </div>

@@ -2,26 +2,49 @@ import styled from "styled-components";
 import { Button } from "@mui/material";
 
 export const DetailContainer = styled.div`
-  width: 80%;
+  width: 75%;
   margin: 0 auto;
   margin-top: 3%;
 `;
 
 export const DetailTop = styled.div`
   display: flex;
+  height: 40vh;
+  min-height: 400px;
+  min-width: 1050px;
+  border-top: 1px solid #ccc;
+  padding-top: 7px;
 `;
 
-// const ImageSection = styled.div`
+export const ImageSection = styled.div`
+  width: 50%;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+`;
 
-// `;
+export const TitleSection = styled.div`
+  align-items: center;
+  display: flex;
+  justify-content: center;
+`;
 
-// const InfoSection = styled.div`
+export const horizon = styled.hr`
+  border-width: 1px 0px 0px 0px;
+  border-style: solid;
+  color: #ccc;
+  height: 1px;
+  min-width: 1050px;
+`;
 
-// `;
+export const InfoSection = styled.div`
+  width: 50%;
+`;
 
 export const Thumbnail = styled.img`
-  width: 25%;
-  height: 25%;
+  width: 90%;
+  height: 90%;
+  object-fit: cover;
 `;
 
 export const DetailInfo = styled.div`
@@ -31,13 +54,20 @@ export const DetailInfo = styled.div`
   margin-left: 20px;
 `;
 
-export const DetailMiddle = styled.div``;
+export const DetailMiddle = styled.div`
+  padding-top: 15px;
+  min-height: 300px;
+  min-width: 1050px;
+`;
 
-export const DetailBottom = styled.div``;
+export const DetailBottom = styled.div`
+  min-width: 1050px;
+`;
 
 export const ButtonsContainer = styled.div`
   margin-top: 10px;
   margin-bottom: 10px;
+  min-width: 1050px;
   display: flex;
   justify-content: flex-end;
 `;
