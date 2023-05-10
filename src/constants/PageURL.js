@@ -385,9 +385,9 @@ export const COMMUNITY = {
   FLEA_WRITE: "/board/flea/write",
 
   /**실종 동물 게시판 페이지 URL
-   * @return "board/missing"
+   * @return "/board/missing"
    */
-  MISSING: "board/missing",
+  MISSING: "/board/missing",
 
   /**실종 동물 게시판 페이지 URL
    **사용법: COMMUNITY.MISSING_DETAIL(id)
@@ -400,9 +400,9 @@ export const COMMUNITY = {
   },
 
   /**실종 동물 게시판 페이지 URL
-   * @return "board/missing/:id"
+   * @return "/board/missing/:id"
    */
-  MISSING_WRITE: "board/missing/write",
+  MISSING_WRITE: "/board/missing/write",
 };
 
 /** ADMIN: 관리자 관련 URL 리스트*/

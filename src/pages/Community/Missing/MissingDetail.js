@@ -9,7 +9,7 @@ import { COMMUNITY } from "../../../constants/PageURL";
 // import { COMMENT_KEYS } from "@babel/types";
 // import { COMMUNITY } from "../../../constants/PageURL";
 
-const FreeDetail = () => {
+const MissingDetail = () => {
   return (
     <Container>
       <Top>실종 동물 게시판</Top>
@@ -37,11 +37,11 @@ const FreeDetail = () => {
         />
         <div>
           <br />
-          문을 열어놓은 사이에 똘이가 나가버렸어요ㅠㅠ
-          똘이를 보신 분들은 010-1234-5925로 연락 부탁드리겠습니다ㅠㅠㅠ
-          사례금은 부족하지 않게 드리겠습니다ㅠㅠㅠ
+          <p>문을 열어놓은 사이에 똘이가 나가버렸어요ㅠㅠ</p>
+          <p>똘이를 보신 분들은 010-1234-5925로 연락 부탁드리겠습니다ㅠㅠㅠ</p>
+          <p>사례금은 부족하지 않게 드리겠습니다ㅠㅠㅠ</p>
         </div>
-        <Link to={COMMUNITY.FREE} style={{ textDecoration: "none" }}>
+        <Link to={COMMUNITY.MISSING} style={{ textDecoration: "none" }}>
           <CustomButton label="돌아가기" value="작성취소" />
         </Link>
       </Body>
@@ -119,4 +119,4 @@ const dummy = [
     free_img: "../../../../public/images/petmilyIcon.png"
   }];
 
-export default FreeDetail;
+export default MissingDetail;
