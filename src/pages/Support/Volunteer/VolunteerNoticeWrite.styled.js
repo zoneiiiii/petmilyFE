@@ -1,4 +1,4 @@
-import { Button, TextField } from "@mui/material";
+import { Button } from "@mui/material";
 import styled from "styled-components";
 
 export const TitleContainer = styled.div`
@@ -31,7 +31,6 @@ export const FormWrapper = styled.div`
 
 export const FormRow = styled.div`
   display: flex;
-  justify-content: space-between;
   width: 100%;
   margin-bottom: 16px;
   align-items: center;
@@ -39,9 +38,9 @@ export const FormRow = styled.div`
 
 export const FormRow2 = styled.div`
   display: flex;
+  justify-content: space-between;
   width: 100%;
   margin-bottom: 16px;
-  align-items: center;
 `;
 
 export const ButtonGroup = styled.div`
@@ -53,8 +52,32 @@ export const ButtonGroup = styled.div`
   margin-bottom: 10px;
 `;
 
+export const ImageWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const StatusWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-grow: 1;
+`;
+
+export const PreviewWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 16px;
+`;
+
 export const ButtonSpace = styled.div`
   width: 4px;
+  height: auto;
+  display: inline-block;
+`;
+
+export const CommonSpace = styled.div`
+  width: 10px;
   height: auto;
   display: inline-block;
 `;

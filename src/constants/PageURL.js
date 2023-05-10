@@ -320,6 +320,16 @@ export const SUPPORT = {
     if (id === undefined) return "/donate/volunteer/review/:id";
     else return "/donate/volunteer/review/" + id;
   },
+
+  /**봉사 후기 게시판 수정 페이지 URL
+   ** 사용법: SUPPORT.VOLUNTEER_REVIEW_MODIFY(id)
+   * @return "/donate/volunteer/review/modify:id" (id 없음)
+   * @return "/donate/volunteer/review/modify/" + id (id 존재)
+   */
+  VOLUNTEER_REVIEW_MODIFY: (id) => {
+    if (id === undefined) return "/donate/volunteer/review/modify/:id";
+    else return "/donate/volunteer/review/modify/" + id;
+  },
 };
 
 /** COMMUNITY: 커뮤니티 관련 URL 리스트*/

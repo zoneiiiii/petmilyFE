@@ -50,7 +50,7 @@ const Donate = () => {
       </S.RecentDonations>
       <S.TransparentDisclosure>
         <S.IconContainer>
-          <VolunteerActivismOutlinedIcon fontSize="large" />
+          <VolunteerActivismOutlinedIcon sx={{ width: 70, height: 70 }} />
         </S.IconContainer>
         저희 펫밀리는 <br />
         기부금 현황과 사용내역을
