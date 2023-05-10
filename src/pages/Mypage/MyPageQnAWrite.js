@@ -1,11 +1,17 @@
 import * as React from "react";
 import styled from "styled-components";
-import Grid from "@mui/material/Grid";
-import { useRef, useState } from "react";
-import CustomButton from "../Login/CustomButton";
+import { useState } from "react";
 import Modal from "@mui/material/Modal";
 import Alert from "@mui/material/Alert";
-import { TextField } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  Grid,
+} from "@mui/material";
 import axios from "axios";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -52,7 +58,7 @@ const MyPageQnAWrite = () => {
   const handleReset = () => {
     setSubject("");
     setContent("");
-    // document.location.href = MYPAGE.QNA;
+    document.location.href = MYPAGE.QNA;
   };
 
   return (
@@ -63,111 +69,106 @@ const MyPageQnAWrite = () => {
             <h5>문의하기</h5>
           </div>
         </MyPageStyle>
-        <Grid sx={{ width: 800, mt: 5 }}>
-          <InputContainer>
-            <p className="title">제목</p>
-            <TextField
-              type="text"
-              size="small"
-              value={subject}
-              onChange={(event) => {
-                setSubject(event.target.value);
-              }}
-              sx={{ width: "717px", borderColor: "#ccced1" }}
-            />
-          </InputContainer>
-          <FileContainer>
-            <p>첨부파일</p>
-            <input type="file" style={{ marginTop: "10px" }} />
-          </FileContainer>
-          <InputContainer>
-            <p className="title">내용</p>
-            <EditorWrapper>
-              <CKEditor
-                editor={ClassicEditor}
-                data={content}
-                onChange={(event, editor) => {
-                  const data = editor.getData();
-                  setContent(data);
-                }}
-                config={{
-                  toolbar: [
-                    "heading",
-                    "|",
-                    "bold",
-                    "italic",
-                    "link",
-                    "bulletedList",
-                    "numberedList",
-                    "|",
-                    "indent",
-                    "outdent",
-                    "|",
-                    "blockQuote",
-                    "insertTable",
-                    "mediaEmbed",
-                    "undo",
-                    "redo",
-                  ],
-                  className: "WriteEditor",
-                  placeholder: "내용을 입력하세요.",
-                }}
-              />
-            </EditorWrapper>
-          </InputContainer>
-          <br />
-          <CustomButton
-            label="취소"
-            value="작성취소"
-            onClick={handleReset}
-          ></CustomButton>
-          <CustomButton
-            label="글쓰기"
-            value="1:1문의작성"
-            onClick={handleOpen}
-          />
-          <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            {formAble ? (
-              <Alert sx={modalStyle} severity="success">
-                작성 완료!
-              </Alert>
-            ) : (
-              <Alert sx={modalStyle} severity="warning">
-                제목과 내용을 모두 입력해주세요.
-              </Alert>
-            )}
-          </Modal>
-        </Grid>
+
+        <Table
+          sx={{
+            width: "70vw",
+            mt: 5,
+            border: "none",
+          }}
+        >
+          <TableBody>
+            <TableRow>
+              <TableCell sx={{ fontWeight: "bold" }}>제목</TableCell>
+              <TableCell>
+                <TextField
+                  type="text"
+                  size="small"
+                  value={subject}
+                  fullWidth
+                  onChange={(event) => {
+                    setSubject(event.target.value);
+                  }}
+                  sx={{ borderColor: "#ccced1" }}
+                />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell sx={{ fontWeight: "bold" }}>첨부파일</TableCell>
+              <TableCell>
+                <input type="file" />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell sx={{ fontWeight: "bold" }}>내용</TableCell>
+              <TableCell>
+                <EditorWrapper>
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={content}
+                    fullWidth
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      setContent(data);
+                    }}
+                    config={{
+                      toolbar: [
+                        "heading",
+                        "|",
+                        "bold",
+                        "italic",
+                        "link",
+                        "bulletedList",
+                        "numberedList",
+                        "|",
+                        "indent",
+                        "outdent",
+                        "|",
+                        "blockQuote",
+                        "insertTable",
+                        "mediaEmbed",
+                        "undo",
+                        "redo",
+                      ],
+                      className: "WriteEditor",
+                      placeholder: "내용을 입력하세요.",
+                    }}
+                  />
+                </EditorWrapper>{" "}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+        <ButtonStyle>
+          <Button className="write" onClick={handleOpen}>
+            글쓰기
+          </Button>
+          <Button className="quit" onClick={handleReset}>
+            취소
+          </Button>
+        </ButtonStyle>
+
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          {formAble ? (
+            <Alert sx={modalStyle} severity="success">
+              작성 완료!
+            </Alert>
+          ) : (
+            <Alert sx={modalStyle} severity="warning">
+              제목과 내용을 모두 입력해주세요.
+            </Alert>
+          )}
+        </Modal>
       </ThemeProvider>
     </>
   );
 };
 
-const InputContainer = styled.div`
-  display: flex;
-  gap: 3rem;
-  align-items: flex;
-  margin-bottom: 10px;
-  .title {
-    font-weight: bold;
-    color: #474747;
-  }
-`;
-const FileContainer = styled.div`
-  display: flex;
-  gap: 1rem;
-  align-items: flex;
-  margin-bottom: 10px;
-  p {
-    font-weight: bold;
-    color: #474747;
-  }
-`;
 const MyPageStyle = styled.div`
   .navTitle {
     border: 1px solid #fbd385;
@@ -181,10 +182,42 @@ const MyPageStyle = styled.div`
 const EditorWrapper = styled.div`
   .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
     min-height: 300px;
-    width: 696px;
 
     &:focus {
       border: 2px solid #fbd385;
+    }
+  }
+`;
+const ButtonStyle = styled.div`
+  margin-top: 5px;
+  text-align: center;
+  .write {
+    background-color: #fbd385;
+    color: white;
+    font-weight: bold;
+    width: 90px;
+    height: 30px;
+    margin-top: 10px;
+    margin-right: 10px;
+    &:hover {
+      background-color: #facc73;
+    }
+    &:focus {
+      background-color: #facc73;
+    }
+  }
+  .quit {
+    background-color: #bfbfbf;
+    color: white;
+    font-weight: bold;
+    width: 90px;
+    height: 30px;
+    margin-top: 10px;
+    &:hover {
+      background-color: #b2b0b0;
+    }
+    &:focus {
+      background-color: #b2b0b0;
     }
   }
 `;

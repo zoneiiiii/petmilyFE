@@ -56,8 +56,8 @@ const MyPageQnADetail = () => {
           <h5>1:1 문의</h5>
         </div>
       </MyPageStyle>
-      <Grid style={{ width: 1000 }}>
-        <Table sx={{ minWidth: 900, width: 1000, mt: 1 }}>
+      <Grid style={{ width: "70vw" }}>
+        <Table sx={{ mt: 1 }}>
           <TableHead>
             <TableRow>
               <TableCell colSpan={2}></TableCell>
@@ -79,7 +79,7 @@ const MyPageQnADetail = () => {
             </TableRow>
           </TableBody>
         </Table>
-        <Table sx={{ minWidth: 900, width: 1000, mt: 5 }}>
+        <Table sx={{ mt: 5 }}>
           <TableBody>
             <TableRow>
               <TableCell colSpan={2} sx={{ fontWeight: "bold" }}>
@@ -109,7 +109,7 @@ const MyPageQnADetail = () => {
         </Table>
         <CustomButton label="문의취소" value="작성취소" />
         <Link to={MYPAGE.QNA} style={{ textDecoration: "none" }}>
-          <CustomButton label="목록으로" value="1:1문의작성" />
+          <CustomButton label="목록으로" value="목록으로" />
         </Link>
       </Grid>
     </>

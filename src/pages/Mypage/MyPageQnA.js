@@ -103,7 +103,7 @@ const MyPageQnA = () => {
             <h5>1:1 문의</h5>
           </div>
         </MyPageStyle>
-        <Grid style={{ width: 1000 }}>
+        <Grid sx={{ width: "70vw" }}>
           <Table
             sx={{
               mt: 5,

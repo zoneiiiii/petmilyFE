@@ -29,7 +29,7 @@ const Header = ({ page }) => {
             { linkName: "프로젝트 소개", link: ABOUT.ABOUT },
             { linkName: "입양절차", link: ABOUT.ADOPT_PROCESS },
             { linkName: "활동내역", link: ABOUT.ACTIVITY() },
-            { linkName: "공지사항", link: ABOUT.NOTICE() },
+            { linkName: "공지사항", link: ABOUT.NOTICE },
             { linkName: "자주 묻는 질문", link: ABOUT.FAQ },
             { linkName: "마이페이지", link: MYPAGE.INFO }, // 임시로 확인하기 편하게 추가(이후 삭제)
           ]}
@@ -37,12 +37,10 @@ const Header = ({ page }) => {
         <NavList
           title={"입양"}
           navList={[
-            { linkName: "보호 동물", link: ADOPT.ADOPT },
+            { linkName: "보호 동물", link: ADOPT.ANIMAL_LIST },
             { linkName: "입양 후기 게시판", link: ADOPT.REVIEW },
             { linkName: "동물 병원 정보", link: ADOPT.HOSPITAL_LOCATION },
             { linkName: "보호소 위치", link: ADOPT.SHELTER_LOCATION },
-            { linkName: "입양 신청", link: ADOPT.APPLICATION },
-            { linkName: "입양 체크리스트", link: ADOPT.CHECKLIST },
           ]}
         />
         <NavList
@@ -119,7 +117,6 @@ const HeaderNavStyle = styled.div`
   text-align: center;
   user-select: none;
   background: rgb(255, 255, 238);
-  box-shadow: 0px 2px 0px rgb(167, 165, 165);
   z-index: 1000;
 
   .logo {
@@ -128,6 +125,10 @@ const HeaderNavStyle = styled.div`
     margin-right: 30px;
     margin-top: 5px;
     object-fit: cover;
+  }
+
+  .NavTitle {
+    padding: 10px 0 0 0;
   }
 `;
 
@@ -138,6 +139,7 @@ const Section = styled.div`
 const NavListStyle = styled.div`
   width: 12vw;
   .NavTitle {
+    width: 11vw;
     height: 30px;
     margin: 25px auto 10px auto;
     font-weight: 550;
@@ -163,7 +165,6 @@ const NavListStyle = styled.div`
     height: ${(props) => (props.isSelected === 1 ? props.height + "px" : 0)};
     transition: height 0.5s ease-in-out;
     background-color: #FFFFEE;
-    border: 2px solid #E8E8E8;
   }
   li {
     min-width: 300px
@@ -175,8 +176,8 @@ const NavListStyle = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 15px 15px / 7px 7px;
-    // border: 2px ridge #E8E8E8;
+
+
   }
   li > a {
     color: black;

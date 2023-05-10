@@ -24,10 +24,10 @@ const MyPageAdoptReview = () => {
         </div>
       </MyPageStyle>
 
-      <Grid maxWidth="xl">
-        {/* End hero unit */}
+      <Grid>
+        {/* maxWidth="xl" */}
 
-        <Grid container spacing={3}>
+        <Grid container spacing={3} sx={{ width: "70vw" }}>
           {cards.map((card) => (
             <Grid item key={card}>
               <Link to={ADOPT.REVIEW_DETAIL} style={{ textDecoration: "none" }}>

@@ -544,7 +544,7 @@ const Order = () => {
 };
 
 const OrderStyle = styled.div`
-  width: 1000px;
+  width: 70vw;
   margin: 0 auto;
   padding-top: 20px;
   h1 {

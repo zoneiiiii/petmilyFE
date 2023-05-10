@@ -228,7 +228,11 @@ function ModifyInfo() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Container component="main" maxWidth="sm" sx={{ m: "0 auto" }}>
+        <Container
+          component="main"
+          //maxWidth="sm"
+          sx={{ width: "50vw", m: "0 auto" }}
+        >
           <CssBaseline />
           <Box
             sx={{
