@@ -1,17 +1,19 @@
 import React from "react";
 import CarouselMain from "../../components/Main/Carousel";
 import * as S from "./Main.styled";
-import BannerExample1 from "../../assets/images/Main/Banner/BannerExample1.jpg";
-import BannerExample2 from "../../assets/images/Main/Banner/BannerExample2.jpg";
-import BannerExample3 from "../../assets/images/Main/Banner/BannerExample3.jpg";
+
+import Banner1 from "../../assets/images/Main/Banner/Banner1.png";
+import Banner2 from "../../assets/images/Main/Banner/Banner2.png";
+import Banner3 from "../../assets/images/Main/Banner/Banner3.png";
 import Card1 from "../../assets/images/Main/Card/card1.jpg";
 import Card2 from "../../assets/images/Main/Card/card2.jpg";
 import Card3 from "../../assets/images/Main/Card/card3.jpg";
 import Card4 from "../../assets/images/Main/Card/card4.jpg";
+import Card5 from "../../assets/images/Main/Card/card5.png";
 import MainCard from "../../components/Main/MainCard";
 
 // const image = "https://picsum.photos/1000/400";
-const carouselImage = [BannerExample1, BannerExample2, BannerExample3];
+const carouselImage = [Banner1, Banner2, Banner3];
 
 const Main = () => {
   return (
@@ -27,7 +29,7 @@ const Main = () => {
         <MainCard
           image={Card1}
           buttonText="보호소 둘러보기"
-          link="/animallist"
+          link="/adopt/animal"
         />
       </S.CardContainer>
       <S.CardContainer2>
@@ -36,7 +38,7 @@ const Main = () => {
         <MainCard
           image={Card2}
           buttonText="입양 후기 작성하기"
-          link="/adoptreview"
+          link="/adopt/review"
         />
       </S.CardContainer2>
 
@@ -60,7 +62,7 @@ const Main = () => {
         <MainCard
           image={Card4}
           buttonText="실종 동물 신고하기"
-          link="/board/find"
+          link="/board/missing"
         />
       </S.CardContainer>
 
@@ -73,13 +75,12 @@ const Main = () => {
         </S.TextContainer>
         <MainCard
           // title="반려동물 먹거리는 펫밀리에서"
-          image={Card3}
+          image={Card5}
           buttonText="반려용품 사러가기"
-          link="/shop"
+          link="/shop/product"
         />
       </S.CardContainer>
     </S.Container>
-
   );
 };
 

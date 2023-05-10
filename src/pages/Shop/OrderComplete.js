@@ -4,9 +4,13 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { Link } from "react-router-dom";
 import { MYPAGE, SHOP } from "../../constants/PageURL";
-const OrderComplete = () => {
-  const paymentState = 1;
-  if (paymentState === 0) {
+import { useLocation } from "react-router-dom";
+const OrderComplete = ({ orderCompleted }) => {
+  const location = useLocation();
+  const orderState = location.state.orderState;
+  const error_msg = location.state.error_msg;
+
+  if ({ orderState } === true) {
     return (
       <>
         <OrderStyle>
@@ -58,6 +62,8 @@ const OrderComplete = () => {
                   />
                   <br />
                   주문이 거부되었습니다.
+                  <br />
+                  {error_msg}
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -73,7 +79,7 @@ const OrderComplete = () => {
   }
 };
 const OrderStyle = styled.div`
-  width: 1000px;
+  width: 70vw;
   margin: 0 auto;
   padding-top: 20px;
   h1 {

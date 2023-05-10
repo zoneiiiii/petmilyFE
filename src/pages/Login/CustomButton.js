@@ -87,7 +87,8 @@ const WriteButton = styled(Button)`
   }
   &:focus {
     background-color: #facc73;
-  }`
+  }
+`;
 
 export default function CustomButton(props) {
   const { value, label } = props;
@@ -118,7 +119,7 @@ export default function CustomButton(props) {
         <QuestionButton value={value} variant="contained" fullWidth>
           {props.label}
         </QuestionButton>
-      ) : value === "1:1문의작성" ? (
+      ) : value === "목록으로" ? (
         <QuestionButton
           value={value}
           variant="contained"
