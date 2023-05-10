@@ -239,7 +239,7 @@ export const SHOP = {
    * @return "/product/" + productId (id 존재)
    */
   PRODUCT_DETAIL: (id) => {
-    if (id === undefined) return "/shop/prodict/:id";
+    if (id === undefined) return "/shop/product/:id";
     else return "/shop/product/" + id;
   },
 
