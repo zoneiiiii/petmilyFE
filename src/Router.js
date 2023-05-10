@@ -95,7 +95,7 @@ const Router = () => {
                 element={<Page.About.FAQ />}
               />
               <Route
-                path={BROWSER_PATH.ABOUT.NOTICE}
+                path={BROWSER_PATH.ABOUT.NOTICE()}
                 element={<Page.About.Notice />}
               />
               <Route
@@ -295,11 +295,11 @@ const Router = () => {
 };
 
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const location = useLocation();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [pathname]);
+  }, [location]);
 
   return null;
 }

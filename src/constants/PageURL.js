@@ -99,19 +99,92 @@ export const ABOUT = {
    * @return "/about/adoptprocess" */
   ADOPT_PROCESS: "/about/adoptprocess",
 
-  /**공지사항 페이지 URL
-   * @return "/about/notice" */
-  NOTICE: "/about/notice",
+  /** 공지사항 페이지 URL
+   ** 사용법: ABOUT.NOTICE({page: page, limit: limit, search: search, search_mode: search_mode})
+   ** parameter 우선순위: page > limit = search = search_mode
+   * @return "/about/notice/list" (parameter 없음)
+   * @return "/about/notice/list?page=" + page (page만 존재)
+   * @return "/about/notice/list?page=" + page + "&search=" + search + "&search_mode=" + search_mode (page, search 존재)
+   * @return "/about/notice/list?page=" + page + "&limit=" + limit (page, limit 존재)
+   * @return "/about/notice/list?page=" + page + "&limit=" + limit + "&search=" + search + "&search_mode=" + search_mode (모두 존재)
+   * */
+  NOTICE: (props) => {
+    if (!props || !props.page) return "/about/notice/list";
+    else if (!props.limit) {
+      if (!props.search) return "/about/notice/list?page=" + props.page;
+      else
+        return (
+          "/about/notice/list?page=" +
+          props.page +
+          "&search=" +
+          props.search +
+          "&search_mode=" +
+          props.search_mode
+        );
+    } else if (!props.search)
+      return "/about/notice/list?page=" + props.page + "&limit=" + props.limit;
+    else
+      return (
+        "/about/notice/list?page=" +
+        props.page +
+        "&limit=" +
+        props.limit +
+        "&search=" +
+        props.search +
+        "&search_mode=" +
+        props.search_mode
+      );
+  },
 
   /**
    ** 공지사항 상세 페이지 URL
-   ** 사용법: ABOUT.NOTICE_DETAIL(id)
-   * @return "/about/notice/:id" (id 없음)
-   * @return "/about/notice/" + id (id 존재)
+   ** 사용법: ABOUT.NOTICE_DETAIL({page: page, limit: limit, search: search, search_mode: search_mode})
+   ** parameter 우선순위: page > limit = search = search_mode
+   * @return "/about/notice/view" (parameter 없음)
+   * @return "/about/notice/view?page=" + page (page만 존재)
+   * @return "/about/notice/view?page=" + page + "&search=" + search + "&search_mode=" + search_mode (page, search 존재)
+   * @return "/about/notice/view?page=" + page + "&limit=" + limit (page, limit 존재)
+   * @return "/about/notice/view?page=" + page + "&limit=" + limit + "&search=" + search + "&search_mode=" + search_mode (모두 존재)
    **/
-  NOTICE_DETAIL: (id) => {
-    if (id === undefined) return "/about/notice/:id";
-    else return "/about/notice/" + id;
+  NOTICE_DETAIL: (props) => {
+    if (!props || !props.no) return "/about/notice/view";
+    else if (!props.page) return "/about/notice/view?no=" + props.no;
+    else if (!props.limit) {
+      if (!props.search)
+        return "/about/notice/view?no=" + props.no + "&page=" + props.page;
+      else
+        return (
+          "/about/notice/view?no=" +
+          props.no +
+          "&page=" +
+          props.page +
+          "&search=" +
+          props.search +
+          "&search_mode=" +
+          props.search_mode
+        );
+    } else if (!props.search)
+      return (
+        "/about/notice/view?no=" +
+        props.no +
+        "&page=" +
+        props.page +
+        "&limit=" +
+        props.limit
+      );
+    else
+      return (
+        "/about/notice/view?no=" +
+        props.no +
+        "&page=" +
+        props.page +
+        "&limit=" +
+        props.limit +
+        "&search=" +
+        props.search +
+        "&search_mode=" +
+        props.search_mode
+      );
   },
 
   /**공지사항 작성 페이지 URL
@@ -120,41 +193,46 @@ export const ABOUT = {
   NOTICE_WRITE: "/about/notice/write",
 
   /**활동내역 페이지 URL
-   ** 사용법: ABOUT.ACTIVITY(page, limit, search)
-   ** parameter 우선순위: page > limit = search
+   ** 사용법: ABOUT.ACTIVITY({page: page, limit: limit, search: search})
+   * @params 우선순위: page > limit = search
    * @return "/about/activity/list" (parameter 없음)
-   * @return "/about/notice/list?page=" + page (page만 존재)
+   * @return "/about/activity/list?page=" + page (page만 존재)
    * @return "/about/activity/list?page=" + page + "&search=" + search (page, search 존재)
    * @return "/about/activity/list?page=" + page + "&limit=" + limit (page, limit 존재)
    * @return "/about/activity/list?page=" + page + "&limit=" + limit + "&search=" + search + page (모두 존재)
    **/
-  ACTIVITY: (page, limit, search) => {
-    if (page === undefined) return "/about/activity/list";
-    else if (limit === undefined) {
-      if (search === undefined) return "/about/activity/list?page=" + page;
-      else return "/about/activity/list?page=" + page + "&search=" + search;
-    } else if (search === undefined)
-      return "/about/activity/list?page=" + page + "&limit=" + limit;
+  ACTIVITY: (props) => {
+    if (!props) return "/about/activity/list";
+    else if (!props.limit) {
+      if (!props.search) return "/about/activity/list?page=" + props.page;
+      else
+        return (
+          "/about/activity/list?page=" + props.page + "&search=" + props.search
+        );
+    } else if (!props.search)
+      return (
+        "/about/activity/list?page=" + props.page + "&limit=" + props.limit
+      );
     else
       return (
         "/about/activity/list?page=" +
-        page +
+        props.page +
         "&limit=" +
-        limit +
+        props.limit +
         "&search=" +
-        search
+        props.search
       );
   },
 
   /**
    ** 활동내역 상세페이지 URL
    ** 사용법: ABOUT.ACTIVITY_DETAIL(id)
-   * @return "/activity/:id" (id 없음)
-   * @return "/activity/" + id (id 존재)
+   * @return "/activity/view/:id" (id 없음)
+   * @return "/activity/view/" + id (id 존재)
    **/
   ACTIVITY_DETAIL: (id) => {
-    if (id === undefined) return "/about/activity/detail/:id";
-    else return "/about/activity/detail/" + id;
+    if (id === undefined) return "/about/activity/view/:id";
+    else return "/about/activity/view/" + id;
   },
 
   /**활동내역 작성페이지 URL
@@ -341,7 +419,6 @@ export const COMMUNITY = {
 
   /**목격 제보 게시판 상세 페이지 URL
    **사용법: COMMUNITY.FIND_DETAIL(id)
-   * @return "/board/find/:id"
    * @return "/board/find/:id"
    */
   FIND_DETAIL: (id) => {

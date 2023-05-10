@@ -50,6 +50,7 @@ const MyPageNickname = styled.div`
 `;
 
 const MyPageContainer = styled.div`
+  max-width: 70vw;
   margin: 40px;
   flex-grow: 1;
 `;

@@ -43,7 +43,20 @@ export const CustomTheme = createTheme({
       active: "#fbd385",
     },
     action: {
+      active: "#fbd385",
       disabled: "#bfbfbf", // disabled 상태일 때 적용할 색상
+      // hover: "#fbd385",
+      // hoverOpacity: 0.8,
+      // selected: "blue",
+      // selectedOpacity: 0.8,
+      // disabled: "#fbd385",
+      // disabledBackground: "#fbd385",
+      // disabledOpacity: 0.3,
+      // focus: "#fbd385",
+      // focusOpacity: 0.8,
+      // activatedOpacity: 0.8,
     },
+    divider: "#fbd385",
+    actionDisabled: "#fbd385",
   },
 });
