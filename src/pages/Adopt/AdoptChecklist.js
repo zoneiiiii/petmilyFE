@@ -46,7 +46,7 @@ function AdoptChecklist() {
         display: "flex",
         flexDirection: "column",
         width: "70%",
-        margin: "0 auto",
+        margin: "30px auto",
       }}
     >
       <div>
