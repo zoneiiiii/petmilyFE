@@ -170,7 +170,14 @@ function FindPW() {
         margin: "0 auto",
       }}
     >
-      <Typography sx={{ color: "#FBD385", mt: "30px", fontSize: "xx-large" }}>
+      <Typography
+        sx={{
+          color: "#FBD385",
+          mt: "30px",
+          fontSize: "40px ",
+          fontWeight: "bolder",
+        }}
+      >
         비밀번호 찾기
       </Typography>
       <Typography sx={{ color: "#FBD385", mb: "20px", fontSize: "small" }}>
@@ -187,7 +194,7 @@ function FindPW() {
           InputLabelProps={{ style: { color: "#FBD385" } }}
           sx={{
             background: "white",
-            width: "300px",
+            width: "350px",
           }}
           required
           onChange={idChange}
@@ -206,7 +213,7 @@ function FindPW() {
           InputProps={{ style: { color: "#FBD385" } }}
           InputLabelProps={{ style: { color: "#FBD385" } }}
           sx={{
-            width: "300px",
+            width: "350px",
             background: "white",
           }}
           onChange={emailChange}

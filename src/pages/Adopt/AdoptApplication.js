@@ -57,18 +57,48 @@ const AdoptApplication = () => {
         marginTop: "30px",
       }}
     >
-      <Typography
-        component="h1"
-        variant="h2"
-        sx={{
-          color: "black",
-          mt: "30px",
-          mb: "30px",
-          fontWeight: "bolder",
-        }}
-      >
-        입양 신청
-      </Typography>
+      {state === 0 ? (
+        <div>
+          <Typography
+            component="h1"
+            variant="h2"
+            sx={{
+              color: "black",
+              mt: "30px",
+              mb: "10px",
+              fontWeight: "bolder",
+            }}
+          >
+            입양 신청
+          </Typography>
+          <Button
+            style={{
+              color: "gray",
+              fontSize: "medium",
+              mb: "30px",
+
+              height: "20px",
+            }}
+            onClick={() => navigate(ADOPT.ADOPT)}
+          >
+            아이들 보러가기
+          </Button>
+        </div>
+      ) : (
+        <Typography
+          component="h1"
+          variant="h2"
+          sx={{
+            color: "black",
+            mt: "30px",
+            mb: "30px",
+            fontWeight: "bolder",
+          }}
+        >
+          입양 신청
+        </Typography>
+      )}
+
       <div
         style={{
           display: "flex",

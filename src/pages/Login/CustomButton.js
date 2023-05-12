@@ -5,8 +5,8 @@ import { styled } from "@mui/material/styles";
 const SignInButton = styled(Button)`
   background-color: #fbd385;
   color: white;
-  width: 300px;
-  height: 25px;
+  width: 350px;
+  height: 35px;
   margin-top: 10px;
   &:hover {
     background-color: #facc73;
