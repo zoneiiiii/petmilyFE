@@ -1,9 +1,12 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import { useState, useEffect } from "react";
+import CustomButton from "../Login/CustomButton";
+import { ADOPT } from "../../constants/PageURL";
 
 const { kakao } = window;
 const AnimalListDetail = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const state = location.state;
 
@@ -45,6 +48,14 @@ const AnimalListDetail = () => {
       }
     });
   }, []);
+  const handleOnClick = () => {
+    navigate(ADOPT.APPLICATION, {
+      state: {
+        desertionNo: state.desertionNo,
+        profile: state.profile,
+      },
+    });
+  };
 
   return (
     <div>
@@ -83,17 +94,25 @@ const AnimalListDetail = () => {
         </div>
       </div>
       <div style={{ width: "1100px" }}>
-        <Typography
-          component="h2"
-          variant="h5"
-          sx={{
-            mt: "30px",
-            fontWeight: "bolder",
-            fontSize: "xx-large",
-          }}
-        >
-          유기동물 정보
-        </Typography>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography
+            component="h2"
+            variant="h5"
+            sx={{
+              mt: "30px",
+              fontWeight: "bolder",
+              fontSize: "xx-large",
+            }}
+          >
+            유기동물 정보
+          </Typography>
+          <CustomButton
+            type="submit"
+            label="입양신청"
+            value="입양신청"
+            onClick={handleOnClick}
+          ></CustomButton>
+        </div>
         <div style={{ display: "flex" }}>
           <div
             style={{

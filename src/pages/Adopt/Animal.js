@@ -71,6 +71,7 @@ function Animal({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#F5F5ED",
+        borderRadius: "5px",
       }}
       onMouseEnter={handleHover}
       onMouseLeave={handleLeave}
@@ -86,6 +87,7 @@ function Animal({
           transition: "all 0.3s ease-out",
           transform: isHover ? "scale(1.1)" : "scale(1)",
           cursor: "pointer",
+          borderRadius: "10px",
         }}
       />
       {isHover ? (

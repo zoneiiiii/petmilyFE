@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
+import { useLocation } from "react-router-dom";
 const CustomTextField = styled(TextField)({
   backgroundColor: "white",
   "& label.Mui-focused": {
@@ -40,6 +41,10 @@ const CustomizedButton = styled(Button)`
 `;
 
 const AdoptApplication = () => {
+  const location = useLocation();
+  console.log("aa", location);
+  const state = location?.state || 0;
+
   return (
     <div
       style={{
@@ -59,7 +64,7 @@ const AdoptApplication = () => {
       >
         <img
           className="ProfileImg"
-          src="./../images/emptyProfile.png"
+          src={"./../images/emptyProfile.png"}
           alt="profile"
           width={"300px"}
           height={"300px"}
@@ -75,14 +80,25 @@ const AdoptApplication = () => {
             marginRight: "20px",
           }}
         />
-        <img
-          className="AdoptedCat"
-          src="./../images/AdoptedCat.png"
-          alt="profile"
-          width={"300px"}
-          height={"300px"}
-          style={{ borderRadius: "50%" }}
-        />
+        {state === 0 ? (
+          <img
+            className="AdoptedCat"
+            src="./../images/AdoptedCat.png"
+            alt="profile"
+            width={"300px"}
+            height={"300px"}
+            style={{ borderRadius: "50%" }}
+          />
+        ) : (
+          <img
+            className="AdoptedCat"
+            src={state.profile}
+            alt="profile"
+            width={"300px"}
+            height={"300px"}
+            style={{ borderRadius: "50%" }}
+          />
+        )}
       </div>
       <div
         style={{
