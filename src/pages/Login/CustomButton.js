@@ -8,6 +8,7 @@ const SignInButton = styled(Button)`
   width: 350px;
   height: 35px;
   margin-top: 10px;
+  font-weight: bold;
   &:hover {
     background-color: #facc73;
   }
@@ -21,6 +22,7 @@ const CustomizedButton = styled(Button)`
   width: 90px;
   height: 30px;
   margin-top: 10px;
+  font-weight: bold;
   &:hover {
     background-color: #facc73;
   }
@@ -96,6 +98,7 @@ const AdoptButton = styled(Button)`
   height: 30px;
   margin-top: 30px;
   margin-right: 10px;
+  font-weight: bold;
 
   &:hover {
     background-color: #facc73;
