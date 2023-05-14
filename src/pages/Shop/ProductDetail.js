@@ -20,6 +20,11 @@ const ProductDetail = ({ cartItems, setCartItems }) => {
 
   const handleCart = () => {};
 
+  const formatCurrency = (number) => {
+    //3번째 자릿수 마다 ',' 와 마지막에 '원' 붙혀주는 함수
+    return number.toLocaleString("ko-KR", { currency: "KRW" }) + "원";
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <ProductWrapper>
@@ -27,7 +32,7 @@ const ProductDetail = ({ cartItems, setCartItems }) => {
           <ProductImage src="/images/product.png" />
           <ProductInfo>
             <ProductTitle>{product.name}</ProductTitle>
-            <ProductPrice>{product.price}원</ProductPrice>
+            <ProductPrice>{formatCurrency(product.price)}</ProductPrice>
             <ProductQuantity>
               <label htmlFor="quantity">구매수량</label>
               <QuantitySelect
