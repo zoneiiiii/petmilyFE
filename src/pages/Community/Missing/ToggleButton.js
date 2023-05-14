@@ -31,7 +31,7 @@ function ColorToggleButton() {
     return (
         <ThemeProvider theme={theme}>
             <ToggleButtonGroup
-                size='large'
+                size='small'
                 sx={{
                     height: 40,
                     width: 200,
@@ -45,24 +45,26 @@ function ColorToggleButton() {
                 <ToggleButton
                     value="실종"
                     sx={{
+                        width: "80px",
                         backgroundColor: '#FF8F8F',
                         color: 'white',
                         '&:hover': {
                             color: 'white',
-                            backgroundColor: '#FF8282',
+                            backgroundColor: '#FF8F8F',
                         },
                         '&.Mui-selected': {
                             backgroundColor: '#FF4646',
                             color: 'white',
                             '&:hover': {
                                 color: 'white',
-                                backgroundColor: '#FF8282',
+                                backgroundColor: '#FF4646',
                             }
                         },
                     }} > 실종</ToggleButton>
                 <ToggleButton
                     value="완료"
                     sx={{
+                        width: "80px",
                         backgroundColor: '#D4D4D4',
                         color: 'white',
                         '&:hover': {

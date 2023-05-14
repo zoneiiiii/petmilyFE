@@ -103,34 +103,35 @@ const FreeWrite = () => {
 
 
     return (
-        <>
-            <Board>게시글 작성</Board>
-            <Grid sx={{ minWidth: 700, mt: 5, }}>
-                <div style={{ margin: 'auto 30vw', maxWidth: '800px' }}>
-                    <InputContainer>
-                        <p className="title">제목</p>
-                        <input type="text" ref={subjectRef} style={{ width: 700 }} />
-                    </InputContainer>
-                    <FileContainer>
-                        <p className="title">첨부파일</p>
-                        <label htmlFor="file">
-                            <div className="btn-upload">파일 선택</div>
-                        </label>
-                        <input type="file" multiple className="file" id="file" />
-                    </FileContainer>
-                    <FileContainer2>
-                        <p className="title">첨부파일</p>
-                        <input className="upload-box" value={fileName} placeholder="첨부파일" readOnly />
-                        <label htmlFor="file">파일찾기</label>
-                        <input className="origin-box" type="file" id="file" onChange={handleChange} />
-                    </FileContainer2>
+        <Section className="result">
+            <MainContainer className="result-container">
+                <Board>게시글 작성</Board>
+                <Grid sx={{ minWidth: 700, mt: 5, }}>
+                    <div style={{ margin: '50px auto', maxWidth: '700px' }}>
+                        <InputContainer>
+                            <p className="title">제목</p>
+                            <input type="text" ref={subjectRef} style={{ width: 700 }} />
+                        </InputContainer>
+                        <FileContainer>
+                            <p className="title">첨부파일</p>
+                            <label htmlFor="file">
+                                <div className="btn-upload">파일 선택</div>
+                            </label>
+                            <input type="file" multiple className="file" id="file" />
+                        </FileContainer>
+                        {/* <FileContainer2>
+                            <p className="title">첨부파일</p>
+                            <input className="upload-box" value={fileName} placeholder="첨부파일" readOnly />
+                            <label htmlFor="file">파일찾기</label>
+                            <input className="origin-box" type="file" id="file" onChange={handleChange} />
+                        </FileContainer2>
 
-                    <FileContainer3>
-                        <input accept="image/*" multiple type="file" onChange={e => onUpload(e)} />
-                        <img alt="" width={'40%'} src={imageSrcs} />
-                    </FileContainer3>
+                        <FileContainer3>
+                            <input accept="image/*" multiple type="file" onChange={e => onUpload(e)} />
+                            <img alt="" width={'40%'} src={imageSrcs} />
+                        </FileContainer3> */}
 
-                    {/* <InputContainer>
+                        {/* <InputContainer>
                         <p className="title">내용</p>
                         <textarea
                             rows={13}
@@ -139,72 +140,92 @@ const FreeWrite = () => {
                             ref={contentRef}
                         />
                     </InputContainer> */}
-                    <FormRow>
-                        <EditorWrapper>
-                            <CKEditor
-                                editor={ClassicEditor}
-                                ref={contentRef}
-                                data={content}
-                                onChange={(event, editor) => {
-                                    const data = editor.getData();
-                                    setContent(data);
-                                }}
-                                config={{
-                                    toolbar: [
-                                        "heading",
-                                        "|",
-                                        "bold",
-                                        "italic",
-                                        "link",
-                                        "bulletedList",
-                                        "numberedList",
-                                        "|",
-                                        "indent",
-                                        "outdent",
-                                        "|",
-                                        "blockQuote",
-                                        "insertTable",
-                                        "mediaEmbed",
-                                        "undo",
-                                        "redo",
-                                    ],
-                                    className: "WriteEditor",
-                                    placeholder: "내용을 입력하세요.",
-                                }}
-                            />
-                        </EditorWrapper>
-                    </FormRow>
-                    <br />
-                    <CustomButton
-                        label="취소"
-                        value="작성취소"
-                        onClick={handleReset}
-                    ></CustomButton>
-                    <CustomButton label="확인" value="글쓰기" onClick={handleOpen} />
-                </div>
+                        <FormRow>
+                            <EditorWrapper>
+                                <CKEditor
+                                    editor={ClassicEditor}
+                                    ref={contentRef}
+                                    data={content}
+                                    onChange={(event, editor) => {
+                                        const data = editor.getData();
+                                        setContent(data);
+                                    }}
+                                    config={{
+                                        toolbar: [
+                                            "heading",
+                                            "|",
+                                            "bold",
+                                            "italic",
+                                            "link",
+                                            "bulletedList",
+                                            "numberedList",
+                                            "|",
+                                            "indent",
+                                            "outdent",
+                                            "|",
+                                            "blockQuote",
+                                            "insertTable",
+                                            "mediaEmbed",
+                                            "undo",
+                                            "redo",
+                                        ],
+                                        className: "WriteEditor",
+                                        placeholder: "내용을 입력하세요.",
+                                    }}
+                                />
+                            </EditorWrapper>
+                        </FormRow>
+                        <br />
+                        <CustomButton
+                            label="취소"
+                            value="작성취소"
+                            onClick={handleReset}
+                        ></CustomButton>
+                        <CustomButton label="확인" value="글쓰기" onClick={handleOpen} />
+                    </div>
 
-                <Modal
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    {formAble ? (
-                        <Alert sx={modalStyle} severity="success">
-                            작성 완료!
-                        </Alert>
-                    ) : (
-                        <Alert sx={modalStyle} severity="warning">
-                            제목과 내용을 모두 입력해주세요.
-                        </Alert>
-                    )}
-                </Modal>
-            </Grid>
-        </>
+                    <Modal
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        {formAble ? (
+                            <Alert sx={modalStyle} severity="success">
+                                작성 완료!
+                            </Alert>
+                        ) : (
+                            <Alert sx={modalStyle} severity="warning">
+                                제목과 내용을 모두 입력해주세요.
+                            </Alert>
+                        )}
+                    </Modal>
+                </Grid>
+            </MainContainer></Section>
     );
 };
+const Section = styled.section`
+  background: #f8f9fa;
+  padding: 30px 0 40px 0;
+`
+
+const MainContainer = styled.div`
+  width: 60vw;
+  // width: 1150px;
+  max-width: 1150px;
+  min-width: 790px;
+  border-radius: 8px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(233, 236, 239);
+  border-image: initial;
+  margin: 0px auto 20px;
+  background: rgb(255, 255, 255);
+`
+
 const Board = styled.h1`
                 text-align: center;
+                margin-top: 50px;
                 `;
 
 const InputContainer = styled.div`
@@ -333,7 +354,7 @@ const FormRow = styled.div`
 const EditorWrapper = styled.div`
   .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
     min-height: 500px;
-    width: 800px;
+    width: 700px;
   }
 `;
 
