@@ -83,7 +83,6 @@ const NoticeDetail = () => {
                   display: "flex",
                   justifyContent: "flex-start",
                   alignItems: "center",
-                  borderBottom: "1px solid #bfbfbf",
                   fontSize: "1rem",
                 }}
               >
@@ -93,7 +92,6 @@ const NoticeDetail = () => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  borderBottom: "1px solid #bfbfbf",
                 }}
               >
                 <VisibilityIcon
@@ -110,7 +108,6 @@ const NoticeDetail = () => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  borderBottom: "1px solid #bfbfbf",
                 }}
               >
                 {data && data.postDate}
@@ -134,7 +131,9 @@ const NoticeDetail = () => {
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell sx={{ borderBottom: "unset", pt: 0, pb: 0 }}>
+              <TableCell
+                sx={{ borderBottom: "unset", pt: 0, pb: 0, fontSize: "1rem" }}
+              >
                 다음글&nbsp;
                 {afterData ? (
                   <StyledLink
@@ -156,7 +155,7 @@ const NoticeDetail = () => {
             <TableRow>
               <TableCell
                 sx={{
-                  borderBottom: "1px solid #bfbfbf",
+                  fontSize: "1rem",
                   pt: 0,
                   pb: 0,
                 }}

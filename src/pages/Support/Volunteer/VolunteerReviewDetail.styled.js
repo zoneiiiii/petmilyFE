@@ -30,18 +30,23 @@ export const horizon = styled.hr`
 
 export const TopInfo = styled.div`
   display: flex;
-  padding-top: 7px;
+  align-items: center;
+  height: 40px;
   border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
 `;
 
-export const TopNickname = styled.div``;
+export const TopNickname = styled.div`
+  font-weight: bold;
+`;
 
 export const TopDate = styled.div`
   display: flex;
   align-items: center;
   margin-left: 16px;
   gap: 4px;
-  font-size: 13px;
+  font-size: 15px;
+  color: #808080;
 `;
 
 export const TopViewCount = styled.div`
@@ -49,7 +54,7 @@ export const TopViewCount = styled.div`
   align-items: center;
   margin-left: auto;
   gap: 4px;
-  font-size: 13px;
+  font-size: 15px;
 `;
 
 export const DetailMiddle = styled.div`

@@ -52,6 +52,25 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
+const Section = styleds.section`
+  background: #f8f9fa;
+  padding: 30px 0 40px 0;
+`
+
+const MainContainer = styleds.div`
+  width: 60vw;
+  // width: 1150px;
+  max-width: 1150px;
+  min-width: 790px;
+  border-radius: 8px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(233, 236, 239);
+  border-image: initial;
+  margin: 0px auto 20px;
+  background: rgb(255, 255, 255);
+`
+
 const SearchContainer = styleds.div`
       float:right;
       margin-bottom: 10px;
@@ -63,15 +82,15 @@ const useStyles = makeStyles({  // 게시글 목록 css
     },
 
     tablecontainer: {
-        maxWidth: 1200,
-        minWidth: 900,
+        // maxWidth: 1200,
+        minWidth: 700,
         margin: "auto"
     },
 
     table: {
         margin: "auto",
-        maxWidth: 1200,
-        minWidth: 700,
+        // maxWidth: 1200,
+        // minWidth: 700,
         // overflow: "hidden"
     },
 
@@ -123,7 +142,7 @@ const rows = [
     createData('024', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.29'),
 ];
 
-export default function CustomizedTables() {
+const FreeBoard = () => {
     const classes = useStyles();    // css 적용을 위한 선언문.
 
     /* sort start */
@@ -180,18 +199,19 @@ export default function CustomizedTables() {
     /* axios end */
 
     return (
-        <>
-            <ThemeProvider theme={theme}>
-                <Container sx={{ py: 5, minWidth: 1000 }} maxWidth="lg">
-                    <h1 className={classes.title}>자유 게시판</h1>
-                    <SearchContainer>
-                        <SearchBar />
-                    </SearchContainer>
-                    <TableContainer className={classes.tablecontainer} component={Paper} >
+        <Section className="result">
+            <MainContainer className="result-container">
+                <ThemeProvider theme={theme}>
+                    <Container sx={{ py: 5, minWidth: 1000 }} maxWidth="lg">
+                        <h1 className={classes.title}>자유 게시판</h1>
+                        <SearchContainer>
+                            <SearchBar />
+                        </SearchContainer>
+                        <TableContainer className={classes.tablecontainer} component={Paper} >
 
-                        <Table aria-label="customized table" className={classes.table}>
-                            <TableHead>
-                                {/* <StyledTableRow>
+                            <Table aria-label="customized table" className={classes.table}>
+                                <TableHead>
+                                    {/* <StyledTableRow>
                                     {columns.map((column) => (
                                         <StyledTableCell
                                             key={column.id}
@@ -203,97 +223,98 @@ export default function CustomizedTables() {
                                         </StyledTableCell>
                                     ))}
                                 </StyledTableRow> */}
-                                <StyledTableRow>
-                                    <StyledTableCell align="left" sx={{ minWidth: 10, background: '#FBD385' }}>No.</StyledTableCell>
-                                    <StyledTableCell align="center" sx={{ minWidth: 700, background: '#FBD385' }}>제목</StyledTableCell>
-                                    <StyledTableCell align="right" sx={{ minWidth: 50, background: '#FBD385' }}>작성자</StyledTableCell>
-                                    <StyledTableCell align="right" sx={{ minWidth: 50, background: '#FBD385' }}>조회수</StyledTableCell>
-                                    <StyledTableCell align="center" sx={{ minWidth: 10, background: '#FBD385' }} onClick={handleSortRequest}>
-                                        <TableSortLabel active={false} direction={orderDirection}>
-                                            작성일
-                                        </TableSortLabel>
-                                    </StyledTableCell>
-                                </StyledTableRow>
-                            </TableHead>
-                            <TableBody>
-                                {rows
-                                    .slice(
-                                        (page - 1) * rowsPerPage,
-                                        (page - 1) * rowsPerPage + rowsPerPage
-                                    )
-                                    .map((rows) => {
-                                        return (
-                                            <StyledTableRow key={rows.num}>
-                                                <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                                                    {rows.num}
-                                                </StyledTableCell>
-                                                <StyledTableCell align="center" sx={{ minWidth: 300 }}>
-                                                    <Link
-                                                        to={COMMUNITY.FREE_DETAIL(rows.num)}
-                                                        style={{ textDecoration: "none", color: "black" }}
-                                                    >
-                                                        {rows.subject}
-                                                    </Link>
-                                                </StyledTableCell>
-                                                <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                                                    {rows.writer}
-                                                </StyledTableCell>
-                                                <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                                                    {rows.views}
-                                                </StyledTableCell>
-                                                <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                                                    {rows.date}
-                                                </StyledTableCell>
-                                            </StyledTableRow>
-                                            // <StyledTableRow key={row.num}>
-                                            //     {columns.map((column) => {
-                                            //         const value = row[column.id];
-                                            //         return (
-                                            //             <StyledTableCell key={column.id} align={column.align}>
-                                            //                 <Link
-                                            //                     to="/board/free/1"
-                                            //                     style={{ textDecoration: "none", color: "black" }}
-                                            //                 >
-                                            //                     {value}
-                                            //                 </Link>
-                                            //             </StyledTableCell>
-                                            //         );
-                                            //     })}
-                                            // </StyledTableRow>
-                                        );
-                                    })}
-                            </TableBody>
-                            <TableFooter>
-                                <TableRow>
-                                    <TableCell /><TableCell /><TableCell /><TableCell />
-                                    <TableCell>
-                                        <Link className={classes.writelink} to={COMMUNITY.FREE_WRITE}>
-                                            <CustomButton label="글쓰기" value="글쓰기">
-                                                글쓰기
-                                            </CustomButton>
-                                        </Link>
-                                    </TableCell>
-                                </TableRow>
-                            </TableFooter>
-                        </Table>
-                    </TableContainer>
-                    <br />
-                    <Stack spacing={2} sx={{ mt: 0 }}>
-                        <Pagination
-                            className={classes.pagination}
-                            color="primary"
-                            page={page}
-                            onChange={handleChangePage}
-                            // onChangeRowsPerPage={handleChangeRowsPerPage}
-                            component="div"
-                            count={Math.ceil(rows.length / rowsPerPage)}
-                        />
-                    </Stack>
-                    <br />
-                </Container>
-            </ThemeProvider >
-        </>
-
-
+                                    <StyledTableRow>
+                                        <StyledTableCell align="center" sx={{ minWidth: 10, background: '#FBD385' }}>No.</StyledTableCell>
+                                        <StyledTableCell align="center" sx={{ minWidth: 200, background: '#FBD385' }}>제목</StyledTableCell>
+                                        <StyledTableCell align="center" sx={{ minWidth: 50, background: '#FBD385' }}>작성자</StyledTableCell>
+                                        <StyledTableCell align="center" sx={{ minWidth: 50, background: '#FBD385' }}>조회수</StyledTableCell>
+                                        <StyledTableCell align="center" sx={{ minWidth: 10, background: '#FBD385' }} onClick={handleSortRequest}>
+                                            <TableSortLabel active={false} direction={orderDirection}>
+                                                작성일
+                                            </TableSortLabel>
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {rows
+                                        .slice(
+                                            (page - 1) * rowsPerPage,
+                                            (page - 1) * rowsPerPage + rowsPerPage
+                                        )
+                                        .map((rows) => {
+                                            return (
+                                                <StyledTableRow key={rows.num}>
+                                                    <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                                                        {rows.num}
+                                                    </StyledTableCell>
+                                                    <StyledTableCell align="center" sx={{ minWidth: 300 }}>
+                                                        <Link
+                                                            to={COMMUNITY.FREE_DETAIL(rows.num)}
+                                                            style={{ textDecoration: "none", color: "black" }}
+                                                        >
+                                                            {rows.subject}
+                                                        </Link>
+                                                    </StyledTableCell>
+                                                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                                                        {rows.writer}
+                                                    </StyledTableCell>
+                                                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                                                        {rows.views}
+                                                    </StyledTableCell>
+                                                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                                                        {rows.date}
+                                                    </StyledTableCell>
+                                                </StyledTableRow>
+                                                // <StyledTableRow key={row.num}>
+                                                //     {columns.map((column) => {
+                                                //         const value = row[column.id];
+                                                //         return (
+                                                //             <StyledTableCell key={column.id} align={column.align}>
+                                                //                 <Link
+                                                //                     to="/board/free/1"
+                                                //                     style={{ textDecoration: "none", color: "black" }}
+                                                //                 >
+                                                //                     {value}
+                                                //                 </Link>
+                                                //             </StyledTableCell>
+                                                //         );
+                                                //     })}
+                                                // </StyledTableRow>
+                                            );
+                                        })}
+                                </TableBody>
+                                <TableFooter>
+                                    <TableRow>
+                                        <TableCell /><TableCell /><TableCell /><TableCell />
+                                        <TableCell>
+                                            <Link className={classes.writelink} to={COMMUNITY.FREE_WRITE}>
+                                                <CustomButton label="글쓰기" value="글쓰기">
+                                                    글쓰기
+                                                </CustomButton>
+                                            </Link>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableFooter>
+                            </Table>
+                        </TableContainer>
+                        <br />
+                        <Stack spacing={2} sx={{ mt: 0 }}>
+                            <Pagination
+                                className={classes.pagination}
+                                color="primary"
+                                page={page}
+                                onChange={handleChangePage}
+                                // onChangeRowsPerPage={handleChangeRowsPerPage}
+                                component="div"
+                                count={Math.ceil(rows.length / rowsPerPage)}
+                            />
+                        </Stack>
+                        <br />
+                    </Container>
+                </ThemeProvider >
+            </MainContainer>
+        </Section>
     );
-}
+};
+
+export default FreeBoard;

@@ -5,6 +5,7 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  TextField,
   ThemeProvider,
 } from "@mui/material";
 import React from "react";
@@ -25,7 +26,6 @@ function MyInfo() {
     gender: "남자",
     birth: "2023-01-01",
     tel: "010-1234-5678",
-    addr: "서울특별시 강남구 선릉로 428",
     img: "",
     role: "user",
   };
@@ -41,36 +41,32 @@ function MyInfo() {
         >
           <TableBody>
             <TableRow>
-              <TableCell sx={tdSx}>ID</TableCell>
+              <TableCell sx={thSx}>ID</TableCell>
               <TableCell sx={tdSx}>{member.id}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell sx={tdSx}>PW</TableCell>
+              <TableCell sx={thSx}>PW</TableCell>
               <TableCell sx={tdSx}>{"*".repeat(member.pw.length)}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell sx={tdSx}>이름</TableCell>
+              <TableCell sx={thSx}>이름</TableCell>
               <TableCell sx={tdSx}>{member.name}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell sx={tdSx}>성별</TableCell>
+              <TableCell sx={thSx}>성별</TableCell>
               <TableCell sx={tdSx}>{member.gender}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell sx={tdSx}>생일</TableCell>
+              <TableCell sx={thSx}>생일</TableCell>
               <TableCell sx={tdSx}>{member.birth}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell sx={tdSx}>연락처</TableCell>
+              <TableCell sx={thSx}>연락처</TableCell>
               <TableCell sx={tdSx}>{member.tel}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell sx={tdSx}>이메일</TableCell>
+              <TableCell sx={thSx}>이메일</TableCell>
               <TableCell sx={tdSx}>{member.email}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell sx={tdSx}>주소</TableCell>
-              <TableCell sx={tdSx}>{member.addr}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -89,9 +85,15 @@ function MyInfo() {
   );
 }
 
-const tdSx = {
-  fontStyle: "normal",
+const thSx = {
   fontWeight: "bold",
+  fontSize: "1.5rem",
+  lineHeight: "50px",
+  borderBottom: "1px solid #fbd385",
+  width: "100px",
+};
+const tdSx = {
+  fontWeight: "400",
   fontSize: "1.5rem",
   lineHeight: "50px",
   borderBottom: "1px solid #fbd385",

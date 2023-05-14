@@ -46,7 +46,6 @@ const SubmitButton = styled(Button)`
 const QuestionButton = styled(Button)`
   background-color: #fbd385;
   color: white;
-  font-weight: bold;
   width: 90px;
   height: 30px;
   margin-top: 10px;
@@ -63,7 +62,6 @@ const QuestionButton = styled(Button)`
 const ResetButton = styled(Button)`
   background-color: #bfbfbf;
   color: white;
-  font-weight: bold;
   width: 90px;
   height: 30px;
   margin-top: 10px;

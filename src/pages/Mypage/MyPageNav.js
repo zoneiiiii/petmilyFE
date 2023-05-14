@@ -4,12 +4,13 @@ import styled from "styled-components";
 import { MYPAGE } from "../../constants/PageURL";
 
 const ProfileSrc = "/images/product.png";
+const noProfile = "/images/emptyProfile.png";
 const MyPageNav = () => {
   return (
     <MyPageNavStyle className="MyPageNav">
       <img
         className="ProfileImg"
-        src={ProfileSrc}
+        src={ProfileSrc ? ProfileSrc : noProfile}
         alt="profile"
         width={"160px"}
         height={"160px"}
