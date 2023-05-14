@@ -3,11 +3,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import Loading from "../../../components/Loading/LoadingPage";
 import axios from "axios";
 import * as S from "./VolunteerNoticeModify.styled";
-import { TextField, Typography } from "@mui/material";
+import { TextField, Typography, ThemeProvider } from "@mui/material";
 import { SUPPORT } from "../../../constants/PageURL";
 
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
+import { CustomTheme } from "../../../assets/Theme/CustomTheme";
 
 const VolunteerReviewModify = () => {
   const [post, setPost] = useState(null);
@@ -73,89 +74,91 @@ const VolunteerReviewModify = () => {
         <Typography variant="subtitle3">봉사 후기 게시판</Typography>
       </S.TitleContainer>
       <S.Container>
-        <S.FormWrapper>
-          <form onSubmit={handleSubmit}>
-            <S.FormRow>
-              <TextField
-                label="제목"
-                value={title}
-                size="small"
-                fullWidth
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </S.FormRow>
-
-            <S.FormRow>
-              <S.ImageWrapper>
-                <span>이미지 첨부</span>
-                <S.CommonSpace />
-                <S.CommonButton component="label">
-                  사진 업로드
-                  <input type="file" hidden onChange={handleFileChange} />
-                </S.CommonButton>
-              </S.ImageWrapper>
-            </S.FormRow>
-
-            <S.FormRow>
-              {previewUrl && (
-                <S.PreviewWrapper>
-                  <img
-                    src={previewUrl}
-                    alt="미리보기"
-                    style={{ width: "150px" }}
-                  />
-                </S.PreviewWrapper>
-              )}
-            </S.FormRow>
-
-            <S.FormRow>
-              <S.EditorWrapper>
-                <CKEditor
-                  editor={ClassicEditor}
-                  data={content}
-                  onChange={(event, editor) => {
-                    const data = editor.getData();
-                    setContent(data);
-                  }}
-                  config={{
-                    toolbar: [
-                      "heading",
-                      "|",
-                      "bold",
-                      "italic",
-                      "link",
-                      "bulletedList",
-                      "numberedList",
-                      "|",
-                      "indent",
-                      "outdent",
-                      "|",
-                      "blockQuote",
-                      "insertTable",
-                      "mediaEmbed",
-                      "undo",
-                      "redo",
-                    ],
-                    className: "WriteEditor",
-                    placeholder: "내용을 입력하세요.",
-                  }}
+        <ThemeProvider theme={CustomTheme}>
+          <S.FormWrapper>
+            <form onSubmit={handleSubmit}>
+              <S.FormRow>
+                <TextField
+                  label="제목"
+                  value={title}
+                  size="small"
+                  fullWidth
+                  onChange={(e) => setTitle(e.target.value)}
                 />
-              </S.EditorWrapper>
-            </S.FormRow>
+              </S.FormRow>
 
-            <S.FormRow>
-              <S.ButtonGroup>
-                <S.WriteButton type="submit" variant="contained">
-                  글쓰기
-                </S.WriteButton>
-                <S.ButtonSpace />
-                <S.WriteButton onClick={handleCancel} variant="contained">
-                  취소
-                </S.WriteButton>
-              </S.ButtonGroup>
-            </S.FormRow>
-          </form>
-        </S.FormWrapper>
+              <S.FormRow>
+                <S.ImageWrapper>
+                  <span>이미지 첨부</span>
+                  <S.CommonSpace />
+                  <S.CommonButton component="label">
+                    사진 업로드
+                    <input type="file" hidden onChange={handleFileChange} />
+                  </S.CommonButton>
+                </S.ImageWrapper>
+              </S.FormRow>
+
+              <S.FormRow>
+                {previewUrl && (
+                  <S.PreviewWrapper>
+                    <img
+                      src={previewUrl}
+                      alt="미리보기"
+                      style={{ width: "150px" }}
+                    />
+                  </S.PreviewWrapper>
+                )}
+              </S.FormRow>
+
+              <S.FormRow>
+                <S.EditorWrapper>
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={content}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      setContent(data);
+                    }}
+                    config={{
+                      toolbar: [
+                        "heading",
+                        "|",
+                        "bold",
+                        "italic",
+                        "link",
+                        "bulletedList",
+                        "numberedList",
+                        "|",
+                        "indent",
+                        "outdent",
+                        "|",
+                        "blockQuote",
+                        "insertTable",
+                        "mediaEmbed",
+                        "undo",
+                        "redo",
+                      ],
+                      className: "WriteEditor",
+                      placeholder: "내용을 입력하세요.",
+                    }}
+                  />
+                </S.EditorWrapper>
+              </S.FormRow>
+
+              <S.FormRow>
+                <S.ButtonGroup>
+                  <S.WriteButton type="submit" variant="contained">
+                    글쓰기
+                  </S.WriteButton>
+                  <S.ButtonSpace />
+                  <S.WriteButton onClick={handleCancel} variant="contained">
+                    취소
+                  </S.WriteButton>
+                </S.ButtonGroup>
+              </S.FormRow>
+            </form>
+          </S.FormWrapper>
+        </ThemeProvider>
       </S.Container>
     </>
   );

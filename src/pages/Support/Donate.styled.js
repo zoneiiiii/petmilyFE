@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import BannerImg from "../../assets/images/Support/Donate/card1.jpg";
+import BannerImg from "../../assets/images/Support/Donate/DonateImg.jpg";
 
 const Container = styled.div`
-  // width: 80%;
   width: 70vw;
   margin: 0 auto;
   margin-top: 3%;
+  min-width: 1000px;
 `;
 
 const Banner = styled.div`

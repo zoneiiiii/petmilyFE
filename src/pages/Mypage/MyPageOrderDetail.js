@@ -97,10 +97,12 @@ const MyPageOrderDetail = () => {
                 <br />
                 연락처: {orderData.recipientTel}
                 <br />
-                우편번호: <br />
+                우편번호: {orderData.postal}
+                <br />
                 주소: {orderData.address}
                 <br />
-                상세주소: <br />
+                상세주소: {orderData.detailAddr}
+                <br />
                 배송 메모: {orderData.note}
               </TableCell>
             </TableRow>
@@ -154,10 +156,12 @@ const dummy = [
     note: "문 앞에 두고가세요.",
     recipient: "이길까",
     recipientTel: "010-1111-2222",
+    postal: 12345,
+    detailAddr: "101-1001",
   },
   {
     orderNum: 4,
-    productName: "마이프로틴 5kg",
+    productName: "저렴이 강아지 사료 5kg",
     cost: 49000,
     quantity: 10,
     orderDate: "2023-04-30",
@@ -167,6 +171,8 @@ const dummy = [
     note: "문 앞에 두고가세요.",
     recipient: "이길까",
     recipientTel: "010-1111-2222",
+    postal: 12345,
+    detailAddr: "101-1001",
   },
   {
     orderNum: 3,
@@ -180,6 +186,8 @@ const dummy = [
     note: "문 앞에 두고가세요.",
     recipient: "이길까",
     recipientTel: "010-1111-2222",
+    postal: 12345,
+    detailAddr: "101-1001",
   },
   {
     orderNum: 2,
@@ -193,6 +201,8 @@ const dummy = [
     note: "문 앞에 두고가세요.",
     recipient: "이길까",
     recipientTel: "010-1111-2222",
+    postal: 12345,
+    detailAddr: "101-1001",
   },
   {
     orderNum: 1,
@@ -206,6 +216,8 @@ const dummy = [
     note: "문 앞에 두고가세요.",
     recipient: "이길까",
     recipientTel: "010-1111-2222",
+    postal: 12345,
+    detailAddr: "101-1001",
   },
 ];
 
