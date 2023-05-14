@@ -5,11 +5,9 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-`;
-
-export const Logo = styled.img`
-  max-width: 200px;
-  height: auto;
+  width: 70vw;
+  min-width: 1000px;
+  margin: 0 auto;
 `;
 
 export const Line = styled.hr`
@@ -18,12 +16,20 @@ export const Line = styled.hr`
   margin: 1.5rem 0;
 `;
 
+export const MainTitle = styled.h1`
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1rem;
+`;
+
 export const Title = styled.h2`
   font-size: 1.5rem;
   font-weight: bold;
-  text-align: center;
-  width: 100%;
-  margin-bottom: 2%;
+  // text-align: center;
+  width: 30vw;
+  min-width: 500px;
+  margin-bottom: 1.5%;
 `;
 
 export const Form = styled.form`
@@ -34,9 +40,17 @@ export const Form = styled.form`
   align-items: center;
 `;
 
+export const InputWrapper = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+
 export const Field = styled.div`
   display: flex;
   align-items: center;
+  width: 30vw;
+  min-width: 500px;
   margin-bottom: 1rem;
 `;
 
@@ -44,6 +58,12 @@ export const Label = styled.label`
   font-size: 1.1rem;
   margin-right: 1rem;
   min-width: 100px;
+`;
+
+export const PayLabel = styled.label`
+  font-size: 1.1rem;
+  margin-right: 1rem;
+  min-width: 120px;
 `;
 
 export const InputAdornment = styled.span`
@@ -54,12 +74,17 @@ export const InputAdornment = styled.span`
 export const PaymentButtons = styled.div`
   display: flex;
   gap: 0.5rem;
-  margin-left: 4px;
 `;
 
 export const ButtonGroup = styled.div`
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-top: 2rem;
+  margin-top: 1rem;
+`;
+
+export const ErrorMsg = styled.p`
+  color: red;
+  text-align: left;
+  font-size: 14px;
 `;
