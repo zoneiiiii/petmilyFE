@@ -5,9 +5,10 @@ import { styled } from "@mui/material/styles";
 const SignInButton = styled(Button)`
   background-color: #fbd385;
   color: white;
-  width: 300px;
-  height: 25px;
+  width: 350px;
+  height: 35px;
   margin-top: 10px;
+  font-weight: bold;
   &:hover {
     background-color: #facc73;
   }
@@ -21,6 +22,7 @@ const CustomizedButton = styled(Button)`
   width: 90px;
   height: 30px;
   margin-top: 10px;
+  font-weight: bold;
   &:hover {
     background-color: #facc73;
   }
@@ -80,6 +82,22 @@ const WriteButton = styled(Button)`
   margin-top: 10px;
   margin-right: 10px;
   float: right;
+  &:hover {
+    background-color: #facc73;
+  }
+  &:focus {
+    background-color: #facc73;
+  }
+`;
+const AdoptButton = styled(Button)`
+  background-color: #fbd385;
+  color: white;
+  width: 90px;
+  height: 30px;
+  margin-top: 30px;
+  margin-right: 10px;
+  font-weight: bold;
+
   &:hover {
     background-color: #facc73;
   }
@@ -153,6 +171,15 @@ export default function CustomButton(props) {
         >
           {props.label}
         </WriteButton>
+      ) : value === "입양신청" ? (
+        <AdoptButton
+          value={value}
+          variant="contained"
+          onClick={props.onClick}
+          fullWidth
+        >
+          {props.label}
+        </AdoptButton>
       ) : (
         ""
       )}

@@ -1,5 +1,11 @@
 import "./Checklist.css";
+import { useNavigate } from "react-router-dom";
+import CustomButton from "../Login/CustomButton";
 function AdoptChecklist() {
+  const navigate = useNavigate();
+  const onClickBtn = () => {
+    navigate(-1); // 바로 이전 페이지로 이동, '/main' 등 직접 지정도 당연히 가능
+  };
   const iconStyle = {
     display: "flex",
     textAlign: "center",
@@ -46,7 +52,7 @@ function AdoptChecklist() {
         display: "flex",
         flexDirection: "column",
         width: "70%",
-        margin: "0 auto",
+        margin: "30px auto",
       }}
     >
       <div>
@@ -294,6 +300,7 @@ function AdoptChecklist() {
           </div>
         </div>
       </div>
+      <CustomButton onClick={onClickBtn} value="입양신청" label="확인" />
     </div>
   );
 }

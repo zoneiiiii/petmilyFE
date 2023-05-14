@@ -1,12 +1,8 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import AnimalListNav from "./AnimalListNav";
 import styled from "styled-components";
-import { MYPAGE } from "../../constants/PageURL";
-
-const NotShowNickName = [MYPAGE.MODIFY_INFO, MYPAGE.INQUIRY];
 
 const AnimalList = () => {
-  const location = useLocation();
   return (
     <MyPageLayout className="MyPageLayout">
       <AnimalListNav />
