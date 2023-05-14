@@ -99,7 +99,6 @@ const VolunteerReviewDetail = () => {
           {post.reviewCount}
         </S.TopViewCount>
       </S.TopInfo>
-      <S.horizon />
       <S.DetailMiddle>
         <div dangerouslySetInnerHTML={createMarkup(post.reviewContent)} />
       </S.DetailMiddle>
