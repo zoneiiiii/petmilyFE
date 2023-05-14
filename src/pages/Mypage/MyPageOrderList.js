@@ -193,7 +193,7 @@ const orderlist = [
   },
   {
     orderNum: 4,
-    productName: "마이 프로틴 5kg",
+    productName: "저렴이 강아지 사료 5kg",
     cost: 49000,
     quantity: 10,
     orderDate: "2023-04-30",

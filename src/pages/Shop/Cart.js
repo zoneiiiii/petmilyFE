@@ -14,7 +14,9 @@ import {
   IconButton,
   Button,
   Checkbox,
+  ThemeProvider,
 } from "@mui/material";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
 
 const Cart = () => {
   //데이터 초기값 설정
@@ -114,7 +116,7 @@ const Cart = () => {
   const shippingCost = totalPrice >= 50000 ? 0 : 2500;
 
   return (
-    <>
+    <ThemeProvider theme={CustomTheme}>
       <CartStyle>
         <h1>🛒 장바구니</h1>
         <Button className="prodDelete" onClick={handleDeleteSelected}>
@@ -255,7 +257,7 @@ const Cart = () => {
           </Link>
         </div>
       </CartStyle>
-    </>
+    </ThemeProvider>
   );
 };
 const CartStyle = styled.div`
@@ -278,7 +280,6 @@ const CartStyle = styled.div`
       background-color: #ffffff;
       color: #ffc149;
     }
-    font-weight: bold;
   }
   .order {
     width: 300px;
@@ -291,7 +292,6 @@ const CartStyle = styled.div`
     &:focus {
       background-color: #facc73;
     }
-    font-weight: bold;
   }
   .prodDelete {
     float: right;
@@ -304,7 +304,6 @@ const CartStyle = styled.div`
     &:focus {
       background-color: #facc73;
     }
-    font-weight: bold;
   }
   .plus_minus {
     color: #ff8282;

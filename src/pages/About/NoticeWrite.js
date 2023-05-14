@@ -26,7 +26,7 @@ const pageWidth = "80%";
 
 const NoticeWrite = () => {
   const navigate = useNavigate();
-
+  const fileList = []; // 업로드한 파일들을 저장하는 배열
   const [data, setData] = useState({
     no: null,
     memberNo: 1,
@@ -38,7 +38,37 @@ const NoticeWrite = () => {
     imgThumbnail: "",
   });
 
-  useEffect(() => console.log("re-rendering..."));
+  useEffect(() => console.log("re-rendering...", data, fileList));
+
+  function uploadAdapter(loader) {
+    return {
+      upload: () => {
+        console.log("loader:", loader);
+        return new Promise((resolve, reject) => {
+          const uploadFiles = Array.prototype.slice.call(loader.file); // 파일선택창에서 선택한 파일들
+
+          uploadFiles.forEach((uploadFile) => {
+            fileList.push(uploadFile);
+          });
+          // const body = new FormData();
+          // loader.file
+          //   .then((file) => {
+          //     body.append("uploadImg", file);
+          //     console.log("filename:", file.name);
+          //   })
+          //   .then((file) => {
+          //     console.log("body:", body.get("uploadImg"));
+          //   });
+        });
+      },
+    };
+  }
+
+  function uploadPlugin(editor) {
+    editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+      return uploadAdapter(loader);
+    };
+  }
 
   return (
     <ThemeProvider theme={CustomTheme}>
@@ -75,7 +105,7 @@ const NoticeWrite = () => {
                 <TextField
                   size="small"
                   fullWidth
-                  placeholder="제목을 입력하세요."
+                  // placeholder="제목을 입력하세요."
                 />
               </TableCell>
             </TableRow>
@@ -86,49 +116,24 @@ const NoticeWrite = () => {
                   fontWeight: 600,
                   textAlign: "left",
                   width: "60px",
+                  verticalAlign: "top",
                 }}
               >
                 내용
               </TableCell>
               <TableCell>
                 <CKEditor
+                  config={{
+                    extraPlugins: [uploadPlugin],
+                  }}
                   editor={ClassicEditor}
                   data={data.contents}
-                  onChange={(event, editor) => {
-                    setData({ ...data, contents: editor.getData() });
-                  }}
-                  config={{
-                    toolbar: [
-                      "heading",
-                      "|",
-                      "bold",
-                      "italic",
-                      "link",
-                      "bulletedList",
-                      "numberedList",
-                      "|",
-                      "indent",
-                      "outdent",
-                      "|",
-                      "blockQuote",
-                      "insertTable",
-                      "mediaEmbed",
-                      "undo",
-                      "redo",
-                    ],
-                    className: "WriteEditor",
-                    placeholder: "내용을 입력하세요.",
-                    extraStyles: `
-          .ck-placeholder {
-            color: #757575; /* MUI TextField의 텍스트 컬러와 동일하게 설정 */
-            font-family: inherit; /* 부모 요소의 폰트 패밀리와 동일하게 설정 */
-            font-size: inherit; /* 부모 요소의 폰트 크기와 동일하게 설정 */
-          }
-        `,
-                  }}
                   onReady={(editor) => {
                     // You can store the "editor" and use when it is needed.
                     console.log("Editor is ready to use!", editor);
+                  }}
+                  onChange={(event, editor) => {
+                    setData({ ...data, contents: editor.getData() });
                   }}
                   onBlur={(event, editor) => {
                     console.log("Blur.", editor);
@@ -162,10 +167,20 @@ const NoticeWrite = () => {
             </Button>
           </Box>
         </Box>
+        <Box>
+          <div dangerouslySetInnerHTML={{ __html: data.contents }}></div>
+        </Box>
       </Box>
     </ThemeProvider>
   );
 };
+
+const CustomCKEditor = styled(CKEditor)`
+  .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
+    min-height: 400px;
+    margin-bottom: 20px;
+  }
+`;
 
 const StyledLink = styled(Link)`
   text-decoration: none;

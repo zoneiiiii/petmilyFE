@@ -11,52 +11,73 @@ import { COMMUNITY } from "../../../constants/PageURL";
 
 const FreeDetail = () => {
     return (
-        <Container>
-            <Top>자유게시판</Top>
-            <Head>
-                <hr />
-                <p className="title">똘이를 찾았습니다ㅠㅠ</p>
-                <div className="subtitle">
-                    <p className="name">똘이 엄마</p>
-                    <p className="date">23.04.19 15:00:27</p>
-                    <p className="cnt">조회수: 31</p>
-                    <p className="comment">댓글: 3</p>
-                </div>
-                <hr /><br />
-            </Head>
-            <Body>
-                <img
-                    src="https://image.dongascience.com/Photo/2022/06/6982fdc1054c503af88bdefeeb7c8fa8.jpg"
-                    alt="img"
-                    style={{
-                        maxWidth: "100%",
-                        maxHeight: "100%",
-                        width: "auto !important",
-                        height: "auto",
-                    }}
-                />
-                <div>
-                    <br />
-                    도와주셔서 감사합니다ㅠㅠㅠ
-                </div>
-                <Link to={COMMUNITY.FREE} style={{ textDecoration: "none" }}>
-                    <CustomButton label="돌아가기" value="작성취소" />
-                </Link>
-            </Body>
+        <Section className="result">
+            <MainContainer className="result-container">
+                <Container>
+                    <Top>자유게시판</Top>
+                    <Head>
+                        <hr />
+                        <p className="title">똘이를 찾았습니다ㅠㅠ</p>
+                        <div className="subtitle">
+                            <p className="name">똘이 엄마</p>
+                            <p className="date">23.04.19 15:00:27</p>
+                            <p className="cnt">조회수: 31 · 댓글: 3</p>
+                        </div>
+                        <hr /><br />
+                    </Head>
+                    <Body>
+                        <img
+                            src="https://image.dongascience.com/Photo/2022/06/6982fdc1054c503af88bdefeeb7c8fa8.jpg"
+                            alt="img"
+                            style={{
+                                maxWidth: "100%",
+                                maxHeight: "100%",
+                                width: "auto !important",
+                                height: "auto",
+                            }}
+                        />
+                        <div>
+                            <br />
+                            도와주셔서 감사합니다ㅠㅠㅠ
+                        </div>
+                        <Link to={COMMUNITY.FREE} style={{ textDecoration: "none" }}>
+                            <CustomButton label="돌아가기" value="작성취소" />
+                        </Link>
+                    </Body>
 
 
-            <Comments>
-                <hr />
-                <p className="comment">댓글</p>
-                <Comment />
-            </Comments>
-        </Container>
+                    <Comments>
+                        <hr />
+                        <p className="comment">댓글</p>
+                        <Comment />
+                    </Comments>
+                </Container>
+            </MainContainer>
+        </Section>
     );
 }
 
+const Section = styled.section`
+  background: #f8f9fa;
+  padding: 30px 0 40px 0;
+`
+
+const MainContainer = styled.div`
+  width: 60vw;
+  // width: 1150px;
+  max-width: 1150px;
+  min-width: 790px;
+  border-radius: 8px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(233, 236, 239);
+  border-image: initial;
+  margin: 0px auto 20px;
+  background: rgb(255, 255, 255);
+`
+
 const Container = styled.div`
-max-width: 65vw;
-margin: auto;
+margin: 0 30px;
 `;
 
 const Top = styled.h1`
@@ -77,14 +98,14 @@ const Head = styled.div`
         display: flex;
     flex-wrap: wrap;
     .name {
-        width: 10%;
+        width: 15%;
     }
     .date {
-        width: 70%;
+        width: 65%;
     }
     .cnt {
         text-align: right;
-        width: 15%;
+        width: 20%;
     }
     .comment {
         text-align: right;
@@ -98,7 +119,6 @@ const Body = styled.div`
 
 const Comments = styled.div`
     margin: 150px auto 20px auto;
-    max-width: 70vw;
     font-size: 2rem;
     font-weight: 700;
 `;

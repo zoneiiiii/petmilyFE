@@ -10,18 +10,11 @@ import { tableCellClasses } from "@mui/material/TableCell";
 import { Pagination } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import CustomButton from "../Login/CustomButton";
-import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { MYPAGE } from "../../constants/PageURL";
-
-const theme = createTheme({
-  palette: {
-    type: "light",
-    primary: {
-      main: "#FBD385",
-    },
-  },
-});
+import { ThemeProvider, Typography } from "@mui/material";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -97,13 +90,17 @@ const MyPageQnA = () => {
 
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <MyPageStyle>
-          <div className="navTitle">
-            <h5>1:1 문의</h5>
-          </div>
-        </MyPageStyle>
-        <Grid sx={{ width: "70vw" }}>
+      <ThemeProvider theme={CustomTheme}>
+        <Typography
+          className="myOrderListTitle"
+          sx={titleSx}
+          border={3}
+          borderColor="#ffbd59"
+          mb={4}
+        >
+          1:1 문의
+        </Typography>
+        <Grid sx={{ width: "70vw", height: "50vh" }}>
           <Table
             sx={{
               mt: 5,
@@ -199,15 +196,13 @@ const MyPageQnA = () => {
   );
 };
 
-const MyPageStyle = styleds.div`
-  .navTitle {
-    border: 1px solid #fbd385;
-    width: 200px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-`;
+const titleSx = {
+  width: "200px",
+  textAlign: "center",
+  fontStyle: "normal",
+  fontWeight: "bold",
+  fontSize: "1.5rem",
+  lineHeight: "50px",
+};
 
 export default MyPageQnA;

@@ -11,6 +11,8 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { MYPAGE } from "../../constants/PageURL";
+import { ThemeProvider, Typography } from "@mui/material";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
 
 //제목, 내용, 멤버num, 답변상태, boardid, boardnum, 이미지, 날짜
 // const [data, setData] = useState({
@@ -50,12 +52,16 @@ const MyPageQnADetail = () => {
   }, [id]);
 
   return (
-    <>
-      <MyPageStyle>
-        <div className="navTitle">
-          <h5>1:1 문의</h5>
-        </div>
-      </MyPageStyle>
+    <ThemeProvider theme={CustomTheme}>
+      <Typography
+        className="myOrderListTitle"
+        sx={titleSx}
+        border={3}
+        borderColor="#ffbd59"
+        mb={4}
+      >
+        1:1 문의
+      </Typography>
       <Grid style={{ width: "70vw" }}>
         <Table sx={{ mt: 1 }}>
           <TableHead>
@@ -63,7 +69,7 @@ const MyPageQnADetail = () => {
               <TableCell colSpan={2}></TableCell>
             </TableRow>
             <TableRow>
-              <TableCell sx={{ width: 850, fontWeight: "bold" }}>
+              <TableCell sx={{ width: 900, fontWeight: "bold" }}>
                 {qnaData.subject}
               </TableCell>
               <TableCell sx={{ color: "lightgray" }}>{qnaData.date}</TableCell>
@@ -112,20 +118,9 @@ const MyPageQnADetail = () => {
           <CustomButton label="목록으로" value="목록으로" />
         </Link>
       </Grid>
-    </>
+    </ThemeProvider>
   );
 };
-const MyPageStyle = styled.div`
-  .navTitle {
-    border: 1px solid #fbd385;
-    width: 200px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-`;
-
 const dummy = [
   {
     num: 7,
@@ -261,4 +256,12 @@ const dummy = [
     qnaStatus: "답변완료",
   },
 ];
+const titleSx = {
+  width: "200px",
+  textAlign: "center",
+  fontStyle: "normal",
+  fontWeight: "bold",
+  fontSize: "1.5rem",
+  lineHeight: "50px",
+};
 export default MyPageQnADetail;

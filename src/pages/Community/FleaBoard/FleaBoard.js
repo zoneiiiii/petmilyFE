@@ -11,8 +11,8 @@ function createData(num, boardId, subject, writer, cost, like, content, views, d
 
 const items = [
     createData('001', 'flea', '캣타워캣타워캣타워캣타워캣타워캣타워캣타워캣타워캣타워캣타워캣타워캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('002', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('003', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
+    createData('002', 'flea', '사료', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
+    createData('003', 'flea', '캣휠', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
     createData('004', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
     createData('005', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
     createData('006', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
@@ -37,10 +37,10 @@ const items = [
 
 const FleaBoard = () => {
     const navigate = useNavigate();
-    const [visibleCount, setVisibleCount] = React.useState(9);
+    const [visibleCount, setVisibleCount] = React.useState(9);  // 더보기 기능
 
     const handleLoadMore = () => {
-        setVisibleCount(visibleCount + 6);
+        setVisibleCount(visibleCount + 6);  // 더보기 클릭시 추가되는 아이템 개수
     };
 
     const visibleItems = items.slice(0, visibleCount);

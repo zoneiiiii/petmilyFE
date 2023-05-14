@@ -56,7 +56,11 @@ export const CustomTheme = createTheme({
       // focusOpacity: 0.8,
       // activatedOpacity: 0.8,
     },
-    divider: "#fbd385",
+    // divider: "#fbd385",
     actionDisabled: "#fbd385",
+  },
+  typography: {
+    fontFamily: "GmarketSansMedium",
+    // 다른 폰트 스타일 속성도 추가할 수 있습니다.
   },
 });

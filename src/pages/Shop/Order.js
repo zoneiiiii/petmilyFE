@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import React from "react";
 import { useState, useCallback } from "react";
 import styled from "styled-components";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import {
   Table,
   TableBody,
@@ -17,16 +17,7 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { useDaumPostcodePopup } from "react-daum-postcode";
-
-//테마 색상 설정
-const theme = createTheme({
-  palette: {
-    type: "light",
-    primary: {
-      main: "#FBD385",
-    },
-  },
-});
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
 
 const Order = () => {
   //필수 항목 입력 상태 확인
@@ -256,7 +247,7 @@ const Order = () => {
   return (
     <>
       <OrderStyle>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={CustomTheme}>
           <h1>주문/결제</h1>
           <Table>
             <TableBody>
@@ -436,7 +427,6 @@ const Order = () => {
                     }
                     onClick={() => paymentSelect("신용카드")}
                     sx={{
-                      fontWeight: "bold",
                       borderColor: "#FBD385",
                       mr: 2,
                       color:
@@ -458,7 +448,6 @@ const Order = () => {
                     }
                     onClick={() => paymentSelect("계좌이체")}
                     sx={{
-                      fontWeight: "bold",
                       borderColor: "#FBD385",
                       mr: 2,
                       color:
@@ -481,7 +470,6 @@ const Order = () => {
                     size="small"
                     onClick={() => paymentSelect("카카오페이")}
                     sx={{
-                      fontWeight: "bold",
                       borderColor: "#FBD385",
                       mr: 2,
                       p: "6px 16px",
@@ -560,7 +548,6 @@ const OrderStyle = styled.div`
     width: 300px;
     background-color: #fbd385;
     color: white;
-    font-weight: bold;
     margin: 50px auto;
     &:hover {
       background-color: #facc73;
@@ -572,7 +559,6 @@ const OrderStyle = styled.div`
   .address {
     background-color: #fbd385;
     color: white;
-    font-weight: bold;
     margin-left: 10px;
     &:hover {
       background-color: #facc73;
