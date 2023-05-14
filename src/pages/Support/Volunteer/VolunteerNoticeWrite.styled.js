@@ -110,4 +110,8 @@ export const EditorWrapper = styled.div`
     min-height: 500px;
     width: 700px;
   }
+
+  .ck.ck-editor__editable:not(.ck-editor__nested-editable):focus {
+    border-color: #fbd385;
+  }
 `;
