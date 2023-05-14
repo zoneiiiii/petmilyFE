@@ -120,7 +120,7 @@ const Body = styled.div`
 `;
 
 const Comments = styled.div`
-    margin: 150px auto 20px auto;
+    // margin: 150px auto 20px auto;
     font-size: 2rem;
     font-weight: 700;
 `;
