@@ -1,6 +1,6 @@
 import "./join.css";
 import axios from "axios";
-import React, { useRef } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import styled from "styled-components";
 import TextField from "@mui/material/TextField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -9,6 +9,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import FormHelperText from "@mui/material/FormHelperText";
 
 const Button = styled.button`
   width: 300px;
@@ -60,8 +61,14 @@ const Inputbox = styled.div`
 const InputRadio = styled.div`
   vertical-align: middle;
 `;
-
 const Join = () => {
+  const [ID, setID] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmpassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [phonenumber, setPhonenumber] = useState("");
+
   const IDRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
@@ -72,6 +79,16 @@ const Join = () => {
   const phonenumberRef = useRef();
   const addressRef = useRef();
   const genderRef = useRef();
+
+  const [IDError, setIDError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [nicknameError, setNicknameError] = useState("");
+  const [dateOfBirthError, setDateOfBirthError] = useState("");
+  const [phonenumberError, setPhonenumberError] = useState("");
+  const [addressError, setAddressError] = useState("");
 
   const handleFormSubmit = () => {
     axios
@@ -89,7 +106,7 @@ const Join = () => {
       .then((res) => {
         const { data } = res;
         if (data === 0) {
-          alert("이미 사용 중인 아이디입니다.");
+          setIDError("이미 사용중인 아이디입니다.");
           IDRef.current.querySelector("input").value = "";
         } else {
           alert("회원가입이 완료되었습니다.\n로그인 화면으로 이동합니다.");
@@ -101,72 +118,130 @@ const Join = () => {
       });
   };
 
-  const handleButtonClick = (e) => {
-    // console.log(
-    //   IDRef.current.querySelector("input").value,
-    //   passwordRef.current.querySelector("input").value,
-    //   confirmPasswordRef.current.querySelector("input").value,
-    //   emailRef.current.querySelector("input").value,
-    //   nameRef.current.querySelector("input").value,
-    //   nicknameRef.current.querySelector("input").value,
-    //   dateOfBirthRef.current.querySelector("input").value,
-    //   phonenumberRef.current.querySelector("input").value,
-    //   addressRef.current.querySelector("input").value,
-    //   genderRef.current.querySelector("input").value
-    // );
-    if (
-      !IDRef?.current?.querySelector("input").value ||
-      !passwordRef?.current?.querySelector("input").value ||
-      !confirmPasswordRef?.current?.querySelector("input").value ||
-      !emailRef?.current?.querySelector("input").value ||
-      !nameRef?.current?.querySelector("input").value ||
-      !nicknameRef?.current?.querySelector("input").value ||
-      !dateOfBirthRef?.current?.querySelector("input").value ||
-      !phonenumberRef?.current?.querySelector("input").value ||
-      !addressRef?.current?.querySelector("input").value
-    ) {
-      alert("입력하지 않은 항목이 존재합니다.");
-      return;
-    }
-
+  const onChangeId = useCallback((e) => {
     const IDRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{6,15}$/;
+    setID(e.target.value);
     if (!IDRegex.test(IDRef.current.querySelector("input").value)) {
-      alert(
-        "아이디는 6자 이상, 15자 이하의 영어 소문자와 숫자가 포함되어야 합니다."
-      );
-      return;
+      setIDError("숫자+영문자 조합으로 6~15자리로 입력해주세요!");
+    } else {
+      setIDError("");
     }
+  }, []);
 
+  const onChangepassword = useCallback((e) => {
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,20}$/;
+    setPassword(e.target.value);
     if (!passwordRegex.test(passwordRef.current.querySelector("input").value)) {
-      alert(
-        "비밀번호는 8자 이상, 20자 이하의 영어 소문자와 숫자가 포함되어야 합니다."
+      setPasswordError(
+        "숫자+영문자+특수문자 조합으로 8~20자리로 입력해주세요!"
       );
-      return;
+    } else {
+      setPasswordError("");
     }
+  }, []);
 
+  const onChangeEmail = useCallback((e) => {
     const emailRegex = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
-    if (!emailRegex.test(emailRef.current.querySelector("input").value)) {
-      alert("이메일 형식이 올바르지 않습니다.");
-      return;
-    }
+    const emailCurrent = e.target.value;
+    setEmail(emailCurrent);
 
+    if (!emailRegex.test(emailCurrent)) {
+      setEmailError("이메일 형식을 다시 확인해주세요.");
+    } else {
+      setEmailError("");
+    }
+  }, []);
+
+  const onChangePhone = useCallback((e) => {
     const phonenumberRegex = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/;
-    if (
-      !phonenumberRegex.test(
-        phonenumberRef.current.querySelector("input").value
-      )
-    ) {
-      alert("전화번호 형식이 올바르지 않습니다.");
-      return;
-    }
+    const phoneCurrent = e.target.value;
+    setPhonenumber(phoneCurrent);
 
-    if (
-      passwordRef.current.querySelector("input").value !==
-      confirmPasswordRef.current.querySelector("input").value
-    ) {
-      alert("두 비밀번호가 일치하지 않습니다.");
-      return;
+    if (!phonenumberRegex.test(phoneCurrent)) {
+      setPhonenumberError("전화번호를 다시 확인해주세요.");
+    } else {
+      setPhonenumberError("");
+    }
+  }, []);
+
+  const onChangeNickname = useCallback((e) => {
+    setNickname(e.target.value);
+    if (e.target.value.length < 2 || e.target.value.length > 5) {
+      setNicknameError("2글자 이상 5글자 미만으로 입력해주세요.");
+    } else {
+      setNicknameError("");
+    }
+  }, []);
+
+  const onChangePasswordConfirm = useCallback(
+    (e) => {
+      const passwordConfirmCurrent = e.target.value;
+      setConfirmPassword(passwordConfirmCurrent);
+
+      if (password === passwordConfirmCurrent) {
+        setConfirmPasswordError("");
+      } else {
+        setConfirmPasswordError("비밀번호가 일치하지 않습니다.");
+      }
+    },
+    [password]
+  );
+
+  const handleButtonClick = (e) => {
+    if (true) {
+      if (!IDRef?.current?.querySelector("input").value) {
+        setIDError("아이디를 입력해주세요.");
+      } else {
+        setIDError("");
+      }
+
+      if (!passwordRef?.current?.querySelector("input").value) {
+        setPasswordError("패스워드를 입력해주세요.");
+      } else {
+        setPasswordError("");
+      }
+
+      if (!confirmPasswordRef?.current?.querySelector("input").value) {
+        setConfirmPasswordError("패스워드 확인을 입력해주세요.");
+      } else {
+        setConfirmPasswordError("");
+      }
+
+      if (!emailRef?.current?.querySelector("input").value) {
+        setEmailError("이메일을 입력해주세요.");
+      } else {
+        setEmailError("");
+      }
+
+      if (!nameRef?.current?.querySelector("input").value) {
+        setNameError("이름을 입력해주세요.");
+      } else {
+        setNameError("");
+      }
+
+      if (!nicknameRef?.current?.querySelector("input").value) {
+        setNicknameError("닉네임을 입력해주세요.");
+      } else {
+        setNicknameError("");
+      }
+
+      if (!dateOfBirthRef?.current?.querySelector("input").value) {
+        setDateOfBirthError("생년월일을 입력해주세요.");
+      } else {
+        setDateOfBirthError("");
+      }
+
+      if (!phonenumberRef?.current?.querySelector("input").value) {
+        setPhonenumberError("전화번호를 입력해주세요.");
+      } else {
+        setPhonenumberError("");
+      }
+
+      if (!addressRef?.current?.querySelector("input").value) {
+        setAddressError("주소를 입력해주세요.");
+      } else {
+        setAddressError("");
+      }
     }
 
     handleFormSubmit();
@@ -175,12 +250,8 @@ const Join = () => {
   return (
     <>
       <Section>
-        {/*<form onSubmit={handleFormSubmit} ref={formRef}>*/}
         <div>
-          <Joinup>
-            <br />
-            회원가입
-          </Joinup>
+          <Joinup>회원가입</Joinup>
 
           <div className="form-wrapper">
             <InputContainer>
@@ -190,6 +261,7 @@ const Join = () => {
                 variant="standard"
                 className="input-item"
                 name="user-id"
+                onChange={onChangeId}
                 ref={IDRef}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -199,7 +271,11 @@ const Join = () => {
                 }}
               />
             </InputContainer>
-
+            <FormHelperText
+              sx={{ color: "red", marginLeft: "140px", fontSize: "0.9rem" }}
+            >
+              {IDError}
+            </FormHelperText>
             <InputContainer>
               <InputName>PW</InputName>
               <TextField
@@ -208,6 +284,7 @@ const Join = () => {
                 className="input-item"
                 name="user-pw"
                 ref={passwordRef}
+                onChange={onChangepassword}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     const target =
@@ -217,6 +294,11 @@ const Join = () => {
                 }}
               />
             </InputContainer>
+            <FormHelperText
+              sx={{ color: "red", marginLeft: "140px", fontSize: "0.9rem" }}
+            >
+              {passwordError}
+            </FormHelperText>
 
             <InputContainer>
               <InputName>PW 확인</InputName>
@@ -226,6 +308,7 @@ const Join = () => {
                 className="input-item"
                 name="chk-user-pw"
                 ref={confirmPasswordRef}
+                onChange={onChangePasswordConfirm}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     const target = emailRef.current.querySelector("input");
@@ -234,6 +317,11 @@ const Join = () => {
                 }}
               />
             </InputContainer>
+            <FormHelperText
+              sx={{ color: "red", marginLeft: "140px", fontSize: "0.9rem" }}
+            >
+              {confirmPasswordError}
+            </FormHelperText>
 
             <InputContainer>
               <InputName>이메일</InputName>
@@ -243,6 +331,7 @@ const Join = () => {
                 className="input-item"
                 name="user-email"
                 ref={emailRef}
+                onChange={onChangeEmail}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     const target = nameRef.current.querySelector("input");
@@ -251,6 +340,11 @@ const Join = () => {
                 }}
               />
             </InputContainer>
+            <FormHelperText
+              sx={{ color: "red", marginLeft: "140px", fontSize: "0.9rem" }}
+            >
+              {emailError}
+            </FormHelperText>
 
             <InputContainer>
               <InputName>이름</InputName>
@@ -269,6 +363,11 @@ const Join = () => {
                 }}
               />
             </InputContainer>
+            <FormHelperText
+              sx={{ color: "red", marginLeft: "140px", fontSize: "0.9rem" }}
+            >
+              {nameError}
+            </FormHelperText>
 
             <InputContainer>
               <InputName>닉네임</InputName>
@@ -278,8 +377,14 @@ const Join = () => {
                 className="input-item"
                 name="user-nickname"
                 ref={nicknameRef}
+                onChange={onChangeNickname}
               />
             </InputContainer>
+            <FormHelperText
+              sx={{ color: "red", marginLeft: "140px", fontSize: "0.9rem" }}
+            >
+              {nicknameError}
+            </FormHelperText>
 
             <InputContainer>
               <InputName>생년월일</InputName>
@@ -301,6 +406,11 @@ const Join = () => {
                 </LocalizationProvider>
               </Inputbox>
             </InputContainer>
+            <FormHelperText
+              sx={{ color: "red", marginLeft: "140px", fontSize: "0.9rem" }}
+            >
+              {dateOfBirthError}
+            </FormHelperText>
 
             <InputContainer>
               <InputName>전화번호</InputName>
@@ -309,6 +419,7 @@ const Join = () => {
                 variant="standard"
                 className="input-item"
                 ref={phonenumberRef}
+                onChange={onChangePhone}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     const target = addressRef.current.querySelector("input");
@@ -318,6 +429,11 @@ const Join = () => {
                 name="user-number"
               />
             </InputContainer>
+            <FormHelperText
+              sx={{ color: "red", marginLeft: "140px", fontSize: "0.9rem" }}
+            >
+              {phonenumberError}
+            </FormHelperText>
 
             <InputContainer>
               <InputName>주소</InputName>
@@ -329,6 +445,11 @@ const Join = () => {
                 name="user-address"
               />
             </InputContainer>
+            <FormHelperText
+              sx={{ color: "red", marginLeft: "140px", fontSize: "0.9rem" }}
+            >
+              {addressError}
+            </FormHelperText>
 
             <InputContainer
               className="form-center"

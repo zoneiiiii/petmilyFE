@@ -26,11 +26,7 @@ const Main = () => {
         <S.TextContainer>
           보호소에서 기다리고 있는 아이들의 새로운 가족이 되어주세요!
         </S.TextContainer>
-        <MainCard
-          image={Card1}
-          buttonText="보호소 둘러보기"
-          link="/adopt/"
-        />
+        <MainCard image={Card1} buttonText="보호소 둘러보기" link="/adopt/" />
       </S.CardContainer>
       <S.CardContainer2>
         <S.SectionContainer>따뜻한 경험을 공유 해주세요</S.SectionContainer>
