@@ -29,7 +29,7 @@ const Main = () => {
         <MainCard
           image={Card1}
           buttonText="보호소 둘러보기"
-          link="/adopt/animal"
+          link="/adopt/"
         />
       </S.CardContainer>
       <S.CardContainer2>

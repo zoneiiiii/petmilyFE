@@ -11,56 +11,75 @@ import { COMMUNITY } from "../../../constants/PageURL";
 
 const FindDetail = () => {
   return (
-    <Container>
-      <Top>목격 제보 게시판</Top>
-      <Head>
-        <hr />
-        <p className="title">골든 리트리버 주인을 찾습니다.</p>
-        <div className="subtitle">
-          <p className="name">작성자: 똘이 엄마</p>
-          <p className="date">23.04.19 15:00:27</p>
-          <p className="cnt">조회수: 31</p>
-          <p className="comment">댓글: 3</p>
-        </div>
-        <hr /><br />
-      </Head>
-      <Body>
-        <img
-          src="http://placeimg.com/300/300/animals/sepia"
-          alt="img"
-          style={{
-            maxWidth: "100%",
-            maxHeight: "100%",
-            width: "auto !important",
-            height: "auto",
-          }}
-        />
-        <div>
-          <br />
-          <p>#목격지역: 서울</p>
-          <p>#상세지역: 신도림</p>
-          <p>#추정 종: 리트리버</p>
-          <p>똘이를 보신 분들은 010-1234-5925로 연락 부탁드리겠습니다ㅠㅠㅠ</p>
-          <p>사례금은 부족하지 않게 드리겠습니다ㅠㅠㅠ</p>
-        </div>
-        <Link to={COMMUNITY.FIND} style={{ textDecoration: "none" }}>
-          <CustomButton label="돌아가기" value="작성취소" />
-        </Link>
-      </Body>
+    <Section className="result">
+      <MainContainer className="result-container">
+        <Container>
+          <Top>목격 제보 게시판</Top>
+          <Head>
+            <hr />
+            <p className="title">골든 리트리버 주인을 찾습니다.</p>
+            <div className="subtitle">
+              <p className="name">똘이 엄마</p>
+              <p className="date">23.04.19 15:00:27</p>
+              <p className="cnt">조회수: 31 · 댓글: 3</p>
+            </div>
+            <hr /><br />
+          </Head>
+          <Body>
+            <img
+              src="http://placeimg.com/300/300/animals/sepia"
+              alt="img"
+              style={{
+                maxWidth: "100%",
+                maxHeight: "100%",
+                width: "auto !important",
+                height: "auto",
+              }}
+            />
+            <div>
+              <br />
+              <p>#목격지역: 서울</p>
+              <p>#상세지역: 신도림</p>
+              <p>#추정 종: 리트리버</p>
+              <p>똘이를 보신 분들은 010-1234-5925로 연락 부탁드리겠습니다ㅠㅠㅠ</p>
+              <p>사례금은 부족하지 않게 드리겠습니다ㅠㅠㅠ</p>
+            </div>
+            <Link to={COMMUNITY.FIND} style={{ textDecoration: "none" }}>
+              <CustomButton label="돌아가기" value="작성취소" />
+            </Link>
+          </Body>
 
 
-      <Comments>
-        <hr />
-        <p className="comment">댓글</p>
-        <Comment />
-      </Comments>
-    </Container>
+          <Comments>
+            <hr />
+            <p className="comment">댓글</p>
+            <Comment />
+          </Comments>
+        </Container>
+      </MainContainer></Section>
   );
 }
+const Section = styled.section`
+  background: #f8f9fa;
+  padding: 30px 0 40px 0;
+`
+
+const MainContainer = styled.div`
+  width: 60vw;
+  // width: 1150px;
+  max-width: 1150px;
+  min-width: 790px;
+  border-radius: 8px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(233, 236, 239);
+  border-image: initial;
+  margin: 0px auto 20px;
+  background: rgb(255, 255, 255);
+`
 
 const Container = styled.div`
-max-width: 65vw;
-margin: auto;
+margin: 30px;
 `;
 
 const Top = styled.h1`
@@ -81,14 +100,14 @@ const Head = styled.div`
         display: flex;
     flex-wrap: wrap;
     .name {
-        width: 10%;
+        width: 15%;
     }
     .date {
-        width: 70%;
+        width: 60%;
     }
     .cnt {
         text-align: right;
-        width: 15%;
+        width: 25%;
     }
     .comment {
         text-align: right;
@@ -102,7 +121,6 @@ const Body = styled.div`
 
 const Comments = styled.div`
     margin: 150px auto 20px auto;
-    max-width: 70vw;
     font-size: 2rem;
     font-weight: 700;
 `;

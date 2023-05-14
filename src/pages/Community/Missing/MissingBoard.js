@@ -72,63 +72,70 @@ const MissingBoard = () => {
   /* axios end */
 
   return (
-    <ThemeProvider theme={theme}>
-      <ContainerBox>
-        <Top>실종 동물 게시판</Top>
-        <hr />
+    <Section className="result">
+      <MainContainer className="result-container">
+        <ThemeProvider theme={theme}>
+          <ContainerBox>
+            <Top>실종 동물 게시판</Top>
 
-        <Container sx={{ py: 12 }} maxWidth="lg">
-          <SearchContainer>
-            <SearchBar />
-          </SearchContainer>
-          <Grid container spacing={4} columns={8}>
-            {dummy.map((card, index) => {
-              if (
-                page * itemsPerPage <= index ||
-                (page - 1) * itemsPerPage > index
-              ) {
-                return <></>;
-              }
-              return (
-                <Grid item xs={10} sm={6} md={2}>
-                  <Link to="/board/missing/1" style={{ textDecoration: "none" }}>
-                    <Card
-                      key={card.id}
-                      sx={{
-                        height: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                      }}
-                    >
-                      <CardImage src="http://placeimg.com/300/300/animals/sepia" />
-                      <div>
-                        <CardTitle>{card.title}</CardTitle>
-                        <CardWritter>{card.writter}</CardWritter>
-                        <CardCount>조회 {card.count}</CardCount>
-                      </div>
-                    </Card>
-                  </Link>
-                </Grid>
-              );
-            })}
-          </Grid>
-          <Link className="button" to={COMMUNITY.MISSING_WRITE}>
-            <CustomButton label="글쓰기" value="글쓰기" />
-          </Link>
-        </Container>
-        <Pagination
-          color="primary"
-          page={page}
-          count={maxPageNum}
-          onChange={handleChange}
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-        />
+            <Container sx={{ py: '30px' }} maxWidth="60vw">
+              <SearchContainer>
+                <SearchBar />
+              </SearchContainer>
+              <Grid container spacing={4} columns={8}>
+                {dummy.map((card, index) => {
+                  if (
+                    page * itemsPerPage <= index ||
+                    (page - 1) * itemsPerPage > index
+                  ) {
+                    return <></>;
+                  }
+                  return (
+                    <Grid item xs={10} sm={6} md={2}>
+                      <Link to="/board/missing/1" style={{ textDecoration: "none" }}>
+                        <Card
+                          key={card.id}
+                          sx={{
+                            height: "100%",
+                            display: "flex",
+                            flexDirection: "column",
+                          }}
+                        >
+                          <CardImage src="http://placeimg.com/300/300/animals/sepia" />
+                          <div>
+                            <CardTitle>{card.title}</CardTitle>
+                            <CardWritter>{card.writter}</CardWritter>
+                            <CardCount>조회 {card.count}</CardCount>
+                          </div>
+                        </Card>
+                      </Link>
+                    </Grid>
+                  );
+                })}
+              </Grid>
+              <Link className="button" to={COMMUNITY.MISSING_WRITE}>
+                <CustomButton label="글쓰기" value="글쓰기" />
+              </Link>
+            </Container>
 
-      </ContainerBox >
-    </ThemeProvider>
+
+            <Pagination
+              color="primary"
+              page={page}
+              count={maxPageNum}
+              onChange={handleChange}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                margin: '50px 0 0 0px'
+              }}
+            />
+
+          </ContainerBox >
+        </ThemeProvider>
+
+      </MainContainer>
+    </Section >
   );
 };
 
@@ -140,6 +147,25 @@ const theme = createTheme({
     },
   },
 });
+
+const Section = styled.section`
+  background: #f8f9fa;
+  padding: 30px 0 40px 0;
+`
+
+const MainContainer = styled.div`
+  width: 60vw;
+  // width: 1150px;
+  max-width: 1150px;
+  min-width: 790px;
+  border-radius: 8px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(233, 236, 239);
+  border-image: initial;
+  margin: 0px auto 20px;
+  background: rgb(255, 255, 255);
+`
 
 const Top = styled.h1`
       font-size: 2rem;
@@ -167,9 +193,9 @@ const CardTitle = styled.p`
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-        `;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      `;
 
 const CardWritter = styled.p`
       font-size: 14px;
@@ -179,14 +205,14 @@ const CardWritter = styled.p`
       `;
 
 const CardCount = styled.p`
-font-size: 14px;
-color: #888;
-float: right;
-margin-right: 10px;
-`
+      font-size: 14px;
+      color: #888;
+      float: right;
+      margin-right: 10px;
+      `
 
 const ContainerBox = styled.div`
-`
+      `
 const CardBoxList = styled.div``
 const CardBox = styled.div``
 

@@ -72,63 +72,68 @@ const FindBoard = () => {
     /* axios end */
 
     return (
-        <ThemeProvider theme={theme}>
-            <ContainerBox>
-                <Top>목격 제보 게시판</Top>
-                <hr />
+        <Section className="result">
+            <MainContainer className="result-container">
+                <ThemeProvider theme={theme}>
+                    <ContainerBox>
+                        <Top>목격 제보 게시판</Top>
 
-                <Container sx={{ py: 12 }} maxWidth="lg">
-                    <SearchContainer>
-                        <SearchBar />
-                    </SearchContainer>
-                    <Grid container spacing={4} columns={8}>
-                        {dummy.map((card, index) => {
-                            if (
-                                page * itemsPerPage <= index ||
-                                (page - 1) * itemsPerPage > index
-                            ) {
-                                return <></>;
-                            }
-                            return (
-                                <Grid item xs={10} sm={6} md={2}>
-                                    <Link to="/board/find/1" style={{ textDecoration: "none" }}>
-                                        <Card
-                                            key={card.id}
-                                            sx={{
-                                                height: "100%",
-                                                display: "flex",
-                                                flexDirection: "column",
-                                            }}
-                                        >
-                                            <CardImage src="http://placeimg.com/300/300/animals/sepia" />
-                                            <div>
-                                                <CardTitle>{card.title}</CardTitle>
-                                                <CardWritter>{card.writter}</CardWritter>
-                                                <CardCount>조회 {card.count}</CardCount>
-                                            </div>
-                                        </Card>
-                                    </Link>
-                                </Grid>
-                            );
-                        })}
-                    </Grid>
-                    <Link className="button" to={COMMUNITY.FIND_WRITE}>
-                        <CustomButton label="글쓰기" value="글쓰기" />
-                    </Link>
-                </Container>
-                <Pagination
-                    color="primary"
-                    page={page}
-                    count={maxPageNum}
-                    onChange={handleChange}
-                    sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                    }}
-                />
+                        <Container sx={{ py: '30px' }} maxWidth="60vw">
+                            <SearchContainer>
+                                <SearchBar />
+                            </SearchContainer>
+                            <Grid container spacing={4} columns={8}>
+                                {dummy.map((card, index) => {
+                                    if (
+                                        page * itemsPerPage <= index ||
+                                        (page - 1) * itemsPerPage > index
+                                    ) {
+                                        return <></>;
+                                    }
+                                    return (
+                                        <Grid item xs={10} sm={6} md={2}>
+                                            <Link to="/board/find/1" style={{ textDecoration: "none" }}>
+                                                <Card
+                                                    key={index}
+                                                    sx={{
+                                                        height: "100%",
+                                                        display: "flex",
+                                                        flexDirection: "column"
+                                                    }}
+                                                >
+                                                    <CardImage src="http://placeimg.com/300/300/animals/sepia" />
+                                                    <div>
+                                                        <CardTitle>{card.title}</CardTitle>
+                                                        <CardWritter>{card.writter}</CardWritter>
+                                                        <CardCount>조회 {card.count}</CardCount>
+                                                    </div>
+                                                </Card>
+                                            </Link>
+                                        </Grid>
+                                    );
+                                })}
+                            </Grid>
+                            <Link className="button" to={COMMUNITY.FIND_WRITE}>
+                                <CustomButton label="글쓰기" value="글쓰기" />
+                            </Link>
+                        </Container>
+                        <Pagination
+                            color="primary"
+                            page={page}
+                            count={maxPageNum}
+                            onChange={handleChange}
+                            sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                margin: '50px 0 0 0px'
+                            }}
+                        />
 
-            </ContainerBox >
-        </ThemeProvider>
+                    </ContainerBox >
+                </ThemeProvider>
+
+            </MainContainer>
+        </Section>
     );
 };
 
@@ -140,6 +145,25 @@ const theme = createTheme({
         },
     },
 });
+
+const Section = styled.section`
+  background: #f8f9fa;
+  padding: 30px 0 40px 0;
+`
+
+const MainContainer = styled.div`
+  width: 60vw;
+  // width: 1150px;
+  max-width: 1150px;
+  min-width: 790px;
+  border-radius: 8px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(233, 236, 239);
+  border-image: initial;
+  margin: 0px auto 20px;
+  background: rgb(255, 255, 255);
+`
 
 const Top = styled.h1`
       font-size: 2rem;
