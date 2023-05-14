@@ -132,6 +132,11 @@ const Product = () => {
     setPage(1);
   }, [activeCategory]);
 
+  const formatCurrency = (number) => {
+    //3번째 자릿수 마다 ',' 와 마지막에 '원' 붙혀주는 함수
+    return number.toLocaleString("ko-KR", { currency: "KRW" }) + "원";
+  };
+
   return (
     <>
       {
@@ -178,7 +183,9 @@ const Product = () => {
                         >
                           <ProductImage src="http://placehold.it/500x500" />
                           <ProductName>{product.name}</ProductName>
-                          <ProductPrice>{product.price} 원</ProductPrice>
+                          <ProductPrice>
+                            {formatCurrency(product.price)}
+                          </ProductPrice>
                         </Card>
                       </Link>
                     </Grid>
