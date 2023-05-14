@@ -11,12 +11,14 @@ import {
   TableRow,
   TableCell,
   Grid,
+  Typography,
 } from "@mui/material";
 import axios from "axios";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { MYPAGE } from "../../constants/PageURL";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
 
 const modalStyle = {
   position: "absolute",
@@ -28,16 +30,6 @@ const modalStyle = {
   boxShadow: 24,
   p: 4,
 };
-
-//테마 색상 설정
-const theme = createTheme({
-  palette: {
-    type: "light",
-    primary: {
-      main: "#FBD385",
-    },
-  },
-});
 
 const MyPageQnAWrite = () => {
   const [content, setContent] = useState("");
@@ -63,12 +55,16 @@ const MyPageQnAWrite = () => {
 
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <MyPageStyle>
-          <div className="navTitle">
-            <h5>문의하기</h5>
-          </div>
-        </MyPageStyle>
+      <ThemeProvider theme={CustomTheme}>
+        <Typography
+          className="myOrderListTitle"
+          sx={titleSx}
+          border={3}
+          borderColor="#ffbd59"
+          mb={4}
+        >
+          문의하기
+        </Typography>
 
         <Table
           sx={{
@@ -169,16 +165,14 @@ const MyPageQnAWrite = () => {
   );
 };
 
-const MyPageStyle = styled.div`
-  .navTitle {
-    border: 1px solid #fbd385;
-    width: 200px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-`;
+const titleSx = {
+  width: "200px",
+  textAlign: "center",
+  fontStyle: "normal",
+  fontWeight: "bold",
+  fontSize: "1.5rem",
+  lineHeight: "50px",
+};
 const EditorWrapper = styled.div`
   .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
     min-height: 300px;
@@ -194,7 +188,6 @@ const ButtonStyle = styled.div`
   .write {
     background-color: #fbd385;
     color: white;
-    font-weight: bold;
     width: 90px;
     height: 30px;
     margin-top: 10px;
@@ -209,7 +202,6 @@ const ButtonStyle = styled.div`
   .quit {
     background-color: #bfbfbf;
     color: white;
-    font-weight: bold;
     width: 90px;
     height: 30px;
     margin-top: 10px;

@@ -1,10 +1,19 @@
 import styled from "styled-components";
-import { Table, TableBody, TableCell, TableRow, Button } from "@mui/material";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Button,
+  ThemeProvider,
+} from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { Link } from "react-router-dom";
 import { MYPAGE, SHOP } from "../../constants/PageURL";
 import { useLocation } from "react-router-dom";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
+
 const OrderComplete = ({ orderCompleted }) => {
   const location = useLocation();
   const orderState = location.state.orderState;
@@ -12,7 +21,7 @@ const OrderComplete = ({ orderCompleted }) => {
 
   if ({ orderState } === true) {
     return (
-      <>
+      <ThemeProvider theme={CustomTheme}>
         <OrderStyle>
           <h1>주문/결제</h1>
           <Table sx={{ mt: 3 }}>
@@ -40,11 +49,11 @@ const OrderComplete = ({ orderCompleted }) => {
             </Link>
           </div>
         </OrderStyle>
-      </>
+      </ThemeProvider>
     );
   } else {
     return (
-      <>
+      <ThemeProvider theme={CustomTheme}>
         <OrderStyle>
           <h1>주문/결제</h1>
           <Table sx={{ mt: 3 }}>
@@ -63,7 +72,7 @@ const OrderComplete = ({ orderCompleted }) => {
                   <br />
                   주문이 거부되었습니다.
                   <br />
-                  {error_msg}
+                  에러메세지 : {error_msg}
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -74,7 +83,7 @@ const OrderComplete = ({ orderCompleted }) => {
             </Link>
           </div>
         </OrderStyle>
-      </>
+      </ThemeProvider>
     );
   }
 };
@@ -89,7 +98,6 @@ const OrderStyle = styled.div`
     width: 200px;
     background-color: #fbd385;
     color: white;
-    font-weight: bold;
     margin-top: 70px;
     &:hover {
       background-color: #facc73;

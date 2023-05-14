@@ -1,42 +1,65 @@
-import "../../Styles/Footer.css"
-import { Link } from 'react-router-dom';
+import "../../Styles/Footer.css";
+import { Link } from "react-router-dom";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
+import { ThemeProvider, Typography } from "@mui/material";
+import { ABOUT } from "../../constants/PageURL";
 
 const Footer = () => {
-    return (
-        <footer className="footer">
-            <h3>© PETMILY</h3>
-            <div className="footer_contents">
-                <div className="ex1">
-                    <dt>Company</dt>
-                    <dd>About us</dd>
-                    <dd>Contact us</dd>
-                    <dd>History</dd>
-                </div>
-
-                <div className="ex2">
-                    <dt>Community</dt>
-                    <dd>Featured artists</dd>
-                    <dd>The Portal</dd>
-                    <dd>Live events</dd>
-                </div>
-            </div>
-            <div>
-                <hr />
-            </div>
-            <span className="p_tag">
-                <p>©Photo,Inc.2023. We love our users!</p>
-                <span className="reverse_p">
-                    <img alt="github Icon" src="/images/navigator/github.png" />
-                    <img alt="github Icon" src="/images/navigator/facebook.png" />
-                    <img alt="github Icon" src="/images/navigator/instargram.png" />
-                    <img alt="github Icon" src="/images/navigator/twitter.png" />
-                    {/* 상대경로 -> 절대경로로 바꿈 */}
-                    <p>Follow us: &nbsp;&nbsp;&nbsp;</p>
-                </span>
-
-            </span>
-        </footer>
-    );
+  return (
+    <ThemeProvider theme={CustomTheme}>
+      <footer className="footer">
+        <div className="footer_contents">
+          <h2>PETMILY</h2>
+          <Typography
+            component={"p"}
+            sx={{
+              fontSize: "13px",
+              color: "gray",
+              lineHeight: "15px",
+            }}
+          >
+            ©Petmily. All rights reserved
+            <br />
+            We love our users🎔
+            <br />
+          </Typography>
+          <span className="reverse_p">
+            <img
+              className="github"
+              alt="github"
+              src="/images/navigator/Github.png"
+            />
+            <img alt="facebook" src="/images/navigator/Facebook.png" />
+            <img alt="instargram" src="/images/navigator/Instagram.png" />
+            <img alt="twitter" src="/images/navigator/Twitter.png" />
+          </span>
+        </div>
+        <div className="footer_contents2">
+          <Link
+            to={ABOUT.FAQ}
+            style={{
+              textDecoration: "none",
+              color: "black",
+            }}
+          >
+            <h3>문의하기</h3>
+          </Link>
+          <Link
+            to={ABOUT.ABOUT}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            <h3>서비스소개</h3>
+          </Link>
+          <Link to="#" style={{ textDecoration: "none", color: "black" }}>
+            <h3>개인정보처리방침</h3>
+          </Link>
+          <Link to="#" style={{ textDecoration: "none", color: "black" }}>
+            <h3>이용약관</h3>
+          </Link>
+        </div>
+      </footer>
+    </ThemeProvider>
+  );
 };
 
 export default Footer;
