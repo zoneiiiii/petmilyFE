@@ -6,44 +6,34 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import Badge from "@mui/material/Badge";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import Fab from "@mui/material/Fab";
 import { useRef, useState, useCallback } from "react";
 import FormHelperText from "@mui/material/FormHelperText";
 import axios from "axios";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
+import styled from "styled-components";
 
-//테마 색상 지정
-const theme = createTheme({
-  palette: {
-    type: "light",
-    primary: {
-      main: "#FBD385",
-    },
-  },
-});
 function ModifyInfo() {
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPw, setConfirmPw] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
 
   const [nicknameError, setNicknameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPwError, setConfirmPwError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
-  const [addressError, setAddressError] = useState("");
 
   const nickRef = useRef();
   const passRef = useRef();
   const confirmRef = useRef();
   const emailRef = useRef();
   const phoneRef = useRef();
-  const addressRef = useRef();
 
   // 닉네임
   const onChangeNickname = useCallback((e) => {
@@ -113,22 +103,11 @@ function ModifyInfo() {
     }
   }, []);
 
-  // 주소
-  const onChangeAddr = useCallback((e) => {
-    setAddress(e.target.value);
-    if (e.target.value.length < 1) {
-      setAddressError("주소를 입력해주세요.");
-    } else {
-      setAddressError("");
-    }
-  }, []);
-
   //엔터 키 이벤트
   const passwordInput = document.querySelector("[name=pw]");
   const confirmPwInput = document.querySelector("[name=confirmPw]");
   const emailInput = document.querySelector("[name=email]");
   const phoneInput = document.querySelector("[name=phone]");
-  const addressInput = document.querySelector("[name=address]");
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       if (e.target.name === "nickname" && passwordInput) {
@@ -142,8 +121,6 @@ function ModifyInfo() {
         emailInput.focus();
       } else if (e.target.name === "email" && emailRef.current.value !== "") {
         phoneInput.focus();
-      } else if (e.target.name === "phone" && phoneRef.current.value !== "") {
-        addressInput.focus();
       }
     }
   };
@@ -170,9 +147,6 @@ function ModifyInfo() {
       }
       if (!phone) {
         setPhoneError("전화번호를 입력해주세요.");
-      }
-      if (!address) {
-        setAddressError("주소를 입력해주세요.");
       }
     }
     // } else {
@@ -224,14 +198,14 @@ function ModifyInfo() {
     };
     reader.readAsDataURL(e.target.files[0]);
   };
-
+  //footer 해결해야함
   return (
-    <>
-      <ThemeProvider theme={theme}>
+    <MyPageContainer className="MyPageContainer">
+      <ThemeProvider theme={CustomTheme}>
         <Container
           component="main"
           //maxWidth="sm"
-          sx={{ width: "50vw", m: "0 auto" }}
+          sx={{ width: "50vw" }}
         >
           <CssBaseline />
           <Box
@@ -242,7 +216,6 @@ function ModifyInfo() {
               alignItems: "center",
             }}
           >
-            {" "}
             <Typography
               component="h1"
               variant="h4"
@@ -333,7 +306,7 @@ function ModifyInfo() {
                   <FormHelperText sx={{ color: "red" }}>
                     {confirmPwError}
                   </FormHelperText>
-                </Grid>{" "}
+                </Grid>
                 <Grid item xs={12}>
                   <TextField
                     required
@@ -358,25 +331,10 @@ function ModifyInfo() {
                     autoComplete="phone"
                     onChange={onChangePhone}
                     ref={phoneRef}
-                    onKeyPress={handleKeyPress}
-                  />
-                  <FormHelperText sx={{ color: "red" }}>
-                    {phoneError}
-                  </FormHelperText>
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    label="주소"
-                    name="address"
-                    autoComplete="address"
-                    onChange={onChangeAddr}
-                    ref={addressRef}
                     onKeyPress={checkenterSubmit}
                   />
                   <FormHelperText sx={{ color: "red" }}>
-                    {addressError}
+                    {phoneError}
                   </FormHelperText>
                 </Grid>
               </Grid>
@@ -388,17 +346,11 @@ function ModifyInfo() {
                   mt: 2,
                   mb: 1,
                   height: "50px",
-                  fontWeight: "bold",
                 }}
                 color="primary"
                 onClick={submitCheck}
               >
-                <Typography
-                  component="h1"
-                  variant="h6"
-                  color="white"
-                  fontWeight="bold"
-                >
+                <Typography component="h1" variant="h6" color="white">
                   수정
                 </Typography>
               </Button>
@@ -406,7 +358,12 @@ function ModifyInfo() {
           </Box>
         </Container>
       </ThemeProvider>
-    </>
+    </MyPageContainer>
   );
 }
+const MyPageContainer = styled.div`
+  max-width: 70vw;
+  margin: 0 auto;
+  flex-grow: 1;
+`;
 export default ModifyInfo;

@@ -4,51 +4,35 @@
     min-width: 1000px;
     background-color: #F9F9F9;
     z-index: 1000;
-}
-
-.footer h3 {
-    /* position: relative; */
-    font-size: 1.5vw;
-    top: 10px;
-    left: 10px;
+    display:flex;
+    align-items: center;
+    margin-top:30px;
 }
 
 .footer_contents {
-    width: 96%;
-    max-width: 1500px;
-    max-height: 90px;
-    height: 100%;
+    position: relative;
+    padding-left: 100px;
+    width:30%;
+}
+
+.footer_contents2 {
+    padding-right:100px;
     display: flex;
     flex-direction: row-reverse;
-    margin-left: auto;
-    margin-right: 10vw;
-    font-size: 1.7vh;
+    position:relative;
+    gap:50px;
+    border-bottom: 1px solid;
+    width:800px;
 }
 
-.footer_contents dt {
-    font-weight: bolder;
-    margin-left: 40px;
-}
-
-.footer_contents ex1 + ex2 {
-    margin: 80px;
-}
-
-.p_tag {
-    font-size: xx-small;
-    display: flex;
-    left: 20px;
-}
-
-.reverse_p {
-    display: flex;
-    flex-direction: row-reverse;
-    margin-left: auto;
-    margin-right: 10vw;
-    width: 350px;
-}
-
-.reverse_p img + img {
+.reverse_p img {
     margin-right: 5px;
+    margin-top:10px;
+    width: 40px;
+    height:40px;
+}
+
+.github {
+    margin-left:-5px;
 }
 
