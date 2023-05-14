@@ -38,7 +38,7 @@ const pages = [
 const AboutNav = () => {
   const { pathname } = useLocation();
   const TabsRef = useRef();
-  const [value, setValue] = useState(
+  const [title, setTitle] = useState(
     pages.find(
       (page) =>
         pathname === page.link ||
@@ -55,7 +55,7 @@ const AboutNav = () => {
     //     page.link !== ABOUT.ABOUT && pathname.includes(page.link)
     //   );
     // });
-    setValue(
+    setTitle(
       pages.find(
         (page) =>
           pathname === page.link ||
@@ -64,7 +64,7 @@ const AboutNav = () => {
     );
   }, [pathname]);
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setTitle(newValue);
   };
 
   return (
@@ -74,15 +74,16 @@ const AboutNav = () => {
           <Typography
             fontSize={"3rem"}
             fontWeight={"bold"}
+            fontFamily={"GmarketSansMedium"}
             borderBottom={"3px solid #fbd385"}
             width={"fit-content"}
           >
-            {value}
+            {title}
           </Typography>
         </Box>
         <Box m={2}>
           <StyledTabs
-            value={value}
+            value={title}
             onChange={handleChange}
             centered
             ref={TabsRef}
@@ -123,6 +124,7 @@ const StyledTabs = styled(Tabs)({
   ".MuiTab-root": {
     fontSize: "1.5rem",
     fontWeight: "bold",
+    fontFamily: "GmarketSansMedium",
   },
   "& .MuiTabs-indicator": {
     backgroundColor: "#fbd385",
@@ -139,7 +141,11 @@ function LinkTab(props) {
       navigate(props.link);
     });
   };
-  return <Tab onClick={handleClick} {...props} />;
+  return (
+    <ThemeProvider theme={CustomTheme}>
+      <Tab onClick={handleClick} {...props} />
+    </ThemeProvider>
+  );
 }
 
 export default AboutLayout;
