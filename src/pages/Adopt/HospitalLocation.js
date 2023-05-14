@@ -1,18 +1,23 @@
-import react, { useEffect, useLayoutEffect, useState, useRef } from "react";
+import react, { useEffect, useLayoutEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import CustomButton from "../Login/CustomButton";
-import { styled } from "@mui/material/styles";
+
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import { useNavigate } from "react-router-dom";
 
 const { kakao } = window;
 let curLatitude = "";
 let curLongitude = "";
 const HospitalLocation = () => {
+  const navigate = useNavigate();
   const [inputText, setInputText] = useState("");
   const [place, setPlace] = useState("");
   const [data, setData] = useState("");
   const [dragend, setDragend] = useState(false);
   const [usefirst, setUseFirst] = useState(false);
+  const [item, setItem] = useState([]);
   const [currentPosition, setCurrentPosition] = useState({
     latitude: curLatitude,
     longtitude: curLongitude,
@@ -28,7 +33,7 @@ const HospitalLocation = () => {
           setCurrentPosition({ latitude, longitude });
           curLatitude = position.coords.latitude;
           curLongitude = position.coords.longitude;
-          console.log("current" + curLatitude + " " + curLongitude);
+
           setData("1");
         },
         function (error) {
@@ -44,11 +49,9 @@ const HospitalLocation = () => {
       alert("GPS를 지원하지 않습니다");
     }
   }
-  const mounted = useRef(false);
 
   useLayoutEffect(() => {
     getLocation();
-    console.log("1");
   }, []);
 
   useEffect(() => {
@@ -59,10 +62,10 @@ const HospitalLocation = () => {
       level: 3,
     };
     const map = new kakao.maps.Map(container, options);
-
+    // map.setZoomable(false); //줌 막기
     // 장소 검색 객체를 생성
     const ps = new kakao.maps.services.Places();
-    // ps.keywordSearch(place, placesSearchCB);
+
     if (place === "") {
       ps.keywordSearch("동물병원", placesSearchCB, {
         location: new kakao.maps.LatLng(curLatitude, curLongitude),
@@ -87,19 +90,27 @@ const HospitalLocation = () => {
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
         // LatLngBounds 객체에 좌표를 추가
         let bounds = new kakao.maps.LatLngBounds();
-
+        setItem(data);
         for (let i = 0; i < data.length; i++) {
           displayMarker(data[i]);
           bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
         }
+
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정
         map.setBounds(bounds);
+      } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+        alert("검색 결과가 존재하지 않습니다.");
+        return;
+      } else if (status === kakao.maps.services.Status.ERROR) {
+        alert("검색 결과 중 오류가 발생했습니다.");
+        return;
       }
     }
 
     // 지도에 마커를 표시하는 함수
     function displayMarker(place) {
       // 마커를 생성하고 지도에 표시
+
       let marker = new kakao.maps.Marker({
         map: map,
         position: new kakao.maps.LatLng(place.y, place.x),
@@ -109,6 +120,7 @@ const HospitalLocation = () => {
       // 마커에 클릭이벤트를 등록
       kakao.maps.event.addListener(marker, "click", function () {
         // 마커를 클릭하면 장소명이 인포윈도우에 표출
+
         infowindow.setContent(
           '<div style="padding:5px;font-size:12px;">' +
             place.place_name +
@@ -117,8 +129,10 @@ const HospitalLocation = () => {
         infowindow.open(map, marker);
       });
     }
-  }, [place, data]);
 
+    // getCenter();
+  }, [place, data, dragend]);
+  console.log(item);
   const onChange = (e) => {
     setInputText(e.target.value);
   };
@@ -187,10 +201,104 @@ const HospitalLocation = () => {
         style={{
           marginTop: "20px",
           border: "solid 1px #FBD385",
-          width: "70vw",
+          width: "1000px",
           height: "500px",
         }}
       ></div>
+      <Box sx={{ marginTop: "30px", marginLeft: "16px" }}>
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            width: "1000px",
+          }}
+        >
+          {item.map((item, index) => (
+            <Grid
+              item
+              xs={6}
+              key={item.place_name}
+              sx={{
+                textAlign: "left",
+                border: "0.5px solid",
+                borderRightWidth:
+                  index % 2 === 0
+                    ? index === item.length - 1
+                      ? 0
+                      : "0.5px"
+                    : "0.5px",
+                borderLeftWidth: index % 2 === 0 ? "0.5px" : 0,
+                borderBottomWidth: "0.5px",
+                borderTopWidth: index > 1 ? 0 : "0.5px",
+              }}
+            >
+              <Typography
+                component="h1"
+                variant="h5"
+                sx={{
+                  color: "black",
+
+                  mb: "10px",
+                  fontSize: "large",
+                }}
+              >
+                {index + 1}. {item.place_name}
+              </Typography>
+              <Typography
+                component="h2"
+                variant="h5"
+                sx={{
+                  color: "black",
+
+                  mb: "10px",
+                  fontSize: "medium",
+                }}
+              >
+                Tel. {item.phone}
+              </Typography>
+              <Typography
+                component="h2"
+                variant="h5"
+                sx={{
+                  color: "black",
+
+                  mb: "10px",
+                  fontSize: "medium",
+                }}
+              >
+                지번 주소: {item.address_name}
+              </Typography>
+              <Typography
+                component="h2"
+                variant="h5"
+                sx={{
+                  color: "black",
+
+                  mb: "10px",
+                  fontSize: "medium",
+                }}
+              >
+                도로명 주소: {item.road_address_name}
+              </Typography>
+              <Typography
+                component="h2"
+                variant="h5"
+                sx={{
+                  color: "black",
+
+                  mb: "10px",
+                  fontSize: "medium",
+                }}
+                onClick={() => {
+                  window.open(item.place_url);
+                }}
+              >
+                {item.place_url}
+              </Typography>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
     </div>
   );
 };

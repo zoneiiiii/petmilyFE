@@ -1,10 +1,12 @@
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import CustomButton from "../Login/CustomButton";
+
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ADOPT } from "../../constants/PageURL";
 const CustomTextField = styled(TextField)({
   backgroundColor: "white",
   "& label.Mui-focused": {
@@ -40,6 +42,11 @@ const CustomizedButton = styled(Button)`
 `;
 
 const AdoptApplication = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  console.log("aa", location);
+  const state = location?.state || 0;
+
   return (
     <div
       style={{
@@ -47,9 +54,51 @@ const AdoptApplication = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        marginTop: "50px",
+        marginTop: "30px",
       }}
     >
+      {state === 0 ? (
+        <div>
+          <Typography
+            component="h1"
+            variant="h2"
+            sx={{
+              color: "black",
+              mt: "30px",
+              mb: "10px",
+              fontWeight: "bolder",
+            }}
+          >
+            입양 신청
+          </Typography>
+          <Button
+            style={{
+              color: "gray",
+              fontSize: "medium",
+              mb: "30px",
+
+              height: "20px",
+            }}
+            onClick={() => navigate(ADOPT.ADOPT)}
+          >
+            아이들 보러가기
+          </Button>
+        </div>
+      ) : (
+        <Typography
+          component="h1"
+          variant="h2"
+          sx={{
+            color: "black",
+            mt: "30px",
+            mb: "30px",
+            fontWeight: "bolder",
+          }}
+        >
+          입양 신청
+        </Typography>
+      )}
+
       <div
         style={{
           display: "flex",
@@ -59,7 +108,7 @@ const AdoptApplication = () => {
       >
         <img
           className="ProfileImg"
-          src="./../images/emptyProfile.png"
+          src={"./../images/emptyProfile.png"}
           alt="profile"
           width={"300px"}
           height={"300px"}
@@ -75,14 +124,25 @@ const AdoptApplication = () => {
             marginRight: "20px",
           }}
         />
-        <img
-          className="AdoptedCat"
-          src="./../images/AdoptedCat.png"
-          alt="profile"
-          width={"300px"}
-          height={"300px"}
-          style={{ borderRadius: "50%" }}
-        />
+        {state === 0 ? (
+          <img
+            className="AdoptedCat"
+            src="./../images/AdoptedCat.png"
+            alt="profile"
+            width={"300px"}
+            height={"300px"}
+            style={{ borderRadius: "50%" }}
+          />
+        ) : (
+          <img
+            className="AdoptedCat"
+            src={state.profile}
+            alt="profile"
+            width={"300px"}
+            height={"300px"}
+            style={{ borderRadius: "50%" }}
+          />
+        )}
       </div>
       <div
         style={{
@@ -114,29 +174,36 @@ const AdoptApplication = () => {
           고양이
         </Typography>
       </div>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          marginTop: "40px",
+          marignBottom: "20px",
+        }}
+      >
+        <Typography
+          component="h5"
+          variant="h5"
+          sx={{
+            color: "black",
+          }}
+        >
+          입양 체크리스트를 꼭 확인 후 신청해 주세요!
+        </Typography>
+        <Button
+          style={{
+            color: "gray",
+            fontSize: "medium",
 
-      <Typography
-        component="h5"
-        variant="h5"
-        sx={{
-          color: "black",
-          mt: "50px",
-          mb: "30px",
-        }}
-      >
-        입양 체크리스트를 꼭 확인 후 신청해 주세요!
-      </Typography>
-      <Typography
-        component="h1"
-        variant="h2"
-        sx={{
-          color: "black",
-          mt: "30px",
-          mb: "30px",
-        }}
-      >
-        입양 신청
-      </Typography>
+            height: "20px",
+          }}
+          onClick={() => navigate(ADOPT.CHECKLIST)}
+        >
+          체크리스트 보러가기.
+        </Button>
+      </div>
+
       <div
         style={{
           backgroundColor: "#F5F5ED",
@@ -144,8 +211,9 @@ const AdoptApplication = () => {
           height: "450px",
           display: "flex",
           justifyContent: "center",
+          marginTop: "10px",
           alignItems: "center",
-          borderRadius: "5%",
+          borderRadius: "10px",
         }}
       >
         <Box sx={{ width: "600px" }}>
@@ -194,7 +262,11 @@ const AdoptApplication = () => {
             >
               신청
             </CustomizedButton>
-            <CustomizedButton type="submit" variant="contained">
+            <CustomizedButton
+              type="submit"
+              variant="contained"
+              onClick={() => navigate(ADOPT.ADOPT)}
+            >
               취소
             </CustomizedButton>
           </Grid>

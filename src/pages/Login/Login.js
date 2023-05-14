@@ -6,6 +6,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 import CustomButton from "./CustomButton";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ACCOUNT } from "../../constants/PageURL";
 
 function Login() {
   const navigate = useNavigate();
@@ -158,7 +159,12 @@ function Login() {
       <Typography
         component="h1"
         variant="h5"
-        sx={{ color: "#FBD385", mt: "30px", mb: "30px", fontSize: "xx-large" }}
+        sx={{
+          color: "#FBD385",
+          mt: "30px",
+          fontSize: "40px ",
+          fontWeight: "bolder",
+        }}
       >
         Login
       </Typography>
@@ -174,7 +180,7 @@ function Login() {
           sx={{
             borderBottom: "solid 1px #FBD385",
             background: "white",
-            width: "300px",
+            width: "350px",
           }}
           InputProps={{
             disableUnderline: true,
@@ -198,7 +204,7 @@ function Login() {
           InputLabelProps={{ style: { color: "#FBD385" } }}
           sx={{
             borderBottom: "solid 1px #FBD385",
-            width: "300px",
+            width: "350px",
             background: "white",
           }}
           InputProps={{
@@ -210,18 +216,21 @@ function Login() {
         />
         <FormHelperText sx={{ color: "red" }}>{passwordError}</FormHelperText>
       </div>
-      <Button
+      <Typography
         style={{
-          color: "gray",
           fontSize: "xx-small",
-          marginBottom: "-10px",
+          marginTop: "5px",
+          marginBottom: "5px",
+          cursor: "pointer",
+          color: "#909090",
         }}
-        href="/findpw"
+        onClick={() => navigate(ACCOUNT.FIND_PW)}
       >
         비밀번호를 잊으셨나요?
-      </Button>
+      </Typography>
       <CustomButton
         type="submit"
+        variant="text"
         label="로그인"
         value="로그인폼"
         onClick={submitCheck}
@@ -242,7 +251,13 @@ function Login() {
         </Typography>
         <Typography
           variant="text"
-          style={{ color: "#909090", fontSize: "xx-small", marginLeft: "5px" }}
+          style={{
+            color: "#909090",
+            fontSize: "xx-small",
+            marginLeft: "5px",
+            cursor: "pointer",
+          }}
+          onClick={() => navigate(ACCOUNT.JOIN)}
         >
           회원가입
         </Typography>

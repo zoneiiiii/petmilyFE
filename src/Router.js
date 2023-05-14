@@ -122,12 +122,12 @@ const Router = () => {
                 path={BROWSER_PATH.ADOPT.ANIMAL_LIST()}
                 element={<Page.Adopt.ShelterAnimal />}
               />
+              <Route
+                path={BROWSER_PATH.ADOPT.ANIMAL_LIST_DETAIL()}
+                element={<Page.Adopt.AnimalListDetail />}
+              />
             </Route>
 
-            <Route
-              path={BROWSER_PATH.ADOPT.ANIMAL_LIST_DETAIL()}
-              element={<Page.Adopt.AnimalListDetail />}
-            />
             <Route
               path={BROWSER_PATH.ADOPT.APPLICATION}
               element={<Page.Adopt.AdoptApplication />}
