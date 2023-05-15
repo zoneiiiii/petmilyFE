@@ -126,10 +126,15 @@ const HospitalLocation = () => {
             place.place_name +
             "</div>"
         );
+        infowindow.setMap(null);
         infowindow.open(map, marker);
       });
     }
-
+    function closeInfoWindow() {
+      for (var idx = 0; idx < item.length; idx++) {
+        item[idx].close();
+      }
+    }
     // getCenter();
   }, [place, data, dragend]);
   console.log(item);

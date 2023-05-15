@@ -13,20 +13,20 @@ const AdoptInfoDetail = (props) => {
   const [animalIndex, setAnimalIndex] = useState(0);
   const [animallength, setAnimalLength] = useState("");
   const [displayData, setDisplayedData] = useState();
-  const { name, code } = props;
+  const { uprCd, name, code } = props;
 
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://apis.data.go.kr/1543061/abandonmentPublicSrvc/abandonmentPublic?bgnde=20230101&endde=20230507&upr_cd=6110000&org_cd=${code}&pageNo=1&numOfRows=100&serviceKey=AhrFaZaAefMdQ7n5tWepAOM5tzLw5%2BCiT3stOXtEl3uTyXNtr0xlgtAn6WZppVVYaZdAuyqJvj%2FS65SSV4iapw%3D%3D&_type=json`
+        `http://apis.data.go.kr/1543061/abandonmentPublicSrvc/abandonmentPublic?bgnde=20230101&endde=20230507&upr_cd=${uprCd}&org_cd=${code}&pageNo=1&numOfRows=100&serviceKey=AhrFaZaAefMdQ7n5tWepAOM5tzLw5%2BCiT3stOXtEl3uTyXNtr0xlgtAn6WZppVVYaZdAuyqJvj%2FS65SSV4iapw%3D%3D&_type=json`
       );
       const data2 = response.data.response.body.items.item;
 
       const filteredData = data2.filter(
         (item) => item.processState === "보호중"
       );
+      setLoading(true);
       setData(filteredData);
-      console.log("length" + filteredData.length);
       setAnimalLength(filteredData.length);
     } catch (e) {
       setError(e);
@@ -60,8 +60,6 @@ const AdoptInfoDetail = (props) => {
 
   const AnimalRender = () => {
     let result = [];
-
-    console.log("data", data);
 
     for (let i = animalIndex; i < animalIndex + 5; i++) {
       let dataIndex = i;
@@ -103,82 +101,90 @@ const AdoptInfoDetail = (props) => {
   };
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [loading]);
   return (
-    <div>
-      <h2
-        style={{
-          marginTop: "0px",
-          justifyContent: "center",
-          marginLeft: "8.5%",
-          color: "black",
-          fontSize: "1.5em",
-          width: "100px",
-          backgroundColor: "#FBD385",
-          textAlign: "center",
-        }}
-      >
-        {name}
-      </h2>
-      <Grid
-        container
-        // spacing={2}
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          marginBottom: "15px",
-        }}
-      >
-        <Grid
-          style={{
-            display: "flex",
-          }}
-          item
-          xs={1}
-        >
-          <IconButton
-            onClick={moveLeft}
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          >
-            <ArrowBackIosIcon
+    <>
+      {loading ? (
+        <h1>loading...</h1>
+      ) : (
+        data?.length !== 0 && (
+          <div>
+            <h2
               style={{
-                width: "30%",
-                height: "100%",
+                marginTop: "0px",
+                justifyContent: "center",
+                marginLeft: "8.5%",
                 color: "black",
-                scale: "2.0",
-                marginLeft: "1.5em",
+                fontSize: "1.5em",
+                width: "100px",
+                backgroundColor: "#FBD385",
+                textAlign: "center",
               }}
-            />
-          </IconButton>
-        </Grid>
-
-        {data?.length && AnimalRender()}
-
-        <Grid item xs={1}>
-          <IconButton
-            onClick={moveRight}
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          >
-            <ArrowForwardIosIcon
+            >
+              {name}
+            </h2>
+            <Grid
+              container
+              // spacing={2}
               style={{
-                width: "30%",
-                height: "100%",
-                color: "black",
-                scale: "2.0",
-                marginRight: "1.5em",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                marginBottom: "15px",
               }}
-            />
-          </IconButton>
-        </Grid>
-      </Grid>
-    </div>
+            >
+              <Grid
+                style={{
+                  display: "flex",
+                }}
+                item
+                xs={1}
+              >
+                <IconButton
+                  onClick={moveLeft}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  <ArrowBackIosIcon
+                    style={{
+                      width: "30%",
+                      height: "100%",
+                      color: "black",
+                      scale: "2.0",
+                      marginLeft: "1.5em",
+                    }}
+                  />
+                </IconButton>
+              </Grid>
+
+              {data?.length && AnimalRender()}
+
+              <Grid item xs={1}>
+                <IconButton
+                  onClick={moveRight}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  <ArrowForwardIosIcon
+                    style={{
+                      width: "30%",
+                      height: "100%",
+                      color: "black",
+                      scale: "2.0",
+                      marginRight: "1.5em",
+                    }}
+                  />
+                </IconButton>
+              </Grid>
+            </Grid>
+          </div>
+        )
+      )}
+    </>
   );
 };
 
