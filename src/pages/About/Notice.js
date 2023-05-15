@@ -188,13 +188,19 @@ const Notice = () => {
                       {notice.subject}
                     </StyledLink>
                   </TableCell>
-                  <TableCell sx={{ ...tdSx, minWidth: "100px" }}>
+                  <TableCell
+                    sx={{ ...tdSx, width: "100px", justifySelf: "end" }}
+                  >
                     {notice.writer}
                   </TableCell>
-                  <TableCell sx={{ ...tdSx, minWidth: "50px" }}>
+                  <TableCell
+                    sx={{ ...tdSx, width: "50px", justifySelf: "end" }}
+                  >
                     {notice.count}
                   </TableCell>
-                  <TableCell sx={{ ...tdSx, minWidth: "100px" }}>
+                  <TableCell
+                    sx={{ ...tdSx, width: "110px", justifySelf: "end" }}
+                  >
                     {notice.postData}
                   </TableCell>
                 </TableRow>
