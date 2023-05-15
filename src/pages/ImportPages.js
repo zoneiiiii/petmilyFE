@@ -27,9 +27,10 @@ import MyPageQnAWrite from "./Mypage/MyPageQnAWrite";
 // About
 import AboutLayout from "./About/AboutLayout";
 import AboutMain from "./About/About";
-import Activity from "./About/Activity";
-import ActivityDetail from "./About/ActivityDetail";
 import AdoptProcess from "./About/AdoptProcess";
+import Event from "./About/Event";
+import EventDetail from "./About/EventDetail";
+import EventWrite from "./About/EventWrite";
 import Notice from "./About/Notice";
 import NoticeDetail from "./About/NoticeDetail";
 import NoticeWrite from "./About/NoticeWrite";
@@ -165,29 +166,33 @@ export const MyPage = {
 
 /**
  ** About
- ** Process
+ ** Layout
+ ** AdoptProcess
+ ** Event
+ ** EventDetail
+ ** EventWrite
+ ** FAQ
  ** Notice
  ** NoticeDetail
  ** NoticeWrite
- ** Activity
- ** ActivityDetail
- ** FAQ
  */
 export const About = {
   Layout: AboutLayout,
-  About: AboutMain,
-  Activity: Activity,
-  ActivityDetail: ActivityDetail,
+  Main: AboutMain,
   AdoptProcess: AdoptProcess,
+  Event: Event,
+  EventDetail: EventDetail,
+  EventWrite: EventWrite,
   Notice: Notice,
   NoticeDetail: NoticeDetail,
   NoticeWrite: NoticeWrite,
   FAQ: FAQ,
   // Layout: lazy(() => import("./About/AboutLayout")),
   // About: lazy(() => import("./About/About")),
-  // Activity: lazy(() => import("./About/Activity")),
-  // ActivityDetail: lazy(() => import("./About/ActivityDetail")),
   // AdoptProcess: lazy(() => import("./About/AdoptProcess")),
+  // Event: lazy(() => import("./About/Event")),
+  // EventDetail: lazy(() => import("./About/EventDetail")),
+  // Event: lazy(() => import("./About/EventWrite")),
   // Notice: lazy(() => import("./About/Notice")),
   // NoticeDetail: lazy(() => import("./About/NoticeDetail")),
   // NoticeWrite: lazy(() => import("./About/NoticeWrite")),

@@ -77,22 +77,22 @@ const Router = () => {
               path={BROWSER_PATH.ABOUT.ABOUT}
               element={<Page.About.Layout />}
             >
-              <Route index element={<Page.About.About />} />
+              <Route index element={<Page.About.Main />} />
               <Route
                 path={BROWSER_PATH.ABOUT.ADOPT_PROCESS}
                 element={<Page.About.AdoptProcess />}
               />
               <Route
-                path={BROWSER_PATH.ABOUT.ACTIVITY()}
-                element={<Page.About.Activity />}
+                path={BROWSER_PATH.ABOUT.EVENT()}
+                element={<Page.About.Event />}
               />
               <Route
-                path={BROWSER_PATH.ABOUT.ACTIVITY_DETAIL()}
-                element={<Page.About.ActivityDetail />}
+                path={BROWSER_PATH.ABOUT.EVENT_DETAIL()}
+                element={<Page.About.EventDetail />}
               />
               <Route
-                path={BROWSER_PATH.ABOUT.FAQ}
-                element={<Page.About.FAQ />}
+                path={BROWSER_PATH.ABOUT.EVENT_WRITE}
+                element={<Page.About.EventWrite />}
               />
               <Route
                 path={BROWSER_PATH.ABOUT.NOTICE()}
@@ -105,6 +105,10 @@ const Router = () => {
               <Route
                 path={BROWSER_PATH.ABOUT.NOTICE_WRITE}
                 element={<Page.About.NoticeWrite />}
+              />
+              <Route
+                path={BROWSER_PATH.ABOUT.FAQ}
+                element={<Page.About.FAQ />}
               />
             </Route>
             {/* Adopt */}
