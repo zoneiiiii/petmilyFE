@@ -8,6 +8,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableHead,
   TableRow,
   ThemeProvider,
 } from "@mui/material";
@@ -17,15 +18,8 @@ import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ABOUT } from "../../constants/PageURL";
 import styled from "styled-components";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 
 const pageWidth = "100%";
-// 검색 방식
-const searchModes = {
-  subject_contents: "subject_contents",
-  subject: "subject",
-  contents: "contents",
-};
 
 const Notice = () => {
   const location = useLocation();
@@ -33,7 +27,6 @@ const Notice = () => {
   const page = searchParams.get("page");
   const limit = searchParams.get("limit");
   const search = searchParams.get("search");
-  const search_mode = searchParams.get("search_mode");
 
   const navigate = useNavigate();
   const [nowPage, setNowPage] = useState(1);
@@ -43,16 +36,18 @@ const Notice = () => {
   const [foundData, setFoundData] = useState(dummy);
   const [pagedData, setPagedData] = useState(dummy.slice(0, 20));
 
-  useEffect(() => {
-    console.log("re-rendering", foundData, searchKeyWord, searchMode);
-  });
+  const searchOption = {
+    subject_contents: "subject_contents",
+    subject: "subject",
+    contents: "contents",
+  };
+
   // 초기 세팅
   useEffect(() => {
     setNowPage(page ? parseInt(page) : 1);
     setSearchKeyWord(search ? search : "");
-    setRowsPerPage(limit ? parseInt(limit) : 10);
-    setSearchMode(search_mode ? search_mode : searchModes.subject_contents);
-    search && findDataByMode(search, search_mode);
+    setRowsPerPage(limit ? parseInt(limit) : 20);
+    search && findDataByMode(search);
   }, [limit, page, search]);
 
   // 페이지 표시 데이터 갱신
@@ -68,7 +63,6 @@ const Notice = () => {
         page: newPage,
         limit: limit,
         search: search,
-        search_mode: search_mode,
       })
     );
   };
@@ -80,14 +74,14 @@ const Notice = () => {
       ABOUT.NOTICE({
         page: nowPage,
         limit: event.target.value,
-        search: search,
-        search_mode: search_mode,
+        search: searchKeyWord,
       })
     );
   };
 
   // 검색 방식 변경
   const handleChangeSearchMode = (event) => {
+    console.log(event.target.value);
     setSearchMode(event.target.value);
   };
 
@@ -100,27 +94,29 @@ const Notice = () => {
         page: 1,
         limit: rowsPerPage,
         search: value,
-        search_mode: searchMode,
       })
     );
   };
 
-  // 검색 방식 설정
   function findDataByMode(value, searchMode) {
     switch (searchMode) {
-      case searchModes.subject_contents:
+      case searchOption.subject_contents:
         setFoundData(
           dummy.filter(
-            (notice) =>
+            (notice, index) =>
               notice.subject.includes(value) || notice.contents.includes(value)
           )
         );
         break;
-      case searchModes.subject:
-        setFoundData(dummy.filter((notice) => notice.subject.includes(value)));
+      case searchOption.subject:
+        setFoundData(
+          dummy.filter((notice, index) => notice.subject.includes(value))
+        );
         break;
-      case searchModes.contents:
-        setFoundData(dummy.filter((notice) => notice.contents.includes(value)));
+      case searchOption.contents:
+        setFoundData(
+          dummy.filter((notice, index) => notice.contents.includes(value))
+        );
         break;
       default:
     }
@@ -147,14 +143,14 @@ const Notice = () => {
           <Box display={"flex"} justifyContent={"flex-end"}>
             <FormControl sx={FormControlSx} size="small">
               <Select
-                defaultValue={searchModes.subject_contents}
+                defaultValue={searchOption.subject_contents}
                 onChange={handleChangeSearchMode}
               >
-                <MenuItem value={searchModes.subject_contents}>
+                <MenuItem value={searchOption.subject_contents}>
                   제목 + 내용
                 </MenuItem>
-                <MenuItem value={searchModes.subject}>제목</MenuItem>
-                <MenuItem value={searchModes.contents}>내용</MenuItem>
+                <MenuItem value={searchOption.subject}>제목</MenuItem>
+                <MenuItem value={searchOption.contents}>내용</MenuItem>
               </Select>
             </FormControl>
             <SearchBar
@@ -164,58 +160,42 @@ const Notice = () => {
             />
           </Box>
         </Box>
-        <Table sx={{ width: pageWidth }}>
+        <Table sx={TableSx}>
+          <TableHead>
+            <TableRow sx={{ backgroundColor: "#fbd385" }}>
+              <TableCell sx={thSx}>No.</TableCell>
+              <TableCell sx={thSx}>제목</TableCell>
+              <TableCell sx={thSx}>작성자</TableCell>
+              <TableCell sx={thSx}>조회수</TableCell>
+              <TableCell sx={thSx}>작성일자</TableCell>
+            </TableRow>
+          </TableHead>
           <TableBody>
             {pagedData.map((notice, index) => {
               return (
                 <TableRow key={index}>
+                  <TableCell sx={{ ...tdSx, minWidth: "40px" }}>
+                    {notice.no}
+                  </TableCell>
                   <TableCell
                     sx={{
-                      borderBottom: "1px solid #bfbfbf",
-                      borderTop: "1px solid #bfbfbf",
+                      ...tdSx,
+                      textAlign: "left",
+                      width: "60%",
                     }}
                   >
-                    <StyledLink
-                      to={ABOUT.NOTICE_DETAIL({
-                        no: notice.no,
-                        page: nowPage,
-                        limit: rowsPerPage,
-                        search: searchKeyWord,
-                        search_mode: searchMode,
-                      })}
-                    >
-                      <Box
-                        sx={{
-                          display: "flex",
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            imgSx,
-                          }}
-                        >
-                          <img
-                            alt={notice.no}
-                            src={notice.imgThumbnail}
-                            style={{ maxWidth: "180px", maxHeight: "90px" }}
-                          />
-                        </Box>
-                        <Box className="hover" sx={titleSx}>
-                          {notice.subject}
-                        </Box>
-                        <Box sx={{ ...tdSx, minWidth: "100px" }}>
-                          {member.nickname}
-                        </Box>
-                        <Box sx={{ ...tdSx, minWidth: "50px" }}>
-                          <VisibilityIcon fontSize="small" color="disabled" />
-                          &nbsp;
-                          {notice.count}
-                        </Box>
-                        <Box sx={{ ...tdSx, minWidth: "90px" }}>
-                          {notice.postDate}
-                        </Box>
-                      </Box>
+                    <StyledLink to={ABOUT.EVENT_DETAIL(notice.no)}>
+                      {notice.subject}
                     </StyledLink>
+                  </TableCell>
+                  <TableCell sx={{ ...tdSx, minWidth: "100px" }}>
+                    {notice.writer}
+                  </TableCell>
+                  <TableCell sx={{ ...tdSx, minWidth: "50px" }}>
+                    {notice.count}
+                  </TableCell>
+                  <TableCell sx={{ ...tdSx, minWidth: "100px" }}>
+                    {notice.postData}
                   </TableCell>
                 </TableRow>
               );
@@ -270,168 +250,913 @@ const FormControlSx = {
   },
 };
 
-const imgSx = {
-  display: "flex",
-  flexWrap: "wrap",
-  justifyContent: "center",
-  alignContent: "center",
-  width: "180px",
-  height: "90px",
-};
+const TableSx = { width: pageWidth };
+const thSx = { fontSize: "1rem", fontWeight: 600, textAlign: "center" };
 const tdSx = {
-  p: 2,
   fontSize: "1rem",
   fontWeight: 500,
-  textAlign: "right",
-  alignSelf: "center",
-  display: "flex",
-  alignContent: "center",
-  justifyContent: "flex-end",
-};
-const titleSx = {
-  ...tdSx,
-  flexGrow: 1,
-  textAlign: "left",
-  justifyContent: "left",
-  fontSize: "1.2rem",
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-  whiteSpace: "nowrap",
+  textAlign: "center",
 };
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: black;
   :hover {
-    .hover {
-      text-decoration: underline;
-    }
+    text-decoration: underline;
   }
-  .hover:visited {
+  :visited {
     color: purple;
   }
 `;
 
 const dummy = [
   {
-    no: 10,
-    memberNo: 1,
-    category: "notice",
-    subject: "펫밀리 사용 후기를 남겨주세요!",
-    contents: "여러분의 의견이 더 나은 펫밀리를 만듭니다!",
+    no: "001",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리펫밀리",
     count: 31,
-    postDate: "2023-05-05",
-    imgThumbnail: "/images/petmilylogo.png",
+    postData: "2023-05-05",
+    contents: "유기동물을 열심히 구조했습니다!",
   },
   {
-    no: 9,
-    memberNo: 1,
-    category: "notice",
-    subject: "게시판 이용수칙",
-    contents:
-      "타 회원에 대한 욕설 비방 등을 금지하고 있으며, 펫밀리는 법규를 준수하는 사이트입니다.",
+    no: "002",
+    subject: "유기동물 구조활동",
     writer: "펫밀리",
     count: 32,
-    postDate: "2023-04-30",
-    imgThumbnail: "/images/petmilylogo.png",
+    postData: "2023-04-30",
+    contents: "유기동물을 열심히 산책했습니다!",
   },
   {
-    no: 8,
-    memberNo: 1,
-    category: "notice",
-    subject: "봉사 후기 이벤트",
-    contents:
-      "펫밀리 봉사하기를 통해 봉사를 실천하신 회원분들 대상으로 봉사후기 게시글을 남기면 하나의 계정당 2000p를 드립니다!",
+    no: "003",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
     count: 33,
-    postDate: "2023-04-29",
-    imgThumbnail: "/images/petmilylogo.png",
+    postData: "2023-04-29",
+    contents: "유기동물을 열심히 밥줬습니다!",
   },
   {
-    no: 7,
-    memberNo: 1,
-    category: "notice",
-    subject: "펫밀리 SHOP 런칭 이벤트",
-    contents: "펫밀리 SHOP을 오픈했습니다!! 후기를 작성하시면 1000p를 드립니다",
+    no: "004",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
     count: 34,
-    postDate: "2023-04-23",
-    imgThumbnail: "/images/petmilylogo.png",
+    postData: "2023-04-23",
+    contents: "유기동물을 열심히 케어했습니다!",
   },
   {
-    no: 6,
-    memberNo: 1,
-    category: "notice",
-    subject: "후원 안내",
-    contents: "후원 탭에서 기부 혹은 봉사 참여하실 수 있습니다.",
+    no: "005",
+    subject: "유기동물 구조활동",
+    writer: "산책왕",
     count: 35,
-    postDate: "2023-04-22",
-    imgThumbnail: "/images/petmilylogo.png",
+    postData: "2023-04-22",
+    contents: "유기동물을 열심히 훈련했습니다!",
   },
   {
-    no: 5,
-    memberNo: 1,
-    category: "notice",
-    subject: "SHOP 오픈",
-    contents: "펫밀리 shop에서 필요하신 반려용품을 구매할 수 있습니다!",
+    no: "006",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
     count: 36,
-    postDate: "2023-04-16",
-    imgThumbnail: "/images/petmilylogo.png",
+    postData: "2023-04-16",
+    contents: "유기동물을 열심히 보살폈습니다!",
   },
   {
-    no: 4,
-    memberNo: 1,
-    category: "notice",
-    subject: "커뮤니티 개설",
-    contents:
-      "실종 동물 게시판, 목격 제보 게시판, 자유게시판, 매매장터 게시판으로 구성되었습니다.",
+    no: "007",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
     count: 37,
-    postDate: "2023-04-15",
-    imgThumbnail: "/images/petmilylogo.png",
+    postData: "2023-04-15",
+    contents: "유기동물을 열심히 치료했습니다!",
   },
   {
-    no: 3,
-    memberNo: 1,
-    category: "notice",
-    subject: "유기동물 입양 신청 안내",
-    contents: "입양 탭에서 입양신청서, 체크리스트 등을 작성하실 수 있습니다.",
+    no: "008",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
     count: 38,
-    postDate: "2023-04-09",
-    imgThumbnail: "/images/petmilylogo.png",
+    postData: "2023-04-09",
+    contents: "유기동물을 열심히 분양했습니다!",
   },
   {
-    no: 2,
-    memberNo: 1,
-    category: "notice",
-    subject: "사이트 가이드",
-    contents:
-      "펫밀리 사이트는 크게 소개 - 입양 - 커뮤니티 - SHOP - 후원으로 구성되어 있습니다.",
+    no: "009",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
     count: 39,
-    postDate: "2023-04-08",
-    imgThumbnail: "/images/petmilylogo.png",
+    postData: "2023-04-08",
+    contents: "유기동물을 열심히 놀아주었습니다!",
   },
   {
-    no: 1,
-    memberNo: 1,
-    category: "notice",
-    subject: "사이트 개설 안내",
-    contents: "펫밀리 사이트를 런칭하였습니다!",
+    no: "010",
+    subject: "유기동물 산책활동",
+    writer: "펫밀리",
     count: 40,
-    postDate: "2023-04-02",
-    imgThumbnail: "/images/petmilylogo.png",
+    postData: "2023-04-02",
+    contents: "유기동물을 열심히 챙겨줬습니다!",
+  },
+  {
+    no: "011",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 31,
+    postData: "2023-05-05",
+    contents: "유기동물을 열심히 구조했습니다!",
+  },
+  {
+    no: "012",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 32,
+    postData: "2023-04-30",
+    contents: "유기동물을 열심히 산책했습니다!",
+  },
+  {
+    no: "013",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 33,
+    postData: "2023-04-29",
+    contents: "유기동물을 열심히 밥줬습니다!",
+  },
+  {
+    no: "014",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 34,
+    postData: "2023-04-23",
+    contents: "유기동물을 열심히 케어했습니다!",
+  },
+  {
+    no: "015",
+    subject: "유기동물 구조활동",
+    writer: "산책왕",
+    count: 35,
+    postData: "2023-04-22",
+    contents: "유기동물을 열심히 훈련했습니다!",
+  },
+  {
+    no: "016",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 36,
+    postData: "2023-04-16",
+    contents: "유기동물을 열심히 보살폈습니다!",
+  },
+  {
+    no: "017",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 37,
+    postData: "2023-04-15",
+    contents: "유기동물을 열심히 치료했습니다!",
+  },
+  {
+    no: "018",
+    subject: "유기동물 구조활동",
+    writer: "산책왕",
+    count: 38,
+    postData: "2023-04-09",
+    contents: "유기동물을 열심히 분양했습니다!",
+  },
+  {
+    no: "019",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 39,
+    postData: "2023-04-08",
+    contents: "유기동물을 열심히 놀아주었습니다!",
+  },
+  {
+    no: "020",
+    subject: "유기동물 산책활동",
+    writer: "펫밀리",
+    count: 40,
+    postData: "2023-04-02",
+    contents: "유기동물을 열심히 챙겨줬습니다!",
+  },
+  {
+    no: "021",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 31,
+    postData: "2023-05-05",
+    contents: "유기동물을 열심히 구조했습니다!",
+  },
+  {
+    no: "022",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 32,
+    postData: "2023-04-30",
+    contents: "유기동물을 열심히 산책했습니다!",
+  },
+  {
+    no: "023",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 33,
+    postData: "2023-04-29",
+    contents: "유기동물을 열심히 밥줬습니다!",
+  },
+  {
+    no: "024",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 34,
+    postData: "2023-04-23",
+    contents: "유기동물을 열심히 케어했습니다!",
+  },
+  {
+    no: "025",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 35,
+    postData: "2023-04-22",
+    contents: "유기동물을 열심히 훈련했습니다!",
+  },
+  {
+    no: "026",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 36,
+    postData: "2023-04-16",
+    contents: "유기동물을 열심히 보살폈습니다!",
+  },
+  {
+    no: "027",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 37,
+    postData: "2023-04-15",
+    contents: "유기동물을 열심히 치료했습니다!",
+  },
+  {
+    no: "028",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 38,
+    postData: "2023-04-09",
+    contents: "유기동물을 열심히 분양했습니다!",
+  },
+  {
+    no: "029",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 39,
+    postData: "2023-04-08",
+    contents: "유기동물을 열심히 놀아주었습니다!",
+  },
+  {
+    no: "030",
+    subject: "유기동물 산책활동",
+    writer: "펫밀리",
+    count: 40,
+    postData: "2023-04-02",
+    contents: "유기동물을 열심히 챙겨줬습니다!",
+  },
+  {
+    no: "031",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 31,
+    postData: "2023-05-05",
+    contents: "유기동물을 열심히 구조했습니다!",
+  },
+  {
+    no: "032",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 32,
+    postData: "2023-04-30",
+    contents: "유기동물을 열심히 산책했습니다!",
+  },
+  {
+    no: "033",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 33,
+    postData: "2023-04-29",
+    contents: "유기동물을 열심히 밥줬습니다!",
+  },
+  {
+    no: "034",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 34,
+    postData: "2023-04-23",
+    contents: "유기동물을 열심히 케어했습니다!",
+  },
+  {
+    no: "035",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 35,
+    postData: "2023-04-22",
+    contents: "유기동물을 열심히 훈련했습니다!",
+  },
+  {
+    no: "036",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 36,
+    postData: "2023-04-16",
+    contents: "유기동물을 열심히 보살폈습니다!",
+  },
+  {
+    no: "037",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 37,
+    postData: "2023-04-15",
+    contents: "유기동물을 열심히 치료했습니다!",
+  },
+  {
+    no: "038",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 38,
+    postData: "2023-04-09",
+    contents: "유기동물을 열심히 분양했습니다!",
+  },
+  {
+    no: "039",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 39,
+    postData: "2023-04-08",
+    contents: "유기동물을 열심히 놀아주었습니다!",
+  },
+  {
+    no: "040",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 40,
+    postData: "2023-04-02",
+    contents: "유기동물을 열심히 챙겨줬습니다!",
+  },
+  {
+    no: "041",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 31,
+    postData: "2023-05-05",
+    contents: "유기동물을 열심히 구조했습니다!",
+  },
+  {
+    no: "042",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 32,
+    postData: "2023-04-30",
+    contents: "유기동물을 열심히 산책했습니다!",
+  },
+  {
+    no: "043",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 33,
+    postData: "2023-04-29",
+    contents: "유기동물을 열심히 밥줬습니다!",
+  },
+  {
+    no: "044",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 34,
+    postData: "2023-04-23",
+    contents: "유기동물을 열심히 케어했습니다!",
+  },
+  {
+    no: "045",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 35,
+    postData: "2023-04-22",
+    contents: "유기동물을 열심히 훈련했습니다!",
+  },
+  {
+    no: "046",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 36,
+    postData: "2023-04-16",
+    contents: "유기동물을 열심히 보살폈습니다!",
+  },
+  {
+    no: "047",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 37,
+    postData: "2023-04-15",
+    contents: "유기동물을 열심히 치료했습니다!",
+  },
+  {
+    no: "048",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 38,
+    postData: "2023-04-09",
+    contents: "유기동물을 열심히 분양했습니다!",
+  },
+  {
+    no: "049",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 39,
+    postData: "2023-04-08",
+    contents: "유기동물을 열심히 놀아주었습니다!",
+  },
+  {
+    no: "050",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 40,
+    postData: "2023-04-02",
+    contents: "유기동물을 열심히 챙겨줬습니다!",
+  },
+  {
+    no: "051",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 31,
+    postData: "2023-05-05",
+    contents: "유기동물을 열심히 구조했습니다!",
+  },
+  {
+    no: "052",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 32,
+    postData: "2023-04-30",
+    contents: "유기동물을 열심히 산책했습니다!",
+  },
+  {
+    no: "053",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 33,
+    postData: "2023-04-29",
+    contents: "유기동물을 열심히 밥줬습니다!",
+  },
+  {
+    no: "054",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 34,
+    postData: "2023-04-23",
+    contents: "유기동물을 열심히 케어했습니다!",
+  },
+  {
+    no: "055",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 35,
+    postData: "2023-04-22",
+    contents: "유기동물을 열심히 훈련했습니다!",
+  },
+  {
+    no: "056",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 36,
+    postData: "2023-04-16",
+    contents: "유기동물을 열심히 보살폈습니다!",
+  },
+  {
+    no: "057",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 37,
+    postData: "2023-04-15",
+    contents: "유기동물을 열심히 치료했습니다!",
+  },
+  {
+    no: "058",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 38,
+    postData: "2023-04-09",
+    contents: "유기동물을 열심히 분양했습니다!",
+  },
+  {
+    no: "059",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 39,
+    postData: "2023-04-08",
+    contents: "유기동물을 열심히 놀아주었습니다!",
+  },
+  {
+    no: "060",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 40,
+    postData: "2023-04-02",
+    contents: "유기동물을 열심히 챙겨줬습니다!",
+  },
+  {
+    no: "061",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 31,
+    postData: "2023-05-05",
+    contents: "유기동물을 열심히 구조했습니다!",
+  },
+  {
+    no: "062",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 32,
+    postData: "2023-04-30",
+    contents: "유기동물을 열심히 산책했습니다!",
+  },
+  {
+    no: "063",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 33,
+    postData: "2023-04-29",
+    contents: "유기동물을 열심히 밥줬습니다!",
+  },
+  {
+    no: "064",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 34,
+    postData: "2023-04-23",
+    contents: "유기동물을 열심히 케어했습니다!",
+  },
+  {
+    no: "065",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 35,
+    postData: "2023-04-22",
+    contents: "유기동물을 열심히 훈련했습니다!",
+  },
+  {
+    no: "066",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 36,
+    postData: "2023-04-16",
+    contents: "유기동물을 열심히 보살폈습니다!",
+  },
+  {
+    no: "067",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 37,
+    postData: "2023-04-15",
+    contents: "유기동물을 열심히 치료했습니다!",
+  },
+  {
+    no: "068",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 38,
+    postData: "2023-04-09",
+    contents: "유기동물을 열심히 분양했습니다!",
+  },
+  {
+    no: "069",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 39,
+    postData: "2023-04-08",
+    contents: "유기동물을 열심히 놀아주었습니다!",
+  },
+  {
+    no: "070",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 40,
+    postData: "2023-04-02",
+    contents: "유기동물을 열심히 챙겨줬습니다!",
+  },
+  {
+    no: "071",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 31,
+    postData: "2023-05-05",
+    contents: "유기동물을 열심히 구조했습니다!",
+  },
+  {
+    no: "072",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 32,
+    postData: "2023-04-30",
+    contents: "유기동물을 열심히 산책했습니다!",
+  },
+  {
+    no: "073",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 33,
+    postData: "2023-04-29",
+    contents: "유기동물을 열심히 밥줬습니다!",
+  },
+  {
+    no: "074",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 34,
+    postData: "2023-04-23",
+    contents: "유기동물을 열심히 케어했습니다!",
+  },
+  {
+    no: "075",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 35,
+    postData: "2023-04-22",
+    contents: "유기동물을 열심히 훈련했습니다!",
+  },
+  {
+    no: "076",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 36,
+    postData: "2023-04-16",
+    contents: "유기동물을 열심히 보살폈습니다!",
+  },
+  {
+    no: "077",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 37,
+    postData: "2023-04-15",
+    contents: "유기동물을 열심히 치료했습니다!",
+  },
+  {
+    no: "078",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 38,
+    postData: "2023-04-09",
+    contents: "유기동물을 열심히 분양했습니다!",
+  },
+  {
+    no: "079",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 39,
+    postData: "2023-04-08",
+    contents: "유기동물을 열심히 놀아주었습니다!",
+  },
+  {
+    no: "080",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 40,
+    postData: "2023-04-02",
+    contents: "유기동물을 열심히 챙겨줬습니다!",
+  },
+  {
+    no: "081",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 31,
+    postData: "2023-05-05",
+    contents: "유기동물을 열심히 구조했습니다!",
+  },
+  {
+    no: "082",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 32,
+    postData: "2023-04-30",
+    contents: "유기동물을 열심히 산책했습니다!",
+  },
+  {
+    no: "083",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 33,
+    postData: "2023-04-29",
+    contents: "유기동물을 열심히 밥줬습니다!",
+  },
+  {
+    no: "084",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 34,
+    postData: "2023-04-23",
+    contents: "유기동물을 열심히 케어했습니다!",
+  },
+  {
+    no: "085",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 35,
+    postData: "2023-04-22",
+    contents: "유기동물을 열심히 훈련했습니다!",
+  },
+  {
+    no: "086",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 36,
+    postData: "2023-04-16",
+    contents: "유기동물을 열심히 보살폈습니다!",
+  },
+  {
+    no: "087",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 37,
+    postData: "2023-04-15",
+    contents: "유기동물을 열심히 치료했습니다!",
+  },
+  {
+    no: "088",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 38,
+    postData: "2023-04-09",
+    contents: "유기동물을 열심히 분양했습니다!",
+  },
+  {
+    no: "089",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 39,
+    postData: "2023-04-08",
+    contents: "유기동물을 열심히 놀아주었습니다!",
+  },
+  {
+    no: "090",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 40,
+    postData: "2023-04-02",
+    contents: "유기동물을 열심히 챙겨줬습니다!",
+  },
+  {
+    no: "091",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 31,
+    postData: "2023-05-05",
+    contents: "유기동물을 열심히 구조했습니다!",
+  },
+  {
+    no: "092",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 32,
+    postData: "2023-04-30",
+    contents: "유기동물을 열심히 산책했습니다!",
+  },
+  {
+    no: "093",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 33,
+    postData: "2023-04-29",
+    contents: "유기동물을 열심히 밥줬습니다!",
+  },
+  {
+    no: "094",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 34,
+    postData: "2023-04-23",
+    contents: "유기동물을 열심히 케어했습니다!",
+  },
+  {
+    no: "095",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 35,
+    postData: "2023-04-22",
+    contents: "유기동물을 열심히 훈련했습니다!",
+  },
+  {
+    no: "096",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 36,
+    postData: "2023-04-16",
+    contents: "유기동물을 열심히 보살폈습니다!",
+  },
+  {
+    no: "097",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 37,
+    postData: "2023-04-15",
+    contents: "유기동물을 열심히 치료했습니다!",
+  },
+  {
+    no: "098",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 38,
+    postData: "2023-04-09",
+    contents: "유기동물을 열심히 분양했습니다!",
+  },
+  {
+    no: "099",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 39,
+    postData: "2023-04-08",
+    contents: "유기동물을 열심히 놀아주었습니다!",
+  },
+  {
+    no: "100",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 40,
+    postData: "2023-04-02",
+    contents: "유기동물을 열심히 챙겨줬습니다!",
+  },
+  {
+    no: "101",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 31,
+    postData: "2023-05-05",
+    contents: "유기동물을 열심히 구조했습니다!",
+  },
+  {
+    no: "102",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 32,
+    postData: "2023-04-30",
+    contents: "유기동물을 열심히 산책했습니다!",
+  },
+  {
+    no: "103",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 33,
+    postData: "2023-04-29",
+    contents: "유기동물을 열심히 밥줬습니다!",
+  },
+  {
+    no: "104",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 34,
+    postData: "2023-04-23",
+    contents: "유기동물을 열심히 케어했습니다!",
+  },
+  {
+    no: "105",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 35,
+    postData: "2023-04-22",
+    contents: "유기동물을 열심히 훈련했습니다!",
+  },
+  {
+    no: "106",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 36,
+    postData: "2023-04-16",
+    contents: "유기동물을 열심히 보살폈습니다!",
+  },
+  {
+    no: "107",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 37,
+    postData: "2023-04-15",
+    contents: "유기동물을 열심히 치료했습니다!",
+  },
+  {
+    no: "108",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 38,
+    postData: "2023-04-09",
+    contents: "유기동물을 열심히 분양했습니다!",
+  },
+  {
+    no: "109",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 39,
+    postData: "2023-04-08",
+    contents: "유기동물을 열심히 놀아주었습니다!",
+  },
+  {
+    no: "110",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 40,
+    postData: "2023-04-02",
+    contents: "유기동물을 열심히 챙겨줬습니다!",
+  },
+  {
+    no: "111",
+    subject: "유기동물 구조활동",
+    writer: "펫밀리",
+    count: 41,
+    postData: "2023-04-02",
+    contents: "유기동물을 열심히 챙겨줬습니다!",
   },
 ];
-
-const member = {
-  num: 1,
-  id: "Admin",
-  pw: "1234",
-  nickname: "관리자",
-  email: "asdf@naver.com",
-  name: "관리자",
-  gender: "남자",
-  birth: "2023-01-01",
-  tel: "010-1234-5678",
-  addr: "서울특별시 강남구 선릉로 428",
-  img: "",
-  role: "admin",
-};
 
 export default Notice;

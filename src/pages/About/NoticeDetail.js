@@ -137,7 +137,7 @@ const NoticeDetail = () => {
                 다음글&nbsp;
                 {afterData ? (
                   <StyledLink
-                    to={ABOUT.NOTICE_DETAIL({
+                    to={ABOUT.EVENT_DETAIL({
                       no: afterData.no,
                       page: page,
                       limit: limit,
@@ -163,7 +163,7 @@ const NoticeDetail = () => {
                 이전글&nbsp;
                 {beforeData ? (
                   <StyledLink
-                    to={ABOUT.NOTICE_DETAIL({
+                    to={ABOUT.EVENT_DETAIL({
                       no: beforeData.no,
                       page: page,
                       limit: limit,
@@ -187,7 +187,7 @@ const NoticeDetail = () => {
             color="bfbfbf"
             onClick={() =>
               navigate(
-                ABOUT.NOTICE({
+                ABOUT.EVENT({
                   page: page,
                   limit: limit,
                   search: search,
@@ -203,7 +203,7 @@ const NoticeDetail = () => {
               variant="contained"
               sx={{ ml: 2, width: "100px" }}
               color="fbd385"
-              onClick={() => navigate(ABOUT.NOTICE_WRITE)}
+              onClick={() => navigate(ABOUT.EVENT_WRITE)}
             >
               수정
             </Button>
