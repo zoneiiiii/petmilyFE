@@ -4,6 +4,7 @@ import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import Typography from "@mui/material/Typography";
 import Animal from "./Animal";
 import axios from "axios";
 const AdoptInfoDetail = (props) => {
@@ -17,6 +18,7 @@ const AdoptInfoDetail = (props) => {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(
         `http://apis.data.go.kr/1543061/abandonmentPublicSrvc/abandonmentPublic?bgnde=20230101&endde=20230507&upr_cd=${uprCd}&org_cd=${code}&pageNo=1&numOfRows=100&serviceKey=AhrFaZaAefMdQ7n5tWepAOM5tzLw5%2BCiT3stOXtEl3uTyXNtr0xlgtAn6WZppVVYaZdAuyqJvj%2FS65SSV4iapw%3D%3D&_type=json`
       );
@@ -25,7 +27,7 @@ const AdoptInfoDetail = (props) => {
       const filteredData = data2.filter(
         (item) => item.processState === "보호중"
       );
-      setLoading(true);
+
       setData(filteredData);
       setAnimalLength(filteredData.length);
     } catch (e) {
@@ -58,13 +60,16 @@ const AdoptInfoDetail = (props) => {
     });
   }, [data]);
 
-  const AnimalRender = () => {
+  const AnimalRender = useCallback(() => {
     let result = [];
 
     for (let i = animalIndex; i < animalIndex + 5; i++) {
       let dataIndex = i;
       if (dataIndex >= data.length) {
         dataIndex = dataIndex % data.length;
+        if (dataIndex === animalIndex) {
+          break;
+        }
       }
       let data1 = data[dataIndex];
 
@@ -97,11 +102,47 @@ const AdoptInfoDetail = (props) => {
         </Grid>
       );
     }
+    // 5개 안되는경우 빈칸에 이미지 채우기
+    const remainingSlots = 5 - result.length;
+    for (let i = 0; i < remainingSlots; i++) {
+      console.log("d");
+      result.push(
+        <Grid item xs={2} key={`empty-slot-${i}`}>
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              height: "180px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "#F5F5ED",
+              borderRadius: "5px",
+            }}
+          >
+            <img
+              src="/images/emptydataicon.png"
+              style={{
+                width: "160px",
+                height: "160px ",
+                objectFit: "cover",
+                borderRadius: "10px",
+              }}
+            />
+          </div>
+        </Grid>
+      );
+    }
+    if (result.length === 0) {
+      // Handle case where there are no items to render
+      result.push(<div key="no-data">No data available.</div>);
+    }
     return result;
-  };
+  }, [data, animalIndex]);
+
   useEffect(() => {
     fetchData();
-  }, [loading]);
+  }, [uprCd]);
   return (
     <>
       {loading ? (
@@ -109,20 +150,27 @@ const AdoptInfoDetail = (props) => {
       ) : (
         data?.length !== 0 && (
           <div>
-            <h2
-              style={{
-                marginTop: "0px",
-                justifyContent: "center",
-                marginLeft: "8.5%",
-                color: "black",
+            <Typography
+              component="h2"
+              variant="h5"
+              sx={{
+                marginLeft: "100px",
                 fontSize: "1.5em",
-                width: "100px",
-                backgroundColor: "#FBD385",
-                textAlign: "center",
+                fontWeight: "bolder",
+                color: "black",
+                justifyContent: "center",
+                width: "150px",
+                textAlign: "left",
+                borderLeft: "3px solid",
+                borderBottom: "3px solid",
+                borderBottomColor: "#FBD385",
+                borderLeftColor: "#FBD385",
+                paddingLeft: "5px",
+                mb: "10px",
               }}
             >
               {name}
-            </h2>
+            </Typography>
             <Grid
               container
               // spacing={2}
@@ -133,53 +181,60 @@ const AdoptInfoDetail = (props) => {
                 marginBottom: "15px",
               }}
             >
-              <Grid
-                style={{
-                  display: "flex",
-                }}
-                item
-                xs={1}
-              >
-                <IconButton
-                  onClick={moveLeft}
+              {data.length <= 5 ? (
+                ""
+              ) : (
+                <Grid
                   style={{
-                    width: "100%",
-                    height: "100%",
+                    display: "flex",
                   }}
+                  item
+                  xs={1}
                 >
-                  <ArrowBackIosIcon
+                  <IconButton
+                    onClick={moveLeft}
                     style={{
-                      width: "30%",
+                      width: "100%",
                       height: "100%",
-                      color: "black",
-                      scale: "2.0",
-                      marginLeft: "1.5em",
                     }}
-                  />
-                </IconButton>
-              </Grid>
+                  >
+                    <ArrowBackIosIcon
+                      style={{
+                        width: "30%",
+                        height: "100%",
+                        color: "black",
+                        scale: "2.0",
+                        marginLeft: "1.5em",
+                      }}
+                    />
+                  </IconButton>
+                </Grid>
+              )}
 
-              {data?.length && AnimalRender()}
-
-              <Grid item xs={1}>
-                <IconButton
-                  onClick={moveRight}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                  }}
-                >
-                  <ArrowForwardIosIcon
+              {AnimalRender()}
+              {data.length <= 5 ? (
+                ""
+              ) : (
+                <Grid item xs={1}>
+                  <IconButton
+                    onClick={moveRight}
                     style={{
-                      width: "30%",
+                      width: "100%",
                       height: "100%",
-                      color: "black",
-                      scale: "2.0",
-                      marginRight: "1.5em",
                     }}
-                  />
-                </IconButton>
-              </Grid>
+                  >
+                    <ArrowForwardIosIcon
+                      style={{
+                        width: "30%",
+                        height: "100%",
+                        color: "black",
+                        scale: "2.0",
+                        marginRight: "1.5em",
+                      }}
+                    />
+                  </IconButton>
+                </Grid>
+              )}
             </Grid>
           </div>
         )
