@@ -7,6 +7,7 @@ import {
   TableRow,
   TextField,
   ThemeProvider,
+  Typography,
 } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -33,6 +34,15 @@ function MyInfo() {
   // const columnWidth = 100;
   return (
     <ThemeProvider theme={CustomTheme}>
+      <Typography
+        className="myOrderListTitle"
+        sx={titleSx}
+        border={3}
+        borderColor="#ffbd59"
+        mb={4}
+      >
+        회원 정보
+      </Typography>
       <Box p={2} border={3} borderRadius={2} borderColor="fbd385.main">
         <Table
           size="small"
@@ -84,7 +94,14 @@ function MyInfo() {
     </ThemeProvider>
   );
 }
-
+const titleSx = {
+  width: "200px",
+  textAlign: "center",
+  fontStyle: "normal",
+  fontWeight: "bold",
+  fontSize: "1.5rem",
+  lineHeight: "50px",
+};
 const thSx = {
   fontWeight: "bold",
   fontSize: "1.5rem",
