@@ -9,7 +9,7 @@ import {
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { useEffect, useState } from "react";
 
-const SearchBar = ({ setValue, value, onClick }) => {
+const SearchBar = ({ setValue, value, onClick, sx, width }) => {
   const [textValue, setTextValue] = useState("");
   useEffect(() => {
     value && setTextValue(value);
@@ -29,7 +29,7 @@ const SearchBar = ({ setValue, value, onClick }) => {
 
   return (
     <ThemeProvider theme={CustomTheme}>
-      <Box>
+      <Box display={"flex"}>
         <TextField
           variant="outlined"
           size="small"
@@ -59,6 +59,8 @@ const SearchBar = ({ setValue, value, onClick }) => {
               //   borderColor: "#fbd385",
               // },
             },
+            width: width,
+            ...sx,
           }}
         />
         <Button
