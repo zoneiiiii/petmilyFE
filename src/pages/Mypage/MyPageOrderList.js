@@ -45,14 +45,20 @@ const MyPageOrderList = () => {
       >
         주문 내역
       </Typography>
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <Box display={"flex"}>
           <CustomDatePicker
             label="Start Date"
             defaultValue={dayjs(startDate)}
             value={startDate}
             onChange={(date) => setStartDate(date)}
             maxDate={endDate}
+            width={"205px"}
             sx={{ mr: 2 }}
           />
           <CustomDatePicker
@@ -62,8 +68,10 @@ const MyPageOrderList = () => {
             onChange={(date) => setEndDate(date)}
             maxDate={dayjs()}
             minDate={startDate}
+            width={"205px"}
           />
           <Button
+            title="reset"
             onClick={resetDate}
             sx={{
               minWidth: "40px",
@@ -72,7 +80,7 @@ const MyPageOrderList = () => {
             <AutorenewIcon onClick={resetDate} />
           </Button>
         </Box>
-        <SearchBar setValue={setValue} value={value} />
+        <SearchBar setValue={setValue} value={value} width={"250px"} />
       </Box>
       {dateList.map((date, index) => {
         return (
