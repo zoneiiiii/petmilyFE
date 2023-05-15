@@ -15,12 +15,18 @@ const AdoptInfoDetail = (props) => {
   const [animallength, setAnimalLength] = useState("");
   const [displayData, setDisplayedData] = useState();
   const { uprCd, name, code } = props;
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = ("0" + (today.getMonth() + 1)).slice(-2);
+  const day = ("0" + today.getDate()).slice(-2);
+
+  const dateString = year + month + day;
 
   const fetchData = async () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://apis.data.go.kr/1543061/abandonmentPublicSrvc/abandonmentPublic?bgnde=20230101&endde=20230507&upr_cd=${uprCd}&org_cd=${code}&pageNo=1&numOfRows=100&serviceKey=AhrFaZaAefMdQ7n5tWepAOM5tzLw5%2BCiT3stOXtEl3uTyXNtr0xlgtAn6WZppVVYaZdAuyqJvj%2FS65SSV4iapw%3D%3D&_type=json`
+        `http://apis.data.go.kr/1543061/abandonmentPublicSrvc/abandonmentPublic?bgnde=20230101&endde=${dateString}&upr_cd=${uprCd}&org_cd=${code}&pageNo=1&numOfRows=100&serviceKey=AhrFaZaAefMdQ7n5tWepAOM5tzLw5%2BCiT3stOXtEl3uTyXNtr0xlgtAn6WZppVVYaZdAuyqJvj%2FS65SSV4iapw%3D%3D&_type=json`
       );
       const data2 = response.data.response.body.items.item;
 
