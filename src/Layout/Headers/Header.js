@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { BROWSER_PATH } from "../../constants/path";
 import HeaderRight from "./HeaderRight";
+import { ThemeProvider } from "@mui/material";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import {
   ABOUT,
   ADOPT,
@@ -14,65 +16,67 @@ import {
 
 const Header = ({ page }) => {
   return (
-    <HeaderNavStyle className="headerNav">
-      <div className="headerLeft">
-        <div className="logo">
-          <Link to="/">
-            <img alt="petmily icon" src="/images/petmilylogo.png" />
-          </Link>
+    <ThemeProvider theme={CustomTheme}>
+      <HeaderNavStyle className="headerNav">
+        <div className="headerLeft">
+          <div className="logo">
+            <Link to="/">
+              <img alt="petmily icon" src="/images/petmilylogo.png" />
+            </Link>
+          </div>
         </div>
-      </div>
-      <Section className="section">
-        <NavList
-          title={"소개"}
-          navList={[
-            { linkName: "프로젝트 소개", link: ABOUT.ABOUT },
-            { linkName: "입양절차", link: ABOUT.ADOPT_PROCESS },
-            { linkName: "활동내역", link: ABOUT.ACTIVITY() },
-            { linkName: "공지사항", link: ABOUT.NOTICE() },
-            { linkName: "자주 묻는 질문", link: ABOUT.FAQ },
-            { linkName: "마이페이지", link: MYPAGE.INFO }, // 임시로 확인하기 편하게 추가(이후 삭제)
-          ]}
-        />
-        <NavList
-          title={"입양"}
-          navList={[
-            { linkName: "보호 동물", link: ADOPT.ADOPT },
-            { linkName: "입양 후기 게시판", link: ADOPT.REVIEW },
-            { linkName: "동물 병원 정보", link: ADOPT.HOSPITAL_LOCATION },
-            { linkName: "보호소 위치", link: ADOPT.SHELTER_LOCATION },
-            { linkName: "입양 신청", link: ADOPT.APPLICATION },
-            { linkName: "입양 체크리스트", link: ADOPT.CHECKLIST },
-          ]}
-        />
-        <NavList
-          title={"커뮤니티"}
-          navList={[
-            { linkName: "실종 동물 게시판", link: COMMUNITY.MISSING },
-            { linkName: "목격 제보 게시판", link: COMMUNITY.FIND },
-            { linkName: "자유게시판", link: COMMUNITY.FREE },
-            { linkName: "매매 장터", link: COMMUNITY.FLEA },
-          ]}
-        />
-        <NavList
-          title={"SHOP"}
-          navList={[
-            { linkName: "상품", link: SHOP.PRODUCT },
-            { linkName: "장바구니", link: SHOP.CART },
-          ]}
-        />
-        <NavList
-          title={"후원"}
-          navList={[
-            { linkName: "기부 내역", link: SUPPORT.DONATE },
-            { linkName: "기부하기", link: SUPPORT.APPLY },
-            { linkName: "봉사하기", link: SUPPORT.VOLUNTEER_NOTICE },
-            { linkName: "봉사 후기", link: SUPPORT.VOLUNTEER_REVIEW },
-          ]}
-        />
-        <HeaderRight />
-      </Section>
-    </HeaderNavStyle>
+        <Section className="section">
+          <NavList
+            title={"소개"}
+            navList={[
+              { linkName: "프로젝트 소개", link: ABOUT.ABOUT },
+              { linkName: "입양절차", link: ABOUT.ADOPT_PROCESS },
+              { linkName: "활동내역", link: ABOUT.ACTIVITY() },
+              { linkName: "공지사항", link: ABOUT.NOTICE() },
+              { linkName: "자주 묻는 질문", link: ABOUT.FAQ },
+              { linkName: "마이페이지", link: MYPAGE.INFO }, // 임시로 확인하기 편하게 추가(이후 삭제)
+            ]}
+          />
+          <NavList
+            title={"입양"}
+            navList={[
+              { linkName: "보호 동물", link: ADOPT.ADOPT },
+              { linkName: "입양 후기 게시판", link: ADOPT.REVIEW },
+              { linkName: "동물 병원 정보", link: ADOPT.HOSPITAL_LOCATION },
+              { linkName: "보호소 위치", link: ADOPT.SHELTER_LOCATION },
+              { linkName: "입양 신청", link: ADOPT.APPLICATION },
+              { linkName: "입양 체크리스트", link: ADOPT.CHECKLIST },
+            ]}
+          />
+          <NavList
+            title={"커뮤니티"}
+            navList={[
+              { linkName: "실종 동물 게시판", link: COMMUNITY.MISSING },
+              { linkName: "목격 제보 게시판", link: COMMUNITY.FIND },
+              { linkName: "자유게시판", link: COMMUNITY.FREE },
+              { linkName: "매매 장터", link: COMMUNITY.FLEA },
+            ]}
+          />
+          <NavList
+            title={"SHOP"}
+            navList={[
+              { linkName: "상품", link: SHOP.PRODUCT },
+              { linkName: "장바구니", link: SHOP.CART },
+            ]}
+          />
+          <NavList
+            title={"후원"}
+            navList={[
+              { linkName: "기부 내역", link: SUPPORT.DONATE },
+              { linkName: "기부하기", link: SUPPORT.APPLY },
+              { linkName: "봉사하기", link: SUPPORT.VOLUNTEER_NOTICE },
+              { linkName: "봉사 후기", link: SUPPORT.VOLUNTEER_REVIEW },
+            ]}
+          />
+          <HeaderRight />
+        </Section>
+      </HeaderNavStyle>
+    </ThemeProvider>
   );
 };
 

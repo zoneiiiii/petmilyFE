@@ -96,7 +96,22 @@ const AdoptButton = styled(Button)`
   height: 30px;
   margin-top: 30px;
   margin-right: 10px;
-  font-weight: bold;
+
+  &:hover {
+    background-color: #facc73;
+  }
+  &:focus {
+    background-color: #facc73;
+  }
+`;
+
+const CheckButton = styled(Button)`
+  background-color: #fbd385;
+  color: white;
+  width: 400px;
+  height: 40px;
+  margin-top: 30px;
+  margin-right: 10px;
 
   &:hover {
     background-color: #facc73;
@@ -180,6 +195,15 @@ export default function CustomButton(props) {
         >
           {props.label}
         </AdoptButton>
+      ) : value === "체크리스트" ? (
+        <CheckButton
+          value={value}
+          variant="contained"
+          onClick={props.onClick}
+          fullWidth
+        >
+          {props.label}
+        </CheckButton>
       ) : (
         ""
       )}
