@@ -264,7 +264,7 @@ function AdoptChecklist() {
             </div>
             <div id="checklist">
               {checkListContents.map((array) => (
-                <div style={iconStyle}>
+                <div style={iconStyle} key={array.contents}>
                   <img
                     alt="Checkbox"
                     style={checkBoxStyle}
@@ -287,7 +287,7 @@ function AdoptChecklist() {
             </div>
             <div id="checklist">
               {checkListContents2.map((array) => (
-                <div style={iconStyle}>
+                <div style={iconStyle} key={array.contents}>
                   <img
                     alt="Checkbox"
                     style={checkBoxStyle}
