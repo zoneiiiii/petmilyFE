@@ -85,7 +85,7 @@ const EventWrite = () => {
                   p: 10,
                 }}
               >
-                공지사항 작성
+                이벤트 추가
               </TableCell>
             </TableRow>
           </TableHead>
@@ -122,26 +122,29 @@ const EventWrite = () => {
                 내용
               </TableCell>
               <TableCell>
-                <CKEditor
-                  config={{
-                    extraPlugins: [uploadPlugin],
-                  }}
-                  editor={ClassicEditor}
-                  data={data.contents}
-                  onReady={(editor) => {
-                    // You can store the "editor" and use when it is needed.
-                    console.log("Editor is ready to use!", editor);
-                  }}
-                  onChange={(event, editor) => {
-                    setData({ ...data, contents: editor.getData() });
-                  }}
-                  onBlur={(event, editor) => {
-                    console.log("Blur.", editor);
-                  }}
-                  onFocus={(event, editor) => {
-                    console.log("Focus.", editor);
-                  }}
-                />
+                <EditorWrapper>
+                  <CKEditor
+                    config={{
+                      height: "400px",
+                      extraPlugins: [uploadPlugin],
+                    }}
+                    editor={ClassicEditor}
+                    data={data.contents}
+                    onReady={(editor) => {
+                      // You can store the "editor" and use when it is needed.
+                      console.log("Editor is ready to use!", editor);
+                    }}
+                    onChange={(event, editor) => {
+                      setData({ ...data, contents: editor.getData() });
+                    }}
+                    onBlur={(event, editor) => {
+                      console.log("Blur.", editor);
+                    }}
+                    onFocus={(event, editor) => {
+                      console.log("Focus.", editor);
+                    }}
+                  />
+                </EditorWrapper>
               </TableCell>
             </TableRow>
           </TableBody>
@@ -175,10 +178,13 @@ const EventWrite = () => {
   );
 };
 
-const CustomCKEditor = styled(CKEditor)`
+export const EditorWrapper = styled.div`
   .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
-    min-height: 400px;
-    margin-bottom: 20px;
+    min-height: 500px;
+  }
+
+  .ck.ck-editor__editable:not(.ck-editor__nested-editable):focus {
+    border-color: #fbd385;
   }
 `;
 
