@@ -32,12 +32,12 @@ export const MYPAGE = {
    */
   MODIFY_INFO: "/mypage/modifyinfo",
 
-  /**구매 내역 페이지 URL
+  /**주문 내역 페이지 URL
    * @return "/mypage/orderlist"
    */
   ORDERLIST: "/mypage/orderlist",
 
-  /** 활동내역 상세페이지 URL
+  /** 주문 내역 상세페이지 URL
    ** 사용법: MYPAGE.ORDER_DETAIL(id)
    * @return "/mypage/order/:id" (id 없음)
    * @return "/mypage/order/" + id (id 존재)
