@@ -14,6 +14,7 @@ export const Line = styled.hr`
   width: 70vw;
   border: 1px solid #cccccc;
   margin: 1.5rem 0;
+  min-width: 800px;
 `;
 
 export const MainTitle = styled.h1`

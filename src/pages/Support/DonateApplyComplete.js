@@ -3,7 +3,7 @@ import * as S from "./DonateApplyComplete.styled";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { useNavigate } from "react-router-dom";
-import { MAIN, SUPPORT } from "../../constants/PageURL";
+import { MAIN } from "../../constants/PageURL";
 import {
   Button,
   Table,
@@ -21,7 +21,7 @@ const formatDate = (dateString) => {
 };
 
 const DonateApplyComplete = ({
-  doner,
+  donor,
   name,
   amount,
   donationDate,
@@ -78,7 +78,7 @@ const DonateApplyComplete = ({
                   >
                     기부이름
                   </TableCell>
-                  <TableCell align="center">{doner}</TableCell>
+                  <TableCell align="center">{donor}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell

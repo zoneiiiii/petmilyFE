@@ -4,6 +4,7 @@ import { TextField, ThemeProvider } from "@mui/material";
 import Button from "@mui/material/Button";
 import DonateApplyComplete from "./DonateApplyComplete";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
+import axios from "axios";
 
 const DonateApply = () => {
   const [isSuccess, setIsSuccess] = useState(false);
@@ -13,7 +14,7 @@ const DonateApply = () => {
   const [amount, setAmount] = useState("");
   const [formattedAmount, setFormattedAmount] = useState(""); //원화 표시 상태
   const [paymentMethod, setPaymentMethod] = useState("");
-  const [doner, setDoner] = useState("");
+  const [donor, setDonor] = useState("");
   const [name, setName] = useState("");
   const [tel, setTel] = useState("");
   const [email, setEmail] = useState("");
@@ -26,12 +27,12 @@ const DonateApply = () => {
   };
 
   // <--입력값 유효성 검사
-  const [donerErrorMsg, setDonerErrorMsg] = useState("");
+  const [donorErrorMsg, setDonorErrorMsg] = useState("");
   const [amountErrorMsg, setAmountErrorMsg] = useState("");
   const [nameErrorMsg, setNameErrorMsg] = useState("");
   const [telErrorMsg, setTelErrorMsg] = useState("");
   const [emailErrorMsg, setEmailErrorMsg] = useState("");
-  const isDonerValid = () => doner !== "";
+  const isDonorValid = () => donor !== "";
   const isAmountValid = () => amount !== "";
   const isNameValid = () => name !== "";
   const isTelValid = () => tel !== "";
@@ -83,13 +84,43 @@ const DonateApply = () => {
 
   function callback(response) {
     //콜백함수 정의하기
-    const { success, merchant_uid, error_msg } = response;
+    const { success, merchant_uid, imp_uid, error_msg } = response;
 
     if (success) {
-      // alert("결제 성공");
-      setDonationDate(new Date().toLocaleDateString());
-      setDonationCompleted(true);
-      setIsSuccess(true);
+      const currentDate = new Date();
+      const isoCurrentDate = new Date(
+        currentDate.getTime() + 9 * 60 * 60 * 1000
+      ).toISOString();
+      axios
+        .post("/donate/apply", {
+          donationDto: {
+            donationDonor: donor,
+            donationName: name,
+            donationTel: tel,
+            donationEmail: email,
+            donationCost: amount,
+            donationDate: isoCurrentDate,
+          },
+          paymentDto: {
+            merchantUid: merchant_uid,
+            impUid: imp_uid,
+            paymentState: "결제완료",
+            amount: amount,
+            paymentDate: isoCurrentDate,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          setDonationDate(isoCurrentDate);
+          setDonationCompleted(true);
+          setIsSuccess(true);
+        })
+        .catch((error) => {
+          console.error(error);
+          setErrorMsg(error_msg);
+          setDonationCompleted(true);
+          setIsSuccess(false);
+        });
     } else {
       // alert(`결제 실패: ${error_msg}`);
       setErrorMsg(error_msg);
@@ -114,8 +145,6 @@ const DonateApply = () => {
       buyer_email: email,
       buyer_name: name,
       buyer_tel: tel,
-      // buyer_addr: "서울특별시 강남구 신사동",
-      // buyer_postcode: "01181",
     };
     IMP.request_pay(data, callback);
   }
@@ -136,8 +165,6 @@ const DonateApply = () => {
       buyer_email: email,
       buyer_name: name,
       buyer_tel: tel,
-      // buyer_addr: "서울특별시 강남구 신사동",
-      // buyer_postcode: "01181",
     };
     IMP.request_pay(data, callback);
   }
@@ -145,7 +172,11 @@ const DonateApply = () => {
   const handleAmountChange = (e) => {
     // 입력할때 이벤트 추가
     const value = e.target.value.replace(/\D/g, "");
-    const formattedValue = Number(value).toLocaleString("ko-KR"); //기부 금액 부분 원으로 표시
+    if (value.length > 10) {
+      return; // 입력값이 10자리를 초과하면, 입력 중단.
+    }
+    const formattedValue =
+      value === "" ? "" : Number(value).toLocaleString("ko-KR"); //기부 금액 부분 원으로 표시
     setAmount(Number(value));
     setFormattedAmount(formattedValue);
   };
@@ -158,12 +189,12 @@ const DonateApply = () => {
     //input 초기화
     setAmount("");
     setFormattedAmount("");
-    setDoner("");
+    setDonor("");
     setPaymentMethod("신용카드");
     setName("");
     setTel("");
     setEmail("");
-    setDonerErrorMsg("");
+    setDonorErrorMsg("");
     setAmountErrorMsg("");
     setNameErrorMsg("");
     setTelErrorMsg("");
@@ -176,11 +207,11 @@ const DonateApply = () => {
     //에러메세지 띄우기
     let isValid = true;
 
-    if (!isDonerValid()) {
-      setDonerErrorMsg("기부명을 입력해주세요.");
+    if (!isDonorValid()) {
+      setDonorErrorMsg("기부명을 입력해주세요.");
       isValid = false;
     } else {
-      setDonerErrorMsg("");
+      setDonorErrorMsg("");
     }
 
     if (!isAmountValid()) {
@@ -224,15 +255,13 @@ const DonateApply = () => {
       } else if (paymentMethod === "계좌이체") {
         onClickVbankPayment();
       }
-    } else {
-      setErrorMsg("모든 입력란에 올바른 정보를 입력해주세요.");
     }
   };
 
   if (donationCompleted) {
     return (
       <DonateApplyComplete
-        doner={doner}
+        donor={donor}
         name={name}
         amount={amount}
         donationDate={donationDate}
@@ -253,17 +282,17 @@ const DonateApply = () => {
           <S.Field>
             <S.Label>
               <S.Label>기부명</S.Label>
-              {donerErrorMsg && <S.ErrorMsg>&nbsp;</S.ErrorMsg>}
+              {donorErrorMsg && <S.ErrorMsg>&nbsp;</S.ErrorMsg>}
             </S.Label>
             <S.InputWrapper>
               <TextField
                 variant="outlined"
                 size="small"
                 fullWidth
-                value={doner}
-                onChange={(e) => setDoner(e.target.value)}
+                value={donor}
+                onChange={(e) => setDonor(e.target.value)}
               />
-              {donerErrorMsg && <S.ErrorMsg>{donerErrorMsg}</S.ErrorMsg>}
+              {donorErrorMsg && <S.ErrorMsg>{donorErrorMsg}</S.ErrorMsg>}
             </S.InputWrapper>
           </S.Field>
 
@@ -411,7 +440,6 @@ const DonateApply = () => {
             </S.PaymentButtons>
           </S.Field>
         </S.Form>
-        <S.ErrorMsg>{errorMsg}</S.ErrorMsg> {/* 에러 메시지 출력 */}
         <S.ButtonGroup>
           <Button
             variant="contained"
