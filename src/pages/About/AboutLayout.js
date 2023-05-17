@@ -16,7 +16,7 @@ const AboutLayout = () => {
         alignContent={"space-between"}
       >
         <AboutNav />
-        <Box width={"70vw"} display={"flex"} justifyContent={"center"}>
+        <Box width={"1100px"} display={"flex"} justifyContent={"center"}>
           <Outlet />
         </Box>
       </Box>
