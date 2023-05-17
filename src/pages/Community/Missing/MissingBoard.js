@@ -92,7 +92,7 @@ const MissingBoard = () => {
                   .map((card) => {
                     return (
                       <Grid item xs={10} sm={6} md={2} key={card.boardNum}>
-                        <Link to={COMMUNITY.FIND_DETAIL(card.boardNum)} style={{ textDecoration: "none" }}>
+                        <Link to={COMMUNITY.MISSING_DETAIL(card.boardNum)} style={{ textDecoration: "none" }}>
                           <Card
                             key={card.boardNum}
                             sx={{
