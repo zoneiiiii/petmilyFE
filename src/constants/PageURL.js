@@ -32,12 +32,12 @@ export const MYPAGE = {
    */
   MODIFY_INFO: "/mypage/modifyinfo",
 
-  /**구매 내역 페이지 URL
+  /**주문 내역 페이지 URL
    * @return "/mypage/orderlist"
    */
   ORDERLIST: "/mypage/orderlist",
 
-  /** 활동내역 상세페이지 URL
+  /** 주문 내역 상세페이지 URL
    ** 사용법: MYPAGE.ORDER_DETAIL(id)
    * @return "/mypage/order/:id" (id 없음)
    * @return "/mypage/order/" + id (id 존재)
@@ -98,6 +98,99 @@ export const ABOUT = {
   /**입양 절차 안내 페이지 URL
    * @return "/about/adoptprocess" */
   ADOPT_PROCESS: "/about/adoptprocess",
+
+  /** 이벤트 페이지 URL
+   ** 사용법: ABOUT.EVENT({page: page, limit: limit, search: search, search_mode: search_mode})
+   ** parameter 우선순위: page > limit = search = search_mode
+   * @return "/about/event/list" (parameter 없음)
+   * @return "/about/event/list?page=" + page (page만 존재)
+   * @return "/about/event/list?page=" + page + "&search=" + search + "&search_mode=" + search_mode (page, search 존재)
+   * @return "/about/event/list?page=" + page + "&limit=" + limit (page, limit 존재)
+   * @return "/about/event/list?page=" + page + "&limit=" + limit + "&search=" + search + "&search_mode=" + search_mode (모두 존재)
+   * */
+  EVENT: (props) => {
+    if (!props || !props.page) return "/about/event/list";
+    else if (!props.limit) {
+      if (!props.search) return "/about/event/list?page=" + props.page;
+      else
+        return (
+          "/about/event/list?page=" +
+          props.page +
+          "&search=" +
+          props.search +
+          "&search_mode=" +
+          props.search_mode
+        );
+    } else if (!props.search)
+      return "/about/event/list?page=" + props.page + "&limit=" + props.limit;
+    else
+      return (
+        "/about/event/list?page=" +
+        props.page +
+        "&limit=" +
+        props.limit +
+        "&search=" +
+        props.search +
+        "&search_mode=" +
+        props.search_mode
+      );
+  },
+
+  /**
+   ** 이벤트 상세 페이지 URL
+   ** 사용법: ABOUT.EVENT_DETAIL({page: page, limit: limit, search: search, search_mode: search_mode})
+   ** parameter 우선순위: page > limit = search = search_mode
+   * @return "/about/event/view" (parameter 없음)
+   * @return "/about/event/view?page=" + page (page만 존재)
+   * @return "/about/event/view?page=" + page + "&search=" + search + "&search_mode=" + search_mode (page, search 존재)
+   * @return "/about/event/view?page=" + page + "&limit=" + limit (page, limit 존재)
+   * @return "/about/event/view?page=" + page + "&limit=" + limit + "&search=" + search + "&search_mode=" + search_mode (모두 존재)
+   **/
+  EVENT_DETAIL: (props) => {
+    if (!props || !props.no) return "/about/event/view";
+    else if (!props.page) return "/about/event/view?no=" + props.no;
+    else if (!props.limit) {
+      if (!props.search)
+        return "/about/event/view?no=" + props.no + "&page=" + props.page;
+      else
+        return (
+          "/about/event/view?no=" +
+          props.no +
+          "&page=" +
+          props.page +
+          "&search=" +
+          props.search +
+          "&search_mode=" +
+          props.search_mode
+        );
+    } else if (!props.search)
+      return (
+        "/about/event/view?no=" +
+        props.no +
+        "&page=" +
+        props.page +
+        "&limit=" +
+        props.limit
+      );
+    else
+      return (
+        "/about/event/view?no=" +
+        props.no +
+        "&page=" +
+        props.page +
+        "&limit=" +
+        props.limit +
+        "&search=" +
+        props.search +
+        "&search_mode=" +
+        props.search_mode
+      );
+  },
+
+  /**이벤트 작성 페이지 URL
+   * @return "/about/event/write"
+   */
+  EVENT_WRITE: "/about/event/write",
 
   /** 공지사항 페이지 URL
    ** 사용법: ABOUT.NOTICE({page: page, limit: limit, search: search, search_mode: search_mode})
@@ -187,58 +280,10 @@ export const ABOUT = {
       );
   },
 
-  /**공지사항 작성 페이지 URL
-   * @return "/about/notice/write"
-   */
-  NOTICE_WRITE: "/about/notice/write",
-
-  /**활동내역 페이지 URL
-   ** 사용법: ABOUT.ACTIVITY({page: page, limit: limit, search: search})
-   * @params 우선순위: page > limit = search
-   * @return "/about/activity/list" (parameter 없음)
-   * @return "/about/activity/list?page=" + page (page만 존재)
-   * @return "/about/activity/list?page=" + page + "&search=" + search (page, search 존재)
-   * @return "/about/activity/list?page=" + page + "&limit=" + limit (page, limit 존재)
-   * @return "/about/activity/list?page=" + page + "&limit=" + limit + "&search=" + search + page (모두 존재)
-   **/
-  ACTIVITY: (props) => {
-    if (!props) return "/about/activity/list";
-    else if (!props.limit) {
-      if (!props.search) return "/about/activity/list?page=" + props.page;
-      else
-        return (
-          "/about/activity/list?page=" + props.page + "&search=" + props.search
-        );
-    } else if (!props.search)
-      return (
-        "/about/activity/list?page=" + props.page + "&limit=" + props.limit
-      );
-    else
-      return (
-        "/about/activity/list?page=" +
-        props.page +
-        "&limit=" +
-        props.limit +
-        "&search=" +
-        props.search
-      );
-  },
-
-  /**
-   ** 활동내역 상세페이지 URL
-   ** 사용법: ABOUT.ACTIVITY_DETAIL(id)
-   * @return "/activity/view/:id" (id 없음)
-   * @return "/activity/view/" + id (id 존재)
-   **/
-  ACTIVITY_DETAIL: (id) => {
-    if (id === undefined) return "/about/activity/view/:id";
-    else return "/about/activity/view/" + id;
-  },
-
-  /**활동내역 작성페이지 URL
+  /**공지사항 작성페이지 URL
    * @return "/notice/write"
    */
-  ACTIVITY_WRITE: "/about/activity/write",
+  NOTICE_WRITE: "/about/activity/write",
 
   /**FAQ페이지 URL
    * @return "/faq"

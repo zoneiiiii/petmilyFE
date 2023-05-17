@@ -24,7 +24,7 @@ import dayjs from "dayjs";
 
 const pageWidth = "80%";
 
-const NoticeWrite = () => {
+const EventWrite = () => {
   const navigate = useNavigate();
   const fileList = []; // 업로드한 파일들을 저장하는 배열
   const [data, setData] = useState({
@@ -85,7 +85,7 @@ const NoticeWrite = () => {
                   p: 10,
                 }}
               >
-                공지사항 작성
+                이벤트 추가
               </TableCell>
             </TableRow>
           </TableHead>
@@ -125,6 +125,7 @@ const NoticeWrite = () => {
                 <EditorWrapper>
                   <CKEditor
                     config={{
+                      height: "400px",
                       extraPlugins: [uploadPlugin],
                     }}
                     editor={ClassicEditor}
@@ -211,4 +212,4 @@ const member = {
   role: "admin",
 };
 
-export default NoticeWrite;
+export default EventWrite;

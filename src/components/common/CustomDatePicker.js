@@ -1,4 +1,4 @@
-import { ThemeProvider, createTheme } from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
@@ -30,7 +30,6 @@ export const CustomDatePicker = ({
             },
           }}
           sx={{
-            mr: 2,
             "& label": {
               // 라벨
               color: "#fbd385",
@@ -55,7 +54,7 @@ export const CustomDatePicker = ({
               //   borderColor: "#fbd385",
               // },
             },
-            width: { width }, // 간편한 width 설정정
+            width: { width }, // 간편한 width 설정
             ...sx, // sx에서 부여한 width의 우선순위가 가장 높음
           }}
         />

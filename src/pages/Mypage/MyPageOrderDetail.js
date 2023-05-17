@@ -18,11 +18,41 @@ import { useEffect, useState } from "react";
 const MyPageOrderDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [orderData, setOrderData] = useState(dummy);
+  const [orderData, setOrderData] = useState({
+    orderNum: null,
+    productName: null,
+    cost: null,
+    quantity: null,
+    orderDate: null,
+    orderState: null,
+    productImg: null,
+    address: null,
+    note: null,
+    recipient: null,
+    recipientTel: null,
+    postal: null,
+    detailAddr: null,
+  });
+  const [payData, setPayData] = useState({
+    paymentNum: null,
+    orderNum: null,
+    merchantUid: null, // 결제코드
+    impUid: null, // 아임포트 uid
+    paymentState: null,
+    amount: null, // 결제금액
+    paymentDate: null,
+    paymentMethod: null,
+  });
 
   useEffect(() => {
-    setOrderData(dummy.filter((data) => data.orderNum === parseInt(id))[0]);
+    setOrderData({
+      ...orderlist.filter((data) => data.orderNum === parseInt(id))[0],
+    });
+    setPayData({
+      ...payment.filter((data) => data.orderNum === parseInt(id))[0],
+    });
   }, [id]);
+  useEffect(() => {}, [orderData]);
   return (
     <ThemeProvider theme={CustomTheme}>
       <Typography
@@ -86,6 +116,26 @@ const MyPageOrderDetail = () => {
           <TableHead>
             <TableRow>
               <TableCell sx={thSx} colSpan={4}>
+                결제 정보
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              <TableCell sx={{ ...tdSx, p: 2 }} colSpan={4}>
+                결제코드: {payData.merchantUid}
+                <br />
+                결제금액: {parseInt(payData.amount).toLocaleString()} 원
+                <br />
+                결제수단: {payData.paymentMethod}
+                <br />
+                결제일자: {payData.paymentDate}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={thSx} colSpan={4}>
                 배송지 정보
               </TableCell>
             </TableRow>
@@ -143,7 +193,7 @@ const tdSx = {
   fontWeight: 600,
 };
 
-const dummy = [
+const orderlist = [
   {
     orderNum: 5,
     productName: "유기농 강아지 사료 3kg",
@@ -218,6 +268,59 @@ const dummy = [
     recipientTel: "010-1111-2222",
     postal: 12345,
     detailAddr: "101-1001",
+  },
+];
+
+const payment = [
+  {
+    paymentNum: 1,
+    orderNum: 1,
+    merchantUid: "PAYMENT-V-1684205061665", // 결제코드
+    impUid: "imp12345678", // 아임포트 uid
+    paymentState: "결제완료",
+    amount: 490000, // 결제금액
+    paymentDate: "2023-04-30",
+    paymentMethod: "계좌이체",
+  },
+  {
+    paymentNum: 2,
+    orderNum: 2,
+    merchantUid: "PAYMENT-C-1684205061665", // 결제코드
+    impUid: "imp12345678", // 아임포트 uid
+    paymentState: "결제완료",
+    amount: 490000, // 결제금액
+    paymentDate: "2023-04-30",
+    paymentMethod: "신용카드",
+  },
+  {
+    paymentNum: 3,
+    orderNum: 3,
+    merchantUid: "PAYMENT-K-1684205061665", // 결제코드
+    impUid: "imp12345678", // 아임포트 uid
+    paymentState: "결제완료",
+    amount: 490000, // 결제금액
+    paymentDate: "2023-04-29",
+    paymentMethod: "카카오페이",
+  },
+  {
+    paymentNum: 4,
+    orderNum: 4,
+    merchantUid: "PAYMENT-V-1684205061665", // 결제코드
+    impUid: "imp12345678", // 아임포트 uid
+    paymentState: "결제완료",
+    amount: 490000, // 결제금액
+    paymentDate: "2023-04-28",
+    paymentMethod: "계좌이체",
+  },
+  {
+    paymentNum: 5,
+    orderNum: 5,
+    merchantUid: "PAYMENT-K-1684205061665", // 결제코드
+    impUid: "imp12345678", // 아임포트 uid
+    paymentState: "결제완료",
+    amount: 490000, // 결제금액
+    paymentDate: "2023-04-26",
+    paymentMethod: "카카오페이",
   },
 ];
 

@@ -131,18 +131,18 @@ const AdoptProcess = () => {
                   <Box sx={{ mb: 2 }}>
                     <div>
                       <Button
-                        variant="contained"
-                        onClick={handleNext}
-                        sx={{ mt: 1, mr: 1 }}
-                      >
-                        {index === steps.length - 1 ? "끝내기" : "다음 단계"}
-                      </Button>
-                      <Button
                         disabled={index === 0}
                         onClick={handleBack}
                         sx={{ mt: 1, mr: 1 }}
                       >
                         이전 단계
+                      </Button>
+                      <Button
+                        variant="contained"
+                        onClick={handleNext}
+                        sx={{ mt: 1, mr: 1 }}
+                      >
+                        {index === steps.length - 1 ? "끝내기" : "다음 단계"}
                       </Button>
                     </div>
                   </Box>

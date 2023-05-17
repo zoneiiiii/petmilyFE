@@ -16,7 +16,7 @@ const AboutLayout = () => {
         alignContent={"space-between"}
       >
         <AboutNav />
-        <Box width={"70vw"} display={"flex"} justifyContent={"center"}>
+        <Box width={"1100px"} display={"flex"} justifyContent={"center"}>
           <Outlet />
         </Box>
       </Box>
@@ -27,11 +27,12 @@ const AboutLayout = () => {
 const pages = [
   { title: "프로젝트 소개", link: ABOUT.ABOUT },
   { title: "입양 절차", link: ABOUT.ADOPT_PROCESS },
-  { title: "활동 내역", link: ABOUT.ACTIVITY() },
-  { title: "활동 내역", link: ABOUT.ACTIVITY_DETAIL("") },
   { title: "공지사항", link: ABOUT.NOTICE() },
-  { title: "공지사항", link: ABOUT.NOTICE_DETAIL() },
+  { title: "공지사항", link: ABOUT.NOTICE_DETAIL("") },
   { title: "공지사항", link: ABOUT.NOTICE_WRITE },
+  { title: "이벤트", link: ABOUT.EVENT() },
+  { title: "이벤트", link: ABOUT.EVENT_DETAIL("") },
+  { title: "이벤트", link: ABOUT.EVENT_WRITE },
   { title: "자주 하는 질문", link: ABOUT.FAQ },
 ];
 
@@ -99,15 +100,11 @@ const AboutNav = () => {
               link={ABOUT.ADOPT_PROCESS}
             />
             <LinkTab
-              label="활동 내역"
-              value={"활동 내역"}
-              link={ABOUT.ACTIVITY()}
-            />
-            <LinkTab
               label="공지사항"
               value={"공지사항"}
               link={ABOUT.NOTICE()}
             />
+            <LinkTab label="이벤트" value={"이벤트"} link={ABOUT.EVENT()} />
             <LinkTab
               label="자주 하는 질문"
               value={"자주 하는 질문"}
