@@ -1,20 +1,20 @@
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { ThemeProvider } from "@mui/material/styles";
-import Badge from "@mui/material/Badge";
-import CameraAltIcon from "@mui/icons-material/CameraAlt";
-import Fab from "@mui/material/Fab";
 import { useRef, useState, useCallback } from "react";
-import FormHelperText from "@mui/material/FormHelperText";
-import axios from "axios";
+import {
+  Avatar,
+  Button,
+  TextField,
+  Grid,
+  Box,
+  Typography,
+  Container,
+  Badge,
+  Fab,
+  FormHelperText,
+  ThemeProvider,
+} from "@mui/material";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
-import styled from "styled-components";
+import axios from "axios";
 
 function ModifyInfo() {
   const [nickname, setNickname] = useState("");
@@ -131,8 +131,13 @@ function ModifyInfo() {
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    //console.log(`submit!  ${password} ${passwordChk} ${name} ${phone}`);
+  };
+
   const submitCheck = () => {
-    if (true) {
+  
       if (!nickname) {
         setNicknameError("닉네임을 입력해주세요.");
       }
@@ -148,33 +153,31 @@ function ModifyInfo() {
       if (!phone) {
         setPhoneError("전화번호를 입력해주세요.");
       }
+    
+      else {
+      axios
+        .post("/update", {
+          nickname: nickRef.current.value,
+          password: passRef.current.value,
+          email: emailRef.current.value,
+          phone: phoneRef.current.value,
+        })
+        .then((res) => {
+          if (res) {
+            alert("수정에 성공하셨습니다.");
+            //document.location.href = "/mypage/info";
+          } else {
+            alert("수정에 실패하셨습니다.");
+          }
+          nickRef.current.value = "";
+          passRef.current.value = "";
+          emailRef.current.value = "";
+          phoneRef.current.value = "";
+        })
+        .catch((e) => {
+          console.error(e);
+        });
     }
-    // } else {
-    //   axios
-    //     .post("/update", {
-    //       nickname: nickRef.current.value,
-    //       password: passRef.current.value,
-    //       email: emailRef.current.value,
-    //       phone: phoneRef.current.value,
-    //       address: addressRef.current.value,
-    //     })
-    //     .then((res) => {
-    //       if (res) {
-    //         alert("수정에 성공하셨습니다.");
-    //         document.location.href = "/mypage/info";
-    //       } else {
-    //         alert("수정에 실패하셨습니다.");
-    //       }
-    //       nickRef.current.value = "";
-    //       passRef.current.value = "";
-    //       emailRef.current.value = "";
-    //       phoneRef.current.value = "";
-    //       addressRef.current.value = "";
-    //     })
-    //     .catch((e) => {
-    //       console.error(e);
-    //     });
-    // }
   };
 
   //이미지 파일
@@ -198,172 +201,165 @@ function ModifyInfo() {
     };
     reader.readAsDataURL(e.target.files[0]);
   };
-  //footer 해결해야함
+
   return (
-    <MyPageContainer className="MyPageContainer">
-      <ThemeProvider theme={CustomTheme}>
-        <Container
-          component="main"
-          //maxWidth="sm"
-          sx={{ width: "50vw" }}
+    <ThemeProvider theme={CustomTheme}>
+      <Container
+        component="main"
+        //maxWidth="sm"
+        sx={{ width: "50vw" }}
+      >
+        <Box
+          sx={{
+            marginTop: "30px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
         >
-          <CssBaseline />
-          <Box
-            sx={{
-              marginTop: "30px",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
+          <Typography
+            component="h1"
+            variant="h4"
+            color="#FBD385"
+            fontWeight="bold"
           >
-            <Typography
-              component="h1"
-              variant="h4"
-              color="#FBD385"
-              fontWeight="bold"
-            >
-              회원 정보 수정
-            </Typography>
-            <br />
-            <Badge
-              overlap="circular"
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-              badgeContent={
-                <Fab
-                  color="primary"
-                  aria-label="edit"
-                  onClick={() => {
-                    fileInput.current.click();
-                  }}
-                >
-                  <CameraAltIcon />
-                </Fab>
-              }
-            >
-              <Avatar src={Image} sx={{ width: 150, height: 150 }} />
-              <input
-                type="file"
-                style={{ display: "none" }}
-                accept="image/jpg,impge/png,image/jpeg"
-                name="profile_img"
-                onChange={onChange}
-                ref={fileInput}
-              />
-            </Badge>
-            <Box
-              //component="form"
-              // noValidate
-              //onSubmit={submitCheck}
-              sx={{ mt: 3, mb: 5 }}
-            >
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    name="nickname"
-                    label="닉네임"
-                    type="nickname"
-                    autoFocus
-                    autoComplete="off"
-                    onChange={onChangeNickname}
-                    ref={nickRef}
-                    onKeyPress={handleKeyPress}
-                  />
-                  <FormHelperText sx={{ color: "red" }}>
-                    {nicknameError}
-                  </FormHelperText>
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    name="pw"
-                    id="pw"
-                    label="비밀번호"
-                    type="password"
-                    autoComplete="new-password"
-                    onChange={onChangePassword}
-                    ref={passRef}
-                    onKeyPress={handleKeyPress}
-                  />
-                  <FormHelperText sx={{ color: "red" }}>
-                    {passwordError}
-                  </FormHelperText>
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    name="confirmPw"
-                    label="비밀번호 확인"
-                    type="password"
-                    autoComplete="new-password"
-                    onChange={onChangePasswordConfirm}
-                    ref={confirmRef}
-                    onKeyPress={handleKeyPress}
-                  />
-                  <FormHelperText sx={{ color: "red" }}>
-                    {confirmPwError}
-                  </FormHelperText>
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    label="이메일"
-                    name="email"
-                    autoComplete="email"
-                    onChange={onChangeEmail}
-                    ref={emailRef}
-                    onKeyPress={handleKeyPress}
-                  />
-                  <FormHelperText sx={{ color: "red" }}>
-                    {emailError}
-                  </FormHelperText>
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    label="전화번호"
-                    name="phone"
-                    autoComplete="phone"
-                    onChange={onChangePhone}
-                    ref={phoneRef}
-                    onKeyPress={checkenterSubmit}
-                  />
-                  <FormHelperText sx={{ color: "red" }}>
-                    {phoneError}
-                  </FormHelperText>
-                </Grid>
-              </Grid>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{
-                  mt: 2,
-                  mb: 1,
-                  height: "50px",
-                }}
+            회원 정보 수정
+          </Typography>
+          <br />
+          <Badge
+            overlap="circular"
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            badgeContent={
+              <Fab
                 color="primary"
-                onClick={submitCheck}
+                aria-label="edit"
+                onClick={() => {
+                  fileInput.current.click();
+                }}
               >
-                <Typography component="h1" variant="h6" color="white">
-                  수정
-                </Typography>
-              </Button>
-            </Box>
+                <CameraAltIcon />
+              </Fab>
+            }
+          >
+            <Avatar src={Image} sx={{ width: 150, height: 150 }} />
+            <input
+              type="file"
+              style={{ display: "none" }}
+              accept="image/jpg,impge/png,image/jpeg"
+              name="profile_img"
+              onChange={onChange}
+              ref={fileInput}
+            />
+          </Badge>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 3, mb: 5 }}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="nickname"
+                  label="닉네임"
+                  type="nickname"
+                  autoFocus
+                  autoComplete="off"
+                  onChange={onChangeNickname}
+                  ref={nickRef}
+                  onKeyPress={handleKeyPress}
+                />
+                <FormHelperText sx={{ color: "red" }}>
+                  {nicknameError}
+                </FormHelperText>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="pw"
+                  id="pw"
+                  label="비밀번호"
+                  type="password"
+                  autoComplete="new-password"
+                  onChange={onChangePassword}
+                  ref={passRef}
+                  onKeyPress={handleKeyPress}
+                />
+                <FormHelperText sx={{ color: "red" }}>
+                  {passwordError}
+                </FormHelperText>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="confirmPw"
+                  label="비밀번호 확인"
+                  type="password"
+                  autoComplete="new-password"
+                  onChange={onChangePasswordConfirm}
+                  ref={confirmRef}
+                  onKeyPress={handleKeyPress}
+                />
+                <FormHelperText sx={{ color: "red" }}>
+                  {confirmPwError}
+                </FormHelperText>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  label="이메일"
+                  name="email"
+                  autoComplete="email"
+                  onChange={onChangeEmail}
+                  ref={emailRef}
+                  onKeyPress={handleKeyPress}
+                />
+                <FormHelperText sx={{ color: "red" }}>
+                  {emailError}
+                </FormHelperText>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  label="전화번호"
+                  name="phone"
+                  autoComplete="phone"
+                  onChange={onChangePhone}
+                  ref={phoneRef}
+                  onKeyPress={checkenterSubmit}
+                />
+                <FormHelperText sx={{ color: "red" }}>
+                  {phoneError}
+                </FormHelperText>
+              </Grid>
+            </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{
+                mt: 2,
+                mb: 1,
+                height: "50px",
+              }}
+              color="primary"
+              onClick={submitCheck}
+            >
+              <Typography  component="h1" variant="h6" color="white">
+                수정
+              </Typography>
+            </Button>
           </Box>
-        </Container>
-      </ThemeProvider>
-    </MyPageContainer>
+        </Box>
+      </Container>
+    </ThemeProvider>
   );
 }
-const MyPageContainer = styled.div`
-  max-width: 70vw;
-  margin: 0 auto;
-  flex-grow: 1;
-`;
+
 export default ModifyInfo;
