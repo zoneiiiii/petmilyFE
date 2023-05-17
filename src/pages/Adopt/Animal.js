@@ -99,7 +99,7 @@ function Animal({
             height: "95%",
             display: "flex",
             justifyContent: "center",
-            alignItems: "center",
+            alignItems: "left",
             zIndex: 10,
             backgroundColor: "rgba(0,0,0,0.8)",
             cursor: "pointer",

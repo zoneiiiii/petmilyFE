@@ -22,6 +22,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { CustomTheme } from "../../../assets/Theme/CustomTheme";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import axios from "axios";
+import { MyCustomUploadAdapterPlugin } from "../../../components/common/UploadAdapter";
 
 const VolunteerNoticeWrite = () => {
   const navigate = useNavigate();
@@ -54,9 +55,49 @@ const VolunteerNoticeWrite = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // 전송 로직 구현
+    const currentDate = new Date();
+    const isoCurrentDate = new Date(
+      currentDate.getTime() + 9 * 60 * 60 * 1000
+    ).toISOString();
+
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await axios.post("/upload", formData);
+        setUploadedImageUrl(response.data);
+      } catch (error) {
+        console.error("이미지 업로드 실패 : ", error);
+      }
+    } else {
+      setUploadedImageUrl("https://via.placeholder.com/150");
+    }
+
+    const postData = {
+      volunteerSubject: title,
+      volunteerStartPeriod: volunteerStartPeriod.format("YYYY-MM-DD"),
+      volunteerEndPeriod: volunteerEndPeriod.format("YYYY-MM-DD"),
+      volunteerAddr: address,
+      volunteerAddrDetail: addressDetail,
+      volunteerNumber: recruitmentNumber,
+      volunteerAge: ageLimit,
+      volunteerStatus: selectedStatus === "모집중" ? 1 : 0,
+      volunteerContent: content,
+      imgThumbnail: uploadedImageUrl,
+      volunteerDate: isoCurrentDate,
+    };
+
+    try {
+      await axios.post("/board/volunteer/write", postData, {
+        withCredentials: true,
+      });
+      navigate(SUPPORT.VOLUNTEER_NOTICE);
+    } catch (error) {
+      console.error("데이터 전송 실패 : ", error);
+    }
   };
 
   const handleCancel = () => {
@@ -88,28 +129,6 @@ const VolunteerNoticeWrite = () => {
   const resetDate = () => {
     setVolunteerStartPeriod(dayjs());
     setVolunteerEndPeriod(dayjs().add(1, "day"));
-  };
-
-  const handleImageUpload = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-
-    const uploadUrl = "업로드할 URL(S3 혹은 서버 내 폴더";
-
-    try {
-      const response = await axios.post(uploadUrl, formData);
-
-      const imageUrl = response.data.imageUrl;
-
-      const editor = document.querySelector(
-        ".WriteEditor .ck-editor__editable"
-      );
-      const imageElement = document.createElement("img");
-      imageElement.src = imageUrl;
-      editor.appendChild(imageElement);
-    } catch (error) {
-      console.error("이미지 업로드 실패 : ", error);
-    }
   };
 
   return (
@@ -316,35 +335,9 @@ const VolunteerNoticeWrite = () => {
                       setContent(data);
                     }}
                     config={{
-                      toolbar: [
-                        "heading",
-                        "|",
-                        "bold",
-                        "italic",
-                        "link",
-                        "bulletedList",
-                        "numberedList",
-                        "|",
-                        "indent",
-                        "outdent",
-                        "|",
-                        "blockQuote",
-                        "insertTable",
-                        "mediaEmbed",
-                        "imageUpload",
-                        "undo",
-                        "redo",
-                      ],
                       className: "WriteEditor",
                       placeholder: "내용을 입력하세요.",
-                      ckfinder: {
-                        // CKFinder 설정
-                        uploadUrl: "업로드할 URL",
-                      },
-                      fileRepository: {
-                        // 이미지 업로드 핸들러 등록
-                        uploadAdapter: handleImageUpload,
-                      },
+                      extraPlugins: [MyCustomUploadAdapterPlugin],
                     }}
                   />
                 </S.EditorWrapper>
@@ -352,7 +345,11 @@ const VolunteerNoticeWrite = () => {
 
               <S.FormRow>
                 <S.ButtonGroup>
-                  <S.WriteButton type="submit" variant="contained">
+                  <S.WriteButton
+                    type="submit"
+                    onClick={handleSubmit}
+                    variant="contained"
+                  >
                     글쓰기
                   </S.WriteButton>
                   <S.ButtonSpace />

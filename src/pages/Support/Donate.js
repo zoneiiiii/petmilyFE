@@ -1,23 +1,40 @@
 import React, { useState, useEffect } from "react";
 import * as S from "./Donate.styled";
 import VolunteerActivismOutlinedIcon from "@mui/icons-material/VolunteerActivismOutlined";
+import axios from "axios";
 
 const Donate = () => {
-  const dummyDonations = [
-    { date: "2022.04.22", name: "홍길동", amount: 1000000 },
-    { date: "2022.04.23", name: "나눔재단", amount: 50000 },
-    { date: "2022.04.24", name: "김기자", amount: 500000 },
-    { date: "2022.04.24", name: "이기자", amount: 300000 },
-    { date: "2022.04.24", name: "박기자", amount: 100000 },
-    { date: "2022.04.25", name: "강기자", amount: 200000 },
-    { date: "2022.04.25", name: "정기사", amount: 80000 },
-    { date: "2022.04.25", name: "윤기자", amount: 50000 },
-    { date: "2022.04.26", name: "사랑재단", amount: 300000 },
-    { date: "2022.04.26", name: "복지재단", amount: 300000 },
-  ];
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}.${month}.${day}`;
+  };
 
-  const leftDonations = dummyDonations.slice(0, 5); //좌측 기부내역 표시
-  const rightDonations = dummyDonations.slice(5, 10); //우측 기부내역 표시
+  const [donaions, setDonations] = useState([]);
+  const [totalCost, setTotalCost] = useState(0);
+
+  useEffect(() => {
+    axios
+      .get("/donate")
+      .then((response) => {
+        setDonations(response.data);
+
+        const total = response.data.reduce(
+          //총 기부금액 계산
+          (sum, donation) => sum + donation.donationCost,
+          0
+        );
+        setTotalCost(total);
+      })
+      .catch((error) => {
+        console.error("axios 오류 : ", error);
+      });
+  }, []);
+
+  const leftDonations = donaions.slice(0, 5); //좌측 기부내역 표시
+  const rightDonations = donaions.slice(5, 10); //우측 기부내역 표시
 
   const formatCurrency = (number) => {
     //3번째 자릿수 마다 ',' 와 마지막에 '원' 붙혀주는 함수
@@ -29,21 +46,25 @@ const Donate = () => {
       <S.Banner>
         <S.DonateButton to="/donate/apply">기부하기</S.DonateButton>
       </S.Banner>
-      <S.TotalDonation>누적 기부금 : {formatCurrency(2880000)}</S.TotalDonation>
+      <S.TotalDonation>
+        누적 기부금 : {formatCurrency(totalCost)}
+      </S.TotalDonation>
       <S.RecentDonations>
         <S.DonationColumn>
           {leftDonations.map((donation, index) => (
             <S.DonationItem key={index}>
-              <span>{donation.date}</span> {donation.name}님{" "}
-              <span>{formatCurrency(donation.amount)}</span>
+              <span>{formatDate(donation.donationDate)}</span>{" "}
+              {donation.donationName}님{" "}
+              <span>{formatCurrency(donation.donationCost)}</span>
             </S.DonationItem>
           ))}
         </S.DonationColumn>
         <S.DonationColumn>
           {rightDonations.map((donation, index) => (
             <S.DonationItem key={index}>
-              <span>{donation.date}</span> {donation.name}님{" "}
-              <span>{formatCurrency(donation.amount)}</span>
+              <span>{formatDate(donation.donationDate)}</span>{" "}
+              {donation.donationName}님{" "}
+              <span>{formatCurrency(donation.donationCost)}</span>
             </S.DonationItem>
           ))}
         </S.DonationColumn>
