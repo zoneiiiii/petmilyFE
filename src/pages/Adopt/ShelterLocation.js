@@ -322,46 +322,7 @@ const ShelterLocation = () => {
     setLoading(false);
   };
   // 시/군/구 코드 파싱
-  const changeRegion = async (regionId) => {
-    // 선택된 지역에 대한 처리 로직을 작성합니다.
-    try {
-      setError(null);
-      setLoading(true);
-      const response = await axios.get(
-        `http://apis.data.go.kr/1543061/abandonmentPublicSrvc/sigungu?upr_cd=${regionId}&serviceKey=AhrFaZaAefMdQ7n5tWepAOM5tzLw5%2BCiT3stOXtEl3uTyXNtr0xlgtAn6WZppVVYaZdAuyqJvj%2FS65SSV4iapw%3D%3D&_type=json`
-      );
 
-      const data2 = response.data.response.body.items.item;
-      const location = data2.map((item) => ({
-        uprCd: item.uprCd,
-        name: item.orgdownNm,
-        code: item.orgCd,
-      }));
-      setData2(location);
-    } catch (e) {
-      setError(e);
-    }
-    setLoading(false);
-  };
-  // 시군구에 맞는 보호소 이름 저장
-  const changeRegion2 = async (selectedValue) => {
-    // const [code, uprCd] = selectedValue.split(",");
-    // try {
-    //   setError(null);
-    //   setLoading(true);
-    //   const response = await axios.get(
-    //     `http://apis.data.go.kr/1543061/abandonmentPublicSrvc/shelter?upr_cd=${uprCd}&org_cd=${code}&serviceKey=AhrFaZaAefMdQ7n5tWepAOM5tzLw5%2BCiT3stOXtEl3uTyXNtr0xlgtAn6WZppVVYaZdAuyqJvj%2FS65SSV4iapw%3D%3D&_type=json`
-    //   );
-    //   const data2 = response.data.response.body.items.item;
-    //   const location = data2.map((item) => ({
-    //     careNm: item.careNm,
-    //   }));
-    //   setData3(location);
-    // } catch (e) {
-    //   setError(e);
-    // }
-    // setLoading(false);
-  };
   return (
     <div
       style={{
@@ -372,72 +333,27 @@ const ShelterLocation = () => {
         margin: "0 auto",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography
-          component="h1"
-          variant="h5"
+      <div style={{ display: "flex", alignItems: "center", marginTop: "30px" }}>
+        <img
+          alt="hospital"
+          style={{ width: "60px", height: "60px", marginRight: "10px" }}
+          src="./../images/shelter.png"
+        />
+        <h1
           sx={{
             color: "black",
             mt: "30px",
             mb: "30px",
-            fontSize: "xx-large",
+            fontSize: "70px",
+            fontWeight: "bord",
           }}
         >
           보호소 정보
-        </Typography>
+        </h1>
       </div>
-
-      {/* <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      > */}
-      {/* <SelectContainer>
-          <nav
-            id="hot-articles-navigation"
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              gap: "2rem",
-            }}
-          >
-            <select
-              name="region1"
-              id="region1"
-              onChange={(e) => changeRegion(e.target.value)}
-              className="hot-articles-nav-select"
-            >
-              <option value="">시/도</option>
-              {data.map((loc) => (
-                <option key={loc.code} value={loc.code}>
-                  {loc.name}
-                </option>
-              ))}
-            </select>
-            <select
-              name="region2"
-              id="region2"
-              onChange={(e) => changeRegion2(e.target.value)}
-              className="hot-articles-nav-select"
-            >
-              <option value="">시/군/구</option>
-              {data2.map((loc) => (
-                <option key={loc.code} value={`${loc.code},${loc.uprCd}`}>
-                  {loc.name}
-                </option>
-              ))}
-            </select>
-          </nav>
-        </SelectContainer>
-      </div> */}
-
       <div
         id="map"
         style={{
-          marginTop: "20px",
           border: "solid 1px #FBD385",
           width: "1000px",
           height: "500px",
@@ -472,14 +388,3 @@ const ShelterLocation = () => {
   );
 };
 export default ShelterLocation;
-
-const SelectContainer = styled.div`
-      display: flex;
-      gap: 1rem;
-      align-items: flex;
-      margin-bottom: 10px;
-      p {
-        font - weight: bold;
-      color: #474747;
-  }
-      `;

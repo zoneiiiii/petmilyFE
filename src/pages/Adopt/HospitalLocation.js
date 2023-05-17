@@ -154,24 +154,23 @@ const HospitalLocation = () => {
         alignItems: "center",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center" }}>
+      <div style={{ display: "flex", alignItems: "center", marginTop: "30px" }}>
         <img
           alt="hospital"
-          style={{ width: "50px", height: "60px", marginRight: "10px" }}
+          style={{ width: "60px", height: "60px", marginRight: "10px" }}
           src="./../images/hospital.png"
         />
-        <Typography
-          component="h1"
-          variant="h5"
+        <h1
           sx={{
             color: "black",
             mt: "30px",
             mb: "30px",
-            fontSize: "xx-large",
+            fontSize: "70px",
+            fontWeight: "bord",
           }}
         >
-          동물병원정보
-        </Typography>
+          동물병원 정보
+        </h1>
       </div>
       <div style={{ display: "flex", alignItems: "center" }}>
         <TextField

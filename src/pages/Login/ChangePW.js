@@ -123,7 +123,7 @@ function ChangePW() {
     console.log("id pw = " + password + " " + id);
     if (isValidPassword(password)) {
       axios
-        .post("http://localhost:8080/changepw", {
+        .put("http://localhost:8080/changepw", {
           memberId: id,
           memberPw: password,
         })
