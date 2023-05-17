@@ -131,8 +131,13 @@ function ModifyInfo() {
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    //console.log(`submit!  ${password} ${passwordChk} ${name} ${phone}`);
+  };
+
   const submitCheck = () => {
-    if (true) {
+  
       if (!nickname) {
         setNicknameError("닉네임을 입력해주세요.");
       }
@@ -148,33 +153,31 @@ function ModifyInfo() {
       if (!phone) {
         setPhoneError("전화번호를 입력해주세요.");
       }
+    
+      else {
+      axios
+        .post("/update", {
+          nickname: nickRef.current.value,
+          password: passRef.current.value,
+          email: emailRef.current.value,
+          phone: phoneRef.current.value,
+        })
+        .then((res) => {
+          if (res) {
+            alert("수정에 성공하셨습니다.");
+            //document.location.href = "/mypage/info";
+          } else {
+            alert("수정에 실패하셨습니다.");
+          }
+          nickRef.current.value = "";
+          passRef.current.value = "";
+          emailRef.current.value = "";
+          phoneRef.current.value = "";
+        })
+        .catch((e) => {
+          console.error(e);
+        });
     }
-    // } else {
-    //   axios
-    //     .post("/update", {
-    //       nickname: nickRef.current.value,
-    //       password: passRef.current.value,
-    //       email: emailRef.current.value,
-    //       phone: phoneRef.current.value,
-    //       address: addressRef.current.value,
-    //     })
-    //     .then((res) => {
-    //       if (res) {
-    //         alert("수정에 성공하셨습니다.");
-    //         document.location.href = "/mypage/info";
-    //       } else {
-    //         alert("수정에 실패하셨습니다.");
-    //       }
-    //       nickRef.current.value = "";
-    //       passRef.current.value = "";
-    //       emailRef.current.value = "";
-    //       phoneRef.current.value = "";
-    //       addressRef.current.value = "";
-    //     })
-    //     .catch((e) => {
-    //       console.error(e);
-    //     });
-    // }
   };
 
   //이미지 파일
@@ -249,9 +252,9 @@ function ModifyInfo() {
             />
           </Badge>
           <Box
-            //component="form"
-            // noValidate
-            //onSubmit={submitCheck}
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
             sx={{ mt: 3, mb: 5 }}
           >
             <Grid container spacing={2}>
@@ -348,7 +351,7 @@ function ModifyInfo() {
               color="primary"
               onClick={submitCheck}
             >
-              <Typography component="h1" variant="h6" color="white">
+              <Typography  component="h1" variant="h6" color="white">
                 수정
               </Typography>
             </Button>
