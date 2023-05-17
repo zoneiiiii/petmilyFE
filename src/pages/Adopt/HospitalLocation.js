@@ -84,6 +84,7 @@ const HospitalLocation = () => {
         curLongitude = latlng.getLat;
       });
     }
+
     // 키워드 검색 완료 시 호출되는 콜백함수
     function placesSearchCB(data, status, pagination) {
       if (status === kakao.maps.services.Status.OK) {
@@ -120,21 +121,17 @@ const HospitalLocation = () => {
       // 마커에 클릭이벤트를 등록
       kakao.maps.event.addListener(marker, "click", function () {
         // 마커를 클릭하면 장소명이 인포윈도우에 표출
-
+        infowindow.close();
         infowindow.setContent(
-          '<div style="padding:5px;font-size:12px;">' +
+          '<div style="padding:5px;font-size:12px;text-align:center;">' +
             place.place_name +
             "</div>"
         );
-        infowindow.setMap(null);
+
         infowindow.open(map, marker);
       });
     }
-    function closeInfoWindow() {
-      for (var idx = 0; idx < item.length; idx++) {
-        item[idx].close();
-      }
-    }
+
     // getCenter();
   }, [place, data, dragend]);
   console.log(item);
@@ -205,7 +202,7 @@ const HospitalLocation = () => {
         id="map"
         style={{
           marginTop: "20px",
-          border: "solid 1px #FBD385",
+          border: "solid 1px ",
           width: "1000px",
           height: "500px",
         }}
@@ -225,6 +222,7 @@ const HospitalLocation = () => {
               key={item.place_name}
               sx={{
                 textAlign: "left",
+
                 border: "0.5px solid",
                 borderRightWidth:
                   index % 2 === 0
@@ -237,12 +235,12 @@ const HospitalLocation = () => {
                 borderTopWidth: index > 1 ? 0 : "0.5px",
               }}
             >
-              <Typography
+              {/* <Typography
                 component="h1"
                 variant="h5"
                 sx={{
                   color: "black",
-
+                  fontWeight: "bolder",
                   mb: "10px",
                   fontSize: "large",
                 }}
@@ -299,7 +297,22 @@ const HospitalLocation = () => {
                 }}
               >
                 {item.place_url}
-              </Typography>
+              </Typography> */}
+              <h3 style={{ lineHeight: "25px" }}>
+                {index + 1}. {item.place_name}
+              </h3>
+              <h5 class="tel" style={{ fontSize: "medium" }}>
+                Tel. {item.phone}
+              </h5>
+              <h5 class="tel" style={{ fontSize: "medium" }}>
+                지번 주소: {item.address_name}
+              </h5>
+              <h5 class="tel" style={{ fontSize: "medium" }}>
+                도로명 주소: {item.road_address_name}
+              </h5>
+              <h5 class="tel" style={{ fontSize: "medium" }}>
+                {item.place_url}
+              </h5>
             </Grid>
           ))}
         </Grid>
