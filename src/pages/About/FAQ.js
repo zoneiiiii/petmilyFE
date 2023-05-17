@@ -80,6 +80,7 @@ const FAQ = () => {
           display={"flex"}
           justifyContent={"center"}
           mt={4}
+          mb={2}
         >
           <StyledTabs value={category} onChange={handleChangeCategory} centered>
             <Tab label={분류.전체} value={분류.전체} />
