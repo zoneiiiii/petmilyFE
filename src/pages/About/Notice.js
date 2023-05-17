@@ -20,13 +20,19 @@ import { ABOUT } from "../../constants/PageURL";
 import styled from "styled-components";
 
 const pageWidth = "100%";
-
+// 검색 방식
+const searchModes = {
+  subject_contents: "subject_contents",
+  subject: "subject",
+  contents: "contents",
+};
 const Notice = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const page = searchParams.get("page");
   const limit = searchParams.get("limit");
   const search = searchParams.get("search");
+  const search_mode = searchParams.get("search_mode");
 
   const navigate = useNavigate();
   const [nowPage, setNowPage] = useState(1);
@@ -36,18 +42,13 @@ const Notice = () => {
   const [foundData, setFoundData] = useState(dummy);
   const [pagedData, setPagedData] = useState(dummy.slice(0, 20));
 
-  const searchOption = {
-    subject_contents: "subject_contents",
-    subject: "subject",
-    contents: "contents",
-  };
-
   // 초기 세팅
   useEffect(() => {
     setNowPage(page ? parseInt(page) : 1);
     setSearchKeyWord(search ? search : "");
     setRowsPerPage(limit ? parseInt(limit) : 20);
-    search && findDataByMode(search);
+    setSearchMode(search_mode ? search_mode : searchModes.subject_contents);
+    search && findDataByMode(search, search_mode);
   }, [limit, page, search]);
 
   // 페이지 표시 데이터 갱신
@@ -63,6 +64,7 @@ const Notice = () => {
         page: newPage,
         limit: limit,
         search: search,
+        search_mode: search_mode,
       })
     );
   };
@@ -74,7 +76,8 @@ const Notice = () => {
       ABOUT.NOTICE({
         page: nowPage,
         limit: event.target.value,
-        search: searchKeyWord,
+        search: search,
+        search_mode: search_mode,
       })
     );
   };
@@ -94,29 +97,27 @@ const Notice = () => {
         page: 1,
         limit: rowsPerPage,
         search: value,
+        search_mode: searchMode,
       })
     );
   };
 
+  // 검색 방식 설정
   function findDataByMode(value, searchMode) {
     switch (searchMode) {
-      case searchOption.subject_contents:
+      case searchModes.subject_contents:
         setFoundData(
           dummy.filter(
-            (notice, index) =>
-              notice.subject.includes(value) || notice.contents.includes(value)
+            (data) =>
+              data.subject.includes(value) || data.contents.includes(value)
           )
         );
         break;
-      case searchOption.subject:
-        setFoundData(
-          dummy.filter((notice, index) => notice.subject.includes(value))
-        );
+      case searchModes.subject:
+        setFoundData(dummy.filter((data) => data.subject.includes(value)));
         break;
-      case searchOption.contents:
-        setFoundData(
-          dummy.filter((notice, index) => notice.contents.includes(value))
-        );
+      case searchModes.contents:
+        setFoundData(dummy.filter((data) => data.contents.includes(value)));
         break;
       default:
     }
@@ -143,14 +144,14 @@ const Notice = () => {
           <Box display={"flex"} justifyContent={"flex-end"}>
             <FormControl sx={FormControlSx} size="small">
               <Select
-                defaultValue={searchOption.subject_contents}
+                defaultValue={searchModes.subject_contents}
                 onChange={handleChangeSearchMode}
               >
-                <MenuItem value={searchOption.subject_contents}>
+                <MenuItem value={searchModes.subject_contents}>
                   제목 + 내용
                 </MenuItem>
-                <MenuItem value={searchOption.subject}>제목</MenuItem>
-                <MenuItem value={searchOption.contents}>내용</MenuItem>
+                <MenuItem value={searchModes.subject}>제목</MenuItem>
+                <MenuItem value={searchModes.contents}>내용</MenuItem>
               </Select>
             </FormControl>
             <SearchBar
@@ -184,7 +185,15 @@ const Notice = () => {
                       width: "60%",
                     }}
                   >
-                    <StyledLink to={ABOUT.EVENT_DETAIL(notice.no)}>
+                    <StyledLink
+                      to={ABOUT.NOTICE_DETAIL({
+                        no: notice.no,
+                        page: nowPage,
+                        limit: rowsPerPage,
+                        search: searchKeyWord,
+                        search_mode: searchMode,
+                      })}
+                    >
                       {notice.subject}
                     </StyledLink>
                   </TableCell>
@@ -275,6 +284,917 @@ const StyledLink = styled(Link)`
 `;
 
 const dummy = [
+  {
+    no: 101,
+    memberNo: 1,
+    category: "notice",
+    subject: "4월 펫밀리 기부내역",
+    contents: "4월 많은 분들이 기부해주셨습니다!",
+    count: 31,
+    postDate: "2023-05-05",
+  },
+  {
+    no: 100,
+    memberNo: 1,
+    category: "notice",
+    subject: "자유게시판 이용 안내",
+    contents: "자유게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-05-04",
+  },
+  {
+    no: 99,
+    memberNo: 1,
+    category: "notice",
+    subject: "실종 동물 게시판 이용 안내",
+    contents: "실종 동물 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-05-03",
+  },
+  {
+    no: 98,
+    memberNo: 1,
+    category: "notice",
+    subject: "목격 제보 게시판 이용 안내",
+    contents: "목격 제보 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-05-02",
+  },
+  {
+    no: 97,
+    memberNo: 1,
+    category: "notice",
+    subject: "중고 거래 게시판 이용 안내",
+    contents: "중고 거래 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-05-02",
+  },
+  {
+    no: 96,
+    memberNo: 1,
+    category: "notice",
+    subject: "직거래 사기 주의",
+    contents: "직거래시 사기를 조심하세세요!",
+    count: 31,
+    postDate: "2023-05-01",
+  },
+  {
+    no: 95,
+    memberNo: 1,
+    category: "notice",
+    subject: "사이트 점검 안내",
+    contents: "오늘 사이트 점검예정입니다!",
+    count: 31,
+    postDate: "2023-05-01",
+  },
+  {
+    no: 94,
+    memberNo: 1,
+    category: "notice",
+    subject: "카카오페이 결제 오류 안내",
+    contents: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
+    count: 31,
+    postDate: "2023-05-01",
+  },
+  {
+    no: 93,
+    memberNo: 1,
+    category: "notice",
+    subject: "공지 몇개 더 올리기기",
+    contents: "내용 채우기 힘들다...!",
+    count: 31,
+    postDate: "2023-05-01",
+  },
+  {
+    no: 92,
+    memberNo: 1,
+    category: "notice",
+    subject: "아무거나 공지",
+    contents: "이제 뭘 써야 하나...",
+    count: 31,
+    postDate: "2023-05-01",
+  },
+  {
+    no: 91,
+    memberNo: 1,
+    category: "notice",
+    subject: "복붙 안내",
+    contents: "공지 복붙할거임!",
+    count: 31,
+    postDate: "2023-05-01",
+  },
+  {
+    no: 90,
+    memberNo: 1,
+    category: "notice",
+    subject: "자유게시판 이용 안내",
+    contents: "자유게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-05-01",
+  },
+  {
+    no: 89,
+    memberNo: 1,
+    category: "notice",
+    subject: "실종 동물 게시판 이용 안내",
+    contents: "실종 동물 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-30",
+  },
+  {
+    no: 88,
+    memberNo: 1,
+    category: "notice",
+    subject: "목격 제보 게시판 이용 안내",
+    contents: "목격 제보 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-30",
+  },
+  {
+    no: 87,
+    memberNo: 1,
+    category: "notice",
+    subject: "중고 거래 게시판 이용 안내",
+    contents: "중고 거래 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-29",
+  },
+  {
+    no: 86,
+    memberNo: 1,
+    category: "notice",
+    subject: "직거래 사기 주의",
+    contents: "직거래시 사기를 조심하세세요!",
+    count: 31,
+    postDate: "2023-04-29",
+  },
+  {
+    no: 85,
+    memberNo: 1,
+    category: "notice",
+    subject: "사이트 점검 안내",
+    contents: "오늘 사이트 점검예정입니다!",
+    count: 31,
+    postDate: "2023-04-28",
+  },
+  {
+    no: 84,
+    memberNo: 1,
+    category: "notice",
+    subject: "카카오페이 결제 오류 안내",
+    contents: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
+    count: 31,
+    postDate: "2023-04-28",
+  },
+  {
+    no: 83,
+    memberNo: 1,
+    category: "notice",
+    subject: "공지 몇개 더 올리기기",
+    contents: "내용 채우기 힘들다...!",
+    count: 31,
+    postDate: "2023-04-27",
+  },
+  {
+    no: 82,
+    memberNo: 1,
+    category: "notice",
+    subject: "아무거나 공지",
+    contents: "이제 뭘 써야 하나...",
+    count: 31,
+    postDate: "2023-04-27",
+  },
+  {
+    no: 81,
+    memberNo: 1,
+    category: "notice",
+    subject: "복붙 안내",
+    contents: "공지 복붙할거임!",
+    count: 31,
+    postDate: "2023-04-26",
+  },
+  {
+    no: 80,
+    memberNo: 1,
+    category: "notice",
+    subject: "자유게시판 이용 안내",
+    contents: "자유게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-26",
+  },
+  {
+    no: 79,
+    memberNo: 1,
+    category: "notice",
+    subject: "실종 동물 게시판 이용 안내",
+    contents: "실종 동물 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-25",
+  },
+  {
+    no: 78,
+    memberNo: 1,
+    category: "notice",
+    subject: "목격 제보 게시판 이용 안내",
+    contents: "목격 제보 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-25",
+  },
+  {
+    no: 77,
+    memberNo: 1,
+    category: "notice",
+    subject: "중고 거래 게시판 이용 안내",
+    contents: "중고 거래 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-24",
+  },
+  {
+    no: 76,
+    memberNo: 1,
+    category: "notice",
+    subject: "직거래 사기 주의",
+    contents: "직거래시 사기를 조심하세세요!",
+    count: 31,
+    postDate: "2023-04-24",
+  },
+  {
+    no: 75,
+    memberNo: 1,
+    category: "notice",
+    subject: "사이트 점검 안내",
+    contents: "오늘 사이트 점검예정입니다!",
+    count: 31,
+    postDate: "2023-04-23",
+  },
+  {
+    no: 74,
+    memberNo: 1,
+    category: "notice",
+    subject: "카카오페이 결제 오류 안내",
+    contents: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
+    count: 31,
+    postDate: "2023-04-23",
+  },
+  {
+    no: 73,
+    memberNo: 1,
+    category: "notice",
+    subject: "공지 몇개 더 올리기기",
+    contents: "내용 채우기 힘들다...!",
+    count: 31,
+    postDate: "2023-04-22",
+  },
+  {
+    no: 72,
+    memberNo: 1,
+    category: "notice",
+    subject: "아무거나 공지",
+    contents: "이제 뭘 써야 하나...",
+    count: 31,
+    postDate: "2023-04-22",
+  },
+  {
+    no: 71,
+    memberNo: 1,
+    category: "notice",
+    subject: "복붙 안내",
+    contents: "공지 복붙할거임!",
+    count: 31,
+    postDate: "2023-04-21",
+  },
+  {
+    no: 70,
+    memberNo: 1,
+    category: "notice",
+    subject: "자유게시판 이용 안내",
+    contents: "자유게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-21",
+  },
+  {
+    no: 69,
+    memberNo: 1,
+    category: "notice",
+    subject: "실종 동물 게시판 이용 안내",
+    contents: "실종 동물 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-20",
+  },
+  {
+    no: 68,
+    memberNo: 1,
+    category: "notice",
+    subject: "목격 제보 게시판 이용 안내",
+    contents: "목격 제보 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-20",
+  },
+  {
+    no: 67,
+    memberNo: 1,
+    category: "notice",
+    subject: "중고 거래 게시판 이용 안내",
+    contents: "중고 거래 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-19",
+  },
+  {
+    no: 66,
+    memberNo: 1,
+    category: "notice",
+    subject: "직거래 사기 주의",
+    contents: "직거래시 사기를 조심하세세요!",
+    count: 31,
+    postDate: "2023-04-19",
+  },
+  {
+    no: 65,
+    memberNo: 1,
+    category: "notice",
+    subject: "사이트 점검 안내",
+    contents: "오늘 사이트 점검예정입니다!",
+    count: 31,
+    postDate: "2023-04-18",
+  },
+  {
+    no: 64,
+    memberNo: 1,
+    category: "notice",
+    subject: "카카오페이 결제 오류 안내",
+    contents: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
+    count: 31,
+    postDate: "2023-04-18",
+  },
+  {
+    no: 63,
+    memberNo: 1,
+    category: "notice",
+    subject: "공지 몇개 더 올리기기",
+    contents: "내용 채우기 힘들다...!",
+    count: 31,
+    postDate: "2023-04-17",
+  },
+  {
+    no: 62,
+    memberNo: 1,
+    category: "notice",
+    subject: "아무거나 공지",
+    contents: "이제 뭘 써야 하나...",
+    count: 31,
+    postDate: "2023-04-17",
+  },
+  {
+    no: 61,
+    memberNo: 1,
+    category: "notice",
+    subject: "복붙 안내",
+    contents: "공지 복붙할거임!",
+    count: 31,
+    postDate: "2023-04-16",
+  },
+  {
+    no: 60,
+    memberNo: 1,
+    category: "notice",
+    subject: "자유게시판 이용 안내",
+    contents: "자유게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-16",
+  },
+  {
+    no: 59,
+    memberNo: 1,
+    category: "notice",
+    subject: "실종 동물 게시판 이용 안내",
+    contents: "실종 동물 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-15",
+  },
+  {
+    no: 58,
+    memberNo: 1,
+    category: "notice",
+    subject: "목격 제보 게시판 이용 안내",
+    contents: "목격 제보 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-15",
+  },
+  {
+    no: 57,
+    memberNo: 1,
+    category: "notice",
+    subject: "중고 거래 게시판 이용 안내",
+    contents: "중고 거래 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-14",
+  },
+  {
+    no: 56,
+    memberNo: 1,
+    category: "notice",
+    subject: "직거래 사기 주의",
+    contents: "직거래시 사기를 조심하세세요!",
+    count: 31,
+    postDate: "2023-04-14",
+  },
+  {
+    no: 55,
+    memberNo: 1,
+    category: "notice",
+    subject: "사이트 점검 안내",
+    contents: "오늘 사이트 점검예정입니다!",
+    count: 31,
+    postDate: "2023-04-13",
+  },
+  {
+    no: 54,
+    memberNo: 1,
+    category: "notice",
+    subject: "카카오페이 결제 오류 안내",
+    contents: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
+    count: 31,
+    postDate: "2023-04-13",
+  },
+  {
+    no: 53,
+    memberNo: 1,
+    category: "notice",
+    subject: "공지 몇개 더 올리기기",
+    contents: "내용 채우기 힘들다...!",
+    count: 31,
+    postDate: "2023-04-12",
+  },
+  {
+    no: 52,
+    memberNo: 1,
+    category: "notice",
+    subject: "아무거나 공지",
+    contents: "이제 뭘 써야 하나...",
+    count: 31,
+    postDate: "2023-04-12",
+  },
+  {
+    no: 51,
+    memberNo: 1,
+    category: "notice",
+    subject: "복붙 안내",
+    contents: "공지 복붙할거임!",
+    count: 31,
+    postDate: "2023-04-11",
+  },
+  {
+    no: 50,
+    memberNo: 1,
+    category: "notice",
+    subject: "자유게시판 이용 안내",
+    contents: "자유게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-11",
+  },
+  {
+    no: 49,
+    memberNo: 1,
+    category: "notice",
+    subject: "실종 동물 게시판 이용 안내",
+    contents: "실종 동물 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-10",
+  },
+  {
+    no: 48,
+    memberNo: 1,
+    category: "notice",
+    subject: "목격 제보 게시판 이용 안내",
+    contents: "목격 제보 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-10",
+  },
+  {
+    no: 47,
+    memberNo: 1,
+    category: "notice",
+    subject: "중고 거래 게시판 이용 안내",
+    contents: "중고 거래 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-09",
+  },
+  {
+    no: 46,
+    memberNo: 1,
+    category: "notice",
+    subject: "직거래 사기 주의",
+    contents: "직거래시 사기를 조심하세세요!",
+    count: 31,
+    postDate: "2023-04-09",
+  },
+  {
+    no: 45,
+    memberNo: 1,
+    category: "notice",
+    subject: "사이트 점검 안내",
+    contents: "오늘 사이트 점검예정입니다!",
+    count: 31,
+    postDate: "2023-04-08",
+  },
+  {
+    no: 44,
+    memberNo: 1,
+    category: "notice",
+    subject: "카카오페이 결제 오류 안내",
+    contents: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
+    count: 31,
+    postDate: "2023-04-08",
+  },
+  {
+    no: 43,
+    memberNo: 1,
+    category: "notice",
+    subject: "공지 몇개 더 올리기기",
+    contents: "내용 채우기 힘들다...!",
+    count: 31,
+    postDate: "2023-04-07",
+  },
+  {
+    no: 42,
+    memberNo: 1,
+    category: "notice",
+    subject: "아무거나 공지",
+    contents: "이제 뭘 써야 하나...",
+    count: 31,
+    postDate: "2023-04-07",
+  },
+  {
+    no: 41,
+    memberNo: 1,
+    category: "notice",
+    subject: "복붙 안내",
+    contents: "공지 복붙할거임!",
+    count: 31,
+    postDate: "2023-04-06",
+  },
+  {
+    no: 40,
+    memberNo: 1,
+    category: "notice",
+    subject: "자유게시판 이용 안내",
+    contents: "자유게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-06",
+  },
+  {
+    no: 39,
+    memberNo: 1,
+    category: "notice",
+    subject: "실종 동물 게시판 이용 안내",
+    contents: "실종 동물 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-05",
+  },
+  {
+    no: 38,
+    memberNo: 1,
+    category: "notice",
+    subject: "목격 제보 게시판 이용 안내",
+    contents: "목격 제보 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-05",
+  },
+  {
+    no: 37,
+    memberNo: 1,
+    category: "notice",
+    subject: "중고 거래 게시판 이용 안내",
+    contents: "중고 거래 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-04",
+  },
+  {
+    no: 36,
+    memberNo: 1,
+    category: "notice",
+    subject: "직거래 사기 주의",
+    contents: "직거래시 사기를 조심하세세요!",
+    count: 31,
+    postDate: "2023-04-04",
+  },
+  {
+    no: 35,
+    memberNo: 1,
+    category: "notice",
+    subject: "사이트 점검 안내",
+    contents: "오늘 사이트 점검예정입니다!",
+    count: 31,
+    postDate: "2023-04-03",
+  },
+  {
+    no: 34,
+    memberNo: 1,
+    category: "notice",
+    subject: "카카오페이 결제 오류 안내",
+    contents: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
+    count: 31,
+    postDate: "2023-04-03",
+  },
+  {
+    no: 33,
+    memberNo: 1,
+    category: "notice",
+    subject: "공지 몇개 더 올리기기",
+    contents: "내용 채우기 힘들다...!",
+    count: 31,
+    postDate: "2023-04-02",
+  },
+  {
+    no: 32,
+    memberNo: 1,
+    category: "notice",
+    subject: "아무거나 공지",
+    contents: "이제 뭘 써야 하나...",
+    count: 31,
+    postDate: "2023-04-02",
+  },
+  {
+    no: 31,
+    memberNo: 1,
+    category: "notice",
+    subject: "복붙 안내",
+    contents: "공지 복붙할거임!",
+    count: 31,
+    postDate: "2023-04-01",
+  },
+  {
+    no: 30,
+    memberNo: 1,
+    category: "notice",
+    subject: "자유게시판 이용 안내",
+    contents: "자유게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-04-01",
+  },
+  {
+    no: 29,
+    memberNo: 1,
+    category: "notice",
+    subject: "실종 동물 게시판 이용 안내",
+    contents: "실종 동물 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-03-31",
+  },
+  {
+    no: 28,
+    memberNo: 1,
+    category: "notice",
+    subject: "목격 제보 게시판 이용 안내",
+    contents: "목격 제보 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-03-31",
+  },
+  {
+    no: 27,
+    memberNo: 1,
+    category: "notice",
+    subject: "중고 거래 게시판 이용 안내",
+    contents: "중고 거래 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-03-30",
+  },
+  {
+    no: 26,
+    memberNo: 1,
+    category: "notice",
+    subject: "직거래 사기 주의",
+    contents: "직거래시 사기를 조심하세세요!",
+    count: 31,
+    postDate: "2023-03-30",
+  },
+  {
+    no: 25,
+    memberNo: 1,
+    category: "notice",
+    subject: "사이트 점검 안내",
+    contents: "오늘 사이트 점검예정입니다!",
+    count: 31,
+    postDate: "2023-03-29",
+  },
+  {
+    no: 24,
+    memberNo: 1,
+    category: "notice",
+    subject: "카카오페이 결제 오류 안내",
+    contents: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
+    count: 31,
+    postDate: "2023-03-29",
+  },
+  {
+    no: 23,
+    memberNo: 1,
+    category: "notice",
+    subject: "공지 몇개 더 올리기기",
+    contents: "내용 채우기 힘들다...!",
+    count: 31,
+    postDate: "2023-03-28",
+  },
+  {
+    no: 22,
+    memberNo: 1,
+    category: "notice",
+    subject: "아무거나 공지",
+    contents: "이제 뭘 써야 하나...",
+    count: 31,
+    postDate: "2023-03-28",
+  },
+  {
+    no: 21,
+    memberNo: 1,
+    category: "notice",
+    subject: "복붙 안내",
+    contents: "공지 복붙할거임!",
+    count: 31,
+    postDate: "2023-03-27",
+  },
+  {
+    no: 20,
+    memberNo: 1,
+    category: "notice",
+    subject: "자유게시판 이용 안내",
+    contents: "자유게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-03-27",
+  },
+  {
+    no: 19,
+    memberNo: 1,
+    category: "notice",
+    subject: "실종 동물 게시판 이용 안내",
+    contents: "실종 동물 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-03-26",
+  },
+  {
+    no: 18,
+    memberNo: 1,
+    category: "notice",
+    subject: "목격 제보 게시판 이용 안내",
+    contents: "목격 제보 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-03-26",
+  },
+  {
+    no: 17,
+    memberNo: 1,
+    category: "notice",
+    subject: "중고 거래 게시판 이용 안내",
+    contents: "중고 거래 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-03-25",
+  },
+  {
+    no: 16,
+    memberNo: 1,
+    category: "notice",
+    subject: "직거래 사기 주의",
+    contents: "직거래시 사기를 조심하세세요!",
+    count: 31,
+    postDate: "2023-03-25",
+  },
+  {
+    no: 15,
+    memberNo: 1,
+    category: "notice",
+    subject: "사이트 점검 안내",
+    contents: "오늘 사이트 점검예정입니다!",
+    count: 31,
+    postDate: "2023-03-24",
+  },
+  {
+    no: 14,
+    memberNo: 1,
+    category: "notice",
+    subject: "카카오페이 결제 오류 안내",
+    contents: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
+    count: 31,
+    postDate: "2023-03-24",
+  },
+  {
+    no: 13,
+    memberNo: 1,
+    category: "notice",
+    subject: "공지 몇개 더 올리기기",
+    contents: "내용 채우기 힘들다...!",
+    count: 31,
+    postDate: "2023-03-23",
+  },
+  {
+    no: 12,
+    memberNo: 1,
+    category: "notice",
+    subject: "아무거나 공지",
+    contents: "이제 뭘 써야 하나...",
+    count: 31,
+    postDate: "2023-03-23",
+  },
+  {
+    no: 11,
+    memberNo: 1,
+    category: "notice",
+    subject: "복붙 안내",
+    contents: "공지 복붙할거임!",
+    count: 31,
+    postDate: "2023-03-22",
+  },
+  {
+    no: 10,
+    memberNo: 1,
+    category: "notice",
+    subject: "자유게시판 이용 안내",
+    contents: "자유게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-03-22",
+  },
+  {
+    no: 9,
+    memberNo: 1,
+    category: "notice",
+    subject: "실종 동물 게시판 이용 안내",
+    contents: "실종 동물 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-03-21",
+  },
+  {
+    no: 8,
+    memberNo: 1,
+    category: "notice",
+    subject: "목격 제보 게시판 이용 안내",
+    contents: "목격 제보 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-03-21",
+  },
+  {
+    no: 7,
+    memberNo: 1,
+    category: "notice",
+    subject: "중고 거래 게시판 이용 안내",
+    contents: "중고 거래 게시판을 다음과 같이 사용해주세요!",
+    count: 31,
+    postDate: "2023-03-20",
+  },
+  {
+    no: 6,
+    memberNo: 1,
+    category: "notice",
+    subject: "직거래 사기 주의",
+    contents: "직거래시 사기를 조심하세세요!",
+    count: 31,
+    postDate: "2023-03-20",
+  },
+  {
+    no: 5,
+    memberNo: 1,
+    category: "notice",
+    subject: "사이트 점검 안내",
+    contents: "오늘 사이트 점검예정입니다!",
+    count: 31,
+    postDate: "2023-03-19",
+  },
+  {
+    no: 4,
+    memberNo: 1,
+    category: "notice",
+    subject: "카카오페이 결제 오류 안내",
+    contents: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
+    count: 31,
+    postDate: "2023-03-19",
+  },
+  {
+    no: 3,
+    memberNo: 1,
+    category: "notice",
+    subject: "공지 몇개 더 올리기기",
+    contents: "내용 채우기 힘들다...!",
+    count: 31,
+    postDate: "2023-03-18",
+  },
+  {
+    no: 2,
+    memberNo: 1,
+    category: "notice",
+    subject: "아무거나 공지",
+    contents: "이제 뭘 써야 하나...",
+    count: 31,
+    postDate: "2023-03-18",
+  },
+  {
+    no: 1,
+    memberNo: 1,
+    category: "notice",
+    subject: "복붙 안내",
+    contents: "공지 복붙할거임!",
+    count: 31,
+    postDate: "2023-03-17",
+  },
+];
+const dummy2 = [
   {
     no: "001",
     subject: "유기동물 구조활동",
