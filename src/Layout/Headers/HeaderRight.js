@@ -54,7 +54,6 @@ const HeaderRight = ({ page }) => {
               color: "#FFFFFF",
               background: "#FF8282",
               borderColor: "#FF8282",
-              fontWeight: "bold",
               ":hover": { borderColor: "#ED4F4F", background: "#ED4F4F" },
             }}
           >
@@ -69,7 +68,6 @@ const HeaderRight = ({ page }) => {
               color: "#FFFFFF",
               background: "#FBD385",
               borderColor: "#FBD385",
-              fontWeight: "bold",
               ":hover": { borderColor: "#FFBE3F", background: "#FFBE3F" },
             }}
           >
@@ -96,7 +94,6 @@ const HeaderRight = ({ page }) => {
               minWidth: "100",
               background: "#BFBFBF",
               borderColor: "#BFBFBF",
-              fontWeight: "bold",
               ":hover": { borderColor: "gray", background: "gray" },
             }}
           >
@@ -111,7 +108,6 @@ const HeaderRight = ({ page }) => {
               color: "#FFFFFF",
               background: "#FBD385",
               borderColor: "#FBD385",
-              fontWeight: "bold",
               ":hover": { borderColor: "#FFBE3F", background: "#FFBE3F" },
             }}
           >
