@@ -202,7 +202,7 @@ const FreeBoard = () => {
         <Section className="result">
             <MainContainer className="result-container">
                 <ThemeProvider theme={theme}>
-                    <Container sx={{ py: 5, minWidth: 1000 }} maxWidth="lg">
+                    <Container sx={{ py: 5, minWidth: 780 }} maxWidth="lg">
                         <h1 className={classes.title}>자유 게시판</h1>
                         <SearchContainer>
                             <SearchBar />
