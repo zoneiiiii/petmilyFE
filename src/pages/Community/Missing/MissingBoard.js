@@ -47,6 +47,7 @@ const MissingBoard = () => {
   const handleChange = (event, value) => {
     //페이지 변경 시 호출, 새 페이지의 번호를 value에 저장함.
     setPage(value);
+    console.log(data);
   };
 
   const getPageNum = () => {
@@ -59,16 +60,16 @@ const MissingBoard = () => {
   }, []);
 
   /* axios start */
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:8080/board/missing")
-  //     .then((response) => {
-  //       setData(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching data:", error);
-  //     });
-  // }, []);
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/board/missing")
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
   /* axios end */
 
   return (
@@ -83,17 +84,17 @@ const MissingBoard = () => {
                 <SearchBar />
               </SearchContainer>
               <Grid container spacing={4} columns={8}>
-                {dummy
+                {data
                   .slice(
                     (page - 1) * itemsPerPage,
                     (page - 1) * itemsPerPage + itemsPerPage
                   )
                   .map((card) => {
                     return (
-                      <Grid item xs={10} sm={6} md={2} key={card.id}>
-                        <Link to={COMMUNITY.MISSING_DETAIL(card.id)} style={{ textDecoration: "none" }}>
+                      <Grid item xs={10} sm={6} md={2} key={card.boardNum}>
+                        <Link to={COMMUNITY.FIND_DETAIL(card.boardNum)} style={{ textDecoration: "none" }}>
                           <Card
-                            key={card.id}
+                            key={card.boardNum}
                             sx={{
                               height: "100%",
                               display: "flex",
@@ -102,9 +103,9 @@ const MissingBoard = () => {
                           >
                             <CardImage src="http://placeimg.com/300/300/animals/sepia" />
                             <div>
-                              <CardTitle>{card.title}</CardTitle>
-                              <CardWritter>{card.writter}</CardWritter>
-                              <CardCount>조회 {card.count}</CardCount>
+                              <CardTitle>{card.boardSubject}</CardTitle>
+                              <CardWritter>{card.memberNickName}</CardWritter>
+                              <CardCount>조회 {card.boardCount}</CardCount>
                             </div>
                           </Card>
                         </Link>
