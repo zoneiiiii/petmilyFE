@@ -47,7 +47,7 @@ function MyInfo() {
         <Table
           size="small"
           padding="normal"
-          sx={{ minWidth: "800px", borderBottomColor: "fbd385.main" }}
+          sx={{ borderBottomColor: "fbd385.main" }}
         >
           <TableBody>
             <TableRow>
