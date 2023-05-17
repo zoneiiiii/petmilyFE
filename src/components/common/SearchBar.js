@@ -2,12 +2,14 @@ import SearchIcon from "@mui/icons-material/Search";
 import {
   Box,
   Button,
+  IconButton,
   InputAdornment,
   TextField,
   ThemeProvider,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const SearchBar = ({ setValue, value, onClick, sx, width }) => {
   const [textValue, setTextValue] = useState("");
@@ -26,6 +28,10 @@ const SearchBar = ({ setValue, value, onClick, sx, width }) => {
       handleClick();
     }
   };
+  const inputRef = useRef();
+  const resetValue = (event) => {
+    setTextValue("");
+  };
 
   return (
     <ThemeProvider theme={CustomTheme}>
@@ -35,12 +41,20 @@ const SearchBar = ({ setValue, value, onClick, sx, width }) => {
           size="small"
           placeholder="Search..."
           value={textValue}
+          inputRef={inputRef}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
                 <SearchIcon color="fbd385" />
+              </InputAdornment>
+            ),
+            endAdornment: textValue && (
+              <InputAdornment position="end">
+                <IconButton onClick={resetValue}>
+                  <CloseIcon color="fbd385" />
+                </IconButton>
               </InputAdornment>
             ),
           }}
