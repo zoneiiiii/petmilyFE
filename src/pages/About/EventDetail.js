@@ -62,7 +62,7 @@ const EventDetail = () => {
                   fontWeight: 600,
                 }}
               >
-                [공지] {data && data.subject}
+                [이벤트] {data && data.subject}
               </TableCell>
             </TableRow>
             <TableRow sx={{ display: "flex" }}>
