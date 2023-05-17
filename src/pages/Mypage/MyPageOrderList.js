@@ -17,21 +17,47 @@ const MyPageOrderList = () => {
   const pageLimit = 10;
   const navigate = useNavigate();
   const [startDate, setStartDate] = useState(
-    dayjs(dayjs().subtract(6, "month").toDate())
+    dayjs(dayjs().subtract(6, "month").startOf("date").toDate())
   );
-  const [endDate, setEndDate] = useState(dayjs());
-  const [value, setValue] = useState();
+  const [endDate, setEndDate] = useState(dayjs().endOf("date"));
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [queryData, setQueryData] = useState(orderlist);
+  const [dateList, setDateList] = useState([
+    ...new Set(orderlist.map((product) => product.orderDate)),
+  ]);
   const resetDate = () => {
-    setStartDate(dayjs(dayjs().subtract(6, "month").toDate()));
-    setEndDate(dayjs());
+    setStartDate(dayjs(dayjs().subtract(6, "month").startOf("date").toDate()));
+    setEndDate(dayjs().endOf("date"));
   };
+  // 검색에 따른 데이터 조회
   useEffect(() => {
-    value && console.log(value);
-    //  console.log(startDate.format("YYYY-MM-DD"), endDate.format("YYYY-MM-DD"));
-  }, [startDate, endDate, value]);
+    searchKeyword && console.log(searchKeyword);
+    console.log(
+      startDate.format("YYYY-MM-DD"),
+      startDate,
+      endDate.format("YYYY-MM-DD"),
+      endDate
+    );
+    setQueryData(
+      orderlist.filter(
+        (data) =>
+          data.productName.includes(searchKeyword) &&
+          dayjs(data.orderDate) >= startDate &&
+          dayjs(data.orderDate) <= endDate
+      )
+    );
+  }, [startDate, endDate, searchKeyword]);
 
-  const dateList = [...new Set(orderlist.map((product) => product.orderDate))];
-
+  // 검색결과에 따른 날짜리스트 변경
+  useEffect(() => {
+    setDateList([
+      ...new Set(
+        queryData.map((product) =>
+          dayjs(product.orderDate).format("YYYY-MM-DD")
+        )
+      ),
+    ]);
+  }, [queryData]);
   const ShowMore = () => {};
 
   return (
@@ -66,7 +92,7 @@ const MyPageOrderList = () => {
             defaultValue={dayjs(endDate)}
             value={endDate}
             onChange={(date) => setEndDate(date)}
-            maxDate={dayjs()}
+            maxDate={endDate}
             minDate={startDate}
             width={"205px"}
           />
@@ -80,7 +106,11 @@ const MyPageOrderList = () => {
             <AutorenewIcon onClick={resetDate} />
           </Button>
         </Box>
-        <SearchBar setValue={setValue} value={value} width={"250px"} />
+        <SearchBar
+          setValue={setSearchKeyword}
+          value={searchKeyword}
+          width={"250px"}
+        />
       </Box>
       {dateList.map((date, index) => {
         return (
@@ -110,10 +140,13 @@ const MyPageOrderList = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {orderlist
-                    .filter((product) => {
-                      return product.orderDate === date;
-                    })
+                  {queryData
+                    .filter(
+                      (product) =>
+                        dayjs(product.orderDate) >=
+                          dayjs(date).startOf("date") &&
+                        dayjs(product.orderDate) <= dayjs(date).endOf("date")
+                    )
                     .map((row, index2) => (
                       <TableRow key={index2}>
                         <TableCell sx={tdSx}>
