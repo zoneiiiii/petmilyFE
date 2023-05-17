@@ -68,6 +68,7 @@ const Join = () => {
   const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
   const [phonenumber, setPhonenumber] = useState("");
+  const [name, setName] = useState("");
 
   const IDRef = useRef();
   const passwordRef = useRef();
@@ -77,7 +78,6 @@ const Join = () => {
   const nicknameRef = useRef();
   const dateOfBirthRef = useRef();
   const phonenumberRef = useRef();
-  const addressRef = useRef();
   const genderRef = useRef();
 
   const [IDError, setIDError] = useState("");
@@ -88,7 +88,6 @@ const Join = () => {
   const [nicknameError, setNicknameError] = useState("");
   const [dateOfBirthError, setDateOfBirthError] = useState("");
   const [phonenumberError, setPhonenumberError] = useState("");
-  const [addressError, setAddressError] = useState("");
 
   const handleFormSubmit = () => {
     axios
@@ -100,7 +99,6 @@ const Join = () => {
         memberName: nameRef?.current?.querySelector("input").value,
         memberBirth: dateOfBirthRef?.current?.querySelector("input").value,
         memberTel: phonenumberRef?.current?.querySelector("input").value,
-        memberAddr: addressRef?.current?.querySelector("input").value,
         memberGender: genderRef?.current?.querySelector("input").value,
       })
       .then((res) => {
@@ -187,6 +185,19 @@ const Join = () => {
     [password]
   );
 
+  const onChangeName = useCallback((e) => {
+    setName(e.target.value);
+    if (!nameRef?.current?.querySelector("input").value) {
+      setNameError("이름을 입력해주세요.");
+    } else {
+      setNameError("");
+    }
+  }, []);
+
+  const onChangeDate = useCallback((e) => {
+    setDateOfBirthError("");
+  }, []);
+
   const handleButtonClick = (e) => {
     if (true) {
       if (!IDRef?.current?.querySelector("input").value) {
@@ -235,12 +246,6 @@ const Join = () => {
         setPhonenumberError("전화번호를 입력해주세요.");
       } else {
         setPhonenumberError("");
-      }
-
-      if (!addressRef?.current?.querySelector("input").value) {
-        setAddressError("주소를 입력해주세요.");
-      } else {
-        setAddressError("");
       }
     }
 
@@ -355,6 +360,7 @@ const Join = () => {
                 className="input-item"
                 name="user-name"
                 ref={nameRef}
+                onChange={onChangeName}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     const target = nicknameRef.current.querySelector("input");
@@ -394,6 +400,7 @@ const Join = () => {
                   <DatePicker
                     className="input-item default-date"
                     ref={dateOfBirthRef}
+                    onChange={onChangeDate}
                     format="YYYY-MM-DD"
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
@@ -420,12 +427,6 @@ const Join = () => {
                 className="input-item"
                 ref={phonenumberRef}
                 onChange={onChangePhone}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    const target = addressRef.current.querySelector("input");
-                    target.focus();
-                  }
-                }}
                 name="user-number"
               />
             </InputContainer>
@@ -433,22 +434,6 @@ const Join = () => {
               sx={{ color: "red", marginLeft: "140px", fontSize: "0.9rem" }}
             >
               {phonenumberError}
-            </FormHelperText>
-
-            <InputContainer>
-              <InputName>주소</InputName>
-              <TextField
-                type="address"
-                variant="standard"
-                className="input-item"
-                ref={addressRef}
-                name="user-address"
-              />
-            </InputContainer>
-            <FormHelperText
-              sx={{ color: "red", marginLeft: "140px", fontSize: "0.9rem" }}
-            >
-              {addressError}
             </FormHelperText>
 
             <InputContainer
