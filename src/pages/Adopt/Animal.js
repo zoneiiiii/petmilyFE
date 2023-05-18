@@ -10,6 +10,7 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import styled from "styled-components";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
 
 function Animal({
   desertionNo,
@@ -85,30 +86,32 @@ function Animal({
     // onMouseLeave={handleLeave}
     // onClick={handleOnClick}
     // >
-    <Card
-      xs={10}
-      sm={6}
-      md={2}
-      sx={{
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        cursor: "pointer",
-        marginRight: "10px",
-        transition: "all 0.3s ease-out",
-        transform: isHover ? "scale(1.05)" : "scale(1)",
-      }}
-      onClick={handleOnClick}
-      onMouseEnter={handleHover}
-      onMouseLeave={handleLeave}
-    >
-      <CardImage src={profile} />
-      <div>
-        <CardTitle>{desertionNo}</CardTitle>
-        {/* <CardWritter>{age}</CardWritter> */}
-        <CardCount> {kindCd}</CardCount>
-      </div>
-    </Card>
+    <ThemeProvider theme={CustomTheme}>
+      <Card
+        xs={10}
+        sm={6}
+        md={2}
+        sx={{
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          cursor: "pointer",
+          marginRight: "10px",
+          transition: "all 0.3s ease-out",
+          transform: isHover ? "scale(1.05)" : "scale(1)",
+        }}
+        onClick={handleOnClick}
+        onMouseEnter={handleHover}
+        onMouseLeave={handleLeave}
+      >
+        <CardImage src={profile} />
+        <div>
+          <CardTitle>{desertionNo}</CardTitle>
+          {/* <CardWritter>{age}</CardWritter> */}
+          <CardCount> {kindCd}</CardCount>
+        </div>
+      </Card>
+    </ThemeProvider>
     /* <img
         src={profile}
         title={desertionNo}

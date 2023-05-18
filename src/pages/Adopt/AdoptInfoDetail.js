@@ -8,6 +8,8 @@ import Typography from "@mui/material/Typography";
 import Animal from "./Animal";
 import axios from "axios";
 import styled from "styled-components";
+import { ThemeProvider } from "@mui/material";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
 const AdoptInfoDetail = (props) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -161,106 +163,104 @@ const AdoptInfoDetail = (props) => {
     fetchData();
   }, [uprCd]);
   return (
-    <>
-      {/* {loading ? (
-        <h1>loading...</h1>
-      ) : ( */}
-      {data?.length !== 0 && (
-        <div style={{ height: "400px" }}>
-          <Typography
-            component="h2"
-            variant="h5"
-            sx={{
-              marginLeft: "100px",
-              fontSize: "1.5em",
-              fontWeight: "bolder",
-              color: "black",
-              justifyContent: "center",
-              width: "150px",
-              textAlign: "left",
-              borderLeft: "3px solid",
-              borderBottom: "3px solid",
-              borderBottomColor: "#FBD385",
-              borderLeftColor: "#FBD385",
-              paddingLeft: "5px",
-              mb: "10px",
-            }}
-          >
-            {name}
-          </Typography>
-          <Grid
-            container
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              marginBottom: "15px",
-            }}
-            onMouseEnter={handleHover}
-            onMouseLeave={handleLeave}
-          >
-            {data.length > 5 && (
-              <>
-                {isHover ? (
-                  <Grid
-                    style={{
-                      display: "flex",
-                    }}
-                    item
-                    xs={1}
-                  >
-                    <IconButton
-                      onClick={moveLeft}
+    <ThemeProvider theme={CustomTheme}>
+      <>
+        {data?.length !== 0 && (
+          <div style={{ height: "400px" }}>
+            <Typography
+              component="h2"
+              variant="h5"
+              sx={{
+                marginLeft: "100px",
+                fontSize: "1.5em",
+                fontWeight: "bolder",
+                color: "black",
+                justifyContent: "center",
+                width: "150px",
+                textAlign: "left",
+                borderLeft: "3px solid",
+                borderBottom: "3px solid",
+                borderBottomColor: "#FBD385",
+                borderLeftColor: "#FBD385",
+                paddingLeft: "5px",
+                mb: "10px",
+              }}
+            >
+              {name}
+            </Typography>
+            <Grid
+              container
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                marginBottom: "15px",
+              }}
+              onMouseEnter={handleHover}
+              onMouseLeave={handleLeave}
+            >
+              {data.length > 5 && (
+                <>
+                  {isHover ? (
+                    <Grid
                       style={{
-                        width: "100%",
-                        height: "100%",
+                        display: "flex",
                       }}
+                      item
+                      xs={1}
                     >
-                      <ArrowBackIosIcon
+                      <IconButton
+                        onClick={moveLeft}
                         style={{
-                          width: "30%",
+                          width: "100%",
                           height: "100%",
-                          color: "black",
-                          scale: "2.0",
-                          marginLeft: "1.5em",
                         }}
-                      />
-                    </IconButton>
-                  </Grid>
-                ) : null}
-              </>
-            )}
-            <AnimalRender />
-            {data.length > 5 && (
-              <>
-                {isHover ? (
-                  <Grid item xs={1}>
-                    <IconButton
-                      onClick={moveRight}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                      }}
-                    >
-                      <ArrowForwardIosIcon
+                      >
+                        <ArrowBackIosIcon
+                          style={{
+                            width: "30%",
+                            height: "100%",
+                            color: "black",
+                            scale: "2.0",
+                            marginLeft: "1.5em",
+                          }}
+                        />
+                      </IconButton>
+                    </Grid>
+                  ) : null}
+                </>
+              )}
+              <AnimalRender />
+              {data.length > 5 && (
+                <>
+                  {isHover ? (
+                    <Grid item xs={1}>
+                      <IconButton
+                        onClick={moveRight}
                         style={{
-                          width: "30%",
+                          width: "100%",
                           height: "100%",
-                          color: "black",
-                          scale: "2.0",
-                          marginRight: "1.5em",
                         }}
-                      />
-                    </IconButton>
-                  </Grid>
-                ) : null}
-              </>
-            )}
-          </Grid>
-        </div>
-      )}
-      {/* )} */}
-    </>
+                      >
+                        <ArrowForwardIosIcon
+                          style={{
+                            width: "30%",
+                            height: "100%",
+                            color: "black",
+                            scale: "2.0",
+                            marginRight: "1.5em",
+                          }}
+                        />
+                      </IconButton>
+                    </Grid>
+                  ) : null}
+                </>
+              )}
+            </Grid>
+          </div>
+        )}
+      </>
+    </ThemeProvider>
   );
 };
 

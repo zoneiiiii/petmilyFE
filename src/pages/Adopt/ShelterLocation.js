@@ -7,6 +7,8 @@ import Box from "@mui/material/Box";
 import styled from "styled-components";
 import Pagination from "@mui/material/Pagination";
 import react, { useEffect, useLayoutEffect, useState, useRef } from "react";
+import { ThemeProvider } from "@mui/material";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
 const { kakao } = window;
 let curLatitude = "";
 let curLongitude = "";
@@ -357,67 +359,71 @@ const ShelterLocation = () => {
   // 시/군/구 코드 파싱
 
   return (
-    <div
-      style={{
-        textAlign: "center",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        margin: "0 auto",
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "center", marginTop: "30px" }}>
-        <img
-          alt="hospital"
-          style={{ width: "60px", height: "60px", marginRight: "10px" }}
-          src="./../images/shelter.png"
-        />
-        <h1
-          sx={{
-            color: "black",
-            mt: "30px",
-            mb: "30px",
-            fontSize: "70px",
-            fontWeight: "bord",
-          }}
-        >
-          보호소 정보
-        </h1>
-      </div>
+    <ThemeProvider theme={CustomTheme}>
       <div
-        id="map"
         style={{
-          border: "solid 1px #FBD385",
-          width: "1000px",
-          height: "500px",
-          marginBottom: "15px",
+          textAlign: "center",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          margin: "0 auto",
         }}
-      ></div>
-      <Box
-        id="menu_wrap"
-        class="bg_white"
-        sx={{ marginTop: "15px", marginLeft: "16px", width: "1000px" }}
       >
         <div
-          container
+          style={{ display: "flex", alignItems: "center", marginTop: "30px" }}
+        >
+          <img
+            alt="hospital"
+            style={{ width: "60px", height: "60px", marginRight: "10px" }}
+            src="./../images/shelter.png"
+          />
+          <h1
+            sx={{
+              color: "black",
+              mt: "30px",
+              mb: "30px",
+              fontSize: "70px",
+              fontWeight: "bord",
+            }}
+          >
+            보호소 정보
+          </h1>
+        </div>
+        <div
+          id="map"
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
+            border: "solid 1px #FBD385",
+            width: "1000px",
+            height: "500px",
+            marginBottom: "15px",
           }}
-          id="placesList"
         ></div>
+        <Box
+          id="menu_wrap"
+          class="bg_white"
+          sx={{ marginTop: "15px", marginLeft: "16px", width: "1000px" }}
+        >
+          <div
+            container
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+            }}
+            id="placesList"
+          ></div>
 
-        <Grid
-          id="pagination"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: "15px",
-          }}
-        ></Grid>
-      </Box>
-    </div>
+          <Grid
+            id="pagination"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "15px",
+            }}
+          ></Grid>
+        </Box>
+      </div>
+    </ThemeProvider>
   );
 };
 export default ShelterLocation;

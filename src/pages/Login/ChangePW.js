@@ -1,12 +1,17 @@
 import React, { useState, useRef } from "react";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import FormHelperText from "@mui/material/FormHelperText";
+
 import { styled } from "@mui/material/styles";
 import CustomButton from "./CustomButton";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import {
+  Button,
+  TextField,
+  Typography,
+  FormHelperText,
+  ThemeProvider,
+} from "@mui/material";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
 const CustomTextField = styled(TextField)({
   "& label.Mui-focused": {
     color: "black",
@@ -146,78 +151,80 @@ function ChangePW() {
     }
   };
   return (
-    <div
-      style={{
-        textAlign: "center",
-        width: "350px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        margin: "0 auto",
-      }}
-    >
-      <Typography
-        sx={{
-          color: "#FBD385",
-          mt: "30px",
-          fontSize: "40px ",
-          fontWeight: "bolder",
-          mb: "38px",
+    <ThemeProvider theme={CustomTheme}>
+      <div
+        style={{
+          textAlign: "center",
+          width: "350px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          margin: "0 auto",
         }}
       >
-        비밀번호 변경
-      </Typography>
-      <div style={{ marginTop: "10px" }}>
-        <CustomTextField
-          autoComplete="off"
-          label={pwLabel}
-          type="password"
-          name="password"
-          variant="outlined"
-          InputProps={{ style: { color: "black" } }}
-          InputLabelProps={{
-            style: { color: "gray", fontSize: "20px", fontWeight: "border" },
-          }}
+        <Typography
           sx={{
-            background: "white",
-            width: "350px",
+            color: "#FBD385",
+            mt: "30px",
+            fontSize: "40px ",
+            fontWeight: "bolder",
+            mb: "38px",
           }}
-          required
-          onChange={pwChange}
-          ref={pwRef}
-          onKeyPress={gotoPasswordCheckInput}
+        >
+          비밀번호 변경
+        </Typography>
+        <div style={{ marginTop: "10px" }}>
+          <CustomTextField
+            autoComplete="off"
+            label={pwLabel}
+            type="password"
+            name="password"
+            variant="outlined"
+            InputProps={{ style: { color: "black" } }}
+            InputLabelProps={{
+              style: { color: "gray", fontSize: "20px", fontWeight: "border" },
+            }}
+            sx={{
+              background: "white",
+              width: "350px",
+            }}
+            required
+            onChange={pwChange}
+            ref={pwRef}
+            onKeyPress={gotoPasswordCheckInput}
+          />
+          <FormHelperText sx={{ color: "red" }}>{passwordError}</FormHelperText>
+        </div>
+        <div style={{ marginTop: "10px" }}>
+          <CustomTextField
+            label={pwchangeLabel}
+            type="password"
+            name="pwCheck"
+            required
+            variant="outlined"
+            InputProps={{ style: { color: "black" } }}
+            InputLabelProps={{
+              style: { color: "gray", fontSize: "20px", fontWeight: "border" },
+            }}
+            sx={{
+              width: "350px",
+              background: "white",
+            }}
+            ref={pwcheckRef}
+            onChange={passwordCheck}
+            onKeyPress={checkenterSubmit}
+          />
+          <FormHelperText sx={{ color: "red" }}>{pwCheckError}</FormHelperText>
+        </div>
+        <CustomButton
+          type="submit"
+          value="로그인폼"
+          label="비밀번호 변경"
+          onClick={submitCheck}
+          disabled={checkDisable()}
         />
-        <FormHelperText sx={{ color: "red" }}>{passwordError}</FormHelperText>
       </div>
-      <div style={{ marginTop: "10px" }}>
-        <CustomTextField
-          label={pwchangeLabel}
-          type="password"
-          name="pwCheck"
-          required
-          variant="outlined"
-          InputProps={{ style: { color: "black" } }}
-          InputLabelProps={{
-            style: { color: "gray", fontSize: "20px", fontWeight: "border" },
-          }}
-          sx={{
-            width: "350px",
-            background: "white",
-          }}
-          ref={pwcheckRef}
-          onChange={passwordCheck}
-          onKeyPress={checkenterSubmit}
-        />
-        <FormHelperText sx={{ color: "red" }}>{pwCheckError}</FormHelperText>
-      </div>
-      <CustomButton
-        type="submit"
-        value="로그인폼"
-        label="비밀번호 변경"
-        onClick={submitCheck}
-        disabled={checkDisable()}
-      />
-    </div>
+    </ThemeProvider>
   );
 }
 
