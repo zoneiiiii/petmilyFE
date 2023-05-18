@@ -7,7 +7,30 @@ import CustomButton from "./CustomButton";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ACCOUNT } from "../../constants/PageURL";
-
+import { styled } from "@mui/material/styles";
+const CustomTextField = styled(TextField)({
+  "& label.Mui-focused": {
+    color: "black",
+  },
+  "& .MuiInput-underline:after": {
+    borderBottomColor: "#FBD385",
+    border: "1px solid",
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      // borderColor: "#FBD385",
+      border: "2px solid #FBD385",
+    },
+    "&:hover fieldset": {
+      // borderColor: "#FBD385",
+      border: "2px solid #FBD385",
+    },
+    "&.Mui-focused fieldset": {
+      // borderColor: "#FBD385",
+      border: "2px solid #FBD385",
+    },
+  },
+});
 function Login() {
   const navigate = useNavigate();
   const [id, setId] = useState("");
@@ -164,48 +187,43 @@ function Login() {
           mt: "30px",
           fontSize: "40px ",
           fontWeight: "bolder",
+          mb: "20px",
         }}
       >
         Login
       </Typography>
-      <div style={{ marginTop: "10px" }}>
-        <TextField
+      <div style={{ marginTop: "10px", width: "350px" }}>
+        <CustomTextField
           autoComplete="off"
           label={idLabel}
           type="text"
           name="id"
-          variant="standard"
-          inputProps={{ style: { color: "#FBD385" } }}
-          InputLabelProps={{ style: { color: "#FBD385" } }}
-          sx={{
-            borderBottom: "solid 1px #FBD385",
-            background: "white",
-            width: "350px",
+          required
+          fullWidth
+          inputProps={{ style: { color: "black" } }}
+          InputLabelProps={{
+            style: { color: "gray", fontSize: "20px", fontWeight: "border" },
           }}
           InputProps={{
             disableUnderline: true,
           }}
           onChange={idChange}
-          required
           ref={idRef}
           onKeyPress={gotoPasswordInput}
         />
         <FormHelperText sx={{ color: "red" }}>{idError}</FormHelperText>
       </div>
-      <div style={{ marginTop: "10px" }}>
-        <TextField
+      <div style={{ marginTop: "10px", width: "350px" }}>
+        <CustomTextField
           autoComplete="current-password"
           label={pwLabel}
           type="password"
           name="password"
           required
-          variant="standard"
-          inputProps={{ style: { color: "#FBD385" } }}
-          InputLabelProps={{ style: { color: "#FBD385" } }}
-          sx={{
-            borderBottom: "solid 1px #FBD385",
-            width: "350px",
-            background: "white",
+          fullWidth
+          inputProps={{ style: { color: "black" } }}
+          InputLabelProps={{
+            style: { color: "gray", fontSize: "20px", fontWeight: "border" },
           }}
           InputProps={{
             disableUnderline: true,

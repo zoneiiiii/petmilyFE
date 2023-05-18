@@ -7,23 +7,26 @@ import { styled } from "@mui/material/styles";
 import CustomButton from "./CustomButton";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
 const CustomTextField = styled(TextField)({
   "& label.Mui-focused": {
-    color: "#FBD385",
+    color: "black",
   },
   "& .MuiInput-underline:after": {
     borderBottomColor: "#FBD385",
+    border: "1px solid",
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "#FBD385",
+      // borderColor: "#FBD385",
+      border: "2px solid #FBD385",
     },
     "&:hover fieldset": {
-      borderColor: "#FBD385",
+      // borderColor: "#FBD385",
+      border: "2px solid #FBD385",
     },
     "&.Mui-focused fieldset": {
-      borderColor: "#FBD385",
+      // borderColor: "#FBD385",
+      border: "2px solid #FBD385",
     },
   },
 });
@@ -183,19 +186,17 @@ function FindPW() {
       <Typography sx={{ color: "#FBD385", mb: "20px", fontSize: "small" }}>
         가입한 아이디와 이메일을 입력하세요.
       </Typography>
-      <div style={{ marginTop: "10px" }}>
+      <div style={{ marginTop: "10px", width: "350px" }}>
         <CustomTextField
           autoComplete="off"
           label={idLabel}
           type="text"
           name="id"
-          variant="outlined"
-          InputProps={{ style: { color: "#FBD385" } }}
-          InputLabelProps={{ style: { color: "#FBD385" } }}
-          sx={{
-            background: "white",
-            width: "350px",
+          InputProps={{ style: { color: "black" } }}
+          InputLabelProps={{
+            style: { color: "gray", fontSize: "20px", fontWeight: "border" },
           }}
+          fullWidth
           required
           onChange={idChange}
           ref={idRef}
@@ -203,18 +204,16 @@ function FindPW() {
         />
         <FormHelperText sx={{ color: "red" }}>{idError}</FormHelperText>
       </div>
-      <div style={{ marginTop: "10px" }}>
+      <div style={{ marginTop: "10px", width: "350px" }}>
         <CustomTextField
           label={emailLabel}
           type="email"
           name="email"
           required
-          variant="outlined"
-          InputProps={{ style: { color: "#FBD385" } }}
-          InputLabelProps={{ style: { color: "#FBD385" } }}
-          sx={{
-            width: "350px",
-            background: "white",
+          fullWidth
+          InputProps={{ style: { color: "black" } }}
+          InputLabelProps={{
+            style: { color: "gray", fontSize: "20px", fontWeight: "border" },
           }}
           onChange={emailChange}
           ref={emailRef}

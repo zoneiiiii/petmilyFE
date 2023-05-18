@@ -2,6 +2,14 @@ import * as React from "react";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { ADOPT } from "../../constants/PageURL";
+import {
+  Card,
+  Grid,
+  Pagination,
+  Container,
+  ThemeProvider,
+} from "@mui/material";
+import styled from "styled-components";
 
 function Animal({
   desertionNo,
@@ -62,75 +70,91 @@ function Animal({
   };
 
   return (
-    <div
-      style={{
-        position: "relative",
-        width: "100%",
-        height: "180px",
+    // <div
+    // style={{
+    //   position: "relative",
+    //   width: "100%",
+    //   height: "100px",
+    //   display: "flex",
+    //   justifyContent: "center",
+    //   alignItems: "center",
+    //   backgroundColor: "#F5F5ED",
+    //   borderRadius: "5px",
+    // }}
+    // onMouseEnter={handleHover}
+    // onMouseLeave={handleLeave}
+    // onClick={handleOnClick}
+    // >
+    <Card
+      xs={10}
+      sm={6}
+      md={2}
+      sx={{
+        height: "100%",
         display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#F5F5ED",
-        borderRadius: "5px",
+        flexDirection: "column",
+        cursor: "pointer",
+        marginRight: "10px",
+        transition: "all 0.3s ease-out",
+        transform: isHover ? "scale(1.05)" : "scale(1)",
       }}
+      onClick={handleOnClick}
       onMouseEnter={handleHover}
       onMouseLeave={handleLeave}
-      onClick={handleOnClick}
     >
-      <img
+      <CardImage src={profile} />
+      <div>
+        <CardTitle>{desertionNo}</CardTitle>
+        {/* <CardWritter>{age}</CardWritter> */}
+        <CardCount> {kindCd}</CardCount>
+      </div>
+    </Card>
+    /* <img
         src={profile}
         title={desertionNo}
         style={{
           width: "160px",
           height: "160px ",
           objectFit: "cover",
-          transition: "all 0.3s ease-out",
-          transform: isHover ? "scale(1.1)" : "scale(1)",
+       
           cursor: "pointer",
           borderRadius: "10px",
         }}
-      />
-      {isHover ? (
-        <div
-          style={{
-            position: "absolute",
+      /> */
 
-            width: "95%",
-            height: "95%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "left",
-            zIndex: 10,
-            backgroundColor: "rgba(0,0,0,0.8)",
-            cursor: "pointer",
-            flexDirection: "column",
-          }}
-        >
-          <Typography
-            variant="h7"
-            component="span"
-            sx={{
-              color: "white",
-              p: 2,
-              animation: isHover ? "none" : "$fadeInOut 2s ease-out infinite",
-            }}
-          >
-            {processState}
-          </Typography>
-          <Typography
-            variant="h7"
-            component="span"
-            sx={{
-              color: "white",
-              p: 2,
-              animation: isHover ? "none" : "$fadeInOut 2s ease-out infinite",
-            }}
-          >
-            {age}
-          </Typography>
-        </div>
-      ) : null}
-    </div>
+    // </div>
   );
 }
 export default Animal;
+const CardImage = styled.img`
+  width: 100%;
+  height: 200px;
+`;
+
+const CardTitle = styled.p`
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 5px;
+  line-height: 1.4em;
+  height: 2.8em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+`;
+
+const CardWritter = styled.p`
+  font-size: 14px;
+  color: #888;
+  float: left;
+  margin-left: 10px;
+`;
+
+const CardCount = styled.p`
+  font-size: 14px;
+  color: #888;
+  float: right;
+  margin-right: 10px;
+`;

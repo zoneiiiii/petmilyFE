@@ -1,4 +1,4 @@
-import react, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import CustomButton from "../Login/CustomButton";
@@ -22,6 +22,16 @@ const HospitalLocation = () => {
     latitude: curLatitude,
     longtitude: curLongitude,
   });
+
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+
+  const handleHover = (index) => {
+    setHoveredIndex(index);
+  };
+
+  const handleLeave = () => {
+    setHoveredIndex(null);
+  };
 
   function getLocation() {
     if (navigator.geolocation) {
@@ -234,72 +244,42 @@ const HospitalLocation = () => {
                 borderTopWidth: index > 1 ? 0 : "0.5px",
               }}
             >
-              {/* <Typography
-                component="h1"
-                variant="h5"
-                sx={{
-                  color: "black",
-                  fontWeight: "bolder",
-                  mb: "10px",
-                  fontSize: "large",
-                }}
-              >
-                {index + 1}. {item.place_name}
-              </Typography>
-              <Typography
-                component="h2"
-                variant="h5"
-                sx={{
-                  color: "black",
+              {hoveredIndex === index ? (
+                <h3
+                  style={{
+                    lineHeight: "25px",
+                    transition: "all 0.3s ease-out",
+                    color: "#FBD385",
+                    cursor: "pointer",
+                    transform: "scale(1.05)",
+                  }}
+                  onMouseEnter={() => handleHover(index)}
+                  onMouseLeave={handleLeave}
+                  onClick={() => {
+                    window.open(item.place_url);
+                  }}
+                >
+                  {index + 1}. {item.place_name}
+                </h3>
+              ) : (
+                <h3
+                  style={{
+                    lineHeight: "25px",
+                    transition: "all 0.3s ease-out",
 
-                  mb: "10px",
-                  fontSize: "medium",
-                }}
-              >
-                Tel. {item.phone}
-              </Typography>
-              <Typography
-                component="h2"
-                variant="h5"
-                sx={{
-                  color: "black",
+                    cursor: "pointer",
+                    transform: "scale(1.0)",
+                  }}
+                  onMouseEnter={() => handleHover(index)}
+                  onMouseLeave={handleLeave}
+                  onClick={() => {
+                    window.open(item.place_url);
+                  }}
+                >
+                  {index + 1}. {item.place_name}
+                </h3>
+              )}
 
-                  mb: "10px",
-                  fontSize: "medium",
-                }}
-              >
-                지번 주소: {item.address_name}
-              </Typography>
-              <Typography
-                component="h2"
-                variant="h5"
-                sx={{
-                  color: "black",
-
-                  mb: "10px",
-                  fontSize: "medium",
-                }}
-              >
-                도로명 주소: {item.road_address_name}
-              </Typography>
-              <Typography
-                component="h2"
-                variant="h5"
-                sx={{
-                  color: "black",
-
-                  mb: "10px",
-                  fontSize: "medium",
-                }}
-                onClick={() => {
-                  window.open(item.place_url);
-                }}
-              >
-                {item.place_url}
-              </Typography> */}
-              <h3 style={{ lineHeight: "25px" }}>
-                {index + 1}. {item.place_name}
-              </h3>
               <h5 class="tel" style={{ fontSize: "medium" }}>
                 Tel. {item.phone}
               </h5>
@@ -308,9 +288,6 @@ const HospitalLocation = () => {
               </h5>
               <h5 class="tel" style={{ fontSize: "medium" }}>
                 도로명 주소: {item.road_address_name}
-              </h5>
-              <h5 class="tel" style={{ fontSize: "medium" }}>
-                {item.place_url}
               </h5>
             </Grid>
           ))}

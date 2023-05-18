@@ -9,20 +9,24 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 const CustomTextField = styled(TextField)({
   "& label.Mui-focused": {
-    color: "#FBD385",
+    color: "black",
   },
   "& .MuiInput-underline:after": {
     borderBottomColor: "#FBD385",
+    border: "1px solid",
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "#FBD385",
+      // borderColor: "#FBD385",
+      border: "2px solid #FBD385",
     },
     "&:hover fieldset": {
-      borderColor: "#FBD385",
+      // borderColor: "#FBD385",
+      border: "2px solid #FBD385",
     },
     "&.Mui-focused fieldset": {
-      borderColor: "#FBD385",
+      // borderColor: "#FBD385",
+      border: "2px solid #FBD385",
     },
   },
 });
@@ -158,9 +162,10 @@ function ChangePW() {
           mt: "30px",
           fontSize: "40px ",
           fontWeight: "bolder",
+          mb: "38px",
         }}
       >
-        비밀번호 찾기
+        비밀번호 변경
       </Typography>
       <div style={{ marginTop: "10px" }}>
         <CustomTextField
@@ -169,8 +174,10 @@ function ChangePW() {
           type="password"
           name="password"
           variant="outlined"
-          InputProps={{ style: { color: "#FBD385" } }}
-          InputLabelProps={{ style: { color: "#FBD385" } }}
+          InputProps={{ style: { color: "black" } }}
+          InputLabelProps={{
+            style: { color: "gray", fontSize: "20px", fontWeight: "border" },
+          }}
           sx={{
             background: "white",
             width: "350px",
@@ -189,8 +196,10 @@ function ChangePW() {
           name="pwCheck"
           required
           variant="outlined"
-          InputProps={{ style: { color: "#FBD385" } }}
-          InputLabelProps={{ style: { color: "#FBD385" } }}
+          InputProps={{ style: { color: "black" } }}
+          InputLabelProps={{
+            style: { color: "gray", fontSize: "20px", fontWeight: "border" },
+          }}
           sx={{
             width: "350px",
             background: "white",
