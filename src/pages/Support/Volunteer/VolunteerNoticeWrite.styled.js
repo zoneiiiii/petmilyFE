@@ -35,12 +35,30 @@ export const FormRow = styled.div`
   margin-bottom: 16px;
   align-items: center;
 `;
+export const FormRowAddr = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+`;
+
+export const FormRowWithError = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 16px;
+  align-items: center;
+`;
 
 export const FormRow2 = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
   margin-bottom: 16px;
+`;
+
+export const ErrorMsg = styled.div`
+  width: 100%;
+  margin-left: 10px;
 `;
 
 export const ButtonGroup = styled.div`

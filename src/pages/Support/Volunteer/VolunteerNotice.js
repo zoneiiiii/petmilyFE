@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import * as S from "./VolunteerNotice.styled";
 import VolunteerCard from "../../../components/Support/Volunteer/VolunteerCard";
 import VolunteerPagination from "../../../components/Support/Volunteer/VolunteerPagination";
 import axios from "axios";
 import { SUPPORT } from "../../../constants/PageURL";
+import { ThemeProvider } from "@mui/material";
+import { CustomTheme } from "../../../assets/Theme/CustomTheme";
+import { AuthContext } from "../../../contexts/AuthContexts";
 
 const VolunteerNotice = () => {
+  const { loggedIn } = useContext(AuthContext);
   const [data, setData] = useState([]); // DB 데이터 가져오는 변수
   const [page, setPage] = useState(1); // 현재 페이지 관리하는 상태 변수
   const itemsPerPage = 9; // 한페이지에 보여줄 페이지의 개수
@@ -49,16 +53,21 @@ const VolunteerNotice = () => {
           )}
         </S.CardGrid>
       </S.CardContainer>
-      <VolunteerPagination
-        count={pageCount}
-        page={page}
-        onChange={handleChange}
-      />
-      <S.ButtonContainer>
-        <Link to={SUPPORT.VOLUNTEER_NOTICE_WRITE}>
-          <S.VolunteerButton>글 작성</S.VolunteerButton>
-        </Link>
-      </S.ButtonContainer>
+      <ThemeProvider theme={CustomTheme}>
+        <VolunteerPagination
+          count={pageCount}
+          page={page}
+          onChange={handleChange}
+        />
+
+        {loggedIn && (
+          <S.ButtonContainer>
+            <Link to={SUPPORT.VOLUNTEER_NOTICE_WRITE}>
+              <S.VolunteerButton>글 작성</S.VolunteerButton>
+            </Link>
+          </S.ButtonContainer>
+        )}
+      </ThemeProvider>
     </S.Container>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as S from "./VolunteerReviewDetail.styled";
 import { useParams, useNavigate } from "react-router-dom";
-import {} from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 import axios from "axios";
 import NotFound from "../../NotFound/NotFound";
 import Loading from "../../../components/Loading/LoadingPage";
@@ -10,6 +10,7 @@ import { SUPPORT } from "../../../constants/PageURL";
 import DOMPurify from "dompurify";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import { CustomTheme } from "../../../assets/Theme/CustomTheme";
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -102,24 +103,26 @@ const VolunteerReviewDetail = () => {
       <S.DetailMiddle>
         <div dangerouslySetInnerHTML={createMarkup(post.reviewContent)} />
       </S.DetailMiddle>
-      <S.ButtonsContainer>
-        <S.Buttons onClick={handleEdit} variant="contained">
-          수정
-        </S.Buttons>
-        <S.ButtonsSpace />
-        <S.Buttons onClick={handleDelete} variant="contained">
-          삭제
-        </S.Buttons>
-      </S.ButtonsContainer>
+      <ThemeProvider theme={CustomTheme}>
+        <S.ButtonsContainer>
+          <S.Buttons onClick={handleEdit} variant="contained">
+            수정
+          </S.Buttons>
+          <S.ButtonsSpace />
+          <S.Buttons onClick={handleDelete} variant="contained">
+            삭제
+          </S.Buttons>
+        </S.ButtonsContainer>
 
-      <S.DetailBottom>
-        <S.horizon />
-        <h2>댓글 </h2>
-        <S.horizon />
-        <div style={{ width: "100%" }}>
-          <Comment />
-        </div>
-      </S.DetailBottom>
+        <S.DetailBottom>
+          <S.horizon />
+          <h2>댓글 </h2>
+          <S.horizon />
+          <div style={{ width: "100%" }}>
+            <Comment />
+          </div>
+        </S.DetailBottom>
+      </ThemeProvider>
     </S.DetailContainer>
   );
 };

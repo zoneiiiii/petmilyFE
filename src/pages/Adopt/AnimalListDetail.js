@@ -235,6 +235,28 @@ const AnimalListDetail = () => {
                   fontWeight: "bold",
                 }}
               >
+                고유번호
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h5"
+                sx={{
+                  mb: "30px",
+                  fontSize: "large",
+                }}
+              >
+                {state.desertionNo}
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h5"
+                sx={{
+                  mt: "10px",
+                  mb: "10px",
+                  fontSize: "x-large",
+                  fontWeight: "bold",
+                }}
+              >
                 성별
               </Typography>
               <Typography
@@ -493,7 +515,7 @@ const AnimalListDetail = () => {
               backgroundColor: "#F5F5ED",
               borderRadius: "0 0 10px 10px",
               padding: "10px 10px 10px 30px ",
-              width: "1080px",
+              width: "1060px",
             }}
           >
             <Typography

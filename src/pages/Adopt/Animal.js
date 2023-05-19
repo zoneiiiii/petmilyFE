@@ -2,6 +2,15 @@ import * as React from "react";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { ADOPT } from "../../constants/PageURL";
+import {
+  Card,
+  Grid,
+  Pagination,
+  Container,
+  ThemeProvider,
+} from "@mui/material";
+import styled from "styled-components";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
 
 function Animal({
   desertionNo,
@@ -62,75 +71,95 @@ function Animal({
   };
 
   return (
-    <div
-      style={{
-        position: "relative",
-        width: "100%",
-        height: "180px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#F5F5ED",
-        borderRadius: "5px",
-      }}
-      onMouseEnter={handleHover}
-      onMouseLeave={handleLeave}
-      onClick={handleOnClick}
-    >
-      <img
+    // <div
+    // style={{
+    //   position: "relative",
+    //   width: "100%",
+    //   height: "100px",
+    //   display: "flex",
+    //   justifyContent: "center",
+    //   alignItems: "center",
+    //   backgroundColor: "#F5F5ED",
+    //   borderRadius: "5px",
+    // }}
+    // onMouseEnter={handleHover}
+    // onMouseLeave={handleLeave}
+    // onClick={handleOnClick}
+    // >
+    <ThemeProvider theme={CustomTheme}>
+      <Card
+        xs={10}
+        sx={{
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          cursor: "pointer",
+          marginRight: "10px",
+          transition: "all 0.3s ease-out",
+          transform: isHover ? "scale(1.05)" : "scale(1)",
+        }}
+        onClick={handleOnClick}
+        onMouseEnter={handleHover}
+        onMouseLeave={handleLeave}
+      >
+        <CardImage src={profile} />
+        <div>
+          <CardTitle>{kindCd}</CardTitle>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              textAlign: "center",
+            }}
+          >
+            <CardWritter>{age}</CardWritter>
+            <CardWritter>{careNm}</CardWritter>
+          </div>
+        </div>
+      </Card>
+    </ThemeProvider>
+    /* <img
         src={profile}
         title={desertionNo}
         style={{
           width: "160px",
           height: "160px ",
           objectFit: "cover",
-          transition: "all 0.3s ease-out",
-          transform: isHover ? "scale(1.1)" : "scale(1)",
+       
           cursor: "pointer",
           borderRadius: "10px",
         }}
-      />
-      {isHover ? (
-        <div
-          style={{
-            position: "absolute",
+      /> */
 
-            width: "95%",
-            height: "95%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "left",
-            zIndex: 10,
-            backgroundColor: "rgba(0,0,0,0.8)",
-            cursor: "pointer",
-            flexDirection: "column",
-          }}
-        >
-          <Typography
-            variant="h7"
-            component="span"
-            sx={{
-              color: "white",
-              p: 2,
-              animation: isHover ? "none" : "$fadeInOut 2s ease-out infinite",
-            }}
-          >
-            {processState}
-          </Typography>
-          <Typography
-            variant="h7"
-            component="span"
-            sx={{
-              color: "white",
-              p: 2,
-              animation: isHover ? "none" : "$fadeInOut 2s ease-out infinite",
-            }}
-          >
-            {age}
-          </Typography>
-        </div>
-      ) : null}
-    </div>
+    // </div>
   );
 }
 export default Animal;
+const CardImage = styled.img`
+  width: 175px;
+  height: 200px;
+`;
+
+const CardTitle = styled.p`
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+`;
+
+const CardWritter = styled.p`
+  font-size: 14px;
+  color: #888;
+  text-align: center;
+  margin: 10px 0;
+`;
+
+const CardCount = styled.p`
+  font-size: 14px;
+  color: #888;
+`;

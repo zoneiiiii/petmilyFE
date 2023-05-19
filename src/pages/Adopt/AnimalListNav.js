@@ -3,10 +3,12 @@ import axios from "axios";
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { ADOPT } from "../../constants/PageURL";
+import { ThemeProvider } from "@mui/material";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
 
 const AnimalListNav = () => {
   return (
-    <>
+    <ThemeProvider theme={CustomTheme}>
       <MyPageNavStyle className="MyPageNav">
         <NavList
           title={"서울특별시"}
@@ -89,8 +91,7 @@ const AnimalListNav = () => {
           ]}
         />
       </MyPageNavStyle>
-    
-    </>
+    </ThemeProvider>
   );
 };
 

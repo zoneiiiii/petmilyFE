@@ -23,6 +23,7 @@ const modalStyle = {
 const FreeWrite = () => {
     const subjectRef = useRef(null);
     const contentRef = useRef(null);
+    const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [formAble, setFormAble] = useState(false);
     const [open, setOpen] = useState(false);
@@ -50,11 +51,19 @@ const FreeWrite = () => {
         document.location.href = "/board/free";
     };
 
-    // 파일첨부 파일명 출력(작동 안함)
-    const [fileName, setFileName] = useState('');
-
-    const handleChange = (e) => {
-        setFileName(e.target.value);
+    // 사진 업로드 미리보기
+    const [file, setFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState(null);
+    const handleFileChange = (event) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            setFile(selectedFile);
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                setPreviewUrl(event.target.result);
+            };
+            reader.readAsDataURL(selectedFile);
+        }
     };
 
     // 업로드 미리보기 구현

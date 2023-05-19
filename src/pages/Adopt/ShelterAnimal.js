@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import AdoptInfoDetail from "./AdoptInfoDetail";
 import axios from "axios";
+import { ThemeProvider } from "@mui/material";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
 const ShelterAnimal = () => {
   const url = useLocation();
   const [data, setData] = useState([]);
@@ -25,6 +27,7 @@ const ShelterAnimal = () => {
         code: item.orgCd,
       }));
       setData(location);
+      setLoading(true);
     } catch (e) {
       setError(e);
     }
@@ -36,17 +39,23 @@ const ShelterAnimal = () => {
   }, [path]);
 
   return (
-    <div style={{ marginTop: "10px" }}>
-      {data.map((loc, index) => (
-        <AdoptInfoDetail
-          key={index}
-          uprCd={loc.uprCd}
-          name={loc.name}
-          code={loc.code}
-          sx={{ marginTop: "10px" }}
-        />
-      ))}
-    </div>
+    <ThemeProvider theme={CustomTheme}>
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        <div style={{ marginTop: "10px" }}>
+          {data.map((loc, index) => (
+            <AdoptInfoDetail
+              key={index}
+              uprCd={loc.uprCd}
+              name={loc.name}
+              code={loc.code}
+              sx={{ marginTop: "10px" }}
+            />
+          ))}
+        </div>
+      )}
+    </ThemeProvider>
   );
 };
 export default ShelterAnimal;
