@@ -7,6 +7,8 @@ import Box from "@mui/material/Box";
 import styled from "styled-components";
 import Pagination from "@mui/material/Pagination";
 import react, { useEffect, useLayoutEffect, useState, useRef } from "react";
+import { ThemeProvider } from "@mui/material";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
 const { kakao } = window;
 let curLatitude = "";
 let curLongitude = "";
@@ -31,6 +33,16 @@ const ShelterLocation = () => {
     latitude: curLatitude,
     longtitude: curLongitude,
   });
+
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+
+  const handleHover = (index) => {
+    setHoveredIndex(index);
+  };
+
+  const handleLeave = () => {
+    setHoveredIndex(null);
+  };
 
   function getLocation() {
     if (navigator.geolocation) {
@@ -164,44 +176,66 @@ const ShelterLocation = () => {
 
     // 검색결과 항목을 Element로 반환하는 함수입니다
     function getListItem(index, places) {
-      var el = document.createElement("div"),
-        itemStr =
-          '<h3 style="line-height: 25px;">' +
-          (index + 1) +
-          ". " +
-          places.place_name +
-          "</h3>";
+      var el = document.createElement("div");
+
+      var h3 = document.createElement("h3");
+      h3.style.lineHeight = "25px";
+      h3.style.marginTop = "30px";
+      h3.innerText = index + 1 + ". " + places.place_name;
+
+      h3.addEventListener("mouseenter", function () {
+        h3.style.transform = "scale(1.03)";
+        h3.style.color = "#FBD385";
+        h3.style.cursor = "pointer";
+      });
+
+      h3.addEventListener("mouseleave", function () {
+        h3.style.transform = "scale(1)";
+        h3.style.color = "black";
+      });
+
+      h3.addEventListener("click", function () {
+        window.open(places.place_url);
+      });
+
+      el.appendChild(h3);
       if (places.phone) {
-        itemStr +=
-          '  <h5 class="tel" style="font-size:medium;"> Tel. ' +
-          places.phone +
-          "</h5>";
+        var tel = document.createElement("h5");
+        tel.className = "tel";
+        tel.style.fontSize = "medium";
+        tel.innerText = "Tel. " + places.phone;
+        el.appendChild(tel);
       } else {
-        itemStr +=
-          '<h5 class="tel" style="font-size:medium;"> Tel. ' +
-          "등록된 번호가 없습니다" +
-          "</h5>";
-      }
-      if (places.road_address_name) {
-        itemStr +=
-          `<h5 style="font-size:medium;">` +
-          "지번 주소: " +
-          places.address_name +
-          "</h5>" +
-          '<h5 class="jibun gray" style="font-size:medium;">' +
-          "도로명 주소: " +
-          places.road_address_name +
-          "</h5>";
-      } else {
-        itemStr +=
-          `<h5 style="font-size:medium;">` + places.address_name + "</h5>";
+        var tel = document.createElement("h5");
+        tel.className = "tel";
+        tel.style.fontSize = "medium";
+        tel.innerText = "Tel. 등록된 번호가 없습니다";
+        el.appendChild(tel);
       }
 
-      el.innerHTML = itemStr;
+      if (places.road_address_name) {
+        var address = document.createElement("h5");
+        address.style.fontSize = "medium";
+        address.innerText = "지번 주소: " + places.address_name;
+        el.appendChild(address);
+
+        var roadAddress = document.createElement("h5");
+        roadAddress.className = "jibun gray";
+        roadAddress.style.fontSize = "medium";
+        roadAddress.innerText = "도로명 주소: " + places.road_address_name;
+        el.appendChild(roadAddress);
+      } else {
+        var address = document.createElement("h5");
+        address.style.fontSize = "medium";
+        address.innerText = "지번 주소: " + places.address_name;
+        el.appendChild(address);
+      }
+
+      // el.innerHTML = itemStr;
       el.className = "item";
       el.style.cssText = `
       text-align: left;
-      width:480px;
+      width:495px;
       border: 0.5px solid;
       padding: 0 0 0 10px;
       border-right-width: ${
@@ -211,6 +245,7 @@ const ShelterLocation = () => {
       border-bottom-width: 0.5px;
       border-top-width: ${index > 1 ? 0 : "0.5px"};
     `;
+
       return el;
     }
 
@@ -324,67 +359,71 @@ const ShelterLocation = () => {
   // 시/군/구 코드 파싱
 
   return (
-    <div
-      style={{
-        textAlign: "center",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        margin: "0 auto",
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "center", marginTop: "30px" }}>
-        <img
-          alt="hospital"
-          style={{ width: "60px", height: "60px", marginRight: "10px" }}
-          src="./../images/shelter.png"
-        />
-        <h1
-          sx={{
-            color: "black",
-            mt: "30px",
-            mb: "30px",
-            fontSize: "70px",
-            fontWeight: "bord",
-          }}
-        >
-          보호소 정보
-        </h1>
-      </div>
+    <ThemeProvider theme={CustomTheme}>
       <div
-        id="map"
         style={{
-          border: "solid 1px #FBD385",
-          width: "1000px",
-          height: "500px",
-          marginBottom: "15px",
+          textAlign: "center",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          margin: "0 auto",
         }}
-      ></div>
-      <Box
-        id="menu_wrap"
-        class="bg_white"
-        sx={{ marginTop: "15px", marginLeft: "16px", width: "1000px" }}
       >
         <div
-          container
+          style={{ display: "flex", alignItems: "center", marginTop: "30px" }}
+        >
+          <img
+            alt="hospital"
+            style={{ width: "60px", height: "60px", marginRight: "10px" }}
+            src="./../images/shelter.png"
+          />
+          <h1
+            sx={{
+              color: "black",
+              mt: "30px",
+              mb: "30px",
+              fontSize: "70px",
+              fontWeight: "bord",
+            }}
+          >
+            보호소 정보
+          </h1>
+        </div>
+        <div
+          id="map"
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
+            border: "solid 1px #FBD385",
+            width: "1000px",
+            height: "500px",
+            marginBottom: "15px",
           }}
-          id="placesList"
         ></div>
+        <Box
+          id="menu_wrap"
+          class="bg_white"
+          sx={{ marginTop: "15px", marginLeft: "16px", width: "1000px" }}
+        >
+          <div
+            container
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+            }}
+            id="placesList"
+          ></div>
 
-        <Grid
-          id="pagination"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: "15px",
-          }}
-        ></Grid>
-      </Box>
-    </div>
+          <Grid
+            id="pagination"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "15px",
+            }}
+          ></Grid>
+        </Box>
+      </div>
+    </ThemeProvider>
   );
 };
 export default ShelterLocation;

@@ -3,11 +3,14 @@ import AdoptInfoDetail from "./AdoptInfoDetail";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { ThemeProvider } from "@mui/material";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
 
 const AdoptInfo = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
   const fetchData = async () => {
     try {
       setError(null);
@@ -23,6 +26,7 @@ const AdoptInfo = () => {
         code: item.orgCd,
       }));
       setData(location);
+      setLoading(true);
     } catch (e) {
       setError(e);
     }
@@ -33,17 +37,23 @@ const AdoptInfo = () => {
   }, []);
 
   return (
-    <div style={{ marginTop: "10px" }}>
-      {data.map((loc, index) => (
-        <AdoptInfoDetail
-          key={index}
-          uprCd={loc.uprCd}
-          name={loc.name}
-          code={loc.code}
-          sx={{ marginTop: "10px" }}
-        />
-      ))}
-    </div>
+    <ThemeProvider theme={CustomTheme}>
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        <div style={{ marginTop: "10px" }}>
+          {data.map((loc, index) => (
+            <AdoptInfoDetail
+              key={index}
+              uprCd={loc.uprCd}
+              name={loc.name}
+              code={loc.code}
+              sx={{ marginTop: "10px" }}
+            />
+          ))}
+        </div>
+      )}
+    </ThemeProvider>
   );
 };
 
