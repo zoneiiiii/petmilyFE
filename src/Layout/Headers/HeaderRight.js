@@ -2,8 +2,12 @@ import { useNavigate } from "react-router-dom";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import styled from "styled-components";
+import axios from "axios";
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContexts";
 
 const HeaderRight = ({ page }) => {
+  const { setLoggedIn } = useContext(AuthContext);
   const navigate = useNavigate();
 
   //임시 sessionStorage
@@ -20,10 +24,16 @@ const HeaderRight = ({ page }) => {
   };
 
   // 로그아웃 버튼
-  const logoutClick = () => {
+  const logoutClick = async () => {
     if (window.confirm("로그아웃 하시겠습니까?")) {
-      window.sessionStorage.clear();
-      return navigate("/", { replace: true }); // true: 뒤로가기 불가능 메인으로 이동.
+      try {
+        await axios.get("/logout");
+        setLoggedIn(false);
+        window.sessionStorage.clear();
+        return navigate("/", { replace: true }); // true: 뒤로가기 불가능 메인으로 이동.
+      } catch (error) {
+        console.error("로그아웃 실패 : ", error);
+      }
     } else {
       return false;
     }
