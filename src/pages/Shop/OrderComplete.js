@@ -16,10 +16,10 @@ import { CustomTheme } from "../../assets/Theme/CustomTheme";
 
 const OrderComplete = ({ orderCompleted }) => {
   const location = useLocation();
-  const orderState = location.state.orderState;
+  const orderState = location.state.orderCompleted;
   const error_msg = location.state.error_msg;
 
-  if ({ orderState } === true) {
+  if ({ orderState }) {
     return (
       <ThemeProvider theme={CustomTheme}>
         <OrderStyle>
