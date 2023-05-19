@@ -19,9 +19,17 @@ import SearchBar from "../../components/common/SearchBar";
 import { useEffect, useState } from "react";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { Link, useNavigate } from "react-router-dom";
-import { ABOUT, ADOPT, MYPAGE } from "../../constants/PageURL";
+import {
+  ABOUT,
+  ADOPT,
+  COMMUNITY,
+  MYPAGE,
+  SHOP,
+  SUPPORT,
+} from "../../constants/PageURL";
 import styled from "styled-components";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { ACCOUNT } from "../../constants/PageURL";
 
 const pageWidth = "100%";
 const 분류 = {
@@ -39,9 +47,9 @@ const FAQ = () => {
   const [nowPage, setNowPage] = useState(1);
   const [category, setCategory] = useState(분류.전체);
   const [searchKeyWord, setSearchKeyWord] = useState("");
-  const rowsPerPage = 20;
+  const rowsPerPage = 10;
   const [foundData, setFoundData] = useState(dummy);
-  const [pagedData, setPagedData] = useState(dummy.slice(0, 20));
+  const [pagedData, setPagedData] = useState(dummy.slice(0, 10));
 
   // 페이지 표시 데이터 갱신
   useEffect(() => {
@@ -53,6 +61,7 @@ const FAQ = () => {
   const handleChangePage = (event, newPage) => {
     console.log(newPage);
     setNowPage(newPage);
+    window.scrollTo(0, 0);
   };
   const handleChangeCategory = (event, newValue) => {
     setCategory(newValue);
@@ -84,11 +93,7 @@ const FAQ = () => {
         >
           <StyledTabs value={category} onChange={handleChangeCategory} centered>
             <Tab label={분류.전체} value={분류.전체} />
-            <Tab
-              label={분류.계정}
-              value={분류.계정}
-              sx={{ BorderBottom: "none" }}
-            />
+            <Tab label={분류.계정} value={분류.계정} />
             <Tab label={분류.입양} value={분류.입양} />
             <Tab label={분류.커뮤니티} value={분류.커뮤니티} />
             <Tab label={분류.SHOP} value={분류.SHOP} />
@@ -166,7 +171,7 @@ const FAQ = () => {
           <Pagination
             count={Math.ceil(foundData.length / rowsPerPage)}
             defaultPage={1}
-            page={1}
+            page={nowPage}
             color="fbd385"
             showFirstButton
             showLastButton
@@ -200,20 +205,143 @@ const StyledTabs = styled(Tabs)({
 
 const dummy = [
   {
-    no: 1,
-    category: "입양",
-    question: "입양신청은 어떻게 하나요?",
+    no: 15,
+    category: "후원",
+    question: "기부 내역은 어디서 확인하나요?",
     answer: (
       <>
-        입양 신청 페이지를 참고 바랍니다!
+        기부내역 페이지에서 조회하시면 됩니다.
         <br />
         <br />
-        <Link to={ADOPT.APPLICATION}>입양 신청 하러가기</Link>
+        <Link to={SUPPORT.DONATE}>입양 내역 확인하기</Link>
       </>
     ),
   },
   {
-    no: 2,
+    no: 14,
+    category: "후원",
+    question: "기부는 어디서 하나요?",
+    answer: (
+      <>
+        기부하기 페이지에서 하시면 됩니다.
+        <br />
+        <br />
+        <Link to={SUPPORT.APPLY}>기부 하기</Link>
+      </>
+    ),
+  },
+  {
+    no: 13,
+    category: "후원",
+    question: "봉사참여는 어떻게 하나요?",
+    answer: (
+      <>
+        봉사 신청 페이지에서 신청하고싶은 봉사 활동의 게시글에 댓글을 달면
+        됩니다.
+        <br />
+        <br />
+        <Link to={SUPPORT.VOLUNTEER_NOTICE}>봉사 참여하러 가기</Link>
+      </>
+    ),
+  },
+  {
+    no: 12,
+    category: "SHOP",
+    question: "배송받은 물품에 하자가 있어요.",
+    answer: (
+      <>
+        QNA 게시판을 통해 문의하시면 펫밀리 측에서 회원님의 주문내역을 확인한
+        뒤에 조치하겠습니다. 불편을 끼쳐드려 죄송합니다.
+        <br />
+        <br />
+        <Link to={MYPAGE.QNA}>문의하러 가기</Link>
+      </>
+    ),
+  },
+  {
+    no: 11,
+    category: "SHOP",
+    question: "어떤 상품들을 판매하나요?",
+    answer: (
+      <>
+        반려동물의 사료, 간식, 외출용품, 목욕/미용제품, 굿즈를 판매하고
+        있습니다.
+        <br />
+        <br />
+        <Link to={SHOP.PRODUCT}>SHOP 바로가기</Link>
+      </>
+    ),
+  },
+  {
+    no: 10,
+    category: "SHOP",
+    question: "주문한 물품의 구매내역을 조회하고 싶습니다.",
+    answer: (
+      <>
+        마이페이지의 주문내역 페이지에서 조회가능합니다.
+        <br />
+        <br />
+        <Link to={MYPAGE.ORDERLIST}>주문내역 조회 하기</Link>
+      </>
+    ),
+  },
+  {
+    no: 9,
+    category: "커뮤니티",
+    question: "자유게시판에서 누군가 저에게 욕설을 했어요.",
+    answer: (
+      <>
+        QNA 게시판을 통해 제보하시면 펫밀리 측에서 해당 게시글과 댓글을 확인 후
+        해당 회원에 대해 조치하겠습니다. 불편을 끼쳐드려 죄송합니다.
+        <br />
+        <br />
+        <Link to={MYPAGE.QNA}>제보하러 가기</Link>
+      </>
+    ),
+  },
+  {
+    no: 8,
+    category: "커뮤니티",
+    question: "목격 제보 게시판은 어떤 게시판인가요?",
+    answer: (
+      <>
+        목격 제보 게시판은 주인없이 떠도는 반려동물을 발견하면 해당 게시판에
+        글을 올려 반려동물 주인이 빨리 찾을 수 있게 하기 위한 게시판입니다.
+        <br />
+        <br />
+        <Link to={COMMUNITY.FIND}>목격 제보 게시판 가기</Link>
+      </>
+    ),
+  },
+  {
+    no: 7,
+    category: "커뮤니티",
+    question: "실종 동물 게시판은 어떤 게시판인가요?",
+    answer: (
+      <>
+        회원님의 반려동물을 잃어버리신 경우에 게시글을 올려 다른 회원분들이
+        발견하셨을 때 답글을 달아 제보를 할 수 있도록 하는 게시판입니다.
+        <br />
+        <br />
+        <Link to={COMMUNITY.MISSING}>실종 동물 게시판 가기</Link>
+      </>
+    ),
+  },
+  {
+    no: 6,
+    category: "입양",
+    question: "입양 결과는 어디서 확인하나요?",
+    answer: (
+      <>
+        마이페이지 입양 내역 페이지를 참고 바랍니다!
+        <br />
+        <br />
+        <Link to={MYPAGE.ADOPTLIST}>입양 내역 확인하기</Link>
+      </>
+    ),
+  },
+  {
+    no: 5,
     category: "입양",
     question: "입양 과정은 어떻게 되나요?",
     answer: (
@@ -226,20 +354,7 @@ const dummy = [
     ),
   },
   {
-    no: 3,
-    category: "입양",
-    question: "입양 결과는 어디서 확인하나요?",
-    answer: (
-      <>
-        마이페이지 입양 내역 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={MYPAGE.ADOPTLIST}>입양 과정 확인하기</Link>
-      </>
-    ),
-  },
-  {
-    no: 1,
+    no: 4,
     category: "입양",
     question: "입양신청은 어떻게 하나요?",
     answer: (
@@ -252,418 +367,41 @@ const dummy = [
     ),
   },
   {
-    no: 2,
-    category: "입양",
-    question: "입양 과정은 어떻게 되나요?",
+    no: 3,
+    category: "계정",
+    question: "회원 탈퇴는 어디서 하나요?",
     answer: (
       <>
-        입양 과정 페이지를 참고 바랍니다!
+        QNA 페이지에서 문의하시면 펫밀리측에서 회원탈퇴처리를 도와드리겠습니다!
         <br />
         <br />
-        <Link to={ABOUT.ADOPT_PROCESS}>입양 과정 확인하기</Link>
+        <Link to={MYPAGE.QNA}>QNA 페이지 바로가기</Link>
       </>
     ),
   },
   {
-    no: 3,
-    category: "입양",
-    question: "입양 결과는 어디서 확인하나요?",
+    no: 2,
+    category: "계정",
+    question: "회원정보를 변경하고 싶어요",
     answer: (
       <>
-        마이페이지 입양 내역 페이지를 참고 바랍니다!
+        회원정보변경 페이지를 참고 바랍니다!
         <br />
         <br />
-        <Link to={MYPAGE.ADOPTLIST}>입양 과정 확인하기</Link>
+        <Link to={MYPAGE.MODIFY_INFO}>회원정보 변경하러 가기</Link>
       </>
     ),
   },
   {
     no: 1,
-    category: "입양",
-    question: "입양신청은 어떻게 하나요?",
+    category: "계정",
+    question: "비밀번호를 잊어버렸어요..",
     answer: (
       <>
-        입양 신청 페이지를 참고 바랍니다!
+        비밀번호 변경 페이지에서 변경하시면 됩니다!
         <br />
         <br />
-        <Link to={ADOPT.APPLICATION}>입양 신청 하러가기</Link>
-      </>
-    ),
-  },
-  {
-    no: 2,
-    category: "입양",
-    question: "입양 과정은 어떻게 되나요?",
-    answer: (
-      <>
-        입양 과정 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={ABOUT.ADOPT_PROCESS}>입양 과정 확인하기</Link>
-      </>
-    ),
-  },
-  {
-    no: 3,
-    category: "입양",
-    question: "입양 결과는 어디서 확인하나요?",
-    answer: (
-      <>
-        마이페이지 입양 내역 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={MYPAGE.ADOPTLIST}>입양 과정 확인하기</Link>
-      </>
-    ),
-  },
-  {
-    no: 1,
-    category: "입양",
-    question: "입양신청은 어떻게 하나요?",
-    answer: (
-      <>
-        입양 신청 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={ADOPT.APPLICATION}>입양 신청 하러가기</Link>
-      </>
-    ),
-  },
-  {
-    no: 2,
-    category: "입양",
-    question: "입양 과정은 어떻게 되나요?",
-    answer: (
-      <>
-        입양 과정 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={ABOUT.ADOPT_PROCESS}>입양 과정 확인하기</Link>
-      </>
-    ),
-  },
-  {
-    no: 3,
-    category: "입양",
-    question: "입양 결과는 어디서 확인하나요?",
-    answer: (
-      <>
-        마이페이지 입양 내역 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={MYPAGE.ADOPTLIST}>입양 과정 확인하기</Link>
-      </>
-    ),
-  },
-  {
-    no: 1,
-    category: "입양",
-    question: "입양신청은 어떻게 하나요?",
-    answer: (
-      <>
-        입양 신청 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={ADOPT.APPLICATION}>입양 신청 하러가기</Link>
-      </>
-    ),
-  },
-  {
-    no: 2,
-    category: "입양",
-    question: "입양 과정은 어떻게 되나요?",
-    answer: (
-      <>
-        입양 과정 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={ABOUT.ADOPT_PROCESS}>입양 과정 확인하기</Link>
-      </>
-    ),
-  },
-  {
-    no: 3,
-    category: "입양",
-    question: "입양 결과는 어디서 확인하나요?",
-    answer: (
-      <>
-        마이페이지 입양 내역 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={MYPAGE.ADOPTLIST}>입양 과정 확인하기</Link>
-      </>
-    ),
-  },
-  {
-    no: 1,
-    category: "입양",
-    question: "입양신청은 어떻게 하나요?",
-    answer: (
-      <>
-        입양 신청 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={ADOPT.APPLICATION}>입양 신청 하러가기</Link>
-      </>
-    ),
-  },
-  {
-    no: 2,
-    category: "입양",
-    question: "입양 과정은 어떻게 되나요?",
-    answer: (
-      <>
-        입양 과정 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={ABOUT.ADOPT_PROCESS}>입양 과정 확인하기</Link>
-      </>
-    ),
-  },
-  {
-    no: 3,
-    category: "입양",
-    question: "입양 결과는 어디서 확인하나요?",
-    answer: (
-      <>
-        마이페이지 입양 내역 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={MYPAGE.ADOPTLIST}>입양 과정 확인하기</Link>
-      </>
-    ),
-  },
-  {
-    no: 1,
-    category: "입양",
-    question: "입양신청은 어떻게 하나요?",
-    answer: (
-      <>
-        입양 신청 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={ADOPT.APPLICATION}>입양 신청 하러가기</Link>
-      </>
-    ),
-  },
-  {
-    no: 2,
-    category: "입양",
-    question: "입양 과정은 어떻게 되나요?",
-    answer: (
-      <>
-        입양 과정 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={ABOUT.ADOPT_PROCESS}>입양 과정 확인하기</Link>
-      </>
-    ),
-  },
-  {
-    no: 3,
-    category: "입양",
-    question: "입양 결과는 어디서 확인하나요?",
-    answer: (
-      <>
-        마이페이지 입양 내역 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={MYPAGE.ADOPTLIST}>입양 과정 확인하기</Link>
-      </>
-    ),
-  },
-  {
-    no: 1,
-    category: "입양",
-    question: "입양신청은 어떻게 하나요?",
-    answer: (
-      <>
-        입양 신청 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={ADOPT.APPLICATION}>입양 신청 하러가기</Link>
-      </>
-    ),
-  },
-  {
-    no: 2,
-    category: "입양",
-    question: "입양 과정은 어떻게 되나요?",
-    answer: (
-      <>
-        입양 과정 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={ABOUT.ADOPT_PROCESS}>입양 과정 확인하기</Link>
-      </>
-    ),
-  },
-  {
-    no: 3,
-    category: "입양",
-    question: "입양 결과는 어디서 확인하나요?",
-    answer: (
-      <>
-        마이페이지 입양 내역 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={MYPAGE.ADOPTLIST}>입양 과정 확인하기</Link>
-      </>
-    ),
-  },
-  {
-    no: 1,
-    category: "입양",
-    question: "입양신청은 어떻게 하나요?",
-    answer: (
-      <>
-        입양 신청 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={ADOPT.APPLICATION}>입양 신청 하러가기</Link>
-      </>
-    ),
-  },
-  {
-    no: 2,
-    category: "입양",
-    question: "입양 과정은 어떻게 되나요?",
-    answer: (
-      <>
-        입양 과정 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={ABOUT.ADOPT_PROCESS}>입양 과정 확인하기</Link>
-      </>
-    ),
-  },
-  {
-    no: 3,
-    category: "입양",
-    question: "입양 결과는 어디서 확인하나요?",
-    answer: (
-      <>
-        마이페이지 입양 내역 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={MYPAGE.ADOPTLIST}>입양 과정 확인하기</Link>
-      </>
-    ),
-  },
-  {
-    no: 1,
-    category: "입양",
-    question: "입양신청은 어떻게 하나요?",
-    answer: (
-      <>
-        입양 신청 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={ADOPT.APPLICATION}>입양 신청 하러가기</Link>
-      </>
-    ),
-  },
-  {
-    no: 2,
-    category: "입양",
-    question: "입양 과정은 어떻게 되나요?",
-    answer: (
-      <>
-        입양 과정 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={ABOUT.ADOPT_PROCESS}>입양 과정 확인하기</Link>
-      </>
-    ),
-  },
-  {
-    no: 3,
-    category: "입양",
-    question: "입양 결과는 어디서 확인하나요?",
-    answer: (
-      <>
-        마이페이지 입양 내역 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={MYPAGE.ADOPTLIST}>입양 과정 확인하기</Link>
-      </>
-    ),
-  },
-  {
-    no: 1,
-    category: "입양",
-    question: "입양신청은 어떻게 하나요?",
-    answer: (
-      <>
-        입양 신청 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={ADOPT.APPLICATION}>입양 신청 하러가기</Link>
-      </>
-    ),
-  },
-  {
-    no: 2,
-    category: "입양",
-    question: "입양 과정은 어떻게 되나요?",
-    answer: (
-      <>
-        입양 과정 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={ABOUT.ADOPT_PROCESS}>입양 과정 확인하기</Link>
-      </>
-    ),
-  },
-  {
-    no: 3,
-    category: "입양",
-    question: "입양 결과는 어디서 확인하나요?",
-    answer: (
-      <>
-        마이페이지 입양 내역 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={MYPAGE.ADOPTLIST}>입양 과정 확인하기</Link>
-      </>
-    ),
-  },
-  {
-    no: 1,
-    category: "입양",
-    question: "입양신청은 어떻게 하나요?",
-    answer: (
-      <>
-        입양 신청 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={ADOPT.APPLICATION}>입양 신청 하러가기</Link>
-      </>
-    ),
-  },
-  {
-    no: 2,
-    category: "입양",
-    question: "입양 과정은 어떻게 되나요?",
-    answer: (
-      <>
-        입양 과정 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={ABOUT.ADOPT_PROCESS}>입양 과정 확인하기</Link>
-      </>
-    ),
-  },
-  {
-    no: 3,
-    category: "입양",
-    question: "입양 결과는 어디서 확인하나요?",
-    answer: (
-      <>
-        마이페이지 입양 내역 페이지를 참고 바랍니다!
-        <br />
-        <br />
-        <Link to={MYPAGE.ADOPTLIST}>입양 과정 확인하기</Link>
+        <Link to={ACCOUNT.FIND_PW}>비밀번호 변경하러가기</Link>
       </>
     ),
   },

@@ -41,7 +41,6 @@ const About = () => {
             <img alt="소개3" src="/images/About/about2.png" />
             <Button
               variant="contained"
-              color="fbd385"
               sx={{
                 fontSize: "1.5rem",
                 fontWeight: 700,

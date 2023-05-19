@@ -130,52 +130,51 @@ const NoticeDetail = () => {
             </TableRow>
           </TableBody>
           <TableFooter>
-            <TableRow>
-              <TableCell
-                sx={{ borderBottom: "unset", pt: 0, pb: 0, fontSize: "1rem" }}
-              >
-                다음글&nbsp;
-                {afterData ? (
-                  <StyledLink
-                    to={ABOUT.NOTICE_DETAIL({
-                      no: afterData.no,
-                      page: page,
-                      limit: limit,
-                      search: search,
-                      search_mode: search_mode,
-                    })}
-                  >
-                    {afterData.subject}
-                  </StyledLink>
-                ) : (
-                  "다음글이 없습니다."
-                )}
-              </TableCell>
-            </TableRow>
+            <TableRow></TableRow>
             <TableRow>
               <TableCell
                 sx={{
                   fontSize: "1rem",
-                  pt: 0,
-                  pb: 0,
+                  display: "flex",
+                  justifyContent: "space-between",
                 }}
               >
-                이전글&nbsp;
-                {beforeData ? (
-                  <StyledLink
-                    to={ABOUT.NOTICE_DETAIL({
-                      no: beforeData.no,
-                      page: page,
-                      limit: limit,
-                      search: search,
-                      search_mode: search_mode,
-                    })}
-                  >
-                    {beforeData.subject}
-                  </StyledLink>
-                ) : (
-                  "이전글이 없습니다."
-                )}
+                <Box display={"flex"}>
+                  {afterData ? (
+                    <StyledLink
+                      to={ABOUT.NOTICE_DETAIL({
+                        no: afterData.no,
+                        page: page,
+                        limit: limit,
+                        search: search,
+                        search_mode: search_mode,
+                      })}
+                    >
+                      &#9664; &nbsp;
+                      <div className="subject">{afterData.subject}</div>
+                    </StyledLink>
+                  ) : (
+                    <Box fontWeight={600}>다음글이 없습니다.</Box>
+                  )}
+                </Box>
+                <Box display={"flex"}>
+                  {beforeData ? (
+                    <StyledLink
+                      to={ABOUT.NOTICE_DETAIL({
+                        no: beforeData.no,
+                        page: page,
+                        limit: limit,
+                        search: search,
+                        search_mode: search_mode,
+                      })}
+                    >
+                      <div className="subject">{beforeData.subject}</div>
+                      &nbsp; &#9654;
+                    </StyledLink>
+                  ) : (
+                    <Box fontWeight={600}>이전글이 없습니다.</Box>
+                  )}
+                </Box>
               </TableCell>
             </TableRow>
           </TableFooter>
@@ -202,7 +201,6 @@ const NoticeDetail = () => {
             <Button
               variant="contained"
               sx={{ ml: 2, width: "100px" }}
-              color="fbd385"
               onClick={() => navigate(ABOUT.NOTICE_WRITE)}
             >
               수정
@@ -223,11 +221,16 @@ const NoticeDetail = () => {
 };
 
 const StyledLink = styled(Link)`
+  display: flex;
   text-decoration: none;
   color: black;
   font-weight: 600;
+
   :hover {
-    text-decoration: underline;
+    .subject {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
   }
 `;
 

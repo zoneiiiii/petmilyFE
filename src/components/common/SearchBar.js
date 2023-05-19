@@ -79,8 +79,6 @@ const SearchBar = ({ setValue, value, onClick, sx, width }) => {
         />
         <Button
           variant="contained"
-          theme={CustomTheme}
-          color="fbd385"
           style={{ marginLeft: "10px" }}
           onKeyDown={handleKeyDown}
           onClick={handleClick}
