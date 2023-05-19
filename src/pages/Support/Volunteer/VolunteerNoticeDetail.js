@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import * as S from "./VolunteerNoticeDetail.styled";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -9,6 +9,7 @@ import {
   TableCell,
   TableContainer,
   TableRow,
+  ThemeProvider,
 } from "@mui/material";
 import axios from "axios";
 import NotFound from "../../NotFound/NotFound";
@@ -17,6 +18,8 @@ import MapModal from "../../../components/Map/MapModal";
 import Comment from "../../../components/Comment/Comment";
 import { SUPPORT } from "../../../constants/PageURL";
 import DOMPurify from "dompurify";
+import { CustomTheme } from "../../../assets/Theme/CustomTheme";
+import { AuthContext } from "../../../contexts/AuthContexts";
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -30,6 +33,7 @@ const VolunteerNoticeDetail = () => {
   const [post, setPost] = useState(null); // volunteer 데이터 객체 저장 상태값
   const [isLoading, setIsLoading] = useState(true); //로딩 상태
   const { id } = useParams(); //게시글 id
+  const { userNum } = useContext(AuthContext);
   const [isMapVisible, setIsMapVisible] = useState(false); // 맵 모달 상태 (열림, 닫힘)
   const [anchorEl, setAnchorEl] = useState(null); //클릭 위치에 모달 띄우기 위한 상태값
   const navigate = useNavigate();
@@ -89,11 +93,17 @@ const VolunteerNoticeDetail = () => {
     const result = window.confirm("정말 삭제하시겠습니까?");
     if (result) {
       try {
-        await axios.delete(`http://localhost:8080/board/volunteer/${id}`);
+        await axios.delete(`http://localhost:8080/board/volunteer/${id}`, {
+          withCredentials: true,
+        });
         alert("게시물이 삭제되었습니다.");
         navigate(SUPPORT.VOLUNTEER_NOTICE);
       } catch (error) {
-        console.error("Error deleting post: ", error);
+        if (error.response) {
+          alert("해당 게시글을 삭제할 권한이 없습니다.");
+        } else {
+          console.error("Error deleting post: ", error);
+        }
       }
     }
   };
@@ -105,7 +115,7 @@ const VolunteerNoticeDetail = () => {
   };
 
   return (
-    <>
+    <ThemeProvider theme={CustomTheme}>
       <S.DetailContainer>
         <S.DetailTop>
           <S.ImageSection>
@@ -175,7 +185,8 @@ const VolunteerNoticeDetail = () => {
                           borderBottom: "none",
                         }}
                       >
-                        {post.volunteerAddr} &nbsp;&nbsp;
+                        {post.volunteerAddr} {post.volunteerAddrDetail}
+                        &nbsp;
                         <Button
                           onClick={handleMapButtonClick}
                           size="small"
@@ -199,19 +210,20 @@ const VolunteerNoticeDetail = () => {
           </S.InfoSection>
         </S.DetailTop>
         <S.horizon />
-        <S.DetailMiddle>
-          <div dangerouslySetInnerHTML={createMarkup(post.volunteerContent)} />
-        </S.DetailMiddle>
-        <S.ButtonsContainer>
-          <S.Buttons onClick={handleEdit} variant="contained">
-            수정
-          </S.Buttons>
-          <S.ButtonsSpace />
-          <S.Buttons onClick={handleDelete} variant="contained">
-            삭제
-          </S.Buttons>
-        </S.ButtonsContainer>
-
+        <S.DetailMiddle
+          dangerouslySetInnerHTML={createMarkup(post.volunteerContent)}
+        />
+        {post.memberNum === userNum && (
+          <S.ButtonsContainer>
+            <S.Buttons onClick={handleEdit} variant="contained">
+              수정
+            </S.Buttons>
+            <S.ButtonsSpace />
+            <S.Buttons onClick={handleDelete} variant="contained">
+              삭제
+            </S.Buttons>
+          </S.ButtonsContainer>
+        )}
         <S.DetailBottom>
           <S.horizon />
           <h2>댓글 </h2>
@@ -238,7 +250,7 @@ const VolunteerNoticeDetail = () => {
           <MapModal address={post.volunteerAddr} onClose={handleClose} />
         )}
       </Popover>
-    </>
+    </ThemeProvider>
   );
 };
 
