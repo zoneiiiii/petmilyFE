@@ -18,6 +18,7 @@ import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ABOUT } from "../../constants/PageURL";
 import styled from "styled-components";
+import axios from "axios";
 
 const pageWidth = "100%";
 // 검색 방식
@@ -49,7 +50,15 @@ const Notice = () => {
     setRowsPerPage(limit ? parseInt(limit) : 20);
     setSearchMode(search_mode ? search_mode : searchModes.subject_contents);
     search && findDataByMode(search, search_mode);
-  }, [limit, page, search]);
+    axios
+      .get("/notice/list")
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error("axios 오류 : ", error);
+      });
+  }, [limit, page, search, search_mode]);
 
   // 페이지 표시 데이터 갱신
   useEffect(() => {
