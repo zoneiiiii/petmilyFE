@@ -1,6 +1,5 @@
-import * as React from 'react';
-import { useState } from 'react';
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import styleds from "styled-components";
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -12,14 +11,16 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { makeStyles } from '@material-ui/core';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import { Pagination } from '@mui/material';
+import Pagination from "@mui/material/Pagination";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
-// import axios from "axios";
+import axios from "axios";
 import CustomButton from "../../Login/CustomButton";
 import { COMMUNITY } from '../../../constants/PageURL';
 import SearchBar from "../../../components/common/SearchBar";
 import Container from "@mui/material/Container";
+import NotFound from "../../NotFound/NotFound";
+import Loading from "../../../components/Loading/LoadingPage";
 
 const theme = createTheme({
     palette: {
@@ -94,6 +95,15 @@ const useStyles = makeStyles({  // 게시글 목록 css
         // overflow: "hidden"
     },
 
+    content: {
+        overflow: "hidden",
+        lineHeight: "1.4em",
+        height: "1.4em",
+        textOverflow: "ellipsis",
+        // webkitlineclamp: 2,
+        // webkitboxorient: "vertical",
+    },
+
     pagination: {
         display: "flex",
         justifyContent: "center",
@@ -145,11 +155,18 @@ const rows = [
 const FreeBoard = () => {
     const classes = useStyles();    // css 적용을 위한 선언문.
 
-    /* sort start */
-    // 날짜 sort 기능을 위한 상수 저장 정의
-    const [rowData, setRowData] = useState(rows);
+    const [data, setData] = useState([]); // DB 데이터 가져오는 변수
+    const [isLoading, setIsLoading] = useState(true); //로딩 상태
+    const [rowData, setRowData] = useState(rows); // 날짜 sort 기능을 위한 상수 저장 정의
     const [orderDirection, setOrderDirection] = useState("asc");
+    const [page, setPage] = useState(1); // 현재 페이지 관리하는 상태 변수
+    const itemsPerPage = 10; // 한페이지에 보여줄 페이지의 개수
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const lists = data.slice(startIndex, endIndex); // 현재 페이지에 해당하는 카드 데이터 계산
+    const [maxPageNum, setMaxPageNum] = useState(1);
 
+    /* sort start */
     // 날짜 정렬 요청 처리
     const sortArray = (arr, orderBy) => {
         switch (orderBy) {
@@ -166,43 +183,62 @@ const FreeBoard = () => {
     };
 
     const handleSortRequest = () => {
-        setRowData(sortArray(rows, orderDirection));
+        setRowData(sortArray(lists, orderDirection));
         setOrderDirection(orderDirection === "asc" ? "desc" : "asc");
     };
     /* sort end */
 
 
     /* pagenation start */
-    const [page, setPage] = React.useState(1)
-    const rowsPerPage = 10;
-    // const [rowsPerPage, setRowsPerPage] = useState(5)
+    const handleChange = (event, value) => {
+        //페이지 변경 시 호출, 새 페이지의 번호를 value에 저장함.
+        setPage(value);
+        console.log(data);
+    };
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage)
+    const getPageNum = () => {
+        const maxLength = data.length;
+        return setMaxPageNum(Math.ceil(maxLength / itemsPerPage));
     }
+
+    useEffect(() => {
+        getPageNum();
+    });
     /* pagenation end */
 
     /* axios start */
-    // const [data, setData] = useState([]);
-
-    // useEffect(() => {
-    //     axios
-    //         .get("https://jsonplaceholder.typicode.com/users")
-    //         .then((res) => {
-    //             setData(res.data);
-    //             console.log("Result:", data);
-    //         })
-    //         .catch((error) => {
-    //             console.log(error);
-    //         });
-    // }, []);
+    useEffect(() => {
+        //게시글 Detail 호출
+        const fetchPost = async () => {
+            try {
+                const response = await axios.get(
+                    `http://localhost:8080/board/free`
+                ); //게시글 데이터 호출
+                setData(response.data);
+            } catch (error) {
+                console.error("Error fetching data : ", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchPost();
+    }, []);
     /* axios end */
 
+    if (isLoading) {
+        return <Loading />; // 로딩 중일 때 표시할 컴포넌트
+    }
+
+    if (!data) {
+        return <NotFound />; //존재하지 않는 번호를 넣었을 때 표시할 컴포넌트
+    }
+
     return (
-        <Section className="result">
-            <MainContainer className="result-container">
-                <ThemeProvider theme={theme}>
-                    <Container sx={{ py: 5, minWidth: 780 }} maxWidth="lg">
+        <ThemeProvider theme={theme}>
+            <Section className="result">
+                <MainContainer className="result-container">
+
+                    <Container sx={{ py: 0, minWidth: 780 }} maxWidth="lg">
                         <h1 className={classes.title}>자유 게시판</h1>
                         <SearchContainer>
                             <SearchBar />
@@ -236,50 +272,31 @@ const FreeBoard = () => {
                                     </StyledTableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {rows
-                                        .slice(
-                                            (page - 1) * rowsPerPage,
-                                            (page - 1) * rowsPerPage + rowsPerPage
-                                        )
-                                        .map((rows) => {
+                                    {lists
+                                        .map((list) => {
                                             return (
-                                                <StyledTableRow key={rows.num}>
+                                                <StyledTableRow key={list.boardNum} className={classes.content}>
                                                     <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                                                        {rows.num}
+                                                        {list.boardNum}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center" sx={{ minWidth: 300 }}>
                                                         <Link
-                                                            to={COMMUNITY.FREE_DETAIL(rows.num)}
+                                                            to={COMMUNITY.FREE_DETAIL(list.boardNum)}
                                                             style={{ textDecoration: "none", color: "black" }}
                                                         >
-                                                            {rows.subject}
+                                                            {list.freeSubject}
                                                         </Link>
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                                                        {rows.writer}
+                                                        {list.memberNickName}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                                                        {rows.views}
+                                                        {list.freeCount}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                                                        {rows.date}
+                                                        {list.freeDate}
                                                     </StyledTableCell>
                                                 </StyledTableRow>
-                                                // <StyledTableRow key={row.num}>
-                                                //     {columns.map((column) => {
-                                                //         const value = row[column.id];
-                                                //         return (
-                                                //             <StyledTableCell key={column.id} align={column.align}>
-                                                //                 <Link
-                                                //                     to="/board/free/1"
-                                                //                     style={{ textDecoration: "none", color: "black" }}
-                                                //                 >
-                                                //                     {value}
-                                                //                 </Link>
-                                                //             </StyledTableCell>
-                                                //         );
-                                                //     })}
-                                                // </StyledTableRow>
                                             );
                                         })}
                                 </TableBody>
@@ -300,20 +317,22 @@ const FreeBoard = () => {
                         <br />
                         <Stack spacing={2} sx={{ mt: 0 }}>
                             <Pagination
-                                className={classes.pagination}
                                 color="primary"
                                 page={page}
-                                onChange={handleChangePage}
-                                // onChangeRowsPerPage={handleChangeRowsPerPage}
-                                component="div"
-                                count={Math.ceil(rows.length / rowsPerPage)}
+                                count={maxPageNum}
+                                onChange={handleChange}
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    margin: '50px 0 0 0px'
+                                }}
                             />
                         </Stack>
                         <br />
                     </Container>
-                </ThemeProvider >
-            </MainContainer>
-        </Section>
+                </MainContainer>
+            </Section>
+        </ThemeProvider>
     );
 };
 
