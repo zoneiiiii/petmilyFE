@@ -5,6 +5,8 @@ import VolunteerReviewCard from "../../../components/Support/Volunteer/Volunteer
 import VolunteerPagination from "../../../components/Support/Volunteer/VolunteerPagination";
 import axios from "axios";
 import { SUPPORT } from "../../../constants/PageURL";
+import { ThemeProvider } from "@mui/material";
+import { CustomTheme } from "../../../assets/Theme/CustomTheme";
 
 const VolunteerReview = () => {
   const [data, setData] = useState([]);
@@ -44,16 +46,18 @@ const VolunteerReview = () => {
           ))}
         </S.CardGrid>
       </S.CardContainer>
-      <VolunteerPagination
-        count={pageCount}
-        page={page}
-        onChange={handleChange}
-      />
-      <S.ButtonContainer>
-        <Link to={SUPPORT.VOLUNTEER_REVIEW_WRITE}>
-          <S.VolunteerButton>글작성</S.VolunteerButton>
-        </Link>
-      </S.ButtonContainer>
+      <ThemeProvider theme={CustomTheme}>
+        <VolunteerPagination
+          count={pageCount}
+          page={page}
+          onChange={handleChange}
+        />
+        <S.ButtonContainer>
+          <Link to={SUPPORT.VOLUNTEER_REVIEW_WRITE}>
+            <S.VolunteerButton>글작성</S.VolunteerButton>
+          </Link>
+        </S.ButtonContainer>
+      </ThemeProvider>
     </S.Container>
   );
 };
