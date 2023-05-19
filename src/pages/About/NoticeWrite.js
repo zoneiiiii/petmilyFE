@@ -21,6 +21,10 @@ import styled from "styled-components";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import dayjs from "dayjs";
+import {
+  MyCustomUploadAdapterPlugin,
+  MyUploadAdapter,
+} from "../../components/common/UploadAdapter";
 
 const pageWidth = "80%";
 
@@ -39,36 +43,6 @@ const NoticeWrite = () => {
   });
 
   useEffect(() => console.log("re-rendering...", data, fileList));
-
-  function uploadAdapter(loader) {
-    return {
-      upload: () => {
-        console.log("loader:", loader);
-        return new Promise((resolve, reject) => {
-          const uploadFiles = Array.prototype.slice.call(loader.file); // 파일선택창에서 선택한 파일들
-
-          uploadFiles.forEach((uploadFile) => {
-            fileList.push(uploadFile);
-          });
-          // const body = new FormData();
-          // loader.file
-          //   .then((file) => {
-          //     body.append("uploadImg", file);
-          //     console.log("filename:", file.name);
-          //   })
-          //   .then((file) => {
-          //     console.log("body:", body.get("uploadImg"));
-          //   });
-        });
-      },
-    };
-  }
-
-  function uploadPlugin(editor) {
-    editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-      return uploadAdapter(loader);
-    };
-  }
 
   return (
     <ThemeProvider theme={CustomTheme}>
@@ -124,10 +98,10 @@ const NoticeWrite = () => {
               <TableCell>
                 <EditorWrapper>
                   <CKEditor
-                    config={{
-                      extraPlugins: [uploadPlugin],
-                    }}
                     editor={ClassicEditor}
+                    config={{
+                      extraPlugins: [MyCustomUploadAdapterPlugin],
+                    }}
                     data={data.contents}
                     onReady={(editor) => {
                       // You can store the "editor" and use when it is needed.

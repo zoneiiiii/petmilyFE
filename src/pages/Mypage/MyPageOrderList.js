@@ -114,20 +114,22 @@ const MyPageOrderList = () => {
       </Box>
       {dateList.map((date, index) => {
         return (
-          <Box key={index} className="MyOrderList">
-            <Typography
-              className="MyOrderDate"
-              sx={dateSx}
-              mt={4}
-              mb={4}
-              pl={4}
-              border={2}
-              borderRadius={2}
-              borderColor="ffbd59.main"
-            >
-              {date}
-            </Typography>
+          <Box key={index} className="MyOrderList" mt={2} mb={2}>
             <Box p={2} border={2} borderRadius={2} borderColor="ffbd59.main">
+              <Box
+                className="MyOrderDate"
+                sx={dateSx}
+                borderBottom={2}
+                // borderRadius={2}
+                borderColor="ffbd59.main"
+                width={"fit-content"}
+                pl={2}
+                pr={2}
+                mb={2}
+                lineHeight={1.5}
+              >
+                {date}
+              </Box>
               <Table size="small" padding="normal" sx={{ minWidth: "800px" }}>
                 <TableHead>
                   <TableRow>
@@ -162,13 +164,15 @@ const MyPageOrderList = () => {
                           {parseInt(row.quantity).toLocaleString()}
                         </TableCell>
                         <TableCell sx={tdSx}>
-                          {parseInt(row.cost).toLocaleString()}원
+                          {(
+                            parseInt(row.cost) * parseInt(row.quantity)
+                          ).toLocaleString()}
+                          원
                         </TableCell>
                         <TableCell sx={tdSx}>{row.orderState}</TableCell>
                         <TableCell sx={tdSx}>
                           <Button
                             variant="contained"
-                            color="fbd385"
                             onClick={() =>
                               navigate(MYPAGE.ORDER_DETAIL(row.orderNum))
                             }
@@ -186,7 +190,7 @@ const MyPageOrderList = () => {
       })}
       {dateList.length === pageLimit && (
         <Box mt={5} sx={{ display: "flex", justifyContent: "center" }}>
-          <Button color="primary" align="center" onClick={ShowMore}>
+          <Button align="center" onClick={ShowMore}>
             상품 더보기
           </Button>
         </Box>
@@ -205,10 +209,10 @@ const titleSx = {
 };
 
 const dateSx = {
+  verticalAlign: "middle",
   fontStyle: "normal",
   fontWeight: "bold",
   fontSize: "1.5rem",
-  lineHeight: "50px",
 };
 
 const thSx = {

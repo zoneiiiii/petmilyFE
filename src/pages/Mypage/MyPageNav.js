@@ -3,19 +3,19 @@ import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { MYPAGE } from "../../constants/PageURL";
 
-const ProfileSrc = "/images/product.png";
 const noProfile = "/images/emptyProfile.png";
 const MyPageNav = () => {
   return (
     <MyPageNavStyle className="MyPageNav">
       <img
         className="ProfileImg"
-        src={ProfileSrc ? ProfileSrc : noProfile}
+        src={member.img ? member.img : noProfile}
         alt="profile"
         width={"160px"}
         height={"160px"}
         style={{ borderRadius: "50%" }}
       />
+      <NickName>{member.nickname}</NickName>
       <NavList
         title={"My Page"}
         navList={[
@@ -119,10 +119,19 @@ const NavList = ({ title, navList }) => {
   );
 };
 
+const NickName = styled.div`
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 36px;
+  margin-top: 5px;
+  text-decoration-line: underline;
+  text-decoration-color: #ffbd59;
+  text-underline-offset: 5px; /* 밑줄과 텍스트의 간격 조절 */
+`;
+
 const MyPageNavStyle = styled.div`
   width: 160px;
   text-align: center;
-  margin: 40px;
 
   .NavTitle {
     margin-top: 20px;
@@ -138,7 +147,7 @@ const NavListStyle = styled.div`
     background: #fbd385;
     border: 1px solid #ffbd59;
     font-weight: 400;
-    font-size: 18px;
+    font-size: 1.2rem;
     line-height: 36px;
     z-index: 0;
     cursor: default;
@@ -168,8 +177,23 @@ const NavListStyle = styled.div`
     color: black;
     text-decoration: none;
     font-weight: 400;
-    font-size: 18px;
+    font-size: 1.2rem;
   }
 `;
+
+const member = {
+  num: 1,
+  id: "PetLove",
+  pw: "12345678",
+  nickname: "봉천동물주먹",
+  email: "asdf@naver.com",
+  name: "이기자",
+  gender: "남자",
+  birth: "2023-01-01",
+  tel: "010-1234-5678",
+  addr: "서울특별시 강남구 선릉로 428",
+  img: "",
+  role: "user",
+};
 
 export default MyPageNav;

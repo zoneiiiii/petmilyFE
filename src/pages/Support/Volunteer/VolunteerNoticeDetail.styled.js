@@ -58,6 +58,10 @@ export const DetailMiddle = styled.div`
   padding-top: 15px;
   min-height: 300px;
   min-width: 1050px;
+  img {
+    max-width: 100%;
+    height: auto;
+  }
 `;
 
 export const DetailBottom = styled.div`

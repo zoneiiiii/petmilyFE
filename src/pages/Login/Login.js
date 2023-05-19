@@ -1,9 +1,9 @@
-import React, { useState, useRef } from "react";
-
+import React, { useState, useRef, useContext } from "react";
 import CustomButton from "./CustomButton";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ACCOUNT } from "../../constants/PageURL";
+import { AuthContext } from "../../contexts/AuthContexts";
 import { styled } from "@mui/material/styles";
 import {
   Button,
@@ -37,6 +37,7 @@ const CustomTextField = styled(TextField)({
   },
 });
 function Login() {
+  const { setLoggedIn } = useContext(AuthContext);
   const navigate = useNavigate();
   const [id, setId] = useState("");
   const [idError, setIdError] = useState("");
@@ -134,14 +135,19 @@ function Login() {
       .then((res) => {
         if (res.data !== "") {
           axios
-            .post("http://localhost:8080/login", {
-              memberId: id,
-              memberPw: password,
-            })
+            .post(
+              "http://localhost:8080/login",
+              {
+                memberId: id,
+                memberPw: password,
+              },
+              { withCredentials: true }
+            )
             .then((res) => {
               console.log("handleLogin =>", res);
               if (res.data === 1) {
                 sessionStorage.setItem("id", id);
+                setLoggedIn(true);
                 navigate("/");
               } else {
                 setLoginError("비밀번호가 다릅니다.");

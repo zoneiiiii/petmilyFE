@@ -85,8 +85,10 @@ function MyInfo() {
             variant="contained"
             color="fbd385"
             sx={{ m: 2, width: "100px" }}
-            onClick={() => navigate(MYPAGE.MODIFY_INFO)}
+            //onClick={() => navigate(MYPAGE.MODIFY_INFO)}
+            onClick={() => navigate(MYPAGE.MODIFY_INFO, { state: { num: member.num } })}
           >
+           
             수정
           </Button>
         </Box>

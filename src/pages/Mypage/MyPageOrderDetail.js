@@ -65,16 +65,16 @@ const MyPageOrderDetail = () => {
         주문 상세
       </Typography>
       <Box p={2} border={1} borderRadius={2} borderColor="fbd385.main">
-        <Table size="small" padding="normal" sx={{ minWidth: "800px" }}>
+        <Table size="small" padding="normal">
           <TableHead>
             <TableRow>
-              <TableCell sx={{ ...thSx, color: "#1976d2" }} colSpan={4}>
-                {orderData.orderState}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell sx={thSx} colSpan={4}>
-                주문날짜: {orderData.orderDate}
+              <TableCell colSpan={4}>
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Box sx={thSx}>주문날짜: {orderData.orderDate}</Box>
+                  <Box sx={{ ...thSx, color: "#1976d2" }} width={"100px"}>
+                    {orderData.orderState}
+                  </Box>
+                </Box>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -88,11 +88,13 @@ const MyPageOrderDetail = () => {
                   onClick={() => navigate(BROWSER_PATH.MYPAGE)}
                 />
               </TableCell>
-              <TableCell sx={tdSx}>{orderData.productName}</TableCell>
-              <TableCell sx={tdSx}>
+              <TableCell sx={{ ...tdSx, flexGrow: 1 }}>
+                {orderData.productName}
+              </TableCell>
+              <TableCell sx={{ ...tdSx, width: "100px" }}>
                 {parseInt(orderData.quantity).toLocaleString()} 개
               </TableCell>
-              <TableCell sx={tdSx}>
+              <TableCell sx={{ ...tdSx, width: "100px" }}>
                 {parseInt(orderData.cost).toLocaleString()} 원
               </TableCell>
             </TableRow>

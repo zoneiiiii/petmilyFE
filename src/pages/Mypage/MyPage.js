@@ -1,59 +1,69 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import MyPageNav from "./MyPageNav";
 import styled from "styled-components";
-import { MYPAGE } from "../../constants/PageURL";
-
-const NotShowNickName = [MYPAGE.MODIFY_INFO, MYPAGE.INQUIRY];
+import { useRef } from "react";
 
 const MyPage = () => {
-  const location = useLocation();
-  const member = {
-    name: "이기자",
-    nickname: "NickName",
-  };
+  const pageRef = useRef();
   return (
     <MyPageLayout className="MyPageLayout">
-      <MyPageNav />
-      <MyPageContainer className="MyPageContainer">
-        {!NotShowNickName.some((path) => path === location.pathname) && (
-          <MyPageNickname className="MyPageNickname">
-            <h1>{member.nickname === "" ? member.name : member.nickname}</h1>
-          </MyPageNickname>
-        )}
-        <Outlet />
-      </MyPageContainer>
+      <PageSizeLimit>
+        <NavContainer>
+          <MyPageNav />
+        </NavContainer>
+        <MyPageContainer className="MyPageContainer" ref={pageRef}>
+          <Outlet />
+        </MyPageContainer>
+        <AdContainer>
+          <div>
+            <img alt="ad" src="http://placehold.it/160x600" />
+          </div>
+        </AdContainer>
+      </PageSizeLimit>
     </MyPageLayout>
   );
 };
 
 const MyPageLayout = styled.div`
   display: flex;
-
-  .MyPageNav {
-    flex-shrink: 0;
-  }
+  max-width: 100vw;
+  justify-content: center;
+  background: "#ff0000";
 `;
 
-const MyPageNickname = styled.div`
-  font-size: 2rem;
+const PageSizeLimit = styled.div`
+  min-width: fit-content;
+  width: 100%;
+  max-width: 1400px;
   display: flex;
-  flex-direction: column;
-  h1 {
-    display: block;
-    text-decoration-line: underline;
-    text-decoration-color: #ffbd59;
-    text-underline-offset: 20px; /* 밑줄과 텍스트의 간격 조절 */
-    text-decoration-thickness: 3px; /* 밑줄 두께 지정 */
-    padding-bottom: 20px;
-    margin-bottom: 20px;
-  }
+`;
+
+const NavContainer = styled.div`
+  box-sizing: border-box;
+  width: 15%;
+  min-width: 200px;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: flex-end;
+  flex-shrink: 0;
 `;
 
 const MyPageContainer = styled.div`
-  max-width: 1100px;
-  min-width: 800px;
-  margin: 40px;
-  flex-grow: 1;
+  box-sizing: border-box;
+  width: 70%;
+  min-width: fit-content;
+  justify-self: center;
+  padding: 40px 20px;
+`;
+
+const AdContainer = styled.div`
+  box-sizing: border-box;
+  width: 15%;
+  min-width: 200px;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: flex-start;
+  flex-shrink: 0;
 `;
 
 export default MyPage;
