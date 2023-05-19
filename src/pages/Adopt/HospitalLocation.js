@@ -1,4 +1,4 @@
-import react, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import CustomButton from "../Login/CustomButton";
@@ -6,7 +6,8 @@ import CustomButton from "../Login/CustomButton";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import { useNavigate } from "react-router-dom";
-
+import { ThemeProvider } from "@mui/material";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
 const { kakao } = window;
 let curLatitude = "";
 let curLongitude = "";
@@ -22,6 +23,16 @@ const HospitalLocation = () => {
     latitude: curLatitude,
     longtitude: curLongitude,
   });
+
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+
+  const handleHover = (index) => {
+    setHoveredIndex(index);
+  };
+
+  const handleLeave = () => {
+    setHoveredIndex(null);
+  };
 
   function getLocation() {
     if (navigator.geolocation) {
@@ -146,177 +157,148 @@ const HospitalLocation = () => {
   };
 
   return (
-    <div
-      style={{
-        textAlign: "center",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "center", marginTop: "30px" }}>
-        <img
-          alt="hospital"
-          style={{ width: "60px", height: "60px", marginRight: "10px" }}
-          src="./../images/hospital.png"
-        />
-        <h1
-          sx={{
-            color: "black",
-            mt: "30px",
-            mb: "30px",
-            fontSize: "70px",
-            fontWeight: "bord",
-          }}
-        >
-          동물병원 정보
-        </h1>
-      </div>
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <TextField
-          sx={{
-            background: "white",
-            width: "300px",
-            marginRight: "10px",
-          }}
-          InputProps={{
-            style: {
-              height: "35px",
-            },
-          }}
-          type="text"
-          name="searchHospital"
-          variant="outlined"
-          value={inputText}
-          onChange={onChange}
-        />
-        <CustomButton
-          type="submit"
-          label="검색"
-          value="병원검색"
-          onClick={handleSubmit}
-        ></CustomButton>
-      </div>
+    <ThemeProvider theme={CustomTheme}>
       <div
-        id="map"
         style={{
-          marginTop: "20px",
-          border: "solid 1px ",
-          width: "1000px",
-          height: "500px",
+          textAlign: "center",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
-      ></div>
-      <Box sx={{ marginTop: "30px", marginLeft: "16px" }}>
-        <Grid
-          container
-          spacing={2}
-          sx={{
-            width: "1000px",
-          }}
+      >
+        <div
+          style={{ display: "flex", alignItems: "center", marginTop: "30px" }}
         >
-          {item.map((item, index) => (
-            <Grid
-              item
-              xs={6}
-              key={item.place_name}
-              sx={{
-                textAlign: "left",
-
-                border: "0.5px solid",
-                borderRightWidth:
-                  index % 2 === 0
-                    ? index === item.length - 1
-                      ? 0
-                      : "0.5px"
-                    : "0.5px",
-                borderLeftWidth: index % 2 === 0 ? "0.5px" : 0,
-                borderBottomWidth: "0.5px",
-                borderTopWidth: index > 1 ? 0 : "0.5px",
-              }}
-            >
-              {/* <Typography
-                component="h1"
-                variant="h5"
+          <img
+            alt="hospital"
+            style={{ width: "60px", height: "60px", marginRight: "10px" }}
+            src="./../images/hospital.png"
+          />
+          <h1
+            sx={{
+              color: "black",
+              mt: "30px",
+              mb: "30px",
+              fontSize: "70px",
+              fontWeight: "bord",
+            }}
+          >
+            동물병원 정보
+          </h1>
+        </div>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <TextField
+            sx={{
+              background: "white",
+              width: "300px",
+              marginRight: "10px",
+            }}
+            InputProps={{
+              style: {
+                height: "35px",
+              },
+            }}
+            type="text"
+            name="searchHospital"
+            variant="outlined"
+            value={inputText}
+            onChange={onChange}
+          />
+          <CustomButton
+            type="submit"
+            label="검색"
+            value="병원검색"
+            onClick={handleSubmit}
+          ></CustomButton>
+        </div>
+        <div
+          id="map"
+          style={{
+            marginTop: "20px",
+            border: "solid 1px ",
+            width: "1000px",
+            height: "500px",
+          }}
+        ></div>
+        <Box sx={{ marginTop: "30px", marginLeft: "16px" }}>
+          <Grid
+            container
+            spacing={2}
+            sx={{
+              width: "1000px",
+            }}
+          >
+            {item.map((item, index) => (
+              <Grid
+                item
+                xs={6}
+                key={item.place_name}
                 sx={{
-                  color: "black",
-                  fontWeight: "bolder",
-                  mb: "10px",
-                  fontSize: "large",
+                  textAlign: "left",
+
+                  border: "0.5px solid",
+                  borderRightWidth:
+                    index % 2 === 0
+                      ? index === item.length - 1
+                        ? 0
+                        : "0.5px"
+                      : "0.5px",
+                  borderLeftWidth: index % 2 === 0 ? "0.5px" : 0,
+                  borderBottomWidth: "0.5px",
+                  borderTopWidth: index > 1 ? 0 : "0.5px",
                 }}
               >
-                {index + 1}. {item.place_name}
-              </Typography>
-              <Typography
-                component="h2"
-                variant="h5"
-                sx={{
-                  color: "black",
+                {hoveredIndex === index ? (
+                  <h3
+                    style={{
+                      lineHeight: "25px",
+                      transition: "all 0.3s ease-out",
+                      color: "#FBD385",
+                      cursor: "pointer",
+                      transform: "scale(1.05)",
+                    }}
+                    onMouseEnter={() => handleHover(index)}
+                    onMouseLeave={handleLeave}
+                    onClick={() => {
+                      window.open(item.place_url);
+                    }}
+                  >
+                    {index + 1}. {item.place_name}
+                  </h3>
+                ) : (
+                  <h3
+                    style={{
+                      lineHeight: "25px",
+                      transition: "all 0.3s ease-out",
 
-                  mb: "10px",
-                  fontSize: "medium",
-                }}
-              >
-                Tel. {item.phone}
-              </Typography>
-              <Typography
-                component="h2"
-                variant="h5"
-                sx={{
-                  color: "black",
+                      cursor: "pointer",
+                      transform: "scale(1.0)",
+                    }}
+                    onMouseEnter={() => handleHover(index)}
+                    onMouseLeave={handleLeave}
+                    onClick={() => {
+                      window.open(item.place_url);
+                    }}
+                  >
+                    {index + 1}. {item.place_name}
+                  </h3>
+                )}
 
-                  mb: "10px",
-                  fontSize: "medium",
-                }}
-              >
-                지번 주소: {item.address_name}
-              </Typography>
-              <Typography
-                component="h2"
-                variant="h5"
-                sx={{
-                  color: "black",
-
-                  mb: "10px",
-                  fontSize: "medium",
-                }}
-              >
-                도로명 주소: {item.road_address_name}
-              </Typography>
-              <Typography
-                component="h2"
-                variant="h5"
-                sx={{
-                  color: "black",
-
-                  mb: "10px",
-                  fontSize: "medium",
-                }}
-                onClick={() => {
-                  window.open(item.place_url);
-                }}
-              >
-                {item.place_url}
-              </Typography> */}
-              <h3 style={{ lineHeight: "25px" }}>
-                {index + 1}. {item.place_name}
-              </h3>
-              <h5 class="tel" style={{ fontSize: "medium" }}>
-                Tel. {item.phone}
-              </h5>
-              <h5 class="tel" style={{ fontSize: "medium" }}>
-                지번 주소: {item.address_name}
-              </h5>
-              <h5 class="tel" style={{ fontSize: "medium" }}>
-                도로명 주소: {item.road_address_name}
-              </h5>
-              <h5 class="tel" style={{ fontSize: "medium" }}>
-                {item.place_url}
-              </h5>
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
-    </div>
+                <h5 class="tel" style={{ fontSize: "medium" }}>
+                  Tel. {item.phone}
+                </h5>
+                <h5 class="tel" style={{ fontSize: "medium" }}>
+                  지번 주소: {item.address_name}
+                </h5>
+                <h5 class="tel" style={{ fontSize: "medium" }}>
+                  도로명 주소: {item.road_address_name}
+                </h5>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      </div>
+    </ThemeProvider>
   );
 };
 

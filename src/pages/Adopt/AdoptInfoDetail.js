@@ -1,12 +1,15 @@
 import React from "react";
 import { useState, useEffect, useCallback } from "react";
-import Grid from "@mui/material/Grid";
+import { Grid, Card } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Typography from "@mui/material/Typography";
 import Animal from "./Animal";
 import axios from "axios";
+import styled from "styled-components";
+import { ThemeProvider } from "@mui/material";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
 const AdoptInfoDetail = (props) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -21,7 +24,9 @@ const AdoptInfoDetail = (props) => {
   const day = ("0" + today.getDate()).slice(-2);
 
   const dateString = year + month + day;
-
+  const [isHover, setIsHover] = React.useState(false);
+  const handleHover = () => setIsHover(true);
+  const handleLeave = () => setIsHover(false);
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -108,34 +113,32 @@ const AdoptInfoDetail = (props) => {
         </Grid>
       );
     }
+
     // 5개 안되는경우 빈칸에 이미지 채우기
     const remainingSlots = 5 - result.length;
     for (let i = 0; i < remainingSlots; i++) {
       console.log("d");
       result.push(
         <Grid item xs={2} key={`empty-slot-${i}`}>
-          <div
-            style={{
-              position: "relative",
-              width: "100%",
-              height: "180px",
+          <Card
+            xs={10}
+            sm={6}
+            md={2}
+            sx={{
+              height: "100%",
               display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: "#F5F5ED",
-              borderRadius: "5px",
+              flexDirection: "column",
+              cursor: "pointer",
+              marginRight: "10px",
+              transition: "all 0.3s ease-out",
+              transform: isHover ? "scale(1.05)" : "scale(1)",
             }}
           >
-            <img
-              src="/images/emptydataicon.png"
-              style={{
-                width: "160px",
-                height: "160px ",
-                objectFit: "cover",
-                borderRadius: "10px",
-              }}
-            />
-          </div>
+            <CardImage src="/images/emptydataicon.png" />
+            <div>
+              <CardTitle>No data</CardTitle>
+            </div>
+          </Card>
         </Grid>
       );
     }
@@ -143,24 +146,23 @@ const AdoptInfoDetail = (props) => {
       // Handle case where there are no items to render
       result.push(<div key="no-data">No data available.</div>);
     }
+
     return result;
-  }, [data, animalIndex]);
+  }, [data, animalIndex, loading]);
 
   useEffect(() => {
     fetchData();
   }, [uprCd]);
   return (
-    <>
-      {loading ? (
-        <h1>loading...</h1>
-      ) : (
-        data?.length !== 0 && (
-          <div>
+    <ThemeProvider theme={CustomTheme}>
+      <>
+        {data?.length !== 0 && (
+          <div style={{ height: "400px", width: "1120px" }}>
             <Typography
               component="h2"
               variant="h5"
               sx={{
-                marginLeft: "100px",
+                marginLeft: "95px",
                 fontSize: "1.5em",
                 fontWeight: "bolder",
                 color: "black",
@@ -179,74 +181,115 @@ const AdoptInfoDetail = (props) => {
             </Typography>
             <Grid
               container
-              // spacing={2}
               style={{
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
                 marginBottom: "15px",
               }}
+              onMouseEnter={handleHover}
+              onMouseLeave={handleLeave}
             >
-              {data.length <= 5 ? (
-                ""
-              ) : (
-                <Grid
-                  style={{
-                    display: "flex",
-                  }}
-                  item
-                  xs={1}
-                >
-                  <IconButton
-                    onClick={moveLeft}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                    }}
-                  >
-                    <ArrowBackIosIcon
+              {data.length > 5 && (
+                <>
+                  {isHover ? (
+                    <Grid
                       style={{
-                        width: "30%",
-                        height: "100%",
-                        color: "black",
-                        scale: "2.0",
-                        marginLeft: "1.5em",
+                        display: "flex",
                       }}
-                    />
-                  </IconButton>
-                </Grid>
+                      item
+                      xs={1}
+                    >
+                      <IconButton
+                        onClick={moveLeft}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      >
+                        <ArrowBackIosIcon
+                          style={{
+                            width: "30%",
+                            height: "100%",
+                            color: "black",
+                            scale: "2.0",
+                            marginLeft: "1.5em",
+                          }}
+                        />
+                      </IconButton>
+                    </Grid>
+                  ) : null}
+                </>
               )}
-
-              {AnimalRender()}
-              {data.length <= 5 ? (
-                ""
+              {/* {loading ? (
+                <div>Loading...</div>
               ) : (
-                <Grid item xs={1}>
-                  <IconButton
-                    onClick={moveRight}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                    }}
-                  >
-                    <ArrowForwardIosIcon
-                      style={{
-                        width: "30%",
-                        height: "100%",
-                        color: "black",
-                        scale: "2.0",
-                        marginRight: "1.5em",
-                      }}
-                    />
-                  </IconButton>
-                </Grid>
+                <>
+                  {data.length > 0 ? (
+                   
+                  ) : (
+                    <div>No data available.</div>
+                  )}
+                </>
+              )} */}
+              <AnimalRender />
+              {data.length > 5 && (
+                <>
+                  {isHover ? (
+                    <Grid item xs={1}>
+                      <IconButton
+                        onClick={moveRight}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      >
+                        <ArrowForwardIosIcon
+                          style={{
+                            width: "30%",
+                            height: "100%",
+                            color: "black",
+                            scale: "2.0",
+                            marginRight: "1.5em",
+                          }}
+                        />
+                      </IconButton>
+                    </Grid>
+                  ) : null}
+                </>
               )}
             </Grid>
           </div>
-        )
-      )}
-    </>
+        )}
+      </>
+    </ThemeProvider>
   );
 };
 
 export default AdoptInfoDetail;
+const CardImage = styled.img`
+  width: 176px;
+  height: 200px;
+`;
+
+const CardTitle = styled.p`
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 5px;
+  line-height: 1.4em;
+  height: 90px;
+`;
+
+const CardWritter = styled.p`
+  font-size: 14px;
+  color: #888;
+  float: left;
+  margin-left: 10px;
+`;
+
+const CardCount = styled.p`
+  font-size: 14px;
+  color: #888;
+  text-align: center;
+`;

@@ -1,13 +1,41 @@
 import React, { useState, useRef } from "react";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import FormHelperText from "@mui/material/FormHelperText";
+
 import CustomButton from "./CustomButton";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ACCOUNT } from "../../constants/PageURL";
-
+import { styled } from "@mui/material/styles";
+import {
+  Button,
+  TextField,
+  Typography,
+  FormHelperText,
+  ThemeProvider,
+} from "@mui/material";
+import { CustomTheme } from "../../assets/Theme/CustomTheme";
+const CustomTextField = styled(TextField)({
+  "& label.Mui-focused": {
+    color: "black",
+  },
+  "& .MuiInput-underline:after": {
+    borderBottomColor: "#FBD385",
+    border: "1px solid",
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      // borderColor: "#FBD385",
+      border: "2px solid #FBD385",
+    },
+    "&:hover fieldset": {
+      // borderColor: "#FBD385",
+      border: "2px solid #FBD385",
+    },
+    "&.Mui-focused fieldset": {
+      // borderColor: "#FBD385",
+      border: "2px solid #FBD385",
+    },
+  },
+});
 function Login() {
   const navigate = useNavigate();
   const [id, setId] = useState("");
@@ -146,123 +174,120 @@ function Login() {
   };
 
   return (
-    <div
-      style={{
-        textAlign: "center",
-        width: "350px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        margin: "0 auto",
-      }}
-    >
-      <Typography
-        component="h1"
-        variant="h5"
-        sx={{
-          color: "#FBD385",
-          mt: "30px",
-          fontSize: "40px ",
-          fontWeight: "bolder",
-        }}
-      >
-        Login
-      </Typography>
-      <div style={{ marginTop: "10px" }}>
-        <TextField
-          autoComplete="off"
-          label={idLabel}
-          type="text"
-          name="id"
-          variant="standard"
-          inputProps={{ style: { color: "#FBD385" } }}
-          InputLabelProps={{ style: { color: "#FBD385" } }}
-          sx={{
-            borderBottom: "solid 1px #FBD385",
-            background: "white",
-            width: "350px",
-          }}
-          InputProps={{
-            disableUnderline: true,
-          }}
-          onChange={idChange}
-          required
-          ref={idRef}
-          onKeyPress={gotoPasswordInput}
-        />
-        <FormHelperText sx={{ color: "red" }}>{idError}</FormHelperText>
-      </div>
-      <div style={{ marginTop: "10px" }}>
-        <TextField
-          autoComplete="current-password"
-          label={pwLabel}
-          type="password"
-          name="password"
-          required
-          variant="standard"
-          inputProps={{ style: { color: "#FBD385" } }}
-          InputLabelProps={{ style: { color: "#FBD385" } }}
-          sx={{
-            borderBottom: "solid 1px #FBD385",
-            width: "350px",
-            background: "white",
-          }}
-          InputProps={{
-            disableUnderline: true,
-          }}
-          onChange={pwChange}
-          ref={pwRef}
-          onKeyPress={checkenterSubmit}
-        />
-        <FormHelperText sx={{ color: "red" }}>{passwordError}</FormHelperText>
-      </div>
-      <Typography
-        style={{
-          fontSize: "xx-small",
-          marginTop: "5px",
-          marginBottom: "5px",
-          cursor: "pointer",
-          color: "#909090",
-        }}
-        onClick={() => navigate(ACCOUNT.FIND_PW)}
-      >
-        비밀번호를 잊으셨나요?
-      </Typography>
-      <CustomButton
-        type="submit"
-        variant="text"
-        label="로그인"
-        value="로그인폼"
-        onClick={submitCheck}
-        disabled={checkDisable()}
-      />
-      <FormHelperText sx={{ color: "red", mt: "10px" }}>
-        {loginError}
-      </FormHelperText>
+    <ThemeProvider theme={CustomTheme}>
       <div
         style={{
-          display: "inline-flex",
+          textAlign: "center",
+          width: "350px",
+          display: "flex",
+          flexDirection: "column",
           alignItems: "center",
-          marginTop: "10px",
+          margin: "0 auto",
         }}
       >
-        <Typography style={{ color: "gray", fontSize: "xx-small" }}>
-          아이디가 존재하지 않으신가요?
-        </Typography>
         <Typography
-          variant="text"
-          style={{
-            color: "#909090",
-            fontSize: "xx-small",
-            marginLeft: "5px",
-            cursor: "pointer",
+          component="h1"
+          variant="h5"
+          sx={{
+            color: "#FBD385",
+            mt: "30px",
+            fontSize: "40px ",
+            fontWeight: "bolder",
+            mb: "20px",
           }}
-          onClick={() => navigate(ACCOUNT.JOIN)}
         >
-          회원가입
+          Login
         </Typography>
+        <div style={{ marginTop: "10px", width: "350px" }}>
+          <CustomTextField
+            autoComplete="off"
+            label={idLabel}
+            type="text"
+            name="id"
+            required
+            fullWidth
+            inputProps={{ style: { color: "black" } }}
+            InputLabelProps={{
+              style: { color: "gray", fontSize: "20px", fontWeight: "border" },
+            }}
+            InputProps={{
+              disableUnderline: true,
+            }}
+            onChange={idChange}
+            ref={idRef}
+            onKeyPress={gotoPasswordInput}
+          />
+          <FormHelperText sx={{ color: "red" }}>{idError}</FormHelperText>
+        </div>
+        <div style={{ marginTop: "10px", width: "350px" }}>
+          <CustomTextField
+            autoComplete="current-password"
+            label={pwLabel}
+            type="password"
+            name="password"
+            required
+            fullWidth
+            inputProps={{ style: { color: "black" } }}
+            InputLabelProps={{
+              style: { color: "gray", fontSize: "20px", fontWeight: "border" },
+            }}
+            InputProps={{
+              disableUnderline: true,
+            }}
+            onChange={pwChange}
+            ref={pwRef}
+            onKeyPress={checkenterSubmit}
+          />
+          <FormHelperText sx={{ color: "red" }}>{passwordError}</FormHelperText>
+        </div>
+        <Typography
+          style={{
+            fontSize: "xx-small",
+            marginTop: "5px",
+            marginBottom: "5px",
+            cursor: "pointer",
+            color: "#909090",
+          }}
+          onClick={() => navigate(ACCOUNT.FIND_PW)}
+        >
+          비밀번호를 잊으셨나요?
+        </Typography>
+        <CustomButton
+          type="submit"
+          variant="text"
+          label="로그인"
+          value="로그인폼"
+          onClick={submitCheck}
+          disabled={checkDisable()}
+        />
+        <FormHelperText sx={{ color: "red", mt: "10px" }}>
+          {loginError}
+        </FormHelperText>
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            marginTop: "10px",
+          }}
+        >
+          <Typography style={{ color: "gray", fontSize: "xx-small" }}>
+            아이디가 존재하지 않으신가요?
+          </Typography>
+          <Typography
+            variant="text"
+            style={{
+              color: "#909090",
+              fontSize: "xx-small",
+              marginLeft: "5px",
+              cursor: "pointer",
+            }}
+            onClick={() => navigate(ACCOUNT.JOIN)}
+          >
+            회원가입
+          </Typography>
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }
 
