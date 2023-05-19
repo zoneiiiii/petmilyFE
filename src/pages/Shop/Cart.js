@@ -224,26 +224,22 @@ const Cart = () => {
                 align="center"
               >
                 총 주문금액 :
-                  <span className="tot">
-                    {totalPrice
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                  </span>
-                  원 + 배송비
-                  <span className="tot">
-                    {shippingCost
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                  </span>
-                  원 =
-                  <span className="tot">
-                    {(totalPrice + shippingCost)
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                  </span>
-                  원
-                  <br/>
-                  <span className="notice">※ 50,000원 이상 구매 시 무료 배송</span>
+                <span>
+                  {totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </span>
+                원 + 배송비
+                <span>
+                  {shippingCost
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </span>
+                원 =
+                <span>
+                  {(totalPrice + shippingCost)
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </span>
+                원
               </TableCell>
             </TableRow>
           </TableBody>
@@ -271,12 +267,8 @@ const CartStyle = styled.div`
   h1 {
     text-align: center;
   }
-  .tot {
+  span {
     font-weight: bold;
-  }
-  .notice {
-    font-size:small;
-    color: darkgray;
   }
   .continue {
     width: 300px;
