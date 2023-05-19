@@ -122,12 +122,12 @@ const HeaderNavStyle = styled.div`
   text-align: center;
   user-select: none;
   background: rgb(255, 255, 238);
+  box-shadow: 0px 1px 0px rgb(167, 165, 165);
   z-index: 1000;
 
   .logo {
-    width: 15vw;
+    width: 20vw;
     min-width: 200px;
-    margin-right: 30px;
     margin-top: 5px;
     object-fit: cover;
   }
@@ -142,7 +142,8 @@ const Section = styled.div`
 `;
 
 const NavListStyle = styled.div`
-  width: 12vw;
+  width: 11vw;
+  min-width: 90px;
   .NavTitle {
     width: 11vw;
     height: 30px;
@@ -160,6 +161,10 @@ const NavListStyle = styled.div`
 
   li:hover {
     background-color: #E8E8E8;
+    background-color: #E8E8E8;
+    border: 1px solid #E8E8E8;
+    border-radius: 15px 15px / 15px 15px;
+    box-shadow: 0px 0.5px 0px rgb(167, 165, 165);
   }
 
   ul {
@@ -169,15 +174,16 @@ const NavListStyle = styled.div`
     overflow: hidden;
     height: ${(props) => (props.isSelected === 1 ? props.height + "px" : 0)};
     transition: height 0.5s ease-in-out;
-    background-color: #FFFFEE;
+    background-color: #FCFCF7;
   }
   li {
     min-width: 300px
     height: 40px;
-    margin: 20px 0px 5px 0px;
+    margin: 5px 0px 5px 0px;
+    padding-top: 10px;
     padding-bottom: 5px;
     border-bottom: 1px solid #fbd385;
-    box-shadow: 0px 0.5px 0px rgb(167, 165, 165);
+    // box-shadow: 0px 0.5px 0px rgb(167, 165, 165);
     display: flex;
     align-items: center;
     justify-content: center;
