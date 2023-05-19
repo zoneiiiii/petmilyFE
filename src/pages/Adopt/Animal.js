@@ -89,8 +89,6 @@ function Animal({
     <ThemeProvider theme={CustomTheme}>
       <Card
         xs={10}
-        sm={6}
-        md={2}
         sx={{
           height: "100%",
           display: "flex",
@@ -106,9 +104,17 @@ function Animal({
       >
         <CardImage src={profile} />
         <div>
-          <CardTitle>{desertionNo}</CardTitle>
-          {/* <CardWritter>{age}</CardWritter> */}
-          <CardCount> {kindCd}</CardCount>
+          <CardTitle>{kindCd}</CardTitle>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              textAlign: "center",
+            }}
+          >
+            <CardWritter>{age}</CardWritter>
+            <CardWritter>{careNm}</CardWritter>
+          </div>
         </div>
       </Card>
     </ThemeProvider>
@@ -130,7 +136,7 @@ function Animal({
 }
 export default Animal;
 const CardImage = styled.img`
-  width: 100%;
+  width: 175px;
   height: 200px;
 `;
 
@@ -139,8 +145,6 @@ const CardTitle = styled.p`
   font-size: 16px;
   text-align: center;
   margin-bottom: 5px;
-  line-height: 1.4em;
-  height: 2.8em;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -151,13 +155,11 @@ const CardTitle = styled.p`
 const CardWritter = styled.p`
   font-size: 14px;
   color: #888;
-  float: left;
-  margin-left: 10px;
+  text-align: center;
+  margin: 10px 0;
 `;
 
 const CardCount = styled.p`
   font-size: 14px;
   color: #888;
-  float: right;
-  margin-right: 10px;
 `;

@@ -26,6 +26,7 @@ const AdoptInfo = () => {
         code: item.orgCd,
       }));
       setData(location);
+      setLoading(true);
     } catch (e) {
       setError(e);
     }
@@ -37,17 +38,21 @@ const AdoptInfo = () => {
 
   return (
     <ThemeProvider theme={CustomTheme}>
-      <div style={{ marginTop: "10px" }}>
-        {data.map((loc, index) => (
-          <AdoptInfoDetail
-            key={index}
-            uprCd={loc.uprCd}
-            name={loc.name}
-            code={loc.code}
-            sx={{ marginTop: "10px" }}
-          />
-        ))}
-      </div>
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        <div style={{ marginTop: "10px" }}>
+          {data.map((loc, index) => (
+            <AdoptInfoDetail
+              key={index}
+              uprCd={loc.uprCd}
+              name={loc.name}
+              code={loc.code}
+              sx={{ marginTop: "10px" }}
+            />
+          ))}
+        </div>
+      )}
     </ThemeProvider>
   );
 };

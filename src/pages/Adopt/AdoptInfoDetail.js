@@ -73,91 +73,82 @@ const AdoptInfoDetail = (props) => {
 
   const AnimalRender = useCallback(() => {
     let result = [];
-    if (loading) {
-      // 로딩 중인 경우
-      result = Array.from({ length: 5 }).map((_, i) => (
-        <Grid item xs={2} key={`loading-${i}`}>
-          <h3>Loading...</h3>
-        </Grid>
-      ));
-    } else {
-      for (let i = animalIndex; i < animalIndex + 5; i++) {
-        let dataIndex = i;
-        if (dataIndex >= data.length) {
-          dataIndex = dataIndex % data.length;
-          if (dataIndex === animalIndex) {
-            break;
-          }
+
+    for (let i = animalIndex; i < animalIndex + 5; i++) {
+      let dataIndex = i;
+      if (dataIndex >= data.length) {
+        dataIndex = dataIndex % data.length;
+        if (dataIndex === animalIndex) {
+          break;
         }
-        let data1 = data[dataIndex];
+      }
+      let data1 = data[dataIndex];
 
-        result.push(
-          <Grid item xs={2} key={data1.desertionNo}>
-            <Animal
-              desertionNo={data1.desertionNo}
-              filename={data1.filename}
-              happenDt={data1.happenDt}
-              happenPlace={data1.happenPlace}
-              kindCd={data1.kindCd}
-              colorCd={data1.colorCd}
-              age={data1.age}
-              weight={data1.weight}
-              noticeNo={data1.noticeNo}
-              noticeSdt={data1.noticeSdt}
-              noticeEdt={data1.noticeEdt}
-              profile={data1.popfile}
-              processState={data1.processState}
-              sexCd={data1.sexCd}
-              neuterYn={data1.neuterYn}
-              pecialMark={data1.pecialMark}
-              careNm={data1.careNm}
-              careTel={data1.careTel}
-              careAddr={data1.careAddr}
-              orgNm={data1.orgNm}
-              chargeNm={data1.chargeNm}
-              officetel={data1.officetel}
-            />
-          </Grid>
-        );
-      }
-
-      // 5개 안되는경우 빈칸에 이미지 채우기
-      const remainingSlots = 5 - result.length;
-      for (let i = 0; i < remainingSlots; i++) {
-        console.log("d");
-        result.push(
-          <Grid item xs={2} key={`empty-slot-${i}`}>
-            <Card
-              xs={10}
-              sm={6}
-              md={2}
-              sx={{
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                cursor: "pointer",
-                marginRight: "10px",
-                transition: "all 0.3s ease-out",
-                transform: isHover ? "scale(1.05)" : "scale(1)",
-              }}
-            >
-              <CardImage src="./../images/emptydataicon.png" />
-              <div>
-                <CardTitle>No data</CardTitle>
-                {/* <CardWritter>{age}</CardWritter> */}
-                <CardCount> No data</CardCount>
-              </div>
-            </Card>
-          </Grid>
-        );
-      }
-      if (result.length === 0) {
-        // Handle case where there are no items to render
-        result.push(<div key="no-data">No data available.</div>);
-      }
+      result.push(
+        <Grid item xs={2} key={data1.desertionNo}>
+          <Animal
+            desertionNo={data1.desertionNo}
+            filename={data1.filename}
+            happenDt={data1.happenDt}
+            happenPlace={data1.happenPlace}
+            kindCd={data1.kindCd}
+            colorCd={data1.colorCd}
+            age={data1.age}
+            weight={data1.weight}
+            noticeNo={data1.noticeNo}
+            noticeSdt={data1.noticeSdt}
+            noticeEdt={data1.noticeEdt}
+            profile={data1.popfile}
+            processState={data1.processState}
+            sexCd={data1.sexCd}
+            neuterYn={data1.neuterYn}
+            pecialMark={data1.pecialMark}
+            careNm={data1.careNm}
+            careTel={data1.careTel}
+            careAddr={data1.careAddr}
+            orgNm={data1.orgNm}
+            chargeNm={data1.chargeNm}
+            officetel={data1.officetel}
+          />
+        </Grid>
+      );
     }
+
+    // 5개 안되는경우 빈칸에 이미지 채우기
+    const remainingSlots = 5 - result.length;
+    for (let i = 0; i < remainingSlots; i++) {
+      console.log("d");
+      result.push(
+        <Grid item xs={2} key={`empty-slot-${i}`}>
+          <Card
+            xs={10}
+            sm={6}
+            md={2}
+            sx={{
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              cursor: "pointer",
+              marginRight: "10px",
+              transition: "all 0.3s ease-out",
+              transform: isHover ? "scale(1.05)" : "scale(1)",
+            }}
+          >
+            <CardImage src="/images/emptydataicon.png" />
+            <div>
+              <CardTitle>No data</CardTitle>
+            </div>
+          </Card>
+        </Grid>
+      );
+    }
+    if (result.length === 0) {
+      // Handle case where there are no items to render
+      result.push(<div key="no-data">No data available.</div>);
+    }
+
     return result;
-  }, [data, animalIndex]);
+  }, [data, animalIndex, loading]);
 
   useEffect(() => {
     fetchData();
@@ -166,12 +157,12 @@ const AdoptInfoDetail = (props) => {
     <ThemeProvider theme={CustomTheme}>
       <>
         {data?.length !== 0 && (
-          <div style={{ height: "400px" }}>
+          <div style={{ height: "400px", width: "1120px" }}>
             <Typography
               component="h2"
               variant="h5"
               sx={{
-                marginLeft: "100px",
+                marginLeft: "95px",
                 fontSize: "1.5em",
                 fontWeight: "bolder",
                 color: "black",
@@ -230,6 +221,17 @@ const AdoptInfoDetail = (props) => {
                   ) : null}
                 </>
               )}
+              {/* {loading ? (
+                <div>Loading...</div>
+              ) : (
+                <>
+                  {data.length > 0 ? (
+                   
+                  ) : (
+                    <div>No data available.</div>
+                  )}
+                </>
+              )} */}
               <AnimalRender />
               {data.length > 5 && (
                 <>
@@ -266,7 +268,7 @@ const AdoptInfoDetail = (props) => {
 
 export default AdoptInfoDetail;
 const CardImage = styled.img`
-  width: 100%;
+  width: 176px;
   height: 200px;
 `;
 
@@ -276,12 +278,7 @@ const CardTitle = styled.p`
   text-align: center;
   margin-bottom: 5px;
   line-height: 1.4em;
-  height: 2.8em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  height: 90px;
 `;
 
 const CardWritter = styled.p`
@@ -294,6 +291,5 @@ const CardWritter = styled.p`
 const CardCount = styled.p`
   font-size: 14px;
   color: #888;
-  float: right;
-  margin-right: 10px;
+  text-align: center;
 `;
