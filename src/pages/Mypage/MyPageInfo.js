@@ -120,7 +120,7 @@ function MyInfo() {
           <Button
             variant="contained"
             sx={{ m: 2, width: "100px" }}
-            onClick={() => navigate(MYPAGE.MODIFY_INFO, { state: { num: member.num } })}
+            onClick={() => navigate(MYPAGE.MODIFY_INFO)}
           >
             수정
           </Button>
