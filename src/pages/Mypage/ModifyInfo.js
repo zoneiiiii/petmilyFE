@@ -15,7 +15,6 @@ import {
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
 
 function ModifyInfo() {
   const [nickname, setNickname] = useState("");
@@ -23,7 +22,7 @@ function ModifyInfo() {
   const [confirmPw, setConfirmPw] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 이미지 URL 저장
+
   const [nicknameError, setNicknameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPwError, setConfirmPwError] = useState("");
@@ -49,13 +48,13 @@ const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 �
   // 비밀번호
   const onChangePassword = useCallback((e) => {
     const passwordRegex =
-    /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,20}$/;
+      /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$/;
     const passwordCurrent = e.target.value;
     setPassword(passwordCurrent);
 
     if (!passwordRegex.test(passwordCurrent)) {
       setPasswordError(
-        "숫자+영문자 조합으로 8~20자리로 입력해주세요!"
+        "숫자+영문자+특수문자 조합으로 8~20자리로 입력해주세요!"
       );
     } else {
       setPasswordError("");
@@ -91,27 +90,18 @@ const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 �
     }
   }, []);
 
-  //이미지 파일
-  const [Image, setImage] = useState("/images/emptyProfile.png");
-  const [file, setFile] = useState();
-  const fileInput = useRef(null);
-  const onChange = (e) => {
-    if (e.target.files[0]) {
-      setFile(e.target.files[0]);
+  // 전화번호
+  const onChangePhone = useCallback((e) => {
+    const phoneRegex = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/;
+    const phoneCurrent = e.target.value;
+    setPhone(phoneCurrent);
+
+    if (!phoneRegex.test(phoneCurrent)) {
+      setPhoneError("전화번호를 다시 확인해주세요.");
     } else {
-      //업로드 취소할 시
-      setImage("/images/emptyProfile.png");
-      return;
+      setPhoneError("");
     }
-    //화면에 프로필 사진 표시
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setImage(reader.result);
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
-  };
+  }, []);
 
   //엔터 키 이벤트
   const passwordInput = document.querySelector("[name=pw]");
@@ -143,67 +133,73 @@ const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 �
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(`submit->  ${password} ${nickname} ${email} ${phone} ${Image}`);
+    //console.log(`submit!  ${password} ${passwordChk} ${name} ${phone}`);
   };
-
-
-  const location = useLocation();
-  const memberNum = location.state.num;
 
   const submitCheck = () => {
-    if (!nickname) {
-      setNicknameError("닉네임을 입력해주세요.");
-    }
-    if (!password) {
-      setPasswordError("패스워드를 입력해주세요.");
-    }
-    if (!confirmPw) {
-      setConfirmPwError("패스워드 확인을 입력해주세요.");
-    }
-    if (!email) {
-      setEmailError("이메일을 입력해주세요.");
-    }
-    if (!phone) {
-      setPhoneError("전화번호를 입력해주세요.");
-    } else {setPhoneError("");}
-    
-    if (nickname && password && confirmPw && email && phone) {
-      if (file) {
-        const formData = new FormData();
-        formData.append("file : ", file);
   
-        try {
-          const response =  axios.post("/upload", formData);
-          setUploadedImageUrl(response.data);
-        } catch (error) {
-          console.error("이미지 업로드 실패 : ", error);
-        }
-      } else {
-        setUploadedImageUrl("https://via.placeholder.com/150");
+      if (!nickname) {
+        setNicknameError("닉네임을 입력해주세요.");
       }
-      
-      console.log(memberNum);
-      const memberData = {
-        memberNickname: nickname,
-        memberPw: password,
-        memberEmail: email,
-        memberTel: phone,
-        memberImg: uploadedImageUrl,
-      };
-    axios.put(`/update/${memberNum}`, memberData)
-      .then((res) => {
-        console.log(res.data); // 성공 시 메시지 출력
-        if (res.data) {
-          alert("수정 성공");
-          //document.location.href = "/mypage";
-        } else {
-          alert("수정에 실패하셨습니다.");
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+      if (!password) {
+        setPasswordError("패스워드를 입력해주세요.");
+      }
+      if (!confirmPw) {
+        setConfirmPwError("패스워드 확인을 입력해주세요.");
+      }
+      if (!email) {
+        setEmailError("이메일을 입력해주세요.");
+      }
+      if (!phone) {
+        setPhoneError("전화번호를 입력해주세요.");
+      }
+    
+      else {
+      axios
+        .post("/update", {
+          nickname: nickRef.current.value,
+          password: passRef.current.value,
+          email: emailRef.current.value,
+          phone: phoneRef.current.value,
+        })
+        .then((res) => {
+          if (res) {
+            alert("수정에 성공하셨습니다.");
+            //document.location.href = "/mypage/info";
+          } else {
+            alert("수정에 실패하셨습니다.");
+          }
+          nickRef.current.value = "";
+          passRef.current.value = "";
+          emailRef.current.value = "";
+          phoneRef.current.value = "";
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    }
   };
+
+  //이미지 파일
+  const [Image, setImage] = useState("/images/emptyProfile.png");
+  const [file, setFile] = useState();
+  const fileInput = useRef(null);
+  const onChange = (e) => {
+    if (e.target.files[0]) {
+      setFile(e.target.files[0]);
+    } else {
+      //업로드 취소할 시
+      setImage("/images/emptyProfile.png");
+      return;
+    }
+    //화면에 프로필 사진 표시
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImage(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
   };
 
   return (
@@ -214,9 +210,6 @@ const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 �
         sx={{ width: "50vw" }}
       >
         <Box
-        component="form"
-        validate="true"
-        onSubmit={handleSubmit}
           sx={{
             marginTop: "30px",
             display: "flex",
@@ -227,6 +220,7 @@ const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 �
           <Typography
             component="h1"
             variant="h4"
+            color="#FBD385"
             fontWeight="bold"
           >
             회원 정보 수정
@@ -237,8 +231,8 @@ const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 �
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
             badgeContent={
               <Fab
+                color="primary"
                 aria-label="edit"
-                size="small"
                 onClick={() => {
                   fileInput.current.click();
                 }}
@@ -258,7 +252,10 @@ const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 �
             />
           </Badge>
           <Box
-            sx={{ mt: 3 }}
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 3, mb: 5 }}
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -333,20 +330,7 @@ const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 �
                   label="전화번호"
                   name="phone"
                   autoComplete="phone"
-                  value={phone}
-                  onChange={(e) =>
-                    setPhone(
-                      e.target.value
-                        .replace(/[^0-9]/g, "")
-                        .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/, `$1-$2-$3`)
-                        .replace(/-{1,2}$/g, "")
-                    )
-                    
-                  }
-                  inputProps={{ maxLength: 13, pattern: "[0-9]*" }}
-                  InputProps={{
-                    inputMode: "numeric",
-                  }}
+                  onChange={onChangePhone}
                   ref={phoneRef}
                   onKeyPress={checkenterSubmit}
                 />

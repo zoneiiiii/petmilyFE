@@ -40,23 +40,19 @@ const Order = () => {
     },
     [receiverName]
   );
- 
+
   const onChangePhone = useCallback(
     (e) => {
-    setReceiverPhone(
-    e.target.value
-      .replace(/[^0-9]/g, "")
-      .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/, `$1-$2-$3`)
-      .replace(/-{1,2}$/g, "")
-  )
-  setPhoneError("");
+      const phoneRegex = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/;
+      setReceiverPhone(e.target.value);
+      if (!phoneRegex.test(receiverPhone)) {
+        setPhoneError("전화번호를 다시 확인해주세요.");
+      } else {
+        setPhoneError("");
+      }
     },
-    []
+    [receiverPhone]
   );
-
-
-
-    
 
   const submitCheck = () => {
     if (!receiverName) {
@@ -95,6 +91,7 @@ const Order = () => {
   const open = useDaumPostcodePopup(
     "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
   );
+
   const handleComplete = (data) => {
     const {
       zonecode,
@@ -147,6 +144,7 @@ const Order = () => {
   //결제방식
   const [orderCompleted, setOrderCompleted] = useState(false);
   const [orderDate, setOrderDate] = useState("");
+  const [formattedAmount, setFormattedAmount] = useState(""); //원화 표시 상태
   const [paymentMethod, setPaymentMethod] = useState("");
 
   const paymentSelect = (method) => {
@@ -342,10 +340,6 @@ const Order = () => {
                     size="small"
                     value={receiverPhone}
                     onChange={onChangePhone}
-                    inputProps={{ maxLength: 13, pattern: "[0-9]*" }}
-                    InputProps={{
-                      inputMode: "numeric",
-                    }}
                   />
                   <FormHelperText sx={{ color: "red" }}>
                     {phoneError}
