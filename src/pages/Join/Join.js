@@ -103,9 +103,18 @@ const Join = () => {
       })
       .then((res) => {
         const { data } = res;
-        if (data === 0) {
+        if (data === 1) {
           setIDError("이미 사용중인 아이디입니다.");
           IDRef.current.querySelector("input").value = "";
+        } else if (data === 2) {
+          setEmailError("이미 사용중인 이메일입니다.");
+          emailRef.current.querySelector("input").value = "";
+        } else if (data === 3) {
+          setNicknameError("이미 사용중인 닉네임입니다.");
+          nicknameRef.current.querySelector("input").value = "";
+        } else if (data === 4) {
+          setPhonenumberError("이미 사용중인 전화번호입니다.");
+          phonenumberRef.current.querySelector("input").value = "";
         } else {
           alert("회원가입이 완료되었습니다.\n로그인 화면으로 이동합니다.");
           window.location.href = "/login";
@@ -130,9 +139,7 @@ const Join = () => {
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,20}$/;
     setPassword(e.target.value);
     if (!passwordRegex.test(passwordRef.current.querySelector("input").value)) {
-      setPasswordError(
-        "숫자+영문자+특수문자 조합으로 8~20자리로 입력해주세요!"
-      );
+      setPasswordError("숫자+영문자 조합으로 8~20자리로 입력해주세요!");
     } else {
       setPasswordError("");
     }
