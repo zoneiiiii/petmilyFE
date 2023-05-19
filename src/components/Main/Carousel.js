@@ -18,7 +18,7 @@ const CarouselMain = ({ images }) => {
       {images.map((image, index) => (
         <Paper key={index} elevation={0} sx={{ height: "400px" }}>
           {index === 1 ? (
-            <Link to="/about/activity/list">
+            <Link to="/about/event/list">
               <img
                 src={image}
                 alt={`Slide ${index}`}
