@@ -6,6 +6,8 @@ import { ADOPT } from "../../constants/PageURL";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
+import axios from "axios";
+import { LocalConvenienceStoreOutlined } from "@material-ui/icons";
 
 const modalStyle = {
   position: "absolute",
@@ -45,9 +47,21 @@ const AdoptReviewWrite = () => {
       setFormAble(false);
       setOpen(true);
     } else {
+      console.log(title, content, " dddd");
+      axios
+        .post("/board/review/insert", {
+          memberNum: "1",
+          boardId: "review",
+          reviewSubject: title,
+          reviewContent: content,
+          imgThumbnail: "aaaa",
+        })
+        .then(() => {
+          alert("등록완료");
+          document.location.href = ADOPT.REVIEW;
+        });
       setFormAble(true);
       setOpen(true);
-      document.location.href = ADOPT.REVIEW;
     }
   };
   const handleSubmit = (e) => {

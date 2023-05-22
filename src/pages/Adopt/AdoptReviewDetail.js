@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import * as React from "react";
 import CustomButton from "../Login/CustomButton";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { ADOPT } from "../../constants/PageURL";
@@ -17,12 +17,21 @@ import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import Comment from "../../components/Comment/Comment";
 
 const AdoptReviewDetail = () => {
-  const { id } = useParams();
+  // const { id } = useParams();
+  const location = useLocation();
   const [data, setData] = useState([]);
-
+  const {
+    boardNum,
+    reviewSubject,
+    memberNum,
+    reviewCount,
+    reviewContent,
+    reviewDate,
+  } = location.state || {};
   useEffect(() => {
-    setData(dummy.filter((data) => data.id === parseInt(id))[0]);
-  }, [id]);
+    setData(data.filter((item) => item.boardNum === parseInt(boardNum))[0]);
+  }, [boardNum]);
+  console.log(data);
   return (
     <ThemeProvider theme={CustomTheme}>
       <Section className="result">
@@ -36,16 +45,16 @@ const AdoptReviewDetail = () => {
                     colSpan={4}
                     sx={{ width: 750, fontWeight: "bold", fontSize: "20px" }}
                   >
-                    {data.title}
+                    {reviewSubject}
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell sx={{ width: 600 }}>{data.writter}</TableCell>
+                  <TableCell sx={{ width: 600 }}>{memberNum}</TableCell>
                   <TableCell align="right" sx={{ color: "lightgray" }}>
-                    {data.date}
+                    {reviewDate}
                   </TableCell>
                   <TableCell align="right" sx={{ color: "lightgray" }}>
-                    조회수 : {data.count}
+                    조회수 : {reviewCount}
                   </TableCell>
                   <TableCell align="right" sx={{ color: "lightgray" }}>
                     댓글 : 2
@@ -66,7 +75,7 @@ const AdoptReviewDetail = () => {
                       }}
                     />
                     <br />
-                    {data.content}
+                    {reviewContent}
                   </TableCell>
                 </TableRow>
               </TableBody>
