@@ -8,6 +8,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import axios from "axios";
 import { LocalConvenienceStoreOutlined } from "@material-ui/icons";
+import dayjs from "dayjs";
 
 const modalStyle = {
   position: "absolute",
@@ -42,6 +43,10 @@ const AdoptReviewWrite = () => {
   const [formAble, setFormAble] = useState(false);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
+  const currentDate = new Date();
+  const isoCurrentDate = new Date(
+    currentDate.getTime() + 9 * 60 * 60 * 1000
+  ).toISOString();
   const handleOpen = () => {
     if (!title || !content) {
       setFormAble(false);
@@ -55,6 +60,7 @@ const AdoptReviewWrite = () => {
           reviewSubject: title,
           reviewContent: content,
           imgThumbnail: "aaaa",
+          reviewDate: isoCurrentDate,
         })
         .then(() => {
           alert("등록완료");

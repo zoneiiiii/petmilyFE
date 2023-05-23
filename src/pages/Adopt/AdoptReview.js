@@ -15,100 +15,6 @@ import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import axios from "axios";
 import { red } from "@mui/material/colors";
 
-// const dummy = [
-//   {
-//     id: 1,
-//     title: "밍키 잘 지내고 있어요! 밍키 잘 지내고 있어요!밍키 밍키 밍키 밍키",
-//     writter: "밍키맘",
-//     date: "2023.05.04",
-//     count: 34,
-//   },
-//   {
-//     id: 2,
-//     title: "펫밀리 입양후기",
-//     writter: "똘이엄마",
-//     date: "2023.05.04",
-//     count: 34,
-//   },
-//   {
-//     id: 3,
-//     title: "입양 3개월 후 남기는 후기",
-//     writter: "별맘",
-//     date: "2023.05.04",
-//     count: 34,
-//   },
-//   {
-//     id: 4,
-//     title: "아지 잘 지냅니다 :)",
-//     writter: "아지아지",
-//     date: "2023.05.04",
-//     count: 34,
-//   },
-//   {
-//     id: 5,
-//     title: "새 가족이 생겼어요!",
-//     writter: "패밀리",
-//     date: "2023.05.04",
-//     count: 34,
-//   },
-//   {
-//     id: 6,
-//     title: "똘이가 어느새 3살이 됐어요.",
-//     writter: "똘이엄마",
-//     date: "2023.05.04",
-//     count: 34,
-//   },
-//   {
-//     id: 7,
-//     title: "이름 같이 지어주세요!",
-//     writter: "초보엄마",
-//     date: "2023.05.04",
-//     count: 34,
-//   },
-//   {
-//     id: 8,
-//     title: "입양신청은 펫밀리에서!",
-//     writter: "나는유저",
-//     date: "2023.05.04",
-//     count: 34,
-//   },
-//   {
-//     id: 9,
-//     title: "초보 반려인의 후기",
-//     writter: "이기자",
-//     date: "2023.05.04",
-//     count: 34,
-//   },
-//   {
-//     id: 10,
-//     title: "서울보호소,입양 후기",
-//     writter: "삼기자",
-//     date: "2023.05.04",
-//     count: 34,
-//   },
-//   {
-//     id: 11,
-//     title: "건강해진 모모 봐주세요!",
-//     writter: "사기자",
-//     date: "2023.05.04",
-//     count: 34,
-//   },
-//   {
-//     id: 12,
-//     title: "골든 리트리버 입양했습니다.",
-//     writter: "오기자",
-//     date: "2023.05.04",
-//     count: 34,
-//   },
-//   {
-//     id: 13,
-//     title: "잘 지내고 있습니다.",
-//     writter: "ㅎㅎ",
-//     date: "2023.05.04",
-//     count: 34,
-//   },
-// ];
-
 const AdoptReview = () => {
   const [data, setData] = useState([]); // DB 데이터 가져오는 변수
   const [page, setPage] = useState(1); // 현재 페이지 관리하는 상태 변수
@@ -161,16 +67,14 @@ const AdoptReview = () => {
                   .map((item) => (
                     <Grid item xs={10} sm={6} md={2} key={item.boardNum}>
                       <Link
-                        to={{
-                          pathname: ADOPT.REVIEW_DETAIL(item.boardNum),
-                          state: {
-                            boardNum: item.boardNum,
-                            reviewSubject: item.reviewSubject,
-                            memberNum: item.memberNum,
-                            reviewCount: item.reviewCount,
-                            reviewContent: item.reviewContent,
-                            reviewDate: item.reviewDate,
-                          },
+                        to={ADOPT.REVIEW_DETAIL(item.boardNum)}
+                        state={{
+                          boardNum: item.boardNum,
+                          reviewSubject: item.reviewSubject,
+                          memberNum: item.memberNum,
+                          reviewCount: item.reviewCount,
+                          reviewContent: item.reviewContent,
+                          reviewDate: item.reviewDate,
                         }}
                         style={{ textDecoration: "none" }}
                       >

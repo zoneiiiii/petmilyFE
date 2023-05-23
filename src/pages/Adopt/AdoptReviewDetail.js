@@ -2,9 +2,10 @@ import styled from "styled-components";
 import * as React from "react";
 import CustomButton from "../Login/CustomButton";
 import { Link, useParams, useLocation } from "react-router-dom";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { ADOPT } from "../../constants/PageURL";
+import DOMPurify from "dompurify";
+import axios from "axios";
 import {
   ThemeProvider,
   Table,
@@ -17,7 +18,7 @@ import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import Comment from "../../components/Comment/Comment";
 
 const AdoptReviewDetail = () => {
-  // const { id } = useParams();
+  const { id } = useParams();
   const location = useLocation();
   const [data, setData] = useState([]);
   const {
@@ -27,11 +28,26 @@ const AdoptReviewDetail = () => {
     reviewCount,
     reviewContent,
     reviewDate,
-  } = location.state || {};
-  useEffect(() => {
-    setData(data.filter((item) => item.boardNum === parseInt(boardNum))[0]);
-  }, [boardNum]);
-  console.log(data);
+  } = location.state;
+  const formatDate = () => {
+    console.log(reviewDate);
+    const date = new Date(reviewDate);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    console.log(`${year}년 ${month}월 ${day}일`);
+    return `${year}년 ${month}월 ${day}일`;
+  };
+
+  // useEffect(() => {
+  //   setData(data.filter((item) => item.id === parseInt(id))[0]);
+  // }, [id]);
+  const createMarkup = (html) => {
+    return {
+      __html: DOMPurify.sanitize(html),
+    };
+  };
+  console.log(reviewDate);
   return (
     <ThemeProvider theme={CustomTheme}>
       <Section className="result">
@@ -51,7 +67,7 @@ const AdoptReviewDetail = () => {
                 <TableRow>
                   <TableCell sx={{ width: 600 }}>{memberNum}</TableCell>
                   <TableCell align="right" sx={{ color: "lightgray" }}>
-                    {reviewDate}
+                    {formatDate}
                   </TableCell>
                   <TableCell align="right" sx={{ color: "lightgray" }}>
                     조회수 : {reviewCount}
@@ -75,7 +91,9 @@ const AdoptReviewDetail = () => {
                       }}
                     />
                     <br />
-                    {reviewContent}
+                    <div
+                      dangerouslySetInnerHTML={createMarkup(reviewContent)}
+                    ></div>
                   </TableCell>
                 </TableRow>
               </TableBody>
@@ -84,6 +102,17 @@ const AdoptReviewDetail = () => {
               <Link to={ADOPT.REVIEW} style={{ textDecoration: "none" }}>
                 <CustomButton label="돌아가기" value="작성취소" />
               </Link>
+              <Link to={ADOPT.REVIEW} style={{ textDecoration: "none" }}>
+                <CustomButton
+                  label="삭제"
+                  value="작성취소"
+                  onClick={() => {
+                    axios.delete(`/board/review/${boardNum}`);
+                    alert("삭제완료");
+                  }}
+                />
+              </Link>
+              <CustomButton label="수정" value="작성취소" />
             </Body>
 
             <section className="comment">
@@ -123,112 +152,5 @@ const Top = styled.h1`
 const Body = styled.div`
   margin: auto;
 `;
-
-const dummy = [
-  {
-    id: 1,
-    title: "밍키 잘 지내고 있어요! 밍키 잘 지내고 있어요!밍키 밍키 밍키 밍키",
-    content: "밍키 건강히 잘 지내고 있어요!",
-    writter: "밍키맘",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 2,
-    title: "펫밀리 입양후기",
-    content: "꼭 펫밀리에서 입양하세요!",
-    writter: "똘이엄마",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 3,
-    title: "입양 3개월 후 남기는 후기",
-    content: "어느새 입양 승인을 받은지 3개월이 지났습니다.",
-    writter: "별맘",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 4,
-    title: "아지 잘 지냅니다 :)",
-    content: "아지 잘 지내요!",
-    writter: "아지아지",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 5,
-    title: "새 가족이 생겼어요!",
-    content: "귀여운 막내동생이 생겼어요.",
-    writter: "패밀리",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 6,
-    title: "똘이가 어느새 3살이 됐어요.",
-    content: "펫밀리를 알게된 지 3년이 지났네요.",
-    writter: "똘이엄마",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 7,
-    title: "이름 같이 지어주세요!",
-    content: "이름을 뭘로 지어줘야 할 지 너무나 고민입니다.",
-    writter: "초보엄마",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 8,
-    title: "입양신청은 펫밀리에서!",
-    content: "펫밀리 추천합니다.",
-    writter: "나는유저",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 9,
-    title: "초보 반려인의 후기",
-    content: "알아야 할 지식들이 정말 많네요.",
-    writter: "이기자",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 10,
-    title: "서울보호소,입양 후기",
-    content: "서울보호소에 있는 친구를 입양했습니다.",
-    writter: "삼기자",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 11,
-    title: "건강해진 모모 봐주세요!",
-    content: "건강해진 모모입니다.",
-    writter: "사기자",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 12,
-    title: "골든 리트리버 입양했습니다.",
-    content: "골든리트리버 입양했어요!.",
-    writter: "오기자",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 13,
-    title: "잘 지내고 있습니다.",
-    content: "안녕하세요. 다들 잘 지내시죠?",
-    writter: "ㅎㅎ",
-    date: "2023.05.04",
-    count: 34,
-  },
-];
 
 export default AdoptReviewDetail;
