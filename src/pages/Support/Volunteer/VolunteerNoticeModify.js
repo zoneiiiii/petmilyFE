@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import DaumPostcode from "react-daum-postcode";
-import Loading from "../../../components/Loading/LoadingPage";
-import axios from "axios";
-import * as S from "./VolunteerNoticeModify.styled";
-import dayjs from "dayjs";
+import * as S from "./VolunteerNoticeWrite.styled";
 import {
   Button,
   TextField,
@@ -16,14 +13,20 @@ import {
   DialogTitle,
   DialogContent,
   ThemeProvider,
+  FormHelperText,
+  Modal,
+  Alert,
 } from "@mui/material";
 import { CustomDatePicker } from "../../../components/common/CustomDatePicker";
 import { SUPPORT } from "../../../constants/PageURL";
-
+import dayjs from "dayjs";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { CustomTheme } from "../../../assets/Theme/CustomTheme";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
+import axios from "axios";
+import Loading from "../../../components/Loading/LoadingPage";
+import { MyCustomUploadAdapterPlugin } from "../../../components/common/UploadAdapter";
 
 const VolunteerNoticeModify = () => {
   const [post, setPost] = useState(null);
@@ -31,16 +34,81 @@ const VolunteerNoticeModify = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [volunteerStartPeriod, setVolunteerStartPeriod] = useState(null);
-  const [volunteerEndPeriod, setVolunteerEndPeriod] = useState(null);
+  const [volunteerStartPeriod, setVolunteerStartPeriod] = useState(dayjs());
+  const [volunteerEndPeriod, setVolunteerEndPeriod] = useState(
+    dayjs().add(1, "day")
+  );
   const [title, setTitle] = useState("");
   const [ageLimit, setAgeLimit] = useState("");
   const [address, setAddress] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
+  const [shelterName, setShelterName] = useState("");
   const [recruitmentNumber, setRecruitmentNumber] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("모집중");
   const [content, setContent] = useState("");
   const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
+  const [Thumbnail, setThumbnail] = useState("");
+
+  //< -- 유효성 검증 상태
+  const [titleError, setTitleError] = useState(false);
+  const [ageLimitError, setAgeLimitError] = useState(false);
+  const [addressError, setAddressError] = useState(false);
+  const [addressDetailError, setAddressDetailError] = useState(false);
+  const [shelterNameError, setShelterNameError] = useState(false);
+  const [recruitmentNumberError, setRecruitmentNumberError] = useState(false);
+  const [contentError, setContentError] = useState(false);
+
+  const validate = () => {
+    let isError = false;
+    if (title === "") {
+      setTitleError(true);
+      isError = true;
+    }
+    if (ageLimit === "") {
+      setAgeLimitError(true);
+      isError = true;
+    }
+    if (address === "") {
+      setAddressError(true);
+      isError = true;
+    }
+    if (addressDetail === "") {
+      setAddressDetailError(true);
+      isError = true;
+    }
+    if (shelterName === "") {
+      setShelterNameError(true);
+      isError = true;
+    }
+    if (recruitmentNumber === "") {
+      setRecruitmentNumberError(true);
+      isError = true;
+    }
+    if (content === "") {
+      setContentError(true);
+      isError = true;
+    }
+
+    return isError;
+  };
+
+  const modalStyle = {
+    // 모달 스타일
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    p: 4,
+  };
+  const [openModal, setOpenModal] = useState(false); // 모달 상태
+  const handleModalClose = () => {
+    // 모달닫는 함수
+    setOpenModal(false);
+    navigate(SUPPORT.VOLUNTEER_NOTICE);
+  };
 
   // 사진 미리보기
   const [file, setFile] = useState(null);
@@ -57,6 +125,21 @@ const VolunteerNoticeModify = () => {
     }
   };
 
+  const uploadImage = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await axios.post("/upload", formData);
+      const imageUrl = response.data;
+      // setUploadedImageUrl(imageUrl);
+      return imageUrl;
+    } catch (error) {
+      console.error("이미지 업로드 실패 : ", error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     //게시글 Detail 호출
     const fetchPost = async () => {
@@ -66,15 +149,17 @@ const VolunteerNoticeModify = () => {
         ); //게시글 Detail 데이터  호출
         const data = response.data;
         setPost(data);
-        setVolunteerStartPeriod(data.volunteerStartPeriod);
-        setVolunteerEndPeriod(data.volunteerEndPeriod);
+        setVolunteerStartPeriod(dayjs(data.volunteerStartPeriod));
+        setVolunteerEndPeriod(dayjs(data.volunteerEndPeriod));
         setTitle(data.volunteerSubject);
         setAgeLimit(data.volunteerAge);
         setAddress(data.volunteerAddr);
         setAddressDetail(data.volunteerAddrDetail);
+        setShelterName(data.shelterName);
         setRecruitmentNumber(data.volunteerNumber);
         setSelectedStatus(data.volunteerStatus ? "모집중" : "마감");
         setContent(data.volunteerContent);
+        setThumbnail(data.imgThumbnail);
       } catch (error) {
         console.error("Error fetching data : ", error);
       } finally {
@@ -84,9 +169,49 @@ const VolunteerNoticeModify = () => {
     fetchPost();
   }, [id]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // 전송 로직 구현
+    const isError = validate();
+    if (isError) return;
+    const currentDate = new Date();
+    const isoCurrentDate = new Date(
+      currentDate.getTime() + 9 * 60 * 60 * 1000
+    ).toISOString();
+    let imageUrl = Thumbnail;
+
+    if (file) {
+      const uploadedUrl = await uploadImage(file);
+      if (uploadedUrl) {
+        imageUrl = uploadedUrl;
+      }
+    }
+
+    const postData = {
+      shelterName: shelterName,
+      volunteerSubject: title,
+      volunteerStartPeriod: volunteerStartPeriod.format("YYYY-MM-DD"),
+      volunteerEndPeriod: volunteerEndPeriod.format("YYYY-MM-DD"),
+      volunteerAddr: address,
+      volunteerAddrDetail: addressDetail,
+      volunteerNumber: recruitmentNumber,
+      volunteerAge: ageLimit,
+      volunteerStatus: selectedStatus === "모집중" ? 1 : 0,
+      volunteerContent: content,
+      imgThumbnail: imageUrl,
+      // volunteerDate: isoCurrentDate,
+    };
+
+    try {
+      await axios.put(`http://localhost:8080/board/volunteer/${id}`, postData, {
+        withCredentials: true,
+      });
+      setOpenModal(true);
+      setTimeout(() => {
+        handleModalClose();
+      }, 1000);
+    } catch (error) {
+      console.error("데이터 전송 실패 : ", error);
+    }
   };
 
   const handleCancel = () => {
@@ -135,15 +260,23 @@ const VolunteerNoticeModify = () => {
         <ThemeProvider theme={CustomTheme}>
           <S.FormWrapper>
             <form onSubmit={handleSubmit}>
-              <S.FormRow>
+              <S.FormRowWithError>
                 <TextField
                   label="제목"
                   value={title}
                   size="small"
                   fullWidth
-                  onChange={(e) => setTitle(e.target.value)}
+                  onChange={(e) => {
+                    setTitleError(false);
+                    setTitle(e.target.value);
+                  }}
                 />
-              </S.FormRow>
+                <S.ErrorMsg>
+                  <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                    {titleError ? "제목을 입력해 주세요." : null}
+                  </FormHelperText>
+                </S.ErrorMsg>
+              </S.FormRowWithError>
 
               <S.FormRow2>
                 <CustomDatePicker
@@ -164,7 +297,6 @@ const VolunteerNoticeModify = () => {
                     },
                   }}
                   onChange={(newValue) => setVolunteerStartPeriod(newValue)}
-                  // inputProps={{ value: volunteerStartPeriod }}
                 />
                 <CustomDatePicker
                   label="활동 종료 기간"
@@ -184,7 +316,6 @@ const VolunteerNoticeModify = () => {
                     },
                   }}
                   onChange={(newValue) => setVolunteerEndPeriod(newValue)}
-                  // inputProps={{ value: volunteerEndPeriod }}
                 />
                 <Button
                   onClick={resetDate}
@@ -196,67 +327,125 @@ const VolunteerNoticeModify = () => {
                 </Button>
               </S.FormRow2>
 
-              <S.FormRow>
-                <TextField
-                  label="주소"
-                  value={address}
-                  fullWidth
-                  size="small"
-                  InputProps={{ readOnly: true }}
-                />
-                <S.ButtonSpace />
-                <S.WriteButton onClick={handlePostcodeOpen}>검색</S.WriteButton>
-                <Dialog
-                  open={isPostcodeOpen}
-                  onClose={handlePostcodeClose}
-                  fullWidth
-                  maxWidth="sm"
-                >
-                  <DialogTitle>주소 검색</DialogTitle>
-                  <DialogContent>
-                    {isPostcodeOpen && (
-                      <DaumPostcode
-                        onComplete={handleAddress}
-                        autoClose={false}
-                        width={592}
-                        height={557}
-                      />
-                    )}
-                  </DialogContent>
-                </Dialog>
-              </S.FormRow>
-              <S.FormRow>
+              <S.FormRowWithError>
+                <S.FormRowAddr>
+                  <TextField
+                    label="주소"
+                    value={address}
+                    fullWidth
+                    size="small"
+                    InputProps={{ readOnly: true }}
+                  />
+                  <S.ButtonSpace />
+                  <S.WriteButton onClick={handlePostcodeOpen}>
+                    검색
+                  </S.WriteButton>
+                  <Dialog
+                    open={isPostcodeOpen}
+                    onClose={handlePostcodeClose}
+                    fullWidth
+                    maxWidth="sm"
+                  >
+                    <DialogTitle>주소 검색</DialogTitle>
+                    <DialogContent>
+                      {isPostcodeOpen && (
+                        <DaumPostcode
+                          onComplete={handleAddress}
+                          autoClose={false}
+                          width={592}
+                          height={557}
+                        />
+                      )}
+                    </DialogContent>
+                  </Dialog>
+                </S.FormRowAddr>
+                <S.ErrorMsg>
+                  <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                    {addressError ? "주소를 입력해 주세요." : null}
+                  </FormHelperText>
+                </S.ErrorMsg>
+              </S.FormRowWithError>
+              <S.FormRowWithError>
                 <TextField
                   label="상세 주소"
                   value={addressDetail}
                   fullWidth
                   size="small"
-                  onChange={(e) => setAddressDetail(e.target.value)}
+                  onChange={(e) => {
+                    setAddressDetailError(false);
+                    setAddressDetail(e.target.value);
+                  }}
                 />
-              </S.FormRow>
+                <S.ErrorMsg>
+                  <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                    {addressDetailError ? "상세주소를 입력해 주세요." : null}
+                  </FormHelperText>
+                </S.ErrorMsg>
+              </S.FormRowWithError>
+
+              <S.FormRowWithError>
+                <TextField
+                  label="보호소 이름"
+                  value={shelterName}
+                  fullWidth
+                  size="small"
+                  onChange={(e) => {
+                    setShelterNameError(false);
+                    setShelterName(e.target.value);
+                  }}
+                />
+                <S.ErrorMsg>
+                  <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                    {shelterNameError ? "보호소 이름을 입력해 주세요" : null}
+                  </FormHelperText>
+                </S.ErrorMsg>
+              </S.FormRowWithError>
 
               <S.FormRow>
-                <TextField
-                  label="모집 인원"
-                  value={recruitmentNumber}
-                  fullWidth
-                  size="small"
-                  onChange={handleRecruitmentNumberChange}
-                  type="number"
-                />
+                <S.FormRowWithError>
+                  <TextField
+                    label="모집 인원"
+                    value={recruitmentNumber}
+                    fullWidth
+                    size="small"
+                    onChange={(e) => {
+                      if (e.target.value.length <= 2) {
+                        handleRecruitmentNumberChange(e);
+                      }
+                      setRecruitmentNumberError(false);
+                    }}
+                  />
+                  <S.ErrorMsg>
+                    <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                      {recruitmentNumberError
+                        ? "모집 인원을 입력해 주세요"
+                        : null}
+                    </FormHelperText>
+                  </S.ErrorMsg>
+                </S.FormRowWithError>
                 &nbsp;
-                <TextField
-                  label="나이제한"
-                  value={ageLimit}
-                  size="small"
-                  fullWidth
-                  onChange={(e) => setAgeLimit(e.target.value)}
-                />
+                <S.FormRowWithError>
+                  <TextField
+                    label="나이제한"
+                    value={ageLimit}
+                    size="small"
+                    fullWidth
+                    onChange={(e) => {
+                      setAgeLimitError(false);
+                      setAgeLimit(e.target.value);
+                    }}
+                  />
+                  <S.ErrorMsg>
+                    <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                      {ageLimitError ? "나이제한을 입력해 주세요" : null}
+                    </FormHelperText>
+                  </S.ErrorMsg>
+                </S.FormRowWithError>
               </S.FormRow>
 
               <S.FormRow>
                 <S.ImageWrapper>
-                  <span>이미지 첨부</span>
+                  <span>대표 이미지</span>
                   <S.CommonSpace />
                   <S.CommonButton component="label">
                     사진 업로드
@@ -271,7 +460,7 @@ const VolunteerNoticeModify = () => {
                       size="small"
                       value={selectedStatus}
                       exclusive
-                      onChange={(e) => setSelectedStatus(e.target.value)}
+                      onChange={(e, value) => setSelectedStatus(value)}
                     >
                       <ToggleButton
                         value="모집중"
@@ -321,7 +510,7 @@ const VolunteerNoticeModify = () => {
                 )}
               </S.FormRow>
 
-              <S.FormRow>
+              <S.FormRowWithError>
                 <S.EditorWrapper>
                   <CKEditor
                     editor={ClassicEditor}
@@ -329,37 +518,30 @@ const VolunteerNoticeModify = () => {
                     onChange={(event, editor) => {
                       const data = editor.getData();
                       setContent(data);
+                      setContentError(false);
                     }}
                     config={{
-                      toolbar: [
-                        "heading",
-                        "|",
-                        "bold",
-                        "italic",
-                        "link",
-                        "bulletedList",
-                        "numberedList",
-                        "|",
-                        "indent",
-                        "outdent",
-                        "|",
-                        "blockQuote",
-                        "insertTable",
-                        "mediaEmbed",
-                        "undo",
-                        "redo",
-                      ],
                       className: "WriteEditor",
                       placeholder: "내용을 입력하세요.",
+                      extraPlugins: [MyCustomUploadAdapterPlugin],
                     }}
                   />
                 </S.EditorWrapper>
-              </S.FormRow>
+                <S.ErrorMsg>
+                  <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                    {contentError ? "내용을 입력해 주세요." : null}
+                  </FormHelperText>
+                </S.ErrorMsg>
+              </S.FormRowWithError>
 
               <S.FormRow>
                 <S.ButtonGroup>
-                  <S.WriteButton type="submit" variant="contained">
-                    글쓰기
+                  <S.WriteButton
+                    type="submit"
+                    onClick={handleSubmit}
+                    variant="contained"
+                  >
+                    수정
                   </S.WriteButton>
                   <S.ButtonSpace />
                   <S.WriteButton onClick={handleCancel} variant="contained">
@@ -369,6 +551,16 @@ const VolunteerNoticeModify = () => {
               </S.FormRow>
             </form>
           </S.FormWrapper>
+          <Modal
+            open={openModal}
+            onClose={handleModalClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Alert sx={modalStyle} severity="success">
+              작성 완료!
+            </Alert>
+          </Modal>
         </ThemeProvider>
       </S.Container>
     </>
