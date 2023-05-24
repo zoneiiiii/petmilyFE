@@ -19,13 +19,14 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ABOUT } from "../../constants/PageURL";
 import styled from "styled-components";
 import axios from "axios";
+import dayjs from "dayjs";
 
 const pageWidth = "100%";
 // 검색 방식
 const searchModes = {
-  subject_contents: "subject_contents",
+  subject_content: "subject_content",
   subject: "subject",
-  contents: "contents",
+  content: "content",
 };
 const Notice = () => {
   const location = useLocation();
@@ -37,58 +38,65 @@ const Notice = () => {
 
   const navigate = useNavigate();
   const [nowPage, setNowPage] = useState(1);
-  const [searchKeyWord, setSearchKeyWord] = useState("");
+  const [totalPage, setTotalPage] = useState(1);
+  const [searchKeyword, setSearchKeyWord] = useState("");
   const [searchMode, setSearchMode] = useState();
   const [rowsPerPage, setRowsPerPage] = useState(20);
-  const [foundData, setFoundData] = useState(dummy);
-  const [pagedData, setPagedData] = useState(dummy.slice(0, 20));
+  const [foundData, setFoundData] = useState();
+  const [pagedData, setPagedData] = useState();
 
   // 초기 세팅
   useEffect(() => {
     setNowPage(page ? parseInt(page) : 1);
     setSearchKeyWord(search ? search : "");
     setRowsPerPage(limit ? parseInt(limit) : 20);
-    setSearchMode(search_mode ? search_mode : searchModes.subject_contents);
-    search && findDataByMode(search, search_mode);
+    setSearchMode(search_mode ? search_mode : searchModes.subject_content);
+    console.log(page, limit, search, search_mode);
+    getData(parseInt(page), limit, search, search_mode);
+  }, []);
+
+  const getData = (page, limit, search, search_mode, isNavigate = false) => {
+    let queryText = "/notice/list";
+    if (page) {
+      queryText += "?page=" + (page - 1);
+      if (limit) queryText += "&limit=" + limit;
+      if (search)
+        search_mode
+          ? (queryText += "&search=" + search + "&search_mode=" + search_mode)
+          : (queryText += "&search=" + search);
+    }
     axios
-      .get("/notice/list")
+      .get(queryText)
       .then((response) => {
         console.log(response);
+        setPagedData(response.data.content);
+        setNowPage(parseInt(response.data.number) + 1);
+        setTotalPage(parseInt(response.data.totalPages));
+      })
+      .then(() => {
+        if (isNavigate)
+          navigate(
+            ABOUT.NOTICE({
+              page: page,
+              limit: limit,
+              search: search,
+              search_mode: search_mode,
+            })
+          );
       })
       .catch((error) => {
         console.error("axios 오류 : ", error);
       });
-  }, [limit, page, search, search_mode]);
-
-  // 페이지 표시 데이터 갱신
-  useEffect(() => {
-    setPagedData(
-      foundData.slice((nowPage - 1) * rowsPerPage, nowPage * rowsPerPage)
-    );
-  }, [nowPage, rowsPerPage, foundData]);
+  };
 
   const handleChangePage = (event, newPage) => {
-    navigate(
-      ABOUT.NOTICE({
-        page: newPage,
-        limit: limit,
-        search: search,
-        search_mode: search_mode,
-      })
-    );
+    getData(newPage, limit, search, search_mode, true);
   };
 
   // 페이지 표시 데이터수 변경
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value));
-    navigate(
-      ABOUT.NOTICE({
-        page: nowPage,
-        limit: event.target.value,
-        search: search,
-        search_mode: search_mode,
-      })
-    );
+    getData(nowPage, event.target.value, search, search_mode, true);
   };
 
   // 검색 방식 변경
@@ -100,37 +108,11 @@ const Notice = () => {
   // 검색
   const handleSearch = (value) => {
     setNowPage(1);
-    findDataByMode(value, searchMode);
-    navigate(
-      ABOUT.NOTICE({
-        page: 1,
-        limit: rowsPerPage,
-        search: value,
-        search_mode: searchMode,
-      })
-    );
+    // findDataByMode(value, searchMode);
+    console.log(page, limit, search, search_mode);
+    console.log(nowPage, rowsPerPage, searchKeyword, searchMode);
+    getData(1, rowsPerPage, value, searchMode, true);
   };
-
-  // 검색 방식 설정
-  function findDataByMode(value, searchMode) {
-    switch (searchMode) {
-      case searchModes.subject_contents:
-        setFoundData(
-          dummy.filter(
-            (data) =>
-              data.subject.includes(value) || data.contents.includes(value)
-          )
-        );
-        break;
-      case searchModes.subject:
-        setFoundData(dummy.filter((data) => data.subject.includes(value)));
-        break;
-      case searchModes.contents:
-        setFoundData(dummy.filter((data) => data.contents.includes(value)));
-        break;
-      default:
-    }
-  }
 
   return (
     <ThemeProvider theme={CustomTheme}>
@@ -153,19 +135,19 @@ const Notice = () => {
           <Box display={"flex"} justifyContent={"flex-end"}>
             <FormControl sx={FormControlSx} size="small">
               <Select
-                defaultValue={searchModes.subject_contents}
+                defaultValue={searchModes.subject_content}
                 onChange={handleChangeSearchMode}
               >
-                <MenuItem value={searchModes.subject_contents}>
+                <MenuItem value={searchModes.subject_content}>
                   제목 + 내용
                 </MenuItem>
                 <MenuItem value={searchModes.subject}>제목</MenuItem>
-                <MenuItem value={searchModes.contents}>내용</MenuItem>
+                <MenuItem value={searchModes.content}>내용</MenuItem>
               </Select>
             </FormControl>
             <SearchBar
               setValue={setSearchKeyWord}
-              value={searchKeyWord}
+              value={searchKeyword}
               onClick={handleSearch}
             />
           </Box>
@@ -181,49 +163,50 @@ const Notice = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {pagedData.map((notice, index) => {
-              return (
-                <TableRow key={index}>
-                  <TableCell sx={{ ...tdSx, minWidth: "40px" }}>
-                    {notice.no}
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      ...tdSx,
-                      textAlign: "left",
-                      width: "60%",
-                    }}
-                  >
-                    <StyledLink
-                      to={ABOUT.NOTICE_DETAIL({
-                        no: notice.no,
-                        page: nowPage,
-                        limit: rowsPerPage,
-                        search: searchKeyWord,
-                        search_mode: searchMode,
-                      })}
+            {pagedData &&
+              pagedData.map((notice, index) => {
+                return (
+                  <TableRow key={index}>
+                    <TableCell sx={{ ...tdSx, minWidth: "40px" }}>
+                      {notice.num}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        ...tdSx,
+                        textAlign: "left",
+                        width: "60%",
+                      }}
                     >
-                      {notice.subject}
-                    </StyledLink>
-                  </TableCell>
-                  <TableCell
-                    sx={{ ...tdSx, width: "100px", justifySelf: "end" }}
-                  >
-                    {notice.writer}
-                  </TableCell>
-                  <TableCell
-                    sx={{ ...tdSx, width: "50px", justifySelf: "end" }}
-                  >
-                    {notice.count}
-                  </TableCell>
-                  <TableCell
-                    sx={{ ...tdSx, width: "110px", justifySelf: "end" }}
-                  >
-                    {notice.postData}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                      <StyledLink
+                        to={ABOUT.NOTICE_DETAIL({
+                          no: notice.num,
+                          page: nowPage,
+                          limit: rowsPerPage,
+                          search: searchKeyword,
+                          search_mode: searchMode,
+                        })}
+                      >
+                        {notice.subject}
+                      </StyledLink>
+                    </TableCell>
+                    <TableCell
+                      sx={{ ...tdSx, width: "100px", justifySelf: "end" }}
+                    >
+                      {notice.writer}
+                    </TableCell>
+                    <TableCell
+                      sx={{ ...tdSx, width: "50px", justifySelf: "end" }}
+                    >
+                      {notice.count}
+                    </TableCell>
+                    <TableCell
+                      sx={{ ...tdSx, width: "110px", justifySelf: "end" }}
+                    >
+                      {dayjs(notice.postDate).format("YY/MM/DD HH:mm:ss")}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
         <Box
@@ -235,16 +218,26 @@ const Notice = () => {
           <Button
             variant="contained"
             sx={{ mr: 3, width: "100px" }}
-            onClick={() => navigate(ABOUT.NOTICE_WRITE)}
+            onClick={() => {
+              axios
+                .post("/notice/insert")
+                .then((response) => {
+                  console.log(response);
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
+              navigate(ABOUT.NOTICE_WRITE);
+            }}
           >
             글쓰기
           </Button>
         </Box>
         <Box width={pageWidth} display={"flex"} justifyContent={"center"} m={2}>
           <Pagination
-            count={Math.ceil(foundData.length / rowsPerPage)}
-            defaultPage={page ? parseInt(page) : 1}
-            page={page ? parseInt(page) : 1}
+            count={totalPage}
+            defaultPage={nowPage}
+            page={nowPage}
             color="fbd385"
             showFirstButton
             showLastButton
@@ -298,7 +291,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "4월 펫밀리 기부내역",
-    contents: "4월 많은 분들이 기부해주셨습니다!",
+    content: "4월 많은 분들이 기부해주셨습니다!",
     count: 31,
     postDate: "2023-05-05",
   },
@@ -307,7 +300,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "자유게시판 이용 안내",
-    contents: "자유게시판을 다음과 같이 사용해주세요!",
+    content: "자유게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-05-04",
   },
@@ -316,7 +309,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "실종 동물 게시판 이용 안내",
-    contents: "실종 동물 게시판을 다음과 같이 사용해주세요!",
+    content: "실종 동물 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-05-03",
   },
@@ -325,7 +318,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "목격 제보 게시판 이용 안내",
-    contents: "목격 제보 게시판을 다음과 같이 사용해주세요!",
+    content: "목격 제보 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-05-02",
   },
@@ -334,7 +327,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "중고 거래 게시판 이용 안내",
-    contents: "중고 거래 게시판을 다음과 같이 사용해주세요!",
+    content: "중고 거래 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-05-02",
   },
@@ -343,7 +336,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "직거래 사기 주의",
-    contents: "직거래시 사기를 조심하세세요!",
+    content: "직거래시 사기를 조심하세세요!",
     count: 31,
     postDate: "2023-05-01",
   },
@@ -352,7 +345,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "사이트 점검 안내",
-    contents: "오늘 사이트 점검예정입니다!",
+    content: "오늘 사이트 점검예정입니다!",
     count: 31,
     postDate: "2023-05-01",
   },
@@ -361,7 +354,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "카카오페이 결제 오류 안내",
-    contents: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
+    content: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
     count: 31,
     postDate: "2023-05-01",
   },
@@ -370,7 +363,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "공지 몇개 더 올리기기",
-    contents: "내용 채우기 힘들다...!",
+    content: "내용 채우기 힘들다...!",
     count: 31,
     postDate: "2023-05-01",
   },
@@ -379,7 +372,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "아무거나 공지",
-    contents: "이제 뭘 써야 하나...",
+    content: "이제 뭘 써야 하나...",
     count: 31,
     postDate: "2023-05-01",
   },
@@ -388,7 +381,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "복붙 안내",
-    contents: "공지 복붙할거임!",
+    content: "공지 복붙할거임!",
     count: 31,
     postDate: "2023-05-01",
   },
@@ -397,7 +390,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "자유게시판 이용 안내",
-    contents: "자유게시판을 다음과 같이 사용해주세요!",
+    content: "자유게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-05-01",
   },
@@ -406,7 +399,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "실종 동물 게시판 이용 안내",
-    contents: "실종 동물 게시판을 다음과 같이 사용해주세요!",
+    content: "실종 동물 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-30",
   },
@@ -415,7 +408,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "목격 제보 게시판 이용 안내",
-    contents: "목격 제보 게시판을 다음과 같이 사용해주세요!",
+    content: "목격 제보 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-30",
   },
@@ -424,7 +417,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "중고 거래 게시판 이용 안내",
-    contents: "중고 거래 게시판을 다음과 같이 사용해주세요!",
+    content: "중고 거래 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-29",
   },
@@ -433,7 +426,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "직거래 사기 주의",
-    contents: "직거래시 사기를 조심하세세요!",
+    content: "직거래시 사기를 조심하세세요!",
     count: 31,
     postDate: "2023-04-29",
   },
@@ -442,7 +435,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "사이트 점검 안내",
-    contents: "오늘 사이트 점검예정입니다!",
+    content: "오늘 사이트 점검예정입니다!",
     count: 31,
     postDate: "2023-04-28",
   },
@@ -451,7 +444,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "카카오페이 결제 오류 안내",
-    contents: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
+    content: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
     count: 31,
     postDate: "2023-04-28",
   },
@@ -460,7 +453,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "공지 몇개 더 올리기기",
-    contents: "내용 채우기 힘들다...!",
+    content: "내용 채우기 힘들다...!",
     count: 31,
     postDate: "2023-04-27",
   },
@@ -469,7 +462,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "아무거나 공지",
-    contents: "이제 뭘 써야 하나...",
+    content: "이제 뭘 써야 하나...",
     count: 31,
     postDate: "2023-04-27",
   },
@@ -478,7 +471,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "복붙 안내",
-    contents: "공지 복붙할거임!",
+    content: "공지 복붙할거임!",
     count: 31,
     postDate: "2023-04-26",
   },
@@ -487,7 +480,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "자유게시판 이용 안내",
-    contents: "자유게시판을 다음과 같이 사용해주세요!",
+    content: "자유게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-26",
   },
@@ -496,7 +489,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "실종 동물 게시판 이용 안내",
-    contents: "실종 동물 게시판을 다음과 같이 사용해주세요!",
+    content: "실종 동물 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-25",
   },
@@ -505,7 +498,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "목격 제보 게시판 이용 안내",
-    contents: "목격 제보 게시판을 다음과 같이 사용해주세요!",
+    content: "목격 제보 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-25",
   },
@@ -514,7 +507,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "중고 거래 게시판 이용 안내",
-    contents: "중고 거래 게시판을 다음과 같이 사용해주세요!",
+    content: "중고 거래 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-24",
   },
@@ -523,7 +516,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "직거래 사기 주의",
-    contents: "직거래시 사기를 조심하세세요!",
+    content: "직거래시 사기를 조심하세세요!",
     count: 31,
     postDate: "2023-04-24",
   },
@@ -532,7 +525,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "사이트 점검 안내",
-    contents: "오늘 사이트 점검예정입니다!",
+    content: "오늘 사이트 점검예정입니다!",
     count: 31,
     postDate: "2023-04-23",
   },
@@ -541,7 +534,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "카카오페이 결제 오류 안내",
-    contents: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
+    content: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
     count: 31,
     postDate: "2023-04-23",
   },
@@ -550,7 +543,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "공지 몇개 더 올리기기",
-    contents: "내용 채우기 힘들다...!",
+    content: "내용 채우기 힘들다...!",
     count: 31,
     postDate: "2023-04-22",
   },
@@ -559,7 +552,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "아무거나 공지",
-    contents: "이제 뭘 써야 하나...",
+    content: "이제 뭘 써야 하나...",
     count: 31,
     postDate: "2023-04-22",
   },
@@ -568,7 +561,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "복붙 안내",
-    contents: "공지 복붙할거임!",
+    content: "공지 복붙할거임!",
     count: 31,
     postDate: "2023-04-21",
   },
@@ -577,7 +570,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "자유게시판 이용 안내",
-    contents: "자유게시판을 다음과 같이 사용해주세요!",
+    content: "자유게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-21",
   },
@@ -586,7 +579,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "실종 동물 게시판 이용 안내",
-    contents: "실종 동물 게시판을 다음과 같이 사용해주세요!",
+    content: "실종 동물 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-20",
   },
@@ -595,7 +588,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "목격 제보 게시판 이용 안내",
-    contents: "목격 제보 게시판을 다음과 같이 사용해주세요!",
+    content: "목격 제보 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-20",
   },
@@ -604,7 +597,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "중고 거래 게시판 이용 안내",
-    contents: "중고 거래 게시판을 다음과 같이 사용해주세요!",
+    content: "중고 거래 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-19",
   },
@@ -613,7 +606,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "직거래 사기 주의",
-    contents: "직거래시 사기를 조심하세세요!",
+    content: "직거래시 사기를 조심하세세요!",
     count: 31,
     postDate: "2023-04-19",
   },
@@ -622,7 +615,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "사이트 점검 안내",
-    contents: "오늘 사이트 점검예정입니다!",
+    content: "오늘 사이트 점검예정입니다!",
     count: 31,
     postDate: "2023-04-18",
   },
@@ -631,7 +624,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "카카오페이 결제 오류 안내",
-    contents: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
+    content: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
     count: 31,
     postDate: "2023-04-18",
   },
@@ -640,7 +633,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "공지 몇개 더 올리기기",
-    contents: "내용 채우기 힘들다...!",
+    content: "내용 채우기 힘들다...!",
     count: 31,
     postDate: "2023-04-17",
   },
@@ -649,7 +642,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "아무거나 공지",
-    contents: "이제 뭘 써야 하나...",
+    content: "이제 뭘 써야 하나...",
     count: 31,
     postDate: "2023-04-17",
   },
@@ -658,7 +651,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "복붙 안내",
-    contents: "공지 복붙할거임!",
+    content: "공지 복붙할거임!",
     count: 31,
     postDate: "2023-04-16",
   },
@@ -667,7 +660,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "자유게시판 이용 안내",
-    contents: "자유게시판을 다음과 같이 사용해주세요!",
+    content: "자유게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-16",
   },
@@ -676,7 +669,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "실종 동물 게시판 이용 안내",
-    contents: "실종 동물 게시판을 다음과 같이 사용해주세요!",
+    content: "실종 동물 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-15",
   },
@@ -685,7 +678,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "목격 제보 게시판 이용 안내",
-    contents: "목격 제보 게시판을 다음과 같이 사용해주세요!",
+    content: "목격 제보 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-15",
   },
@@ -694,7 +687,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "중고 거래 게시판 이용 안내",
-    contents: "중고 거래 게시판을 다음과 같이 사용해주세요!",
+    content: "중고 거래 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-14",
   },
@@ -703,7 +696,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "직거래 사기 주의",
-    contents: "직거래시 사기를 조심하세세요!",
+    content: "직거래시 사기를 조심하세세요!",
     count: 31,
     postDate: "2023-04-14",
   },
@@ -712,7 +705,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "사이트 점검 안내",
-    contents: "오늘 사이트 점검예정입니다!",
+    content: "오늘 사이트 점검예정입니다!",
     count: 31,
     postDate: "2023-04-13",
   },
@@ -721,7 +714,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "카카오페이 결제 오류 안내",
-    contents: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
+    content: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
     count: 31,
     postDate: "2023-04-13",
   },
@@ -730,7 +723,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "공지 몇개 더 올리기기",
-    contents: "내용 채우기 힘들다...!",
+    content: "내용 채우기 힘들다...!",
     count: 31,
     postDate: "2023-04-12",
   },
@@ -739,7 +732,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "아무거나 공지",
-    contents: "이제 뭘 써야 하나...",
+    content: "이제 뭘 써야 하나...",
     count: 31,
     postDate: "2023-04-12",
   },
@@ -748,7 +741,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "복붙 안내",
-    contents: "공지 복붙할거임!",
+    content: "공지 복붙할거임!",
     count: 31,
     postDate: "2023-04-11",
   },
@@ -757,7 +750,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "자유게시판 이용 안내",
-    contents: "자유게시판을 다음과 같이 사용해주세요!",
+    content: "자유게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-11",
   },
@@ -766,7 +759,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "실종 동물 게시판 이용 안내",
-    contents: "실종 동물 게시판을 다음과 같이 사용해주세요!",
+    content: "실종 동물 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-10",
   },
@@ -775,7 +768,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "목격 제보 게시판 이용 안내",
-    contents: "목격 제보 게시판을 다음과 같이 사용해주세요!",
+    content: "목격 제보 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-10",
   },
@@ -784,7 +777,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "중고 거래 게시판 이용 안내",
-    contents: "중고 거래 게시판을 다음과 같이 사용해주세요!",
+    content: "중고 거래 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-09",
   },
@@ -793,7 +786,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "직거래 사기 주의",
-    contents: "직거래시 사기를 조심하세세요!",
+    content: "직거래시 사기를 조심하세세요!",
     count: 31,
     postDate: "2023-04-09",
   },
@@ -802,7 +795,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "사이트 점검 안내",
-    contents: "오늘 사이트 점검예정입니다!",
+    content: "오늘 사이트 점검예정입니다!",
     count: 31,
     postDate: "2023-04-08",
   },
@@ -811,7 +804,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "카카오페이 결제 오류 안내",
-    contents: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
+    content: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
     count: 31,
     postDate: "2023-04-08",
   },
@@ -820,7 +813,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "공지 몇개 더 올리기기",
-    contents: "내용 채우기 힘들다...!",
+    content: "내용 채우기 힘들다...!",
     count: 31,
     postDate: "2023-04-07",
   },
@@ -829,7 +822,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "아무거나 공지",
-    contents: "이제 뭘 써야 하나...",
+    content: "이제 뭘 써야 하나...",
     count: 31,
     postDate: "2023-04-07",
   },
@@ -838,7 +831,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "복붙 안내",
-    contents: "공지 복붙할거임!",
+    content: "공지 복붙할거임!",
     count: 31,
     postDate: "2023-04-06",
   },
@@ -847,7 +840,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "자유게시판 이용 안내",
-    contents: "자유게시판을 다음과 같이 사용해주세요!",
+    content: "자유게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-06",
   },
@@ -856,7 +849,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "실종 동물 게시판 이용 안내",
-    contents: "실종 동물 게시판을 다음과 같이 사용해주세요!",
+    content: "실종 동물 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-05",
   },
@@ -865,7 +858,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "목격 제보 게시판 이용 안내",
-    contents: "목격 제보 게시판을 다음과 같이 사용해주세요!",
+    content: "목격 제보 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-05",
   },
@@ -874,7 +867,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "중고 거래 게시판 이용 안내",
-    contents: "중고 거래 게시판을 다음과 같이 사용해주세요!",
+    content: "중고 거래 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-04",
   },
@@ -883,7 +876,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "직거래 사기 주의",
-    contents: "직거래시 사기를 조심하세세요!",
+    content: "직거래시 사기를 조심하세세요!",
     count: 31,
     postDate: "2023-04-04",
   },
@@ -892,7 +885,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "사이트 점검 안내",
-    contents: "오늘 사이트 점검예정입니다!",
+    content: "오늘 사이트 점검예정입니다!",
     count: 31,
     postDate: "2023-04-03",
   },
@@ -901,7 +894,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "카카오페이 결제 오류 안내",
-    contents: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
+    content: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
     count: 31,
     postDate: "2023-04-03",
   },
@@ -910,7 +903,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "공지 몇개 더 올리기기",
-    contents: "내용 채우기 힘들다...!",
+    content: "내용 채우기 힘들다...!",
     count: 31,
     postDate: "2023-04-02",
   },
@@ -919,7 +912,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "아무거나 공지",
-    contents: "이제 뭘 써야 하나...",
+    content: "이제 뭘 써야 하나...",
     count: 31,
     postDate: "2023-04-02",
   },
@@ -928,7 +921,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "복붙 안내",
-    contents: "공지 복붙할거임!",
+    content: "공지 복붙할거임!",
     count: 31,
     postDate: "2023-04-01",
   },
@@ -937,7 +930,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "자유게시판 이용 안내",
-    contents: "자유게시판을 다음과 같이 사용해주세요!",
+    content: "자유게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-04-01",
   },
@@ -946,7 +939,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "실종 동물 게시판 이용 안내",
-    contents: "실종 동물 게시판을 다음과 같이 사용해주세요!",
+    content: "실종 동물 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-03-31",
   },
@@ -955,7 +948,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "목격 제보 게시판 이용 안내",
-    contents: "목격 제보 게시판을 다음과 같이 사용해주세요!",
+    content: "목격 제보 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-03-31",
   },
@@ -964,7 +957,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "중고 거래 게시판 이용 안내",
-    contents: "중고 거래 게시판을 다음과 같이 사용해주세요!",
+    content: "중고 거래 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-03-30",
   },
@@ -973,7 +966,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "직거래 사기 주의",
-    contents: "직거래시 사기를 조심하세세요!",
+    content: "직거래시 사기를 조심하세세요!",
     count: 31,
     postDate: "2023-03-30",
   },
@@ -982,7 +975,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "사이트 점검 안내",
-    contents: "오늘 사이트 점검예정입니다!",
+    content: "오늘 사이트 점검예정입니다!",
     count: 31,
     postDate: "2023-03-29",
   },
@@ -991,7 +984,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "카카오페이 결제 오류 안내",
-    contents: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
+    content: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
     count: 31,
     postDate: "2023-03-29",
   },
@@ -1000,7 +993,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "공지 몇개 더 올리기기",
-    contents: "내용 채우기 힘들다...!",
+    content: "내용 채우기 힘들다...!",
     count: 31,
     postDate: "2023-03-28",
   },
@@ -1009,7 +1002,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "아무거나 공지",
-    contents: "이제 뭘 써야 하나...",
+    content: "이제 뭘 써야 하나...",
     count: 31,
     postDate: "2023-03-28",
   },
@@ -1018,7 +1011,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "복붙 안내",
-    contents: "공지 복붙할거임!",
+    content: "공지 복붙할거임!",
     count: 31,
     postDate: "2023-03-27",
   },
@@ -1027,7 +1020,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "자유게시판 이용 안내",
-    contents: "자유게시판을 다음과 같이 사용해주세요!",
+    content: "자유게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-03-27",
   },
@@ -1036,7 +1029,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "실종 동물 게시판 이용 안내",
-    contents: "실종 동물 게시판을 다음과 같이 사용해주세요!",
+    content: "실종 동물 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-03-26",
   },
@@ -1045,7 +1038,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "목격 제보 게시판 이용 안내",
-    contents: "목격 제보 게시판을 다음과 같이 사용해주세요!",
+    content: "목격 제보 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-03-26",
   },
@@ -1054,7 +1047,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "중고 거래 게시판 이용 안내",
-    contents: "중고 거래 게시판을 다음과 같이 사용해주세요!",
+    content: "중고 거래 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-03-25",
   },
@@ -1063,7 +1056,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "직거래 사기 주의",
-    contents: "직거래시 사기를 조심하세세요!",
+    content: "직거래시 사기를 조심하세세요!",
     count: 31,
     postDate: "2023-03-25",
   },
@@ -1072,7 +1065,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "사이트 점검 안내",
-    contents: "오늘 사이트 점검예정입니다!",
+    content: "오늘 사이트 점검예정입니다!",
     count: 31,
     postDate: "2023-03-24",
   },
@@ -1081,7 +1074,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "카카오페이 결제 오류 안내",
-    contents: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
+    content: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
     count: 31,
     postDate: "2023-03-24",
   },
@@ -1090,7 +1083,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "공지 몇개 더 올리기기",
-    contents: "내용 채우기 힘들다...!",
+    content: "내용 채우기 힘들다...!",
     count: 31,
     postDate: "2023-03-23",
   },
@@ -1099,7 +1092,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "아무거나 공지",
-    contents: "이제 뭘 써야 하나...",
+    content: "이제 뭘 써야 하나...",
     count: 31,
     postDate: "2023-03-23",
   },
@@ -1108,7 +1101,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "복붙 안내",
-    contents: "공지 복붙할거임!",
+    content: "공지 복붙할거임!",
     count: 31,
     postDate: "2023-03-22",
   },
@@ -1117,7 +1110,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "자유게시판 이용 안내",
-    contents: "자유게시판을 다음과 같이 사용해주세요!",
+    content: "자유게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-03-22",
   },
@@ -1126,7 +1119,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "실종 동물 게시판 이용 안내",
-    contents: "실종 동물 게시판을 다음과 같이 사용해주세요!",
+    content: "실종 동물 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-03-21",
   },
@@ -1135,7 +1128,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "목격 제보 게시판 이용 안내",
-    contents: "목격 제보 게시판을 다음과 같이 사용해주세요!",
+    content: "목격 제보 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-03-21",
   },
@@ -1144,7 +1137,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "중고 거래 게시판 이용 안내",
-    contents: "중고 거래 게시판을 다음과 같이 사용해주세요!",
+    content: "중고 거래 게시판을 다음과 같이 사용해주세요!",
     count: 31,
     postDate: "2023-03-20",
   },
@@ -1153,7 +1146,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "직거래 사기 주의",
-    contents: "직거래시 사기를 조심하세세요!",
+    content: "직거래시 사기를 조심하세세요!",
     count: 31,
     postDate: "2023-03-20",
   },
@@ -1162,7 +1155,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "사이트 점검 안내",
-    contents: "오늘 사이트 점검예정입니다!",
+    content: "오늘 사이트 점검예정입니다!",
     count: 31,
     postDate: "2023-03-19",
   },
@@ -1171,7 +1164,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "카카오페이 결제 오류 안내",
-    contents: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
+    content: "카카오페이 결제 오류가 일시적으로 발생했습니다!",
     count: 31,
     postDate: "2023-03-19",
   },
@@ -1180,7 +1173,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "공지 몇개 더 올리기기",
-    contents: "내용 채우기 힘들다...!",
+    content: "내용 채우기 힘들다...!",
     count: 31,
     postDate: "2023-03-18",
   },
@@ -1189,7 +1182,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "아무거나 공지",
-    contents: "이제 뭘 써야 하나...",
+    content: "이제 뭘 써야 하나...",
     count: 31,
     postDate: "2023-03-18",
   },
@@ -1198,7 +1191,7 @@ const dummy = [
     memberNo: 1,
     category: "notice",
     subject: "복붙 안내",
-    contents: "공지 복붙할거임!",
+    content: "공지 복붙할거임!",
     count: 31,
     postDate: "2023-03-17",
   },
@@ -1210,7 +1203,7 @@ const dummy2 = [
     writer: "펫밀리펫밀리",
     count: 31,
     postData: "2023-05-05",
-    contents: "유기동물을 열심히 구조했습니다!",
+    content: "유기동물을 열심히 구조했습니다!",
   },
   {
     no: "002",
@@ -1218,7 +1211,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 32,
     postData: "2023-04-30",
-    contents: "유기동물을 열심히 산책했습니다!",
+    content: "유기동물을 열심히 산책했습니다!",
   },
   {
     no: "003",
@@ -1226,7 +1219,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 33,
     postData: "2023-04-29",
-    contents: "유기동물을 열심히 밥줬습니다!",
+    content: "유기동물을 열심히 밥줬습니다!",
   },
   {
     no: "004",
@@ -1234,7 +1227,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 34,
     postData: "2023-04-23",
-    contents: "유기동물을 열심히 케어했습니다!",
+    content: "유기동물을 열심히 케어했습니다!",
   },
   {
     no: "005",
@@ -1242,7 +1235,7 @@ const dummy2 = [
     writer: "산책왕",
     count: 35,
     postData: "2023-04-22",
-    contents: "유기동물을 열심히 훈련했습니다!",
+    content: "유기동물을 열심히 훈련했습니다!",
   },
   {
     no: "006",
@@ -1250,7 +1243,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 36,
     postData: "2023-04-16",
-    contents: "유기동물을 열심히 보살폈습니다!",
+    content: "유기동물을 열심히 보살폈습니다!",
   },
   {
     no: "007",
@@ -1258,7 +1251,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 37,
     postData: "2023-04-15",
-    contents: "유기동물을 열심히 치료했습니다!",
+    content: "유기동물을 열심히 치료했습니다!",
   },
   {
     no: "008",
@@ -1266,7 +1259,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 38,
     postData: "2023-04-09",
-    contents: "유기동물을 열심히 분양했습니다!",
+    content: "유기동물을 열심히 분양했습니다!",
   },
   {
     no: "009",
@@ -1274,7 +1267,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 39,
     postData: "2023-04-08",
-    contents: "유기동물을 열심히 놀아주었습니다!",
+    content: "유기동물을 열심히 놀아주었습니다!",
   },
   {
     no: "010",
@@ -1282,7 +1275,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 40,
     postData: "2023-04-02",
-    contents: "유기동물을 열심히 챙겨줬습니다!",
+    content: "유기동물을 열심히 챙겨줬습니다!",
   },
   {
     no: "011",
@@ -1290,7 +1283,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 31,
     postData: "2023-05-05",
-    contents: "유기동물을 열심히 구조했습니다!",
+    content: "유기동물을 열심히 구조했습니다!",
   },
   {
     no: "012",
@@ -1298,7 +1291,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 32,
     postData: "2023-04-30",
-    contents: "유기동물을 열심히 산책했습니다!",
+    content: "유기동물을 열심히 산책했습니다!",
   },
   {
     no: "013",
@@ -1306,7 +1299,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 33,
     postData: "2023-04-29",
-    contents: "유기동물을 열심히 밥줬습니다!",
+    content: "유기동물을 열심히 밥줬습니다!",
   },
   {
     no: "014",
@@ -1314,7 +1307,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 34,
     postData: "2023-04-23",
-    contents: "유기동물을 열심히 케어했습니다!",
+    content: "유기동물을 열심히 케어했습니다!",
   },
   {
     no: "015",
@@ -1322,7 +1315,7 @@ const dummy2 = [
     writer: "산책왕",
     count: 35,
     postData: "2023-04-22",
-    contents: "유기동물을 열심히 훈련했습니다!",
+    content: "유기동물을 열심히 훈련했습니다!",
   },
   {
     no: "016",
@@ -1330,7 +1323,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 36,
     postData: "2023-04-16",
-    contents: "유기동물을 열심히 보살폈습니다!",
+    content: "유기동물을 열심히 보살폈습니다!",
   },
   {
     no: "017",
@@ -1338,7 +1331,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 37,
     postData: "2023-04-15",
-    contents: "유기동물을 열심히 치료했습니다!",
+    content: "유기동물을 열심히 치료했습니다!",
   },
   {
     no: "018",
@@ -1346,7 +1339,7 @@ const dummy2 = [
     writer: "산책왕",
     count: 38,
     postData: "2023-04-09",
-    contents: "유기동물을 열심히 분양했습니다!",
+    content: "유기동물을 열심히 분양했습니다!",
   },
   {
     no: "019",
@@ -1354,7 +1347,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 39,
     postData: "2023-04-08",
-    contents: "유기동물을 열심히 놀아주었습니다!",
+    content: "유기동물을 열심히 놀아주었습니다!",
   },
   {
     no: "020",
@@ -1362,7 +1355,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 40,
     postData: "2023-04-02",
-    contents: "유기동물을 열심히 챙겨줬습니다!",
+    content: "유기동물을 열심히 챙겨줬습니다!",
   },
   {
     no: "021",
@@ -1370,7 +1363,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 31,
     postData: "2023-05-05",
-    contents: "유기동물을 열심히 구조했습니다!",
+    content: "유기동물을 열심히 구조했습니다!",
   },
   {
     no: "022",
@@ -1378,7 +1371,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 32,
     postData: "2023-04-30",
-    contents: "유기동물을 열심히 산책했습니다!",
+    content: "유기동물을 열심히 산책했습니다!",
   },
   {
     no: "023",
@@ -1386,7 +1379,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 33,
     postData: "2023-04-29",
-    contents: "유기동물을 열심히 밥줬습니다!",
+    content: "유기동물을 열심히 밥줬습니다!",
   },
   {
     no: "024",
@@ -1394,7 +1387,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 34,
     postData: "2023-04-23",
-    contents: "유기동물을 열심히 케어했습니다!",
+    content: "유기동물을 열심히 케어했습니다!",
   },
   {
     no: "025",
@@ -1402,7 +1395,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 35,
     postData: "2023-04-22",
-    contents: "유기동물을 열심히 훈련했습니다!",
+    content: "유기동물을 열심히 훈련했습니다!",
   },
   {
     no: "026",
@@ -1410,7 +1403,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 36,
     postData: "2023-04-16",
-    contents: "유기동물을 열심히 보살폈습니다!",
+    content: "유기동물을 열심히 보살폈습니다!",
   },
   {
     no: "027",
@@ -1418,7 +1411,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 37,
     postData: "2023-04-15",
-    contents: "유기동물을 열심히 치료했습니다!",
+    content: "유기동물을 열심히 치료했습니다!",
   },
   {
     no: "028",
@@ -1426,7 +1419,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 38,
     postData: "2023-04-09",
-    contents: "유기동물을 열심히 분양했습니다!",
+    content: "유기동물을 열심히 분양했습니다!",
   },
   {
     no: "029",
@@ -1434,7 +1427,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 39,
     postData: "2023-04-08",
-    contents: "유기동물을 열심히 놀아주었습니다!",
+    content: "유기동물을 열심히 놀아주었습니다!",
   },
   {
     no: "030",
@@ -1442,7 +1435,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 40,
     postData: "2023-04-02",
-    contents: "유기동물을 열심히 챙겨줬습니다!",
+    content: "유기동물을 열심히 챙겨줬습니다!",
   },
   {
     no: "031",
@@ -1450,7 +1443,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 31,
     postData: "2023-05-05",
-    contents: "유기동물을 열심히 구조했습니다!",
+    content: "유기동물을 열심히 구조했습니다!",
   },
   {
     no: "032",
@@ -1458,7 +1451,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 32,
     postData: "2023-04-30",
-    contents: "유기동물을 열심히 산책했습니다!",
+    content: "유기동물을 열심히 산책했습니다!",
   },
   {
     no: "033",
@@ -1466,7 +1459,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 33,
     postData: "2023-04-29",
-    contents: "유기동물을 열심히 밥줬습니다!",
+    content: "유기동물을 열심히 밥줬습니다!",
   },
   {
     no: "034",
@@ -1474,7 +1467,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 34,
     postData: "2023-04-23",
-    contents: "유기동물을 열심히 케어했습니다!",
+    content: "유기동물을 열심히 케어했습니다!",
   },
   {
     no: "035",
@@ -1482,7 +1475,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 35,
     postData: "2023-04-22",
-    contents: "유기동물을 열심히 훈련했습니다!",
+    content: "유기동물을 열심히 훈련했습니다!",
   },
   {
     no: "036",
@@ -1490,7 +1483,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 36,
     postData: "2023-04-16",
-    contents: "유기동물을 열심히 보살폈습니다!",
+    content: "유기동물을 열심히 보살폈습니다!",
   },
   {
     no: "037",
@@ -1498,7 +1491,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 37,
     postData: "2023-04-15",
-    contents: "유기동물을 열심히 치료했습니다!",
+    content: "유기동물을 열심히 치료했습니다!",
   },
   {
     no: "038",
@@ -1506,7 +1499,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 38,
     postData: "2023-04-09",
-    contents: "유기동물을 열심히 분양했습니다!",
+    content: "유기동물을 열심히 분양했습니다!",
   },
   {
     no: "039",
@@ -1514,7 +1507,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 39,
     postData: "2023-04-08",
-    contents: "유기동물을 열심히 놀아주었습니다!",
+    content: "유기동물을 열심히 놀아주었습니다!",
   },
   {
     no: "040",
@@ -1522,7 +1515,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 40,
     postData: "2023-04-02",
-    contents: "유기동물을 열심히 챙겨줬습니다!",
+    content: "유기동물을 열심히 챙겨줬습니다!",
   },
   {
     no: "041",
@@ -1530,7 +1523,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 31,
     postData: "2023-05-05",
-    contents: "유기동물을 열심히 구조했습니다!",
+    content: "유기동물을 열심히 구조했습니다!",
   },
   {
     no: "042",
@@ -1538,7 +1531,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 32,
     postData: "2023-04-30",
-    contents: "유기동물을 열심히 산책했습니다!",
+    content: "유기동물을 열심히 산책했습니다!",
   },
   {
     no: "043",
@@ -1546,7 +1539,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 33,
     postData: "2023-04-29",
-    contents: "유기동물을 열심히 밥줬습니다!",
+    content: "유기동물을 열심히 밥줬습니다!",
   },
   {
     no: "044",
@@ -1554,7 +1547,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 34,
     postData: "2023-04-23",
-    contents: "유기동물을 열심히 케어했습니다!",
+    content: "유기동물을 열심히 케어했습니다!",
   },
   {
     no: "045",
@@ -1562,7 +1555,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 35,
     postData: "2023-04-22",
-    contents: "유기동물을 열심히 훈련했습니다!",
+    content: "유기동물을 열심히 훈련했습니다!",
   },
   {
     no: "046",
@@ -1570,7 +1563,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 36,
     postData: "2023-04-16",
-    contents: "유기동물을 열심히 보살폈습니다!",
+    content: "유기동물을 열심히 보살폈습니다!",
   },
   {
     no: "047",
@@ -1578,7 +1571,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 37,
     postData: "2023-04-15",
-    contents: "유기동물을 열심히 치료했습니다!",
+    content: "유기동물을 열심히 치료했습니다!",
   },
   {
     no: "048",
@@ -1586,7 +1579,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 38,
     postData: "2023-04-09",
-    contents: "유기동물을 열심히 분양했습니다!",
+    content: "유기동물을 열심히 분양했습니다!",
   },
   {
     no: "049",
@@ -1594,7 +1587,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 39,
     postData: "2023-04-08",
-    contents: "유기동물을 열심히 놀아주었습니다!",
+    content: "유기동물을 열심히 놀아주었습니다!",
   },
   {
     no: "050",
@@ -1602,7 +1595,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 40,
     postData: "2023-04-02",
-    contents: "유기동물을 열심히 챙겨줬습니다!",
+    content: "유기동물을 열심히 챙겨줬습니다!",
   },
   {
     no: "051",
@@ -1610,7 +1603,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 31,
     postData: "2023-05-05",
-    contents: "유기동물을 열심히 구조했습니다!",
+    content: "유기동물을 열심히 구조했습니다!",
   },
   {
     no: "052",
@@ -1618,7 +1611,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 32,
     postData: "2023-04-30",
-    contents: "유기동물을 열심히 산책했습니다!",
+    content: "유기동물을 열심히 산책했습니다!",
   },
   {
     no: "053",
@@ -1626,7 +1619,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 33,
     postData: "2023-04-29",
-    contents: "유기동물을 열심히 밥줬습니다!",
+    content: "유기동물을 열심히 밥줬습니다!",
   },
   {
     no: "054",
@@ -1634,7 +1627,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 34,
     postData: "2023-04-23",
-    contents: "유기동물을 열심히 케어했습니다!",
+    content: "유기동물을 열심히 케어했습니다!",
   },
   {
     no: "055",
@@ -1642,7 +1635,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 35,
     postData: "2023-04-22",
-    contents: "유기동물을 열심히 훈련했습니다!",
+    content: "유기동물을 열심히 훈련했습니다!",
   },
   {
     no: "056",
@@ -1650,7 +1643,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 36,
     postData: "2023-04-16",
-    contents: "유기동물을 열심히 보살폈습니다!",
+    content: "유기동물을 열심히 보살폈습니다!",
   },
   {
     no: "057",
@@ -1658,7 +1651,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 37,
     postData: "2023-04-15",
-    contents: "유기동물을 열심히 치료했습니다!",
+    content: "유기동물을 열심히 치료했습니다!",
   },
   {
     no: "058",
@@ -1666,7 +1659,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 38,
     postData: "2023-04-09",
-    contents: "유기동물을 열심히 분양했습니다!",
+    content: "유기동물을 열심히 분양했습니다!",
   },
   {
     no: "059",
@@ -1674,7 +1667,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 39,
     postData: "2023-04-08",
-    contents: "유기동물을 열심히 놀아주었습니다!",
+    content: "유기동물을 열심히 놀아주었습니다!",
   },
   {
     no: "060",
@@ -1682,7 +1675,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 40,
     postData: "2023-04-02",
-    contents: "유기동물을 열심히 챙겨줬습니다!",
+    content: "유기동물을 열심히 챙겨줬습니다!",
   },
   {
     no: "061",
@@ -1690,7 +1683,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 31,
     postData: "2023-05-05",
-    contents: "유기동물을 열심히 구조했습니다!",
+    content: "유기동물을 열심히 구조했습니다!",
   },
   {
     no: "062",
@@ -1698,7 +1691,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 32,
     postData: "2023-04-30",
-    contents: "유기동물을 열심히 산책했습니다!",
+    content: "유기동물을 열심히 산책했습니다!",
   },
   {
     no: "063",
@@ -1706,7 +1699,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 33,
     postData: "2023-04-29",
-    contents: "유기동물을 열심히 밥줬습니다!",
+    content: "유기동물을 열심히 밥줬습니다!",
   },
   {
     no: "064",
@@ -1714,7 +1707,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 34,
     postData: "2023-04-23",
-    contents: "유기동물을 열심히 케어했습니다!",
+    content: "유기동물을 열심히 케어했습니다!",
   },
   {
     no: "065",
@@ -1722,7 +1715,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 35,
     postData: "2023-04-22",
-    contents: "유기동물을 열심히 훈련했습니다!",
+    content: "유기동물을 열심히 훈련했습니다!",
   },
   {
     no: "066",
@@ -1730,7 +1723,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 36,
     postData: "2023-04-16",
-    contents: "유기동물을 열심히 보살폈습니다!",
+    content: "유기동물을 열심히 보살폈습니다!",
   },
   {
     no: "067",
@@ -1738,7 +1731,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 37,
     postData: "2023-04-15",
-    contents: "유기동물을 열심히 치료했습니다!",
+    content: "유기동물을 열심히 치료했습니다!",
   },
   {
     no: "068",
@@ -1746,7 +1739,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 38,
     postData: "2023-04-09",
-    contents: "유기동물을 열심히 분양했습니다!",
+    content: "유기동물을 열심히 분양했습니다!",
   },
   {
     no: "069",
@@ -1754,7 +1747,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 39,
     postData: "2023-04-08",
-    contents: "유기동물을 열심히 놀아주었습니다!",
+    content: "유기동물을 열심히 놀아주었습니다!",
   },
   {
     no: "070",
@@ -1762,7 +1755,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 40,
     postData: "2023-04-02",
-    contents: "유기동물을 열심히 챙겨줬습니다!",
+    content: "유기동물을 열심히 챙겨줬습니다!",
   },
   {
     no: "071",
@@ -1770,7 +1763,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 31,
     postData: "2023-05-05",
-    contents: "유기동물을 열심히 구조했습니다!",
+    content: "유기동물을 열심히 구조했습니다!",
   },
   {
     no: "072",
@@ -1778,7 +1771,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 32,
     postData: "2023-04-30",
-    contents: "유기동물을 열심히 산책했습니다!",
+    content: "유기동물을 열심히 산책했습니다!",
   },
   {
     no: "073",
@@ -1786,7 +1779,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 33,
     postData: "2023-04-29",
-    contents: "유기동물을 열심히 밥줬습니다!",
+    content: "유기동물을 열심히 밥줬습니다!",
   },
   {
     no: "074",
@@ -1794,7 +1787,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 34,
     postData: "2023-04-23",
-    contents: "유기동물을 열심히 케어했습니다!",
+    content: "유기동물을 열심히 케어했습니다!",
   },
   {
     no: "075",
@@ -1802,7 +1795,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 35,
     postData: "2023-04-22",
-    contents: "유기동물을 열심히 훈련했습니다!",
+    content: "유기동물을 열심히 훈련했습니다!",
   },
   {
     no: "076",
@@ -1810,7 +1803,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 36,
     postData: "2023-04-16",
-    contents: "유기동물을 열심히 보살폈습니다!",
+    content: "유기동물을 열심히 보살폈습니다!",
   },
   {
     no: "077",
@@ -1818,7 +1811,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 37,
     postData: "2023-04-15",
-    contents: "유기동물을 열심히 치료했습니다!",
+    content: "유기동물을 열심히 치료했습니다!",
   },
   {
     no: "078",
@@ -1826,7 +1819,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 38,
     postData: "2023-04-09",
-    contents: "유기동물을 열심히 분양했습니다!",
+    content: "유기동물을 열심히 분양했습니다!",
   },
   {
     no: "079",
@@ -1834,7 +1827,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 39,
     postData: "2023-04-08",
-    contents: "유기동물을 열심히 놀아주었습니다!",
+    content: "유기동물을 열심히 놀아주었습니다!",
   },
   {
     no: "080",
@@ -1842,7 +1835,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 40,
     postData: "2023-04-02",
-    contents: "유기동물을 열심히 챙겨줬습니다!",
+    content: "유기동물을 열심히 챙겨줬습니다!",
   },
   {
     no: "081",
@@ -1850,7 +1843,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 31,
     postData: "2023-05-05",
-    contents: "유기동물을 열심히 구조했습니다!",
+    content: "유기동물을 열심히 구조했습니다!",
   },
   {
     no: "082",
@@ -1858,7 +1851,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 32,
     postData: "2023-04-30",
-    contents: "유기동물을 열심히 산책했습니다!",
+    content: "유기동물을 열심히 산책했습니다!",
   },
   {
     no: "083",
@@ -1866,7 +1859,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 33,
     postData: "2023-04-29",
-    contents: "유기동물을 열심히 밥줬습니다!",
+    content: "유기동물을 열심히 밥줬습니다!",
   },
   {
     no: "084",
@@ -1874,7 +1867,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 34,
     postData: "2023-04-23",
-    contents: "유기동물을 열심히 케어했습니다!",
+    content: "유기동물을 열심히 케어했습니다!",
   },
   {
     no: "085",
@@ -1882,7 +1875,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 35,
     postData: "2023-04-22",
-    contents: "유기동물을 열심히 훈련했습니다!",
+    content: "유기동물을 열심히 훈련했습니다!",
   },
   {
     no: "086",
@@ -1890,7 +1883,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 36,
     postData: "2023-04-16",
-    contents: "유기동물을 열심히 보살폈습니다!",
+    content: "유기동물을 열심히 보살폈습니다!",
   },
   {
     no: "087",
@@ -1898,7 +1891,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 37,
     postData: "2023-04-15",
-    contents: "유기동물을 열심히 치료했습니다!",
+    content: "유기동물을 열심히 치료했습니다!",
   },
   {
     no: "088",
@@ -1906,7 +1899,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 38,
     postData: "2023-04-09",
-    contents: "유기동물을 열심히 분양했습니다!",
+    content: "유기동물을 열심히 분양했습니다!",
   },
   {
     no: "089",
@@ -1914,7 +1907,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 39,
     postData: "2023-04-08",
-    contents: "유기동물을 열심히 놀아주었습니다!",
+    content: "유기동물을 열심히 놀아주었습니다!",
   },
   {
     no: "090",
@@ -1922,7 +1915,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 40,
     postData: "2023-04-02",
-    contents: "유기동물을 열심히 챙겨줬습니다!",
+    content: "유기동물을 열심히 챙겨줬습니다!",
   },
   {
     no: "091",
@@ -1930,7 +1923,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 31,
     postData: "2023-05-05",
-    contents: "유기동물을 열심히 구조했습니다!",
+    content: "유기동물을 열심히 구조했습니다!",
   },
   {
     no: "092",
@@ -1938,7 +1931,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 32,
     postData: "2023-04-30",
-    contents: "유기동물을 열심히 산책했습니다!",
+    content: "유기동물을 열심히 산책했습니다!",
   },
   {
     no: "093",
@@ -1946,7 +1939,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 33,
     postData: "2023-04-29",
-    contents: "유기동물을 열심히 밥줬습니다!",
+    content: "유기동물을 열심히 밥줬습니다!",
   },
   {
     no: "094",
@@ -1954,7 +1947,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 34,
     postData: "2023-04-23",
-    contents: "유기동물을 열심히 케어했습니다!",
+    content: "유기동물을 열심히 케어했습니다!",
   },
   {
     no: "095",
@@ -1962,7 +1955,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 35,
     postData: "2023-04-22",
-    contents: "유기동물을 열심히 훈련했습니다!",
+    content: "유기동물을 열심히 훈련했습니다!",
   },
   {
     no: "096",
@@ -1970,7 +1963,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 36,
     postData: "2023-04-16",
-    contents: "유기동물을 열심히 보살폈습니다!",
+    content: "유기동물을 열심히 보살폈습니다!",
   },
   {
     no: "097",
@@ -1978,7 +1971,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 37,
     postData: "2023-04-15",
-    contents: "유기동물을 열심히 치료했습니다!",
+    content: "유기동물을 열심히 치료했습니다!",
   },
   {
     no: "098",
@@ -1986,7 +1979,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 38,
     postData: "2023-04-09",
-    contents: "유기동물을 열심히 분양했습니다!",
+    content: "유기동물을 열심히 분양했습니다!",
   },
   {
     no: "099",
@@ -1994,7 +1987,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 39,
     postData: "2023-04-08",
-    contents: "유기동물을 열심히 놀아주었습니다!",
+    content: "유기동물을 열심히 놀아주었습니다!",
   },
   {
     no: "100",
@@ -2002,7 +1995,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 40,
     postData: "2023-04-02",
-    contents: "유기동물을 열심히 챙겨줬습니다!",
+    content: "유기동물을 열심히 챙겨줬습니다!",
   },
   {
     no: "101",
@@ -2010,7 +2003,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 31,
     postData: "2023-05-05",
-    contents: "유기동물을 열심히 구조했습니다!",
+    content: "유기동물을 열심히 구조했습니다!",
   },
   {
     no: "102",
@@ -2018,7 +2011,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 32,
     postData: "2023-04-30",
-    contents: "유기동물을 열심히 산책했습니다!",
+    content: "유기동물을 열심히 산책했습니다!",
   },
   {
     no: "103",
@@ -2026,7 +2019,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 33,
     postData: "2023-04-29",
-    contents: "유기동물을 열심히 밥줬습니다!",
+    content: "유기동물을 열심히 밥줬습니다!",
   },
   {
     no: "104",
@@ -2034,7 +2027,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 34,
     postData: "2023-04-23",
-    contents: "유기동물을 열심히 케어했습니다!",
+    content: "유기동물을 열심히 케어했습니다!",
   },
   {
     no: "105",
@@ -2042,7 +2035,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 35,
     postData: "2023-04-22",
-    contents: "유기동물을 열심히 훈련했습니다!",
+    content: "유기동물을 열심히 훈련했습니다!",
   },
   {
     no: "106",
@@ -2050,7 +2043,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 36,
     postData: "2023-04-16",
-    contents: "유기동물을 열심히 보살폈습니다!",
+    content: "유기동물을 열심히 보살폈습니다!",
   },
   {
     no: "107",
@@ -2058,7 +2051,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 37,
     postData: "2023-04-15",
-    contents: "유기동물을 열심히 치료했습니다!",
+    content: "유기동물을 열심히 치료했습니다!",
   },
   {
     no: "108",
@@ -2066,7 +2059,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 38,
     postData: "2023-04-09",
-    contents: "유기동물을 열심히 분양했습니다!",
+    content: "유기동물을 열심히 분양했습니다!",
   },
   {
     no: "109",
@@ -2074,7 +2067,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 39,
     postData: "2023-04-08",
-    contents: "유기동물을 열심히 놀아주었습니다!",
+    content: "유기동물을 열심히 놀아주었습니다!",
   },
   {
     no: "110",
@@ -2082,7 +2075,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 40,
     postData: "2023-04-02",
-    contents: "유기동물을 열심히 챙겨줬습니다!",
+    content: "유기동물을 열심히 챙겨줬습니다!",
   },
   {
     no: "111",
@@ -2090,7 +2083,7 @@ const dummy2 = [
     writer: "펫밀리",
     count: 41,
     postData: "2023-04-02",
-    contents: "유기동물을 열심히 챙겨줬습니다!",
+    content: "유기동물을 열심히 챙겨줬습니다!",
   },
 ];
 

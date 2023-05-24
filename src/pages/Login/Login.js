@@ -217,7 +217,7 @@ function Login() {
               style: { color: "gray", fontSize: "20px", fontWeight: "border" },
             }}
             InputProps={{
-              disableUnderline: true,
+              disableunderline: "true",
             }}
             onChange={idChange}
             ref={idRef}
@@ -238,7 +238,7 @@ function Login() {
               style: { color: "gray", fontSize: "20px", fontWeight: "border" },
             }}
             InputProps={{
-              disableUnderline: true,
+              disableunderline: "true",
             }}
             onChange={pwChange}
             ref={pwRef}

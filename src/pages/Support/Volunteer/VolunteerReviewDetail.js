@@ -119,7 +119,7 @@ const VolunteerReviewDetail = () => {
           <h2>댓글 </h2>
           <S.horizon />
           <div style={{ width: "100%" }}>
-            <Comment />
+            <Comment boardId="volunteerReview" boardNum={id} />
           </div>
         </S.DetailBottom>
       </ThemeProvider>

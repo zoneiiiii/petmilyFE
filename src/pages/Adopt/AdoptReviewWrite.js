@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useLayoutEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import * as S from "../Support/Volunteer/VolunteerNoticeWrite.styled";
 import { TextField, Modal, Alert, ThemeProvider } from "@mui/material";
 import { ADOPT } from "../../constants/PageURL";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
+import axios from "axios";
+import { MyCustomUploadAdapterPlugin } from "../../components/common/UploadAdapter";
 
 const modalStyle = {
   position: "absolute",
@@ -19,12 +21,33 @@ const modalStyle = {
 };
 
 const AdoptReviewWrite = () => {
+  const location = useLocation();
+  const [formAble, setFormAble] = useState(false);
+  const [open, setOpen] = useState(false);
+  const handleClose = () => setOpen(false);
+  const [isModify, setIsModify] = useState(false);
+  const currentDate = new Date();
+  const isoCurrentDate = new Date(
+    currentDate.getTime() + 9 * 60 * 60 * 1000
+  ).toISOString();
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [file, setFile] = useState(null);
+  const modify = location.state;
+  useLayoutEffect(() => {
+    modifyCheck();
+    console.log(modify.modify);
+  }, []);
+  const modifyCheck = () => {
+    if (modify.modify === "modify") {
+      setIsModify(true);
+      console.log("mo", modify);
+    } else {
+      setIsModify(false);
+    }
+  };
   // 사진 미리보기
-
   const [previewUrl, setPreviewUrl] = useState(null);
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -37,31 +60,69 @@ const AdoptReviewWrite = () => {
       reader.readAsDataURL(selectedFile);
     }
   };
-  const [formAble, setFormAble] = useState(false);
-  const [open, setOpen] = useState(false);
-  const handleClose = () => setOpen(false);
-  const handleOpen = () => {
+
+  // const handleOpen = () => {};
+  const uploadImage = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await axios.post("/upload", formData);
+      const imageUrl = response.data;
+      // setUploadedImageUrl(imageUrl);
+      return imageUrl;
+    } catch (error) {
+      console.error("이미지 업로드 실패 : ", error);
+      return null;
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (!title || !content) {
       setFormAble(false);
       setOpen(true);
     } else {
+      let imageUrl = "https://via.placeholder.com/150";
+
+      if (file) {
+        const uploadedUrl = await uploadImage(file);
+        if (uploadedUrl) {
+          imageUrl = uploadedUrl;
+        }
+      }
+      console.log(title, content, " dddd");
+      axios
+        .post("/board/review/insert", {
+          memberNum: "1",
+          boardId: "review",
+          reviewSubject: title,
+          reviewContent: content,
+          imgThumbnail: imageUrl,
+          reviewDate: isoCurrentDate,
+        })
+        .then(() => {
+          alert("등록완료");
+          document.location.href = ADOPT.REVIEW;
+        });
       setFormAble(true);
       setOpen(true);
-      document.location.href = ADOPT.REVIEW;
     }
-  };
-  const handleSubmit = (e) => {
-    e.preventDefault();
     // 전송 로직 구현
   };
 
   const handleCancel = () => {
     navigate(ADOPT.REVIEW);
   };
+
   return (
     <>
       <S.TitleContainer>
-        <S.Title>게시글 작성</S.Title>
+        {isModify ? (
+          <S.Title>게시글 수정</S.Title>
+        ) : (
+          <S.Title>게시글 작성</S.Title>
+        )}
       </S.TitleContainer>
       <S.Container>
         <ThemeProvider theme={CustomTheme}>
@@ -109,26 +170,9 @@ const AdoptReviewWrite = () => {
                       setContent(data);
                     }}
                     config={{
-                      toolbar: [
-                        "heading",
-                        "|",
-                        "bold",
-                        "italic",
-                        "link",
-                        "bulletedList",
-                        "numberedList",
-                        "|",
-                        "indent",
-                        "outdent",
-                        "|",
-                        "blockQuote",
-                        "insertTable",
-                        "mediaEmbed",
-                        "undo",
-                        "redo",
-                      ],
                       className: "WriteEditor",
                       placeholder: "내용을 입력하세요.",
+                      extraPlugins: [MyCustomUploadAdapterPlugin],
                     }}
                   />
                 </S.EditorWrapper>
@@ -136,13 +180,24 @@ const AdoptReviewWrite = () => {
 
               <S.FormRow>
                 <S.ButtonGroup>
-                  <S.WriteButton
-                    type="submit"
-                    variant="contained"
-                    onClick={handleOpen}
-                  >
-                    글쓰기
-                  </S.WriteButton>
+                  {isModify ? (
+                    <S.WriteButton
+                      type="submit"
+                      variant="contained"
+                      onClick={handleSubmit}
+                    >
+                      수정
+                    </S.WriteButton>
+                  ) : (
+                    <S.WriteButton
+                      type="submit"
+                      variant="contained"
+                      onClick={handleSubmit}
+                    >
+                      글쓰기
+                    </S.WriteButton>
+                  )}
+
                   <S.ButtonSpace />
                   <S.WriteButton onClick={handleCancel} variant="contained">
                     취소

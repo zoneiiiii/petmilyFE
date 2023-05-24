@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import {
   Card,
   Grid,
@@ -12,106 +12,15 @@ import CustomButton from "../Login/CustomButton";
 import { Link } from "react-router-dom";
 import { ADOPT } from "../../constants/PageURL";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
-
-const dummy = [
-  {
-    id: 1,
-    title: "밍키 잘 지내고 있어요! 밍키 잘 지내고 있어요!밍키 밍키 밍키 밍키",
-    writter: "밍키맘",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 2,
-    title: "펫밀리 입양후기",
-    writter: "똘이엄마",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 3,
-    title: "입양 3개월 후 남기는 후기",
-    writter: "별맘",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 4,
-    title: "아지 잘 지냅니다 :)",
-    writter: "아지아지",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 5,
-    title: "새 가족이 생겼어요!",
-    writter: "패밀리",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 6,
-    title: "똘이가 어느새 3살이 됐어요.",
-    writter: "똘이엄마",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 7,
-    title: "이름 같이 지어주세요!",
-    writter: "초보엄마",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 8,
-    title: "입양신청은 펫밀리에서!",
-    writter: "나는유저",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 9,
-    title: "초보 반려인의 후기",
-    writter: "이기자",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 10,
-    title: "서울보호소,입양 후기",
-    writter: "삼기자",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 11,
-    title: "건강해진 모모 봐주세요!",
-    writter: "사기자",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 12,
-    title: "골든 리트리버 입양했습니다.",
-    writter: "오기자",
-    date: "2023.05.04",
-    count: 34,
-  },
-  {
-    id: 13,
-    title: "잘 지내고 있습니다.",
-    writter: "ㅎㅎ",
-    date: "2023.05.04",
-    count: 34,
-  },
-];
+import axios from "axios";
+import { red } from "@mui/material/colors";
 
 const AdoptReview = () => {
   const [data, setData] = useState([]); // DB 데이터 가져오는 변수
   const [page, setPage] = useState(1); // 현재 페이지 관리하는 상태 변수
   const itemsPerPage = 12; // 한페이지에 보여줄 페이지의 개수
   const [maxPageNum, setMaxPageNum] = useState(1);
+  const [pageChk, setPageChk] = useState(false);
 
   const handleChange = (event, value) => {
     //페이지 변경 시 호출, 새 페이지의 번호를 value에 저장함.
@@ -119,13 +28,24 @@ const AdoptReview = () => {
   };
 
   const getPageNum = () => {
-    const maxLength = dummy.length;
+    const maxLength = data.length;
+    setPageChk(!pageChk);
     return setMaxPageNum(Math.ceil(maxLength / itemsPerPage));
   };
-
+  useLayoutEffect(() => {
+    axios
+      .get("/board/review/list")
+      .then((response) => {
+        setData(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("error");
+      });
+  }, []);
   useEffect(() => {
     getPageNum();
-  }, []);
+  }, [pageChk]);
 
   return (
     <Section className="result">
@@ -139,15 +59,23 @@ const AdoptReview = () => {
                 <SearchBar />
               </SearchContainer>
               <Grid container spacing={4} columns={8}>
-                {dummy
+                {data
                   .slice(
                     (page - 1) * itemsPerPage,
                     (page - 1) * itemsPerPage + itemsPerPage
                   )
-                  .map((card) => (
-                    <Grid item xs={10} sm={6} md={2} key={card.id}>
+                  .map((item) => (
+                    <Grid item xs={10} sm={6} md={2} key={item.boardNum}>
                       <Link
-                        to={ADOPT.REVIEW_DETAIL(card.id)}
+                        to={ADOPT.REVIEW_DETAIL(item.boardNum)}
+                        state={{
+                          boardNum: item.boardNum,
+                          reviewSubject: item.reviewSubject,
+                          memberNum: item.memberNum,
+                          reviewCount: item.reviewCount,
+                          reviewContent: item.reviewContent,
+                          reviewDate: item.reviewDate,
+                        }}
                         style={{ textDecoration: "none" }}
                       >
                         <Card
@@ -157,18 +85,24 @@ const AdoptReview = () => {
                             flexDirection: "column",
                           }}
                         >
-                          <CardImage src="http://placeimg.com/300/300/animals/sepia" />
+                          <CardImage src={item.imgThumbnail} />
                           <div>
-                            <CardTitle>{card.title}</CardTitle>
-                            <CardWritter>{card.writter}</CardWritter>
-                            <CardCount>조회 {card.count}</CardCount>
+                            <CardTitle>{item.reviewSubject}</CardTitle>
+                            <CardWritter>{item.memberNum}</CardWritter>
+                            <CardCount>조회 {item.reviewCount}</CardCount>
                           </div>
                         </Card>
                       </Link>
                     </Grid>
                   ))}
               </Grid>
-              <Link className="button" to={ADOPT.REVIEW_WRITE}>
+              <Link
+                className="button"
+                to={ADOPT.REVIEW_WRITE}
+                state={{
+                  modify: "write",
+                }}
+              >
                 <CustomButton label="글쓰기" value="글쓰기" />
               </Link>
             </Container>
