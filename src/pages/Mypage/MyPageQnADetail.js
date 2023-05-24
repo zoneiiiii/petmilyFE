@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -7,49 +6,67 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import CustomButton from "../Login/CustomButton";
 import Grid from "@mui/material/Grid";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { MYPAGE } from "../../constants/PageURL";
 import { ThemeProvider, Typography } from "@mui/material";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
-
-//제목, 내용, 멤버num, 답변상태, boardid, boardnum, 이미지, 날짜
-// const [data, setData] = useState({
-//   subject: "",
-//   img: "",
-//   content: "",
-// });
-// useEffect(() => {
-//   setData({
-//     subject: board.subject,
-//     img : board.img,
-//     content: board.content,
-//   });
-// }, []);
-// const handleDelete = () => {
-//   axios
-//     .post("/qnaBoardDelete", {
-//       num: board.num,
-//     })
-//     .then((res) => {
-//       if (res.data) {
-//         alert("삭제완료!");
-//         document.location.href = "/member/qnainquiry";
-//       }
-//     })
-//     .catch((e) => {
-//       console.error(e);
-//     });
-// };
+import Loading from "../../components/Loading/LoadingPage";
+import NotFound from "../NotFound/NotFound";
+import DOMPurify from "dompurify";
 
 const MyPageQnADetail = () => {
   const { id } = useParams();
-  const [qnaData, setQnaData] = useState(dummy);
+  const [qnaData, setQnaData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true); //로딩 상태
+  const navigate = useNavigate();
+  //  const { userNum } = useContext(AuthContext);
 
   useEffect(() => {
-    setQnaData(dummy.filter((data) => data.num === parseInt(id))[0]);
+    //게시글 Detail 호출
+    const fetchPost = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/board/qna/${id}`
+        ); //게시글 Detail 데이터  호출
+        setQnaData(response.data);
+      } catch (error) {
+        console.error("Error fetching data : ", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchPost();
   }, [id]);
+
+  if (isLoading) {
+    return <Loading />; // 로딩 중일 때 표시할 컴포넌트
+  }
+
+  if (!qnaData) {
+    return <NotFound />; //존재하지 않는 번호를 넣었을 때 표시할 컴포넌트
+  }
+
+  const createMarkup = (html) => {
+    return {
+      __html: DOMPurify.sanitize(html),
+    };
+  };
+
+  const handleDelete = async () => {
+    // 삭제
+    const result = window.confirm("정말 삭제하시겠습니까?");
+    if (result) {
+      try {
+        await axios.delete(`http://localhost:8080/board/qna/${id}`);
+        alert("게시물이 삭제되었습니다.");
+        navigate(MYPAGE.QNA);
+      } catch (error) {
+        console.error("Error deleting post: ", error);
+      }
+    }
+  };
 
   return (
     <ThemeProvider theme={CustomTheme}>
@@ -62,38 +79,36 @@ const MyPageQnADetail = () => {
       >
         1:1 문의
       </Typography>
-      <Grid style={{ width: "70vw" }}>
+      <Grid style={{ width: "940px" }}>
         <Table sx={{ mt: 1 }}>
           <TableHead>
             <TableRow>
               <TableCell colSpan={2}></TableCell>
             </TableRow>
             <TableRow>
-              <TableCell sx={{ width: 900, fontWeight: "bold" }}>
-                {qnaData.subject}
+              <TableCell sx={{ width: 780, fontWeight: "bold" }}>
+                {qnaData.qnaSubject}
               </TableCell>
-              <TableCell sx={{ color: "lightgray" }}>{qnaData.date}</TableCell>
+              <TableCell sx={{ color: "lightgray" }}>{qnaData.qnaDate}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             <TableRow>
-              <TableCell colSpan={2} sx={{ height: 200 }}>
-                {qnaData.img}
-                <br />
-                {qnaData.content}
-              </TableCell>
+              <TableCell colSpan={2} 
+                dangerouslySetInnerHTML={createMarkup(qnaData.qnaContent)}
+              />
             </TableRow>
           </TableBody>
         </Table>
-        <Table sx={{ mt: 5 }}>
+        <Table sx={{ mt: 7 }}>
           <TableBody>
             <TableRow>
               <TableCell colSpan={2} sx={{ fontWeight: "bold" }}>
-                관리자 답변
+              관리자 답변
               </TableCell>
             </TableRow>
             <TableRow>
-              {qnaData.qnaStatus === "진행중" ? (
+              {qnaData.qnaStatus === false ? (
                 <TableCell
                   colSpan={2}
                   sx={{ height: 100, color: "gray" }}
@@ -113,7 +128,7 @@ const MyPageQnADetail = () => {
             </TableRow>
           </TableBody>
         </Table>
-        <CustomButton label="문의취소" value="작성취소" />
+        <CustomButton label="문의취소" value="삭제" onClick={handleDelete} />
         <Link to={MYPAGE.QNA} style={{ textDecoration: "none" }}>
           <CustomButton label="목록으로" value="목록으로" />
         </Link>
@@ -121,141 +136,6 @@ const MyPageQnADetail = () => {
     </ThemeProvider>
   );
 };
-const dummy = [
-  {
-    num: 7,
-    img: (
-      <img
-        src="https://source.unsplash.com/random/?programming"
-        alt="img"
-        style={{
-          maxWidth: "100%",
-          maxHeight: "100%",
-          width: "auto !important",
-          height: "auto",
-        }}
-      />
-    ),
-    subject: "환불 문의드립니다.",
-    content: "상품에 하자가 있어 환불 문의드립니다.",
-    date: "2023-02-02",
-    qnaStatus: "진행중",
-  },
-  {
-    num: 6,
-    img: (
-      <img
-        src="https://source.unsplash.com/random/?programming"
-        alt="img"
-        style={{
-          maxWidth: "100%",
-          maxHeight: "100%",
-          width: "auto !important",
-          height: "auto",
-        }}
-      />
-    ),
-    subject: "환불 문의드립니다.",
-    content: "환불하고 싶어요.",
-    date: "2023-02-02",
-    qnaStatus: "진행중",
-  },
-  {
-    num: 5,
-    img: (
-      <img
-        src="https://source.unsplash.com/random/?programming"
-        alt="img"
-        style={{
-          maxWidth: "100%",
-          maxHeight: "100%",
-          width: "auto !important",
-          height: "auto",
-        }}
-      />
-    ),
-    subject: "환불 문의드립니다.",
-    content: "배송이 너무 늦네요. 환불하고 싶어요.",
-    date: "2023-02-02",
-    qnaStatus: "진행중",
-  },
-  {
-    num: 4,
-    img: (
-      <img
-        src="https://source.unsplash.com/random/?programming"
-        alt="img"
-        style={{
-          maxWidth: "100%",
-          maxHeight: "100%",
-          width: "auto !important",
-          height: "auto",
-        }}
-      />
-    ),
-    subject: "환불 문의드립니다.",
-    content: "환불하면 적립금은 어떻게 되나요?",
-    date: "2023-02-02",
-    qnaStatus: "진행중",
-  },
-  {
-    num: 3,
-    img: (
-      <img
-        src="https://source.unsplash.com/random/?programming"
-        alt="img"
-        style={{
-          maxWidth: "100%",
-          maxHeight: "100%",
-          width: "auto !important",
-          height: "auto",
-        }}
-      />
-    ),
-    subject: "환불 문의드립니다.",
-    content: "상품에 하자가 있어 환불 문의드립니다.",
-    date: "2023-02-02",
-    qnaStatus: "진행중",
-  },
-  {
-    num: 2,
-    img: (
-      <img
-        src="https://source.unsplash.com/random/?programming"
-        alt="img"
-        style={{
-          maxWidth: "100%",
-          maxHeight: "100%",
-          width: "auto !important",
-          height: "auto",
-        }}
-      />
-    ),
-    subject: "입양 절차 문의드립니다.",
-    content: "보호소 매칭이 어떻게 되는건가요?",
-    date: "2023-02-02",
-    qnaStatus: "답변완료",
-  },
-  {
-    num: 1,
-    img: (
-      <img
-        src="https://source.unsplash.com/random/?programming"
-        alt="img"
-        style={{
-          maxWidth: "100%",
-          maxHeight: "100%",
-          width: "auto !important",
-          height: "auto",
-        }}
-      />
-    ),
-    subject: "배송 문의드립니다.",
-    content: "이번주에 꼭 필요한 물품인데 배송 언제쯤 올까요?",
-    date: "2023-02-02",
-    qnaStatus: "답변완료",
-  },
-];
 const titleSx = {
   width: "200px",
   textAlign: "center",

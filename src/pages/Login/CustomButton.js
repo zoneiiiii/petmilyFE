@@ -121,6 +121,23 @@ const CheckButton = styled(Button)`
   }
 `;
 
+const DeleteButton = styled(Button)`
+  background-color: #FF8282;
+  color: white;
+  width: 90px;
+  height: 30px;
+  margin-top: 10px;
+  margin-right: 10px;
+  float: right;
+
+  &:hover {
+    background-color: #FF5555;
+  }
+  &:focus {
+    background-color: #FF5555;
+  }
+`;
+
 export default function CustomButton(props) {
   const { value, label } = props;
 
@@ -204,7 +221,16 @@ export default function CustomButton(props) {
         >
           {props.label}
         </CheckButton>
-      ) : (
+      ) : value === "삭제" ? (
+        <DeleteButton
+          value={value}
+          variant="contained"
+          onClick={props.onClick}
+          fullWidth
+        >
+          {props.label}
+        </DeleteButton>
+      ): (
         ""
       )}
     </div>
