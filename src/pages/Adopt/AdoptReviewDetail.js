@@ -39,9 +39,6 @@ const AdoptReviewDetail = () => {
     return `${year}년 ${month}월 ${day}일`;
   };
 
-  // useEffect(() => {
-  //   setData(data.filter((item) => item.id === parseInt(id))[0]);
-  // }, [id]);
   const createMarkup = (html) => {
     return {
       __html: DOMPurify.sanitize(html),
@@ -67,7 +64,7 @@ const AdoptReviewDetail = () => {
                 <TableRow>
                   <TableCell sx={{ width: 600 }}>{memberNum}</TableCell>
                   <TableCell align="right" sx={{ color: "lightgray" }}>
-                    {formatDate}
+                    {formatDate()}
                   </TableCell>
                   <TableCell align="right" sx={{ color: "lightgray" }}>
                     조회수 : {reviewCount}
@@ -80,7 +77,7 @@ const AdoptReviewDetail = () => {
               <TableBody>
                 <TableRow>
                   <TableCell colSpan={4} sx={{ height: 300 }}>
-                    <img
+                    {/* <img
                       src="http://placeimg.com/300/300/animals/sepia"
                       alt="img"
                       style={{
@@ -90,7 +87,7 @@ const AdoptReviewDetail = () => {
                         height: "auto",
                       }}
                     />
-                    <br />
+                    <br /> */}
                     <div
                       dangerouslySetInnerHTML={createMarkup(reviewContent)}
                     ></div>
@@ -112,7 +109,15 @@ const AdoptReviewDetail = () => {
                   }}
                 />
               </Link>
-              <CustomButton label="수정" value="작성취소" />
+              <Link
+                to={ADOPT.REVIEW_WRITE}
+                state={{
+                  modify: "modify",
+                }}
+                style={{ textDecoration: "none" }}
+              >
+                <CustomButton label="수정" value="작성취소" />
+              </Link>
             </Body>
 
             <section className="comment">

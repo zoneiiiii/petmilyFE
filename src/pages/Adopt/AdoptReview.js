@@ -85,7 +85,7 @@ const AdoptReview = () => {
                             flexDirection: "column",
                           }}
                         >
-                          <CardImage src="http://placeimg.com/300/300/animals/sepia" />
+                          <CardImage src={item.imgThumbnail} />
                           <div>
                             <CardTitle>{item.reviewSubject}</CardTitle>
                             <CardWritter>{item.memberNum}</CardWritter>
@@ -96,7 +96,13 @@ const AdoptReview = () => {
                     </Grid>
                   ))}
               </Grid>
-              <Link className="button" to={ADOPT.REVIEW_WRITE}>
+              <Link
+                className="button"
+                to={ADOPT.REVIEW_WRITE}
+                state={{
+                  modify: "write",
+                }}
+              >
                 <CustomButton label="글쓰기" value="글쓰기" />
               </Link>
             </Container>
