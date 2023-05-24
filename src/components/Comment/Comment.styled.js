@@ -27,7 +27,6 @@ export const CommentItem = styled.li`
   border-bottom: 1px solid #ccc;
   list-style-type: none;
   margin: 16px 0;
-  // border: 1px solid blue;
 `;
 
 export const CommentProfile = styled.div`
@@ -36,7 +35,6 @@ export const CommentProfile = styled.div`
   list-style-type: none;
   margin-left: 10px;
   margin-top: 10px;
-  // border: 1px solid red;
 `;
 
 export const CommentImg = styled(Avatar)`
@@ -74,7 +72,6 @@ export const CommentButton = styled(Button)`
     background-color: #fbd385;
     width: auto;
     margin-left: auto;
-    margin-top: 8px;
     &:hover {
       background-color: #ffbe3f;
     }
@@ -91,7 +88,6 @@ export const CommentDate = styled.span`
 
 export const CommentForm = styled.form`
   display: flex;
-  // margin-top: 16px;
   flex-direction: column;
 `;
 
@@ -115,7 +111,6 @@ export const Reply = styled.div`
   color: gray;
   margin-left: auto;
   margin-right: 5px;
-  margin-top: 10px;
   margin-bottom: 10px;
 `;
 
@@ -135,6 +130,20 @@ export const ReplyButton = styled(Button)`
     margin-top: 8px;
     &:hover {
       background-color: #ffbe3f;
+    }
+  }
+`;
+
+export const DeleteButton = styled(Button)`
+  && {
+    color: #fff;
+    background-color: #ff8282;
+    width: auto;
+    height: 30px;
+    margin-left: auto;
+    margin-top: 8px;
+    &:hover {
+      background-color: #ed4f4f;
     }
   }
 `;
@@ -179,5 +188,24 @@ export const EditButton = styled(ReplyButton)``;
 export const CommentContentWrapper = styled.div`
   margin-top: 10px;
   margin-left: 20px;
-  // border: 1px solid #ccc;
+`;
+
+export const SecretWrapper = styled.div`
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const SecretCheckInput = styled.input`
+  margin-left: 5px;
+  width: 15px;
+  height: 15px;
+  accent-color: #fbd385;
+`;
+export const ReplySecretCheckInput = styled.input`
+  margin-left: 5px;
+  width: 15px;
+  height: 15px;
+  accent-color: #fbd385;
 `;

@@ -95,3 +95,17 @@ export const Buttons = styled(Button)`
     }
   }
 `;
+
+export const DeleteButton = styled(Button)`
+  && {
+    color: #fff;
+    background-color: #ff8282;
+    width: auto;
+    height: 30px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    &:hover {
+      background-color: #ed4f4f;
+    }
+  }
+`;

@@ -34,24 +34,56 @@ const DonateApply = () => {
   const [emailErrorMsg, setEmailErrorMsg] = useState("");
   const isDonorValid = () => donor !== "";
   const isAmountValid = () => amount !== "";
-  const isNameValid = () => name !== "";
-  const isTelValid = () => tel !== "";
-  const isEmailValid = () => email !== "";
+  const isNameValid = () => validateName(name);
+  const isTelValid = () => validateTel(tel);
+  const isEmailValid = () => validateEmail(email);
   // -->
+
+  const validateName = (name) => {
+    return name.length >= 2;
+  };
 
   //이메일 검증 로직
   const validateEmail = (email) => {
     const emailValue = /^[A-Za-z0-9_.-]+@[A-Za-z0-9-]+\.[A-Za-z0-9-]+/;
     return emailValue.test(email);
   };
+  //전화번호 검증 로직
+  const validateTel = (tel) => {
+    const telValue = /^\d{3}-\d{4}-\d{4}$/;
+    return telValue.test(tel);
+  };
+
+  const handleNameChange = (e) => {
+    const newName = e.target.value;
+    setName(newName);
+    if (!validateName(newName)) {
+      setNameErrorMsg("올바른 이름을 입력해주세요.");
+    } else {
+      setNameErrorMsg("");
+    }
+  };
 
   const handleEmailChange = (e) => {
     const newEmail = e.target.value;
     setEmail(newEmail);
     if (!validateEmail(newEmail)) {
-      setEmailErrorMsg("올바른 이메일을 입력해 주세요.");
+      setEmailErrorMsg("올바른 이메일을 입력해주세요.");
     } else {
       setEmailErrorMsg("");
+    }
+  };
+
+  const handleTelChange = (e) => {
+    const newTel = e.target.value
+      .replace(/[^0-9]/g, "")
+      .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/, `$1-$2-$3`)
+      .replace(/-{1,2}$/g, "");
+    setTel(newTel);
+    if (!validateTel(newTel)) {
+      setTelErrorMsg("올바른 전화번호를 입력해주세요.");
+    } else {
+      setTelErrorMsg("");
     }
   };
 
@@ -179,6 +211,12 @@ const DonateApply = () => {
       value === "" ? "" : Number(value).toLocaleString("ko-KR"); //기부 금액 부분 원으로 표시
     setAmount(Number(value));
     setFormattedAmount(formattedValue);
+
+    if (isAmountValid(Number(value))) {
+      setAmountErrorMsg("");
+    } else {
+      setAmountErrorMsg("기부 금액을 입력해주세요.");
+    }
   };
 
   const paymentSelect = (method) => {
@@ -222,21 +260,21 @@ const DonateApply = () => {
     }
 
     if (!isNameValid()) {
-      setNameErrorMsg("이름을 입력해주세요.");
+      setNameErrorMsg("올바른 이름을 입력해주세요.");
       isValid = false;
     } else {
       setNameErrorMsg("");
     }
 
     if (!isTelValid()) {
-      setTelErrorMsg("전화번호를 입력해주세요.");
+      setTelErrorMsg("올바른 전화번호를 입력해주세요.");
       isValid = false;
     } else {
       setTelErrorMsg("");
     }
 
     if (!isEmailValid()) {
-      setEmailErrorMsg("이메일을 입력해주세요.");
+      setEmailErrorMsg("올바른 이메일을 입력해주세요.");
       isValid = false;
     } else {
       setEmailErrorMsg("");
@@ -290,7 +328,13 @@ const DonateApply = () => {
                 size="small"
                 fullWidth
                 value={donor}
-                onChange={(e) => setDonor(e.target.value)}
+                onChange={(e) => {
+                  const newDonor = e.target.value;
+                  setDonor(newDonor);
+                  if (isDonorValid(newDonor)) {
+                    setDonorErrorMsg("");
+                  }
+                }}
               />
               {donorErrorMsg && <S.ErrorMsg>{donorErrorMsg}</S.ErrorMsg>}
             </S.InputWrapper>
@@ -325,7 +369,7 @@ const DonateApply = () => {
                 variant="outlined"
                 size="small"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={handleNameChange}
               />
               {nameErrorMsg && <S.ErrorMsg>{nameErrorMsg}</S.ErrorMsg>}
             </S.InputWrapper>
@@ -342,14 +386,7 @@ const DonateApply = () => {
                 size="small"
                 placeholder="010-0000-0000"
                 value={tel}
-                onChange={(e) =>
-                  setTel(
-                    e.target.value
-                      .replace(/[^0-9]/g, "")
-                      .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/, `$1-$2-$3`)
-                      .replace(/-{1,2}$/g, "")
-                  )
-                }
+                onChange={handleTelChange}
                 inputProps={{ maxLength: 13, pattern: "[0-9]*" }}
                 InputProps={{
                   inputMode: "numeric",

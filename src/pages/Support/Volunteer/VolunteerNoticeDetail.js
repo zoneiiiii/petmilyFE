@@ -219,9 +219,9 @@ const VolunteerNoticeDetail = () => {
               수정
             </S.Buttons>
             <S.ButtonsSpace />
-            <S.Buttons onClick={handleDelete} variant="contained">
+            <S.DeleteButton onClick={handleDelete} variant="contained">
               삭제
-            </S.Buttons>
+            </S.DeleteButton>
           </S.ButtonsContainer>
         )}
         <S.DetailBottom>
@@ -229,7 +229,7 @@ const VolunteerNoticeDetail = () => {
           <h2>댓글 </h2>
           <S.horizon />
           <div style={{ width: "100%" }}>
-            <Comment />
+            <Comment boardId="volunteer" boardNum={id} />
           </div>
         </S.DetailBottom>
       </S.DetailContainer>
