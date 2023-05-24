@@ -9,14 +9,15 @@ import {
   TableHead,
   TableRow,
   ThemeProvider,
-  Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { ABOUT } from "../../constants/PageURL";
 import styled from "styled-components";
+import axios from "axios";
+import dayjs from "dayjs";
 
 const pageWidth = "100%";
 
@@ -31,19 +32,17 @@ const NoticeDetail = () => {
   const search_mode = searchParams.get("search_mode");
 
   const [data, setData] = useState(null);
-  const [beforeData, setBeforeData] = useState(null);
-  const [afterData, setAfterData] = useState(null);
 
   useEffect(() => console.log("re-rendering...", no, page, search));
   useEffect(() => {
-    console.log(no, beforeData, data, afterData);
-    if (no && (!data || data.no !== parseInt(no))) {
-      const index = dummy.findIndex((data) => data.no === parseInt(no));
-      setData(dummy.at(index));
-      setAfterData(index > 0 ? dummy.at(index - 1) : null);
-      setBeforeData(index < dummy.length ? dummy.at(index + 1) : null);
-    }
-  }, [no, data, beforeData, afterData]);
+    axios
+      .get("/notice/view?no=" + no)
+      .then((response) => {
+        console.log(response.data);
+        setData(response.data);
+      })
+      .catch((error) => console.error("에러발생: ", error));
+  }, [no]);
 
   const deleteData = () => {
     // db연결 후 삭제 구현
@@ -75,7 +74,7 @@ const NoticeDetail = () => {
                   borderBottom: "1px solid #bfbfbf",
                 }}
               >
-                <Avatar alt="profile" src={member.img} />
+                <Avatar alt="profile" src={data && data.imgSrc} />
               </TableCell>
               <TableCell
                 sx={{
@@ -86,7 +85,7 @@ const NoticeDetail = () => {
                   fontSize: "1rem",
                 }}
               >
-                {member.nickname}
+                {data && data.nickname}
               </TableCell>
               <TableCell
                 sx={{
@@ -110,7 +109,7 @@ const NoticeDetail = () => {
                   alignItems: "center",
                 }}
               >
-                {data && data.postDate}
+                {data && dayjs(data.postDate).format("YY/MM/DD HH:mm:ss")}
               </TableCell>
             </TableRow>
           </TableHead>
@@ -124,7 +123,7 @@ const NoticeDetail = () => {
                     mb: "200px",
                   }}
                 >
-                  {data && data.contents}
+                  {data && data.content}
                 </Box>
               </TableCell>
             </TableRow>
@@ -140,40 +139,42 @@ const NoticeDetail = () => {
                 }}
               >
                 <Box display={"flex"}>
-                  {afterData ? (
-                    <StyledLink
-                      to={ABOUT.NOTICE_DETAIL({
-                        no: afterData.no,
-                        page: page,
-                        limit: limit,
-                        search: search,
-                        search_mode: search_mode,
-                      })}
-                    >
-                      &#9664; &nbsp;
-                      <div className="subject">{afterData.subject}</div>
-                    </StyledLink>
-                  ) : (
-                    <Box fontWeight={600}>다음글이 없습니다.</Box>
-                  )}
+                  {data &&
+                    (data.nextNo ? (
+                      <StyledLink
+                        to={ABOUT.NOTICE_DETAIL({
+                          no: data.nextNo,
+                          page: page,
+                          limit: limit,
+                          search: search,
+                          search_mode: search_mode,
+                        })}
+                      >
+                        &#9664; &nbsp;
+                        <div className="subject">{data.nextSub}</div>
+                      </StyledLink>
+                    ) : (
+                      <Box>{data.nextSub}</Box>
+                    ))}
                 </Box>
                 <Box display={"flex"}>
-                  {beforeData ? (
-                    <StyledLink
-                      to={ABOUT.NOTICE_DETAIL({
-                        no: beforeData.no,
-                        page: page,
-                        limit: limit,
-                        search: search,
-                        search_mode: search_mode,
-                      })}
-                    >
-                      <div className="subject">{beforeData.subject}</div>
-                      &nbsp; &#9654;
-                    </StyledLink>
-                  ) : (
-                    <Box fontWeight={600}>이전글이 없습니다.</Box>
-                  )}
+                  {data &&
+                    (data.prevNo ? (
+                      <StyledLink
+                        to={ABOUT.NOTICE_DETAIL({
+                          no: data.prevNo,
+                          page: page,
+                          limit: limit,
+                          search: search,
+                          search_mode: search_mode,
+                        })}
+                      >
+                        <div className="subject">{data && data.prevSub}</div>
+                        &nbsp; &#9654;
+                      </StyledLink>
+                    ) : (
+                      <Box>{data.prevSub}</Box>
+                    ))}
                 </Box>
               </TableCell>
             </TableRow>
