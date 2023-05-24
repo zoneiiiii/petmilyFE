@@ -23,7 +23,7 @@ function ModifyInfo() {
   const [confirmPw, setConfirmPw] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 이미지 URL 저장
+  const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 이미지 URL 저장
   const [nicknameError, setNicknameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPwError, setConfirmPwError] = useState("");
@@ -48,15 +48,12 @@ const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 �
 
   // 비밀번호
   const onChangePassword = useCallback((e) => {
-    const passwordRegex =
-    /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,20}$/;
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,20}$/;
     const passwordCurrent = e.target.value;
     setPassword(passwordCurrent);
 
     if (!passwordRegex.test(passwordCurrent)) {
-      setPasswordError(
-        "숫자+영문자 조합으로 8~20자리로 입력해주세요!"
-      );
+      setPasswordError("숫자+영문자 조합으로 8~20자리로 입력해주세요!");
     } else {
       setPasswordError("");
     }
@@ -146,7 +143,6 @@ const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 �
     console.log(`submit->  ${password} ${nickname} ${email} ${phone} ${Image}`);
   };
 
-
   const location = useLocation();
   const memberNum = location.state.num;
 
@@ -165,15 +161,17 @@ const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 �
     }
     if (!phone) {
       setPhoneError("전화번호를 입력해주세요.");
-    } else {setPhoneError("");}
-    
+    } else {
+      setPhoneError("");
+    }
+
     if (nickname && password && confirmPw && email && phone) {
       if (file) {
         const formData = new FormData();
         formData.append("file : ", file);
-  
+
         try {
-          const response =  axios.post("/upload", formData);
+          const response = axios.post("/upload", formData);
           setUploadedImageUrl(response.data);
         } catch (error) {
           console.error("이미지 업로드 실패 : ", error);
@@ -181,7 +179,7 @@ const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 �
       } else {
         setUploadedImageUrl("https://via.placeholder.com/150");
       }
-      
+
       console.log(memberNum);
       const memberData = {
         memberNickname: nickname,
@@ -190,20 +188,21 @@ const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 �
         memberTel: phone,
         memberImg: uploadedImageUrl,
       };
-    axios.put(`/update/${memberNum}`, memberData)
-      .then((res) => {
-        console.log(res.data); // 성공 시 메시지 출력
-        if (res.data) {
-          alert("수정 성공");
-          //document.location.href = "/mypage";
-        } else {
-          alert("수정에 실패하셨습니다.");
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-  };
+      axios
+        .put(`/update/${memberNum}`, memberData)
+        .then((res) => {
+          console.log(res.data); // 성공 시 메시지 출력
+          if (res.data) {
+            alert("수정 성공");
+            //document.location.href = "/mypage";
+          } else {
+            alert("수정에 실패하셨습니다.");
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    }
   };
 
   return (
@@ -214,9 +213,9 @@ const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 �
         sx={{ width: "50vw" }}
       >
         <Box
-        component="form"
-        validate="true"
-        onSubmit={handleSubmit}
+          component="form"
+          validate="true"
+          onSubmit={handleSubmit}
           sx={{
             marginTop: "30px",
             display: "flex",
@@ -224,11 +223,7 @@ const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 �
             alignItems: "center",
           }}
         >
-          <Typography
-            component="h1"
-            variant="h4"
-            fontWeight="bold"
-          >
+          <Typography component="h1" variant="h4" fontWeight="bold">
             회원 정보 수정
           </Typography>
           <br />
@@ -257,9 +252,7 @@ const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 �
               ref={fileInput}
             />
           </Badge>
-          <Box
-            sx={{ mt: 3 }}
-          >
+          <Box sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -341,7 +334,6 @@ const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 �
                         .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/, `$1-$2-$3`)
                         .replace(/-{1,2}$/g, "")
                     )
-                    
                   }
                   inputProps={{ maxLength: 13, pattern: "[0-9]*" }}
                   InputProps={{
@@ -367,7 +359,7 @@ const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 �
               color="primary"
               onClick={submitCheck}
             >
-              <Typography  component="h1" variant="h6" color="white">
+              <Typography component="h1" variant="h6" color="white">
                 수정
               </Typography>
             </Button>

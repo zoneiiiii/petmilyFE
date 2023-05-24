@@ -13,14 +13,20 @@ import FormHelperText from "@mui/material/FormHelperText";
 
 const Button = styled.button`
   width: 300px;
-  height: 35px;
-  background-color: #fbd385;
+  height: 40px;
+  background-color: #bfbfbf;
   font-weight: bold;
+  color: white;
   border: none;
   border-radius: 4px;
-  border: 2px solid #ffbd59;
   margin-top: 40px;
   cursor: pointer;
+  &:hover {
+    background-color: #757575;
+  }
+  &:focus {
+    background-color: #757575;
+  }
 `;
 
 const Joinup = styled.h1`
@@ -157,17 +163,40 @@ const Join = () => {
     }
   }, []);
 
-  const onChangePhone = useCallback((e) => {
-    const phonenumberRegex = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/;
-    const phoneCurrent = e.target.value;
-    setPhonenumber(phoneCurrent);
+  // const onChangePhone = useCallback((e) => {
+  //   const phonenumberRegex = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/;
+  //   const phoneCurrent = e.target.value;
+  //   setPhonenumber(phoneCurrent);
 
-    if (!phonenumberRegex.test(phoneCurrent)) {
-      setPhonenumberError("전화번호를 다시 확인해주세요.");
-    } else {
+  //   if (!phonenumberRegex.test(phoneCurrent)) {
+  //     setPhonenumberError("전화번호를 다시 확인해주세요.");
+  //   } else {
+  //     setPhonenumberError("");
+  //   }
+  // }, []);
+
+  //전화번호
+  const onChangePhone = (e) => {
+    const input = e.target.value;
+    const formattedNumber = formatPhoneNumber(input);
+    setPhonenumber(formattedNumber);
+    const regPhone = /^01([0|1|6|7|8|9])?([0-9]{3,4})?([0-9]{4})$/;
+
+    if (regPhone.test(phonenumber) === true || formattedNumber.trim() !== "") {
       setPhonenumberError("");
+    } else {
+      setPhonenumberError("전화번호를 다시 확인해주세요.");
     }
-  }, []);
+  };
+
+  //전화번호 하이픈 자동완성
+  const formatPhoneNumber = (number) => {
+    const numericOnly = number.replace(/[^0-9]/g, "");
+    const formattedNumber = numericOnly
+      .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/, "$1-$2-$3")
+      .replace(/-{1,2}$/g, "");
+    return formattedNumber;
+  };
 
   const onChangeNickname = useCallback((e) => {
     setNickname(e.target.value);
@@ -206,54 +235,92 @@ const Join = () => {
   }, []);
 
   const handleButtonClick = (e) => {
-    if (true) {
-      if (!IDRef?.current?.querySelector("input").value) {
-        setIDError("아이디를 입력해주세요.");
-      } else {
-        setIDError("");
-      }
+    const IDRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{6,15}$/;
+    if (!IDRef?.current?.querySelector("input").value) {
+      setIDError("아이디를 입력해주세요.");
+      return;
+    } else if (!IDRegex.test(IDRef.current.querySelector("input").value)) {
+      setIDError("숫자+영문자 조합으로 6~15자리로 입력해주세요!");
+      return;
+    } else {
+      setIDError("");
+    }
 
-      if (!passwordRef?.current?.querySelector("input").value) {
-        setPasswordError("패스워드를 입력해주세요.");
-      } else {
-        setPasswordError("");
-      }
+    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,20}$/;
+    if (!passwordRef?.current?.querySelector("input").value) {
+      setPasswordError("패스워드를 입력해주세요.");
+      return;
+    } else if (
+      !passwordRegex.test(passwordRef.current.querySelector("input").value)
+    ) {
+      setPasswordError("숫자+영문자 조합으로 8~20자리로 입력해주세요!");
+      return;
+    } else {
+      setPasswordError("");
+    }
 
-      if (!confirmPasswordRef?.current?.querySelector("input").value) {
-        setConfirmPasswordError("패스워드 확인을 입력해주세요.");
-      } else {
-        setConfirmPasswordError("");
-      }
+    if (!confirmPasswordRef?.current?.querySelector("input").value) {
+      setConfirmPasswordError("패스워드 확인을 입력해주세요.");
+      return;
+    } else if (password !== confirmpassword) {
+      setConfirmPasswordError("비밀번호가 일치하지 않습니다.");
+      return;
+    } else {
+      setConfirmPasswordError("");
+    }
 
-      if (!emailRef?.current?.querySelector("input").value) {
-        setEmailError("이메일을 입력해주세요.");
-      } else {
-        setEmailError("");
-      }
+    const emailRegex = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+    if (!emailRef?.current?.querySelector("input").value) {
+      setEmailError("이메일을 입력해주세요.");
+      return;
+    } else if (
+      !emailRegex.test(emailRef.current.querySelector("input").value)
+    ) {
+      setEmailError("이메일 형식을 다시 확인해주세요.");
+      return;
+    } else {
+      setEmailError("");
+    }
 
-      if (!nameRef?.current?.querySelector("input").value) {
-        setNameError("이름을 입력해주세요.");
-      } else {
-        setNameError("");
-      }
+    if (!nameRef?.current?.querySelector("input").value) {
+      setNameError("이름을 입력해주세요.");
+      return;
+    } else {
+      setNameError("");
+    }
 
-      if (!nicknameRef?.current?.querySelector("input").value) {
-        setNicknameError("닉네임을 입력해주세요.");
-      } else {
-        setNicknameError("");
-      }
+    if (!nicknameRef?.current?.querySelector("input").value) {
+      setNicknameError("닉네임을 입력해주세요.");
+      return;
+    } else if (nickname.length < 2 || nickname.length > 5) {
+      setNicknameError("2글자 이상 5글자 미만으로 입력해주세요.");
+      return;
+    } else {
+      setNicknameError("");
+    }
+    console.log(nicknameRef?.current?.querySelector("input").value);
 
-      if (!dateOfBirthRef?.current?.querySelector("input").value) {
-        setDateOfBirthError("생년월일을 입력해주세요.");
-      } else {
-        setDateOfBirthError("");
-      }
+    if (!dateOfBirthRef?.current?.querySelector("input").value) {
+      setDateOfBirthError("생년월일을 입력해주세요.");
+      return;
+    } else {
+      setDateOfBirthError("");
+    }
 
-      if (!phonenumberRef?.current?.querySelector("input").value) {
-        setPhonenumberError("전화번호를 입력해주세요.");
-      } else {
-        setPhonenumberError("");
-      }
+    const phonenumberRegex =
+      /^(?:(010-\d{4})|(01[1|6|7|8|9]-\d{3,4}))-(\d{4})$/;
+    if (!phonenumberRef?.current?.querySelector("input").value) {
+      setPhonenumberError("전화번호를 입력해주세요.");
+      return;
+    } else if (
+      !phonenumberRegex.test(
+        phonenumberRef.current.querySelector("input").value
+      )
+    ) {
+      setPhonenumberError("전화번호를 다시 확인해주세요.");
+      return;
+    } else {
+      setPhonenumberError("");
     }
 
     handleFormSubmit();
@@ -432,9 +499,11 @@ const Join = () => {
                 type="phonenumber"
                 variant="standard"
                 className="input-item"
+                name="user-number"
+                value={phonenumber}
                 ref={phonenumberRef}
                 onChange={onChangePhone}
-                name="user-number"
+                inputProps={{ maxLength: 13 }}
               />
             </InputContainer>
             <FormHelperText
