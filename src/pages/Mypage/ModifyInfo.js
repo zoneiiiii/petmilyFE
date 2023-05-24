@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   Avatar,
   Button,
@@ -14,8 +14,9 @@ import {
 } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
-import axios from "axios";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
+
 
 function ModifyInfo() {
   const [nickname, setNickname] = useState("");
@@ -23,59 +24,108 @@ function ModifyInfo() {
   const [confirmPw, setConfirmPw] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // 업로드된 이미지 URL 저장
+  const [Image, setImage] = useState("/images/emptyProfile.png");
+  const [file, setFile] = useState();
+
   const [nicknameError, setNicknameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPwError, setConfirmPwError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
 
+  const [nickAble, setNickAble]= useState(0);
+  const [pwAble, setPwAble]= useState(0);
+  const [confirmAble, setConfirmAble]= useState(0);
+  const [emailAble, setEmailAble]= useState(0);
+  const [phoneAble, setPhoneAble]= useState(0);
+  const [checkAble, setCheckAble]= useState(0);
+ 
+  const fileInput = useRef(null);
   const nickRef = useRef();
   const passRef = useRef();
   const confirmRef = useRef();
   const emailRef = useRef();
   const phoneRef = useRef();
 
+  //memberNum 값 매칭
+  const location = useLocation();
+  const memberNum = location.state.num;
+  // const memberNickname = "봉천동물주먹"
+  // const memberPw = location.state.member.pw;
+  // const memberConfirmPw = memberPw;
+  // const memberEmail = location.state.member.email;
+  // const memberPhone = location.state.member.tel;
+  // const mem = location.state.member;
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/memberInfo/${memberNum}`
+        ); 
+        const data = response.data;
+        console.log(response);
+        setNickname(data.memberNickname);
+        setEmail(data.memberEmail);
+        setPhone(data.memberTel);
+        setImage(data.memberImg);
+      } catch (error) {
+        console.error("Error fetching data : ", error);
+      } 
+    };
+    fetchPost();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+
   // 닉네임
-  const onChangeNickname = useCallback((e) => {
+  const onChangeNickname = (e) => {
     setNickname(e.target.value);
     if (e.target.value.length < 2 || e.target.value.length > 5) {
       setNicknameError("2글자 이상 5글자 미만으로 입력해주세요.");
+      setNickAble(0);
     } else {
       setNicknameError("");
+      setNickAble(1);
     }
-  }, []);
+  };
 
   // 비밀번호
-  const onChangePassword = useCallback((e) => {
-    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,20}$/;
+  const onChangePassword = (e) => {
+    const passwordRegex =
+    /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,20}$/;
     const passwordCurrent = e.target.value;
     setPassword(passwordCurrent);
 
     if (!passwordRegex.test(passwordCurrent)) {
-      setPasswordError("숫자+영문자 조합으로 8~20자리로 입력해주세요!");
+      setPasswordError(
+        "숫자+영문자 조합으로 8~20자리로 입력해주세요!"
+      );
+      setPwAble(0);
     } else {
       setPasswordError("");
+      setPwAble(1);
     }
-  }, []);
+  };
 
   // 비밀번호 확인
-  const onChangePasswordConfirm = useCallback(
+  const onChangePasswordConfirm = 
     (e) => {
       const passwordConfirmCurrent = e.target.value;
       setConfirmPw(passwordConfirmCurrent);
 
       if (password === passwordConfirmCurrent) {
         setConfirmPwError("");
+        setConfirmAble(1);
       } else {
         setConfirmPwError("비밀번호가 일치하지 않습니다.");
+        setConfirmAble(0);
       }
-    },
-    [password]
-  );
+    }
+ ;
 
   // 이메일
-  const onChangeEmail = useCallback((e) => {
+  const onChangeEmail = (e) => {
     const emailRegex =
       /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
     const emailCurrent = e.target.value;
@@ -83,15 +133,40 @@ function ModifyInfo() {
 
     if (!emailRegex.test(emailCurrent)) {
       setEmailError("이메일 형식을 다시 확인해주세요.");
+      setEmailAble(0);
     } else {
       setEmailError("");
+      setEmailAble(1);
     }
-  }, []);
+  };
+
+  //전화번호 하이픈 자동완성 
+  const formatPhoneNumber = (number) => {
+    const numericOnly = number.replace(/[^0-9]/g, "");
+    const formattedNumber = numericOnly
+      .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/, "$1-$2-$3")
+      .replace(/-{1,2}$/g, "");
+    return formattedNumber;
+  };
+ 
+  //전화번호
+  const onChangePhone = (e) => {
+    const input = e.target.value;
+    const formattedNumber = formatPhoneNumber(input);
+    setPhone(formattedNumber);
+    const regPhone= /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+
+    if (regPhone.test(formattedNumber) === true)  {
+      setPhoneError("");
+      setPhoneAble(1);
+    }else {
+      setPhoneError("전화번호 형식을 다시 확인해주세요.");
+      setPhoneAble(0);
+    }
+
+  };
 
   //이미지 파일
-  const [Image, setImage] = useState("/images/emptyProfile.png");
-  const [file, setFile] = useState();
-  const fileInput = useRef(null);
   const onChange = (e) => {
     if (e.target.files[0]) {
       setFile(e.target.files[0]);
@@ -111,42 +186,44 @@ function ModifyInfo() {
   };
 
   //엔터 키 이벤트
-  const passwordInput = document.querySelector("[name=pw]");
-  const confirmPwInput = document.querySelector("[name=confirmPw]");
-  const emailInput = document.querySelector("[name=email]");
-  const phoneInput = document.querySelector("[name=phone]");
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      if (e.target.name === "nickname" && passwordInput) {
-        passwordInput.focus();
-      } else if (e.target.name === "pw" && passRef.current.value !== "") {
-        confirmPwInput.focus();
-      } else if (
-        e.target.name === "confirmPw" &&
-        confirmRef.current.value !== ""
-      ) {
-        emailInput.focus();
-      } else if (e.target.name === "email" && emailRef.current.value !== "") {
-        phoneInput.focus();
+      if (e.target.name === "nickname" && passRef.current) {
+        passRef.current.focus();
+      } else if (e.target.name === "pw" && confirmRef.current) {
+        confirmRef.current.focus();
+      } else if (e.target.name === "confirmPw" && emailRef.current) {
+        emailRef.current.focus();
+      } else if (e.target.name === "email" && phoneRef.current) {
+        phoneRef.current.focus();
       }
     }
   };
 
+  //수정 전 마지막 항목 엔터키 이벤트
   const checkenterSubmit = (e) => {
     if (e.key === "Enter") {
       submitCheck();
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(`submit->  ${password} ${nickname} ${email} ${phone} ${Image}`);
+  //이미지 업로드 
+  const uploadImage = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await axios.post("/upload", formData);
+      const imageUrl = response.data;
+      return imageUrl;
+    } catch (error) {
+      console.error("이미지 업로드 실패 : ", error);
+      return null;
+    }
   };
 
-  const location = useLocation();
-  const memberNum = location.state.num;
-
-  const submitCheck = () => {
+  //submitCheck
+  const submitCheck =  () => {
     if (!nickname) {
       setNicknameError("닉네임을 입력해주세요.");
     }
@@ -161,61 +238,131 @@ function ModifyInfo() {
     }
     if (!phone) {
       setPhoneError("전화번호를 입력해주세요.");
-    } else {
-      setPhoneError("");
-    }
+    } 
+  };
 
-    if (nickname && password && confirmPw && email && phone) {
-      if (file) {
-        const formData = new FormData();
-        formData.append("file : ", file);
+  //submit
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        try {
-          const response = axios.post("/upload", formData);
-          setUploadedImageUrl(response.data);
-        } catch (error) {
-          console.error("이미지 업로드 실패 : ", error);
-        }
-      } else {
-        setUploadedImageUrl("https://via.placeholder.com/150");
-      }
-
-      console.log(memberNum);
-      const memberData = {
+    try {
+      const response = await axios.post('/updateValid',{
         memberNickname: nickname,
-        memberPw: password,
         memberEmail: email,
         memberTel: phone,
-        memberImg: uploadedImageUrl,
-      };
-      axios
-        .put(`/update/${memberNum}`, memberData)
-        .then((res) => {
-          console.log(res.data); // 성공 시 메시지 출력
+      })
+      const { data } = response;
+      if (data===1) {
+        setNicknameError("이미 사용중인 닉네임입니다.");
+        nickRef.current= "";
+        setNickAble(0);
+      } else if (data===2) {
+        setEmailError("이미 사용중인 이메일입니다.");
+        emailRef.current = "";
+        setEmailAble(0);
+      } else if (data===3) {
+        setPhoneError("이미 사용중인 전화번호입니다.");
+        phoneRef.current= "";
+        setPhoneAble(0);
+      } else if (data === 0){
+        setCheckAble(1);
+        setEmailError("");
+        setPhoneError("");
+        setNicknameError("");
+      } 
+    }catch(err) {
+      console.log("Error >>", err);
+      setCheckAble(0);
+    }
+    // axios
+    // .post(`/updateValid`, 
+    // .then((res) => {
+    //   const { data } = res;
+    //   if (data===1) {
+    //      setNicknameError("이미 사용중인 닉네임입니다.");
+    //     nickRef.current= "";
+    //     setNickAble(0);
+    //   } else if (data===2) {
+    //    setEmailError("이미 사용중인 이메일입니다.");
+    //    emailRef.current = "";
+    //    setEmailAble(0);
+    //   } else if (data===3) {
+    //     setPhoneError("이미 사용중인 전화번호입니다.");
+    //     phoneRef.current= "";
+    //     setPhoneAble(0);
+    //   } else if (data === 0){
+    //     setCheckAble(1);
+    //     setEmailError("");
+    //     setPhoneError("");
+    //     setNicknameError("");
+    //   } 
+    // })
+    // .catch((err) => {
+    //   console.error(err);
+    // });
+    
+    if (nickAble === 0 || pwAble === 0 || confirmAble === 0 || emailAble === 0 || phoneAble === 0 || checkAble ===0) {
+      console.log("요청 실패");
+      return;
+    } else {
+      
+      let imageUrl = "https://via.placeholder.com/150";
+      if (file) {
+        const uploadedUrl = await uploadImage(file);
+        if (uploadedUrl) {
+          imageUrl = uploadedUrl;
+        }
+      }
+
+        console.log(memberNum);
+        const memberData = {
+          memberNickname: nickname,
+          memberPw: password,
+          memberEmail: email,
+          memberTel: phone,
+          memberImg: imageUrl,
+        };
+        // axios.put(`/update/${memberNum}`, memberData)
+        //   .then((res) => {
+        //     console.log(res.data);
+        //     if (res.data) {
+        //       alert("수정 성공");
+        //       //document.location.href = "/mypage";
+        //     } else {
+        //       alert("수정에 실패하셨습니다.");
+        //     }
+        //   })
+        //   .catch((e) => {
+        //     console.error(e);
+        //   });
+
+        try {
+          const res = await axios.put(`/update/${memberNum}`, memberData);
+          console.log(res.data);
           if (res.data) {
             alert("수정 성공");
             //document.location.href = "/mypage";
           } else {
             alert("수정에 실패하셨습니다.");
           }
-        })
-        .catch((e) => {
-          console.error(e);
-        });
-    }
-  };
+        }catch(err) {
+          console.log("Error >>", err);
+        };
 
+    console.log(`submit->${nickname},${password},${email},${phone},${Image}`); 
+  }
+}
+   
   return (
     <ThemeProvider theme={CustomTheme}>
       <Container
         component="main"
-        //maxWidth="sm"
         sx={{ width: "50vw" }}
       >
         <Box
-          component="form"
-          validate="true"
-          onSubmit={handleSubmit}
+        component="form"
+        validate="true"
+        onSubmit={handleSubmit}
           sx={{
             marginTop: "30px",
             display: "flex",
@@ -223,7 +370,11 @@ function ModifyInfo() {
             alignItems: "center",
           }}
         >
-          <Typography component="h1" variant="h4" fontWeight="bold">
+          <Typography
+            component="h1"
+            variant="h4"
+            fontWeight="bold"
+          >
             회원 정보 수정
           </Typography>
           <br />
@@ -252,7 +403,9 @@ function ModifyInfo() {
               ref={fileInput}
             />
           </Badge>
-          <Box sx={{ mt: 3 }}>
+          <Box
+            sx={{ mt: 3 }}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -261,9 +414,9 @@ function ModifyInfo() {
                   name="nickname"
                   label="닉네임"
                   type="nickname"
-                  autoFocus
                   autoComplete="off"
                   onChange={onChangeNickname}
+                  value={nickname || ""}
                   ref={nickRef}
                   onKeyPress={handleKeyPress}
                 />
@@ -279,8 +432,9 @@ function ModifyInfo() {
                   id="pw"
                   label="비밀번호"
                   type="password"
-                  autoComplete="new-password"
+                  autoComplete="off"
                   onChange={onChangePassword}
+                  value={password || ""}
                   ref={passRef}
                   onKeyPress={handleKeyPress}
                 />
@@ -295,7 +449,8 @@ function ModifyInfo() {
                   name="confirmPw"
                   label="비밀번호 확인"
                   type="password"
-                  autoComplete="new-password"
+                  autoComplete="off"
+                  value={confirmPw || ""}
                   onChange={onChangePasswordConfirm}
                   ref={confirmRef}
                   onKeyPress={handleKeyPress}
@@ -312,6 +467,7 @@ function ModifyInfo() {
                   name="email"
                   autoComplete="email"
                   onChange={onChangeEmail}
+                  value={email || ""}
                   ref={emailRef}
                   onKeyPress={handleKeyPress}
                 />
@@ -326,19 +482,12 @@ function ModifyInfo() {
                   label="전화번호"
                   name="phone"
                   autoComplete="phone"
-                  value={phone}
-                  onChange={(e) =>
-                    setPhone(
-                      e.target.value
-                        .replace(/[^0-9]/g, "")
-                        .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/, `$1-$2-$3`)
-                        .replace(/-{1,2}$/g, "")
-                    )
-                  }
-                  inputProps={{ maxLength: 13, pattern: "[0-9]*" }}
+                  onChange={onChangePhone}
+                  inputProps={{ maxLength: 13}}
                   InputProps={{
                     inputMode: "numeric",
                   }}
+                  value={phone || ""}
                   ref={phoneRef}
                   onKeyPress={checkenterSubmit}
                 />
@@ -359,7 +508,7 @@ function ModifyInfo() {
               color="primary"
               onClick={submitCheck}
             >
-              <Typography component="h1" variant="h6" color="white">
+              <Typography  component="h1" variant="h6" color="white">
                 수정
               </Typography>
             </Button>

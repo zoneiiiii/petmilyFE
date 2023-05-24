@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { BROWSER_PATH } from "../../constants/path";
 import HeaderRight from "./HeaderRight";
 import { ThemeProvider } from "@mui/material";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
@@ -147,24 +146,20 @@ const NavListStyle = styled.div`
   .NavTitle {
     width: 11vw;
     height: 30px;
-    margin: 25px auto 10px auto;
+    margin: 25px auto 0px auto;
     font-weight: 550;
     font-size: 1.2rem;
     cursor: default;
     white-space:nowrap;
   }
-  .NavTitle:hover {
-    background-color: #E8E8E8;
-    border: 1px solid #E8E8E8;
-    border-radius: 15px 15px / 15px 15px;
-  }
 
   li:hover {
-    background-color: #E8E8E8;
-    background-color: #E8E8E8;
-    border: 1px solid #E8E8E8;
-    border-radius: 15px 15px / 15px 15px;
-    box-shadow: 0px 0.5px 0px rgb(167, 165, 165);
+    background: #CCCCC7;
+    transition-duration: 1s;
+  }
+
+  ul > li:first-child {
+    border-top: 3px solid #FBD385;
   }
 
   ul {
@@ -175,26 +170,29 @@ const NavListStyle = styled.div`
     height: ${(props) => (props.isSelected === 1 ? props.height + "px" : 0)};
     transition: height 0.5s ease-in-out;
     background-color: #FCFCF7;
+    // box-shadow: 4px 0px 4px rgb(167, 165, 165);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+
   }
+
   li {
     min-width: 300px
     height: 40px;
-    margin: 5px 0px 5px 0px;
-    padding-top: 10px;
-    padding-bottom: 5px;
-    border-bottom: 1px solid #fbd385;
-    // box-shadow: 0px 0.5px 0px rgb(167, 165, 165);
+    padding-top: 15px;
+    padding-bottom: 10px;
+    background: #F4F4EF;
+    // box-shadow: 1px 0.5px 4px rgb(167, 165, 165);
     display: flex;
     align-items: center;
     justify-content: center;
-
-
   }
+
   li > a {
     color: black;
     text-decoration: none;
     font-weight: 400;
     font-size: 1.1rem;
+    display: block;
   }
 `;
 
