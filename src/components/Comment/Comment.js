@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import * as S from "./Comment.styled";
 import Pagination from "../Support/Volunteer/VolunteerPagination";
 import DOMPurify from "dompurify"; //XSS 공격 방어 검증 라이브러리
 import axios from "axios";
+import LockIcon from "@mui/icons-material/Lock";
+import { AuthContext } from "../../contexts/AuthContexts";
 
 const Comment = ({ boardId, boardNum }) => {
   const [comments, setComments] = useState([]);
@@ -10,18 +12,15 @@ const Comment = ({ boardId, boardNum }) => {
   const [replyValue, setReplyValue] = useState(""); //답글 입력 상태
   const [secretChecked, setSecretChecked] = useState(false); // 댓글의 비밀댓글 체크 상태
   const [replySecretChecked, setReplySecretChecked] = useState(false); //대댓글 비밀댓글 체크 상태
+  const { userNum, loggedIn } = useContext(AuthContext);
 
   const itemsPerPage = 10;
   const [page, setPage] = useState(1);
+  const [totalComments, setTotalComments] = useState(0);
 
   const handleChangePage = (event, value) => {
     setPage(value);
   };
-
-  const displayComments = comments.slice(
-    (page - 1) * itemsPerPage,
-    page * itemsPerPage
-  );
 
   const encodedInputValue = inputValue
     .replace(/</g, "&lt;")
@@ -37,29 +36,32 @@ const Comment = ({ boardId, boardNum }) => {
         const response = await axios.get(
           `/board/comment/${boardId}/${boardNum}`
         );
-        const data = response.data;
-        console.log("Received data: ", data);
-        // <-- 댓글, 답글 정렬 로직
-        const originalComments = data.filter(
+        const comments = response.data;
+
+        const originalComments = comments.filter(
           (comment) => comment.commentPnum === null
         );
-        const replyComments = data.filter(
+        const replyComments = comments.filter(
           (comment) => comment.commentPnum !== null
         );
 
-        // 원 댓글에 대해 답글을 찾아 추가
-        for (let comment of originalComments) {
-          const replies = replyComments.filter(
+        const orderedComments = [];
+
+        originalComments.forEach((comment) => {
+          orderedComments.push(comment);
+
+          const correspondingReplies = replyComments.filter(
             (reply) => reply.commentPnum === comment.commentNum
           );
-          const replyIdx = originalComments.indexOf(comment);
-          originalComments.splice(replyIdx + 1, 0, ...replies);
-        }
-        // setComments(data);
-        setComments(originalComments);
-        // -->
+          correspondingReplies.forEach((reply) => {
+            orderedComments.push(reply);
+          });
+        });
+
+        setComments(orderedComments);
+        setTotalComments(orderedComments.length);
       } catch (error) {
-        console.error("댓글 불러오기 실패 : ", error.response || error.message);
+        console.error("댓글 불러오기 실패: ", error.response || error.message);
       }
     };
 
@@ -100,18 +102,21 @@ const Comment = ({ boardId, boardNum }) => {
       setReplySecretChecked(e.target.checked);
     }
   };
-
   const handleSubmit = async (e) => {
-    e.preventDefault(); // 기본동작인 새로 고침을 막아줌.
+    e.preventDefault();
+    if (!loggedIn) {
+      alert("로그인 후 이용 가능합니다");
+      return;
+    }
     if (inputValue.trim() === "") return;
 
     const newComment = {
-      boardId: boardId, //  props로 전달받은 게시판 ID
-      boardNum: boardNum, //  props로 전달받은 게시글 번호
-      commentContent: DOMPurify.sanitize(encodedInputValue), //XSS 검증
+      boardId: boardId,
+      boardNum: boardNum,
+      commentContent: DOMPurify.sanitize(encodedInputValue),
       commentPnum: null,
-      showReplyInput: false, // 답글 입력 UI를 표시할지 여부
-      commentIsSecret: secretChecked, // 비밀 댓글 여부
+      showReplyInput: false,
+      commentIsSecret: secretChecked,
     };
 
     try {
@@ -119,7 +124,21 @@ const Comment = ({ boardId, boardNum }) => {
         "/board/comment/write",
         newComment
       );
-      setComments([...comments, createdComment]);
+
+      const updatedComments = [...comments, createdComment].sort(
+        (a, b) => a.commentNum - b.commentNum
+      );
+      setComments(updatedComments);
+
+      // // 페이지에 댓글이 10개를 넘으면 다음 페이지로 이동
+      // if (updatedComments.length > itemsPerPage) {
+      //   setPage(page + 1);
+      // }
+
+      setTotalComments(totalComments + 1);
+
+      const lastPage = Math.ceil(updatedComments.length / itemsPerPage);
+      setPage(lastPage);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -128,120 +147,160 @@ const Comment = ({ boardId, boardNum }) => {
     setSecretChecked(false);
   };
 
-  const handleReplySubmit = async (e, index) => {
+  const handleReplySubmit = async (e, commentNum) => {
     e.preventDefault();
-    const newComments = [...comments];
 
     if (replyValue.trim() === "") return;
 
     const newReply = {
-      boardId: boardId, // props로 전달받은 게시판 ID
-      boardNum: boardNum, //  props로 전달받은 게시글 번호
+      boardId: boardId,
+      boardNum: boardNum,
       commentContent: DOMPurify.sanitize(encodedReplyValue),
-      commentPnum: comments[index].commentNum, // 부모 댓글 번호 설정
+      commentPnum: commentNum,
       commentIsSecret: replySecretChecked,
     };
 
-    // 답글을 해당 댓글 바로 다음에 추가
     try {
       const { data: createdComment } = await axios.post(
         "/board/comment/write",
         newReply
       );
-      const insertIndex = newComments
-        .slice(index + 1)
-        .findIndex((comment) => comment.commentPnum === null);
-      if (insertIndex !== -1) {
-        newComments.splice(index + 1 + insertIndex, 0, createdComment);
-      } else {
-        newComments.push(createdComment);
+
+      const parentCommentIndex = comments.findIndex(
+        (comment) => comment.commentNum === commentNum
+      );
+      let insertIndex = parentCommentIndex + 1;
+
+      while (
+        insertIndex < comments.length &&
+        comments[insertIndex].commentPnum === commentNum
+      ) {
+        insertIndex++;
       }
+
+      const newComments = [...comments];
+      newComments.splice(insertIndex, 0, createdComment);
+
+      newComments[parentCommentIndex].showReplyInput = false;
+      setComments(newComments);
+      setTotalComments(totalComments + 1);
     } catch (error) {
       console.error("Error:", error);
     }
-    newComments[index].showReplyInput = false; // 답글 입력 창 닫기
 
-    setComments(newComments);
     setReplyValue("");
     setReplySecretChecked(false);
   };
 
-  const handleReplyClick = (index) => {
-    //답글 버튼 클릭시 답글 폼 표시 / 답글 상태 관리
-    const newComments = [...comments];
-    newComments[index].showReplyInput = !newComments[index].showReplyInput;
-    setComments(newComments);
+  const handleReplyClick = (commentNum) => {
+    setComments(
+      comments.map((comment) => {
+        if (comment.commentNum === commentNum) {
+          return { ...comment, showReplyInput: !comment.showReplyInput };
+        }
+        return comment;
+      })
+    );
   };
 
-  const handleDeleteClick = async (index) => {
-    const commentIdToDelete = comments[index].commentNum;
+  const handleDeleteClick = async (commentNum) => {
+    const commentIndex = comments.findIndex(
+      (comment) => comment.commentNum === commentNum
+    );
 
     if (window.confirm("정말 삭제하시겠습니까?")) {
       try {
-        await axios.delete(`/board/comment/${commentIdToDelete}`);
+        await axios.delete(`/board/comment/${commentNum}`);
         const newComments = [...comments];
-        newComments.splice(index, 1);
+        newComments.splice(commentIndex, 1);
         setComments(newComments);
+        setTotalComments(totalComments - 1);
       } catch (error) {
         console.error("Error:", error);
       }
     }
-    // const newComments = [...comments];
-    // newComments.splice(index, 1);
-    // setComments(newComments);
   };
 
-  const handleEditClick = (index) => {
-    // 수정 클릭시 수정 폼 표시
-    const newComments = [...comments];
-    newComments[index].showEditForm = !newComments[index].showEditForm;
-    if (newComments[index].showEditForm) {
-      // 인코딩된 값을 수정 폼에 사용하도록 변경
-      newComments[index].commentContent = newComments[index].commentContent
-        .replace(/&lt;/g, "<")
-        .replace(/&gt;/g, ">");
-    } else {
-      // 취소 버튼 클릭시 다시 인코딩된 값을 사용하도록 변경
-      newComments[index].commentContent = newComments[index].commentContent
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-    }
-    setComments(newComments);
+  const handleEditClick = (commentNum) => {
+    setComments(
+      comments.map((comment) => {
+        if (comment.commentNum === commentNum) {
+          return { ...comment, showEditForm: !comment.showEditForm };
+        }
+        return comment;
+      })
+    );
   };
 
-  const handleEditSubmit = (e, index) => {
+  const handleEditSubmit = async (e, commentNum) => {
     //수정 완료 시
     e.preventDefault();
-    const newComments = [...comments];
+    const commentToEdit = comments.find(
+      (comment) => comment.commentNum === commentNum
+    );
     const editInputValue = e.target.editInput.value;
+    const isSecretChecked = e.target.isSecret.checked;
     const encodedEditInputValue = editInputValue
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;");
 
     if (editInputValue.trim() === "") return;
 
-    newComments[index].commentContent = DOMPurify.sanitize(
-      encodedEditInputValue
-    );
-    newComments[index].commentUpdate = new Date().toISOString();
-    newComments[index].showEditForm = false; // 수정 폼 닫기
-    setComments(newComments);
+    const updatedCommentData = {
+      commentContent: DOMPurify.sanitize(encodedEditInputValue),
+      commentIsSecret: isSecretChecked,
+    };
+
+    try {
+      const response = await axios.put(
+        `/board/comment/${commentToEdit.commentNum}`,
+        updatedCommentData
+      );
+
+      const updatedComment = response.data;
+
+      const newComments = comments.map((comment) =>
+        comment.commentNum === commentNum ? updatedComment : comment
+      );
+      setComments(newComments);
+    } catch (error) {
+      console.error("수정 실패 :", error);
+    }
+
+    commentToEdit.showEditForm = false; // 수정 폼 닫기
   };
+
+  const displayComments = comments.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage
+  );
 
   return (
     <S.CommentWrapper>
-      <S.CommentCount> 💬 {comments.length}개의 댓글</S.CommentCount>
+      <S.CommentCount> 💬 {totalComments}개의 댓글</S.CommentCount>
       <S.CommentList>
         {displayComments.map((comment, index) => {
           const isReply = comment.commentPnum !== null;
           const CommentItemComponent = isReply ? S.ReplyItem : S.CommentItem;
 
           return (
-            <CommentItemComponent key={index}>
+            <CommentItemComponent key={comment.commentNum}>
               <S.CommentProfile>
                 <S.CommentImg src={comment.memberImg}></S.CommentImg>
                 <S.CommentInfo>
-                  <S.CommentAuthor>{comment.memberNickname}</S.CommentAuthor>
+                  <S.CommentAuthor>
+                    {comment.memberNickname}{" "}
+                    {comment.commentIsSecret && (
+                      <LockIcon
+                        sx={{
+                          color: "#808080",
+                          width: 15,
+                          height: 15,
+                          verticalAlign: "top",
+                        }}
+                      />
+                    )}
+                  </S.CommentAuthor>
                   <S.CommentDate>
                     {formatDate(comment.commentCreate)}
                   </S.CommentDate>
@@ -256,7 +315,9 @@ const Comment = ({ boardId, boardNum }) => {
                     }}
                   ></S.CommentContent>
                 ) : (
-                  <S.EditForm onSubmit={(e) => handleEditSubmit(e, index)}>
+                  <S.EditForm
+                    onSubmit={(e) => handleEditSubmit(e, comment.commentNum)}
+                  >
                     <S.EditInput
                       type="text"
                       defaultValue={comment.commentContent}
@@ -276,7 +337,7 @@ const Comment = ({ boardId, boardNum }) => {
                         </S.EditButton>
                         <S.ReplyButtonSpace />
                         <S.DeleteButton
-                          onClick={() => handleEditClick(index)}
+                          onClick={() => handleEditClick(comment.commentNum)}
                           variant="contained"
                         >
                           취소
@@ -288,25 +349,38 @@ const Comment = ({ boardId, boardNum }) => {
               </S.CommentContentWrapper>
 
               <S.Reply>
-                {!isReply && ( //답글이 아닐 경우에만 답글 버튼 표시
+                {!isReply &&
+                  loggedIn && ( //답글이 아닐 경우에만, 로그인 상태일 경우에만 답글 버튼 표시
+                    <>
+                      <S.ReplyButton
+                        onClick={() => handleReplyClick(comment.commentNum)}
+                      >
+                        답글
+                      </S.ReplyButton>
+                      <S.ReplyButtonSpace />
+                    </>
+                  )}
+                {comment.memberNum === userNum && ( //댓글 작성자와 현재 로그인한 사용자가 같을 경우에만 표시
                   <>
-                    <S.ReplyButton onClick={() => handleReplyClick(index)}>
-                      답글
+                    <S.ReplyButton
+                      onClick={() => handleEditClick(comment.commentNum)}
+                    >
+                      수정
                     </S.ReplyButton>
                     <S.ReplyButtonSpace />
+                    <S.DeleteButton
+                      onClick={() => handleDeleteClick(comment.commentNum)}
+                    >
+                      삭제
+                    </S.DeleteButton>
                   </>
                 )}
-                <S.ReplyButton onClick={() => handleEditClick(index)}>
-                  수정
-                </S.ReplyButton>
-                <S.ReplyButtonSpace />
-                <S.DeleteButton onClick={() => handleDeleteClick(index)}>
-                  삭제
-                </S.DeleteButton>
               </S.Reply>
 
               {comment.showReplyInput && (
-                <S.ReplyForm onSubmit={(e) => handleReplySubmit(e, index)}>
+                <S.ReplyForm
+                  onSubmit={(e) => handleReplySubmit(e, comment.commentNum)}
+                >
                   <S.ReplyInput
                     type="text"
                     placeholder="답글 입력..."
@@ -337,6 +411,7 @@ const Comment = ({ boardId, boardNum }) => {
           placeholder="댓글 입력..."
           value={inputValue}
           onChange={handleInputChange}
+          readOnly={!loggedIn}
         />
         <S.SecretWrapper>
           비밀 댓글
