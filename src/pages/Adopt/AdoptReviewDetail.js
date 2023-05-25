@@ -4,6 +4,7 @@ import CustomButton from "../Login/CustomButton";
 import { Link, useParams, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ADOPT } from "../../constants/PageURL";
+import * as S from "../Support/Volunteer/VolunteerNoticeWrite.styled";
 import DOMPurify from "dompurify";
 import axios from "axios";
 import {
@@ -21,17 +22,10 @@ const AdoptReviewDetail = () => {
   const { id } = useParams();
   const location = useLocation();
   const [data, setData] = useState([]);
-  const {
-    boardNum,
-    reviewSubject,
-    memberNum,
-    reviewCount,
-    reviewContent,
-    reviewDate,
-  } = location.state;
+  const number = location.state;
   const formatDate = () => {
-    console.log(reviewDate);
-    const date = new Date(reviewDate);
+    console.log(data.reviewDate);
+    const date = new Date(data.reviewDate);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
@@ -44,7 +38,17 @@ const AdoptReviewDetail = () => {
       __html: DOMPurify.sanitize(html),
     };
   };
-  console.log(reviewDate);
+  useEffect(() => {
+    axios
+      .get(`/board/review/${number.boardNum}`)
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((error) => {
+        console.error("error");
+      });
+  }, []);
+  console.log("data", data);
   return (
     <ThemeProvider theme={CustomTheme}>
       <Section className="result">
@@ -58,16 +62,16 @@ const AdoptReviewDetail = () => {
                     colSpan={4}
                     sx={{ width: 750, fontWeight: "bold", fontSize: "20px" }}
                   >
-                    {reviewSubject}
+                    {data.reviewSubject}
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell sx={{ width: 600 }}>{memberNum}</TableCell>
+                  <TableCell sx={{ width: 600 }}>{data.memberNum}</TableCell>
                   <TableCell align="right" sx={{ color: "lightgray" }}>
                     {formatDate()}
                   </TableCell>
                   <TableCell align="right" sx={{ color: "lightgray" }}>
-                    조회수 : {reviewCount}
+                    조회수 : {data.reviewCount}
                   </TableCell>
                   <TableCell align="right" sx={{ color: "lightgray" }}>
                     댓글 : 2
@@ -89,7 +93,7 @@ const AdoptReviewDetail = () => {
                     />
                     <br /> */}
                     <div
-                      dangerouslySetInnerHTML={createMarkup(reviewContent)}
+                      dangerouslySetInnerHTML={createMarkup(data.reviewContent)}
                     ></div>
                   </TableCell>
                 </TableRow>
@@ -99,20 +103,22 @@ const AdoptReviewDetail = () => {
               <Link to={ADOPT.REVIEW} style={{ textDecoration: "none" }}>
                 <CustomButton label="돌아가기" value="작성취소" />
               </Link>
+
               <Link to={ADOPT.REVIEW} style={{ textDecoration: "none" }}>
                 <CustomButton
                   label="삭제"
                   value="작성취소"
                   onClick={() => {
-                    axios.delete(`/board/review/${boardNum}`);
+                    axios.delete(`/board/review/${data.boardNum}`);
                     alert("삭제완료");
                   }}
                 />
               </Link>
+
               <Link
-                to={ADOPT.REVIEW_WRITE}
+                to={ADOPT.REVIEW_MODIFY}
                 state={{
-                  modify: "modify",
+                  boardNum: data.boardNum,
                 }}
                 style={{ textDecoration: "none" }}
               >

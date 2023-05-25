@@ -49,6 +49,7 @@ import HospitalLocation from "./Adopt/HospitalLocation";
 import ShelterLocation from "./Adopt/ShelterLocation";
 import AdoptInfo from "./Adopt/AdoptInfo";
 import AnimalListNav from "./Adopt/AnimalListNav";
+import AdoptReviewModify from "./Adopt/AdoptReviewModify";
 
 // Shop
 import Cart from "./Shop/Cart";
@@ -223,6 +224,7 @@ export const Adopt = {
   ShelterLocation: ShelterLocation,
   AdoptInfo: AdoptInfo,
   AnimalListNav: AnimalListNav,
+  AdoptReviewModify: AdoptReviewModify,
   // AdoptApplication: lazy(() => import("./Adopt/AdoptApplication")),
   // AdoptChecklist: lazy(() => import("./Adopt/AdoptChecklist")),
   // AdoptReview: lazy(() => import("./Adopt/AdoptReview")),

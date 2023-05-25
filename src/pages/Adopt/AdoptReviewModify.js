@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import * as S from "../Support/Volunteer/VolunteerNoticeWrite.styled";
 import { TextField, Modal, Alert, ThemeProvider } from "@mui/material";
@@ -20,11 +20,12 @@ const modalStyle = {
   p: 4,
 };
 
-const AdoptReviewWrite = () => {
+const AdoptReviewModify = () => {
+  const location = useLocation();
   const [formAble, setFormAble] = useState(false);
+  const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
-  const [isModify, setIsModify] = useState(false);
   const currentDate = new Date();
   const isoCurrentDate = new Date(
     currentDate.getTime() + 9 * 60 * 60 * 1000
@@ -33,6 +34,7 @@ const AdoptReviewWrite = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [file, setFile] = useState(null);
+  const boardNum = location.state;
 
   // 사진 미리보기
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -63,6 +65,19 @@ const AdoptReviewWrite = () => {
       return null;
     }
   };
+  useEffect(() => {
+    axios
+      .get(`/board/review/${boardNum.boardNum}`)
+      .then((response) => {
+        setData(response.data);
+        setPreviewUrl(response.data.imgThumbnail);
+        setTitle(response.data.reviewSubject);
+        setContent(response.data.reviewContent);
+      })
+      .catch((error) => {
+        console.error("error");
+      });
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,7 +85,7 @@ const AdoptReviewWrite = () => {
       setFormAble(false);
       setOpen(true);
     } else {
-      let imageUrl = "https://via.placeholder.com/150";
+      let imageUrl = data.imgThumbnail;
 
       if (file) {
         const uploadedUrl = await uploadImage(file);
@@ -80,13 +95,10 @@ const AdoptReviewWrite = () => {
       }
 
       axios
-        .post("/board/review/insert", {
-          memberNum: "1",
-          boardId: "review",
+        .put(`/board/review/${boardNum.boardNum}`, {
           reviewSubject: title,
           reviewContent: content,
           imgThumbnail: imageUrl,
-          reviewDate: isoCurrentDate,
         })
         .then(() => {
           alert("등록완료");
@@ -105,7 +117,7 @@ const AdoptReviewWrite = () => {
   return (
     <>
       <S.TitleContainer>
-        <S.Title>게시글 작성</S.Title>
+        <S.Title>게시글 수정</S.Title>
       </S.TitleContainer>
       <S.Container>
         <ThemeProvider theme={CustomTheme}>
@@ -168,7 +180,7 @@ const AdoptReviewWrite = () => {
                     variant="contained"
                     onClick={handleSubmit}
                   >
-                    글쓰기
+                    수정
                   </S.WriteButton>
                   <S.ButtonSpace />
                   <S.WriteButton onClick={handleCancel} variant="contained">
@@ -188,7 +200,7 @@ const AdoptReviewWrite = () => {
       >
         {formAble ? (
           <Alert sx={modalStyle} severity="success">
-            작성 완료!
+            수정 완료!
           </Alert>
         ) : (
           <Alert sx={modalStyle} severity="warning">
@@ -199,4 +211,4 @@ const AdoptReviewWrite = () => {
     </>
   );
 };
-export default AdoptReviewWrite;
+export default AdoptReviewModify;

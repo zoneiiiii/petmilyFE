@@ -149,7 +149,7 @@ const SearchContainer = styled.div`
 
 const CardImage = styled.img`
   width: 100%;
-  height: auto;
+  height: 251.5px;
   margin-bottom: 10px;
 `;
 

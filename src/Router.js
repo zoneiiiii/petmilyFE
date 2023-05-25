@@ -156,6 +156,10 @@ const Router = () => {
               path={BROWSER_PATH.ADOPT.REVIEW_WRITE}
               element={<Page.Adopt.AdoptReviewWrite />}
             />
+            <Route
+              path={BROWSER_PATH.ADOPT.REVIEW_MODIFY}
+              element={<Page.Adopt.AdoptReviewModify />}
+            />
             {/* Shop */}
             <Route
               path={BROWSER_PATH.SHOP.PRODUCT}
