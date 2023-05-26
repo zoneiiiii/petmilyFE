@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect, useLayoutEffect, useContext } from "react";
 import {
   Card,
   Grid,
@@ -13,9 +13,10 @@ import { Link } from "react-router-dom";
 import { ADOPT } from "../../constants/PageURL";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import axios from "axios";
-import { red } from "@mui/material/colors";
+import { AuthContext } from "../../contexts/AuthContexts";
 
 const AdoptReview = () => {
+  const { loggedIn } = useContext(AuthContext);
   const [data, setData] = useState([]); // DB 데이터 가져오는 변수
   const [page, setPage] = useState(1); // 현재 페이지 관리하는 상태 변수
   const itemsPerPage = 12; // 한페이지에 보여줄 페이지의 개수
@@ -70,11 +71,6 @@ const AdoptReview = () => {
                         to={ADOPT.REVIEW_DETAIL(item.boardNum)}
                         state={{
                           boardNum: item.boardNum,
-                          reviewSubject: item.reviewSubject,
-                          memberNum: item.memberNum,
-                          reviewCount: item.reviewCount,
-                          reviewContent: item.reviewContent,
-                          reviewDate: item.reviewDate,
                         }}
                         style={{ textDecoration: "none" }}
                       >
@@ -88,7 +84,7 @@ const AdoptReview = () => {
                           <CardImage src={item.imgThumbnail} />
                           <div>
                             <CardTitle>{item.reviewSubject}</CardTitle>
-                            <CardWritter>{item.memberNum}</CardWritter>
+                            <CardWritter>{item.memberNickName}</CardWritter>
                             <CardCount>조회 {item.reviewCount}</CardCount>
                           </div>
                         </Card>
@@ -96,15 +92,17 @@ const AdoptReview = () => {
                     </Grid>
                   ))}
               </Grid>
-              <Link
-                className="button"
-                to={ADOPT.REVIEW_WRITE}
-                state={{
-                  modify: "write",
-                }}
-              >
-                <CustomButton label="글쓰기" value="글쓰기" />
-              </Link>
+              {loggedIn && (
+                <Link
+                  className="button"
+                  to={ADOPT.REVIEW_WRITE}
+                  state={{
+                    modify: "write",
+                  }}
+                >
+                  <CustomButton label="글쓰기" value="글쓰기" />
+                </Link>
+              )}
             </Container>
             <Pagination
               color="primary"

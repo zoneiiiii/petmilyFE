@@ -2,7 +2,7 @@ import styled from "styled-components";
 import * as React from "react";
 import CustomButton from "../Login/CustomButton";
 import { Link, useParams, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { ADOPT } from "../../constants/PageURL";
 import * as S from "../Support/Volunteer/VolunteerNoticeWrite.styled";
 import DOMPurify from "dompurify";
@@ -17,11 +17,14 @@ import {
 } from "@mui/material";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import Comment from "../../components/Comment/Comment";
+import { AuthContext } from "../../contexts/AuthContexts";
 
 const AdoptReviewDetail = () => {
   const { id } = useParams();
+  const { userNum } = useContext(AuthContext);
   const location = useLocation();
   const [data, setData] = useState([]);
+  const [writeId, setWriteId] = useState(false);
   const number = location.state;
   const formatDate = () => {
     console.log(data.reviewDate);
@@ -43,12 +46,18 @@ const AdoptReviewDetail = () => {
       .get(`/board/review/${number.boardNum}`)
       .then((response) => {
         setData(response.data);
+        console.log(response.data);
+        if (response.data.memberNum === userNum) {
+          setWriteId(true);
+        } else {
+          setWriteId(false);
+        }
       })
       .catch((error) => {
         console.error("error");
       });
-  }, []);
-  console.log("data", data);
+  }, [userNum]);
+
   return (
     <ThemeProvider theme={CustomTheme}>
       <Section className="result">
@@ -103,27 +112,32 @@ const AdoptReviewDetail = () => {
               <Link to={ADOPT.REVIEW} style={{ textDecoration: "none" }}>
                 <CustomButton label="돌아가기" value="작성취소" />
               </Link>
+              {writeId ? (
+                <div>
+                  <Link to={ADOPT.REVIEW} style={{ textDecoration: "none" }}>
+                    <CustomButton
+                      label="삭제"
+                      value="삭제"
+                      onClick={() => {
+                        axios.delete(`/board/review/${data.boardNum}`);
+                        alert("삭제완료");
+                      }}
+                    />
+                  </Link>
 
-              <Link to={ADOPT.REVIEW} style={{ textDecoration: "none" }}>
-                <CustomButton
-                  label="삭제"
-                  value="작성취소"
-                  onClick={() => {
-                    axios.delete(`/board/review/${data.boardNum}`);
-                    alert("삭제완료");
-                  }}
-                />
-              </Link>
-
-              <Link
-                to={ADOPT.REVIEW_MODIFY}
-                state={{
-                  boardNum: data.boardNum,
-                }}
-                style={{ textDecoration: "none" }}
-              >
-                <CustomButton label="수정" value="작성취소" />
-              </Link>
+                  <Link
+                    to={ADOPT.REVIEW_MODIFY}
+                    state={{
+                      boardNum: data.boardNum,
+                    }}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <CustomButton label="수정" value="삭제" />
+                  </Link>
+                </div>
+              ) : (
+                ""
+              )}
             </Body>
 
             <section className="comment">
