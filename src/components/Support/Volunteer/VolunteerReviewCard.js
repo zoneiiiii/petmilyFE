@@ -16,10 +16,10 @@ function formatDate(dateString) {
 const VolunteerReviewCard = ({
   boardNum,
   imgThumbnail,
-  memberNum,
   reviewSubject,
   reviewDate,
   reviewCount,
+  memberNickname,
 }) => {
   return (
     <S.Container>
@@ -28,8 +28,8 @@ const VolunteerReviewCard = ({
         style={{ textDecoration: "none", color: "inherit", width: "100%" }}
       >
         <S.Thumbnail src={imgThumbnail} alt="thumbnail" />
-        <S.User>{reviewSubject}</S.User>
-        <S.Title>아이디: {memberNum}</S.Title>
+        <S.Title>{reviewSubject}</S.Title>
+        <S.User>{memberNickname}</S.User>
         <S.Date>{formatDate(reviewDate)}</S.Date>
         <S.CountWrapper>
           <S.Count>조회수 : {reviewCount} </S.Count>
