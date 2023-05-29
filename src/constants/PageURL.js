@@ -584,47 +584,49 @@ export const COMMUNITY = {
   },
 };
 
-
-
 /** ADMIN: 관리자 관련 URL 리스트*/
 export const ADMIN = {
-  /**회원 관리 페이지 URL
-   * @return "/admin/member"
+  /**관리자 레이아웃 페이지 URL
+   * @return "/a"
    */
-  MEMBER: "/admin/member",
+  ADMINLAYOUT: "/a",
+  /**회원 관리 페이지 URL
+   * @return "/a/member"
+   */
+  MEMBER: "/a/member",
 
   /**입양 관리 페이지 URL
-   * @return "/admin/adopt"
+   * @return "/a/adopt"
    */
-  ADOPT: "/admin/adopt",
+  ADOPT: "/a/adopt",
 
   /**사용자 대쉬보드 페이지 URL
-   * @return "/admin/dashboard"
+   * @return "/a/dashboard"
    */
-  DASHBOARD: "/admin/dashboard",
+  DASHBOARD: "/a/dashboard",
 
   /**1:1 문의 관리 페이지 URL
-   * @return "/admin/qna"
+   * @return "/a/qna"
    */
-  QNA: "/admin/qna",
+  QNA: "/a/qna",
 
   /**상품 관리 페이지 URL
-   * @return "/admin/product"
+   * @return "/a/product"
    */
-  PRODUCT: "/admin/product",
+  PRODUCT: "/a/product",
 
   /**상품 입력 페이지 URL
-   * @return "/admin/product/write"
+   * @return "/a/product/write"
    */
-  PRODUCT_WRITE: "/admin/product/write",
+  PRODUCT_WRITE: "/a/product/write",
 
   /**주문 관리 페이지 URL
-   * @return "/admin/order"
+   * @return "/a/order"
    */
-  ORDER: "/admin/order",
+  ORDER: "/a/order",
 
   /**게시글 관리 페이지 URL
-   * @return "/admin/board"
+   * @return "/a/board"
    */
-  BOARD: "/admin/board",
+  BOARD: "/a/board",
 };

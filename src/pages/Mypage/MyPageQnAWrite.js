@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Modal from "@mui/material/Modal";
 import Alert from "@mui/material/Alert";
 import {
@@ -11,7 +11,7 @@ import {
   TableRow,
   TableCell,
   Typography,
-  ThemeProvider
+  ThemeProvider,
 } from "@mui/material";
 import axios from "axios";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -20,6 +20,7 @@ import { MYPAGE } from "../../constants/PageURL";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { MyCustomUploadAdapterPlugin } from "../../components/common/UploadAdapter";
 import { useLocation } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContexts";
 
 const modalStyle = {
   position: "absolute",
@@ -33,6 +34,7 @@ const modalStyle = {
 };
 
 const MyPageQnAWrite = () => {
+  const { userNum } = useContext(AuthContext);
   const [content, setContent] = useState("");
   const [subject, setSubject] = useState("");
   // const [data, setData] = useState("");
@@ -51,8 +53,7 @@ const MyPageQnAWrite = () => {
     let isError = false;
     if (subject === "" || content === "") {
       isError = true;
-    }
-    else  {
+    } else {
       isError = false;
     }
     return isError;
@@ -65,7 +66,6 @@ const MyPageQnAWrite = () => {
     try {
       const response = await axios.post("/upload", formData);
       const imageUrl = response.data;
-      // setUploadedImageUrl(imageUrl);
       return imageUrl;
     } catch (error) {
       console.error("이미지 업로드 실패 : ", error);
@@ -73,45 +73,46 @@ const MyPageQnAWrite = () => {
     }
   };
 
-  const location = useLocation();
-  const memberNum = location.state.num;
+  // const location = useLocation();
+  // const memberNum = location.state.num;
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
     const isError = validate();
-    if (isError){
+    if (isError) {
       setFormAble(false);
       setOpen(true);
       return;
     } else {
       setFormAble(true);
     }
-    e.preventDefault();
-
-   const currentDate = new Date();
+    const currentDate = new Date();
     const isoCurrentDate = new Date(
       currentDate.getTime() + 9 * 60 * 60 * 1000
     ).toISOString();
 
     let imageUrl = "https://via.placeholder.com/150";
-    
+
     if (file) {
       const uploadedUrl = await uploadImage(file);
       if (uploadedUrl) {
         imageUrl = uploadedUrl;
       }
     }
-    
+
     const postData = {
       qnaSubject: subject,
       qnaContent: content,
       qnaImg: imageUrl,
       qnaDate: isoCurrentDate,
-      memberNum:memberNum,
       qnaStatus: false,
+      // memberNum: userNum,
     };
 
     try {
-      await axios.post("http://localhost:8080/board/qna/write", postData, memberNum);
+      await axios.post("http://localhost:8080/board/qna/write", postData, {
+        withCredentials: true,
+      });
       setOpen(true);
       setTimeout(() => {
         handleReset();
@@ -158,7 +159,7 @@ const MyPageQnAWrite = () => {
             </TableRow>
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>내용</TableCell>
-              <TableCell sx={{width:"828px"}}>
+              <TableCell sx={{ width: "828px" }}>
                 <EditorWrapper>
                   <CKEditor
                     editor={ClassicEditor}
@@ -218,7 +219,7 @@ const titleSx = {
 const EditorWrapper = styled.div`
   .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
     min-height: 300px;
-    width:828px;
+    width: 828px;
     &:focus {
       border: 1px solid #fbd385;
     }

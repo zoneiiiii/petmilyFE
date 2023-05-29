@@ -6,116 +6,39 @@ import {
   Pagination,
   ThemeProvider,
   Typography,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
 } from "@mui/material";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
-import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 import { ADOPT } from "../../constants/PageURL";
-  const cards = [
-    {
-      id: 1,
-      title: "밍키 잘 지내고 있어요! 밍키 잘 지내고 있어요!밍키 밍키 밍키 밍키",
-      writter: "밍키맘",
-      date: "2023.05.04",
-      count: 34,
-    },
-    {
-      id: 2,
-      title: "펫밀리 입양후기",
-      writter: "똘이엄마",
-      date: "2023.05.04",
-      count: 34,
-    },
-    {
-      id: 3,
-      title: "입양 3개월 후 남기는 후기",
-      writter: "별맘",
-      date: "2023.05.04",
-      count: 34,
-    },
-    {
-      id: 4,
-      title: "아지 잘 지냅니다 :)",
-      writter: "아지아지",
-      date: "2023.05.04",
-      count: 34,
-    },
-    {
-      id: 5,
-      title: "새 가족이 생겼어요!",
-      writter: "패밀리",
-      date: "2023.05.04",
-      count: 34,
-    },
-    {
-      id: 6,
-      title: "똘이가 어느새 3살이 됐어요.",
-      writter: "똘이엄마",
-      date: "2023.05.04",
-      count: 34,
-    },
-    {
-      id: 7,
-      title: "이름 같이 지어주세요!",
-      writter: "초보엄마",
-      date: "2023.05.04",
-      count: 34,
-    },
-    {
-      id: 8,
-      title: "입양신청은 펫밀리에서!",
-      writter: "나는유저",
-      date: "2023.05.04",
-      count: 34,
-    },
-    {
-      id: 9,
-      title: "초보 반려인의 후기",
-      writter: "이기자",
-      date: "2023.05.04",
-      count: 34,
-    },
-    {
-      id: 10,
-      title: "서울보호소,입양 후기",
-      writter: "삼기자",
-      date: "2023.05.04",
-      count: 34,
-    },
-    {
-      id: 11,
-      title: "건강해진 모모 봐주세요!",
-      writter: "사기자",
-      date: "2023.05.04",
-      count: 34,
-    },
-    {
-      id: 12,
-      title: "골든 리트리버 입양했습니다.",
-      writter: "오기자",
-      date: "2023.05.04",
-      count: 34,
-    },
-    {
-      id: 13,
-      title: "잘 지내고 있습니다.",
-      writter: "ㅎㅎ",
-      date: "2023.05.04",
-      count: 34,
-    },
-  ];
+import { AuthContext } from "../../contexts/AuthContexts";
+import axios from "axios";
 
 const MyPageAdoptReview = () => {
-  const [data, setData] = useState([]); // DB 데이터 가져오는 변수
+  const [reviewData, setReviewData] = useState([]);
   const [page, setPage] = useState(1); // 현재 페이지 관리하는 상태 변수
   const itemsPerPage = 12; // 한페이지에 보여줄 페이지의 개수
   const [maxPageNum, setMaxPageNum] = useState(1);
-  const { id } = useParams();
-  const [reviewData, setReviewData] = useState([]); 
+  const { userNum } = useContext(AuthContext);
 
   useEffect(() => {
-    setReviewData(cards.filter((data) => data.id === parseInt(id))[0]);
-  }, [id]);
+    if (userNum) {
+      // API 호출
+
+      axios
+        .get(`/mypage/adoptReview/${userNum}`)
+        .then((response) => {
+          setReviewData(response.data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+  }, [userNum]);
 
   const handleChange = (event, value) => {
     //페이지 변경 시 호출, 새 페이지의 번호를 value에 저장함.
@@ -123,68 +46,98 @@ const MyPageAdoptReview = () => {
   };
 
   const getPageNum = () => {
-    const maxLength = cards.length;
+    const maxLength = reviewData.length;
     return setMaxPageNum(Math.ceil(maxLength / itemsPerPage));
   };
 
   useEffect(() => {
     getPageNum();
   }, []);
-
-  return (
-    <ThemeProvider theme={CustomTheme}>
-      <Typography
-        className="myOrderListTitle"
-        sx={titleSx}
-        border={3}
-        borderColor="#ffbd59"
-        mb={4}
-      >
-        입양 후기
-      </Typography>
-              <Grid container spacing={4} columns={8} width="940px">
-                {cards
-                  .slice(
-                    (page - 1) * itemsPerPage,
-                    (page - 1) * itemsPerPage + itemsPerPage
-                  )
-                  .map((card) => (
-                    <Grid item xs={10} sm={6} md={2} key={card.id}>
-                      <Link
-                        to={ADOPT.REVIEW_DETAIL(card.id)}
-                        style={{ textDecoration: "none" }}
-                      >
-                        <Card
-                          sx={{
-                            height: "100%",
-                            display: "flex",
-                            flexDirection: "column",
-                          }}
-                        >
-                          <CardImage src="http://placeimg.com/300/300/animals/sepia" />
-                          <div>
-                            <CardTitle>{card.title}</CardTitle>
-                            <CardWritter>{card.writter}</CardWritter>
-                            <CardCount>조회 {card.count}</CardCount>
-                          </div>
-                        </Card>
-                      </Link>
-                    </Grid>
-                  ))}
+  if (reviewData.length === 0) {
+    return (
+      <ThemeProvider theme={CustomTheme}>
+        <Typography
+          className="myOrderListTitle"
+          sx={titleSx}
+          border={3}
+          borderColor="#ffbd59"
+          mb={4}
+        >
+          입양 후기
+        </Typography>
+        <Grid sx={{ width: "940px", height: "50vh" }}>
+          <Table
+            aria-label="caption table"
+            overflow="hidden"
+            sx={{ border: "1px solid lightgray" }}
+          >
+            <TableHead>
+              <TableRow>
+                <TableCell colSpan={4} align="center" sx={{ height: 250 }}>
+                  게시글이 없습니다.
+                </TableCell>
+              </TableRow>
+            </TableHead>
+          </Table>
+        </Grid>
+      </ThemeProvider>
+    );
+  } else {
+    return (
+      <ThemeProvider theme={CustomTheme}>
+        <Typography
+          className="myOrderListTitle"
+          sx={titleSx}
+          border={3}
+          borderColor="#ffbd59"
+          mb={4}
+        >
+          입양 후기
+        </Typography>
+        <Grid container spacing={4} columns={8} width="940px">
+          {reviewData
+            .slice(
+              (page - 1) * itemsPerPage,
+              (page - 1) * itemsPerPage + itemsPerPage
+            )
+            .map((card) => (
+              <Grid item xs={10} sm={6} md={2} key={card.boardNum}>
+                <Link
+                  to={ADOPT.REVIEW_DETAIL(card.boardNum)}
+                  style={{ textDecoration: "none" }}
+                >
+                  <Card
+                    sx={{
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <CardImage src={card.imgThumbnail} />
+                    <div>
+                      <CardTitle>{card.reviewSubject}</CardTitle>
+                      <CardWritter>{card.memberNickname}</CardWritter>
+                      <CardCount>조회 {card.reviewCount}</CardCount>
+                    </div>
+                  </Card>
+                </Link>
               </Grid>
-            <Pagination
-              color="primary"
-              page={page}
-              count={maxPageNum}
-              onChange={handleChange}
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                margin: "50px 0 0px 0px",
-              }}
-            />
-    </ThemeProvider>
-  );
+            ))}
+        </Grid>
+        <Pagination
+          color="primary"
+          page={page}
+          count={maxPageNum}
+          onChange={handleChange}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            margin: "50px 0 0px 0px",
+          }}
+        />
+      </ThemeProvider>
+    );
+  }
 };
 
 const titleSx = {

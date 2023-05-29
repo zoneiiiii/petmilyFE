@@ -285,7 +285,15 @@ const Router = () => {
               path={BROWSER_PATH.COMMUNITY.MISSING_WRITE}
               element={<Page.Community.MissingWrite />}
             />
-            {/* Admin */}
+
+            <Route path="*" element={<Page.Main.NotFound />} />
+          </Route>
+          {/* Admin */}
+          <Route
+            path={BROWSER_PATH.ADMIN.ADMINLAYOUT}
+            element={<Page.Admin.AdminLayout />}
+          >
+            <Route index element={<Page.Admin.AdminDashBoard />} />
             <Route
               path={BROWSER_PATH.ADMIN.ADOPT}
               element={<Page.Admin.AdminAdopt />}
@@ -294,10 +302,10 @@ const Router = () => {
               path={BROWSER_PATH.ADMIN.BOARD}
               element={<Page.Admin.AdminBoard />}
             />
-            <Route
+            {/* <Route
               path={BROWSER_PATH.ADMIN.DASHBOARD}
               element={<Page.Admin.AdminDashBoard />}
-            />
+            /> */}
             <Route
               path={BROWSER_PATH.ADMIN.MEMBER}
               element={<Page.Admin.AdminMember />}
@@ -318,7 +326,6 @@ const Router = () => {
               path={BROWSER_PATH.ADMIN.QNA}
               element={<Page.Admin.AdminQnA />}
             />
-            <Route path="*" element={<Page.Main.NotFound />} />
           </Route>
         </Routes>
       </React.Suspense>

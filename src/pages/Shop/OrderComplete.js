@@ -9,17 +9,21 @@ import {
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import { Link } from "react-router-dom";
 import { MYPAGE, SHOP } from "../../constants/PageURL";
-import { useLocation } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
+import { useEffect } from "react";
 
-const OrderComplete = ({ orderCompleted }) => {
-  const location = useLocation();
-  const orderState = location.state.orderCompleted;
-  const error_msg = location.state.error_msg;
+const OrderComplete = ({ isSuccess, errorMsg, reset }) => {
+  const handleClick = () => {
+    reset();
+  };
 
-  if ({ orderState }) {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
+
+  if (isSuccess) {
     return (
       <ThemeProvider theme={CustomTheme}>
         <OrderStyle>
@@ -72,14 +76,16 @@ const OrderComplete = ({ orderCompleted }) => {
                   <br />
                   주문이 거부되었습니다.
                   <br />
-                  에러메세지 : {error_msg}
+                  에러메세지 : {errorMsg}
                 </TableCell>
               </TableRow>
             </TableBody>
           </Table>
           <div style={{ textAlign: "center" }}>
             <Link to={SHOP.ORDER} style={{ textDecoration: "none" }}>
-              <Button className="success">돌아가기</Button>
+              <Button className="success" onClick={handleClick}>
+                돌아가기
+              </Button>
             </Link>
           </div>
         </OrderStyle>
