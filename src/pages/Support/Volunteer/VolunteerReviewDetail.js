@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import * as S from "./VolunteerReviewDetail.styled";
 import { useParams, useNavigate } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
@@ -11,6 +11,7 @@ import DOMPurify from "dompurify";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { CustomTheme } from "../../../assets/Theme/CustomTheme";
+import { AuthContext } from "../../../contexts/AuthContexts";
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -24,6 +25,7 @@ const VolunteerReviewDetail = () => {
   const [post, setPost] = useState(null); // volunteer 데이터 객체 저장 상태값
   const [isLoading, setIsLoading] = useState(true); //로딩 상태
   const { id } = useParams(); //게시글 id
+  const { userNum } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,7 +67,10 @@ const VolunteerReviewDetail = () => {
     if (result) {
       try {
         await axios.delete(
-          `http://localhost:8080/donate/volunteer/review/${id}`
+          `http://localhost:8080/donate/volunteer/review/${id}`,
+          {
+            withCredentials: true,
+          }
         );
         alert("게시물이 삭제되었습니다.");
         navigate(SUPPORT.VOLUNTEER_REVIEW);
@@ -88,7 +93,8 @@ const VolunteerReviewDetail = () => {
         <h2>제목 {post.reviewSubject}</h2>
       </S.DetailTop>
       <S.TopInfo>
-        <S.TopNickname>밍키맘{post.memberNum}</S.TopNickname>
+        <S.UserImg src={post.memberImg}></S.UserImg>
+        <S.TopNickname>{post.memberNickname}</S.TopNickname>
         <S.TopDate>
           <AccessTimeIcon sx={{ color: "#808080", width: 18, height: 18 }} />
           {formatDate(post.reviewDate)}
@@ -104,15 +110,17 @@ const VolunteerReviewDetail = () => {
         <div dangerouslySetInnerHTML={createMarkup(post.reviewContent)} />
       </S.DetailMiddle>
       <ThemeProvider theme={CustomTheme}>
-        <S.ButtonsContainer>
-          <S.Buttons onClick={handleEdit} variant="contained">
-            수정
-          </S.Buttons>
-          <S.ButtonsSpace />
-          <S.Buttons onClick={handleDelete} variant="contained">
-            삭제
-          </S.Buttons>
-        </S.ButtonsContainer>
+        {post.memberNum === userNum && (
+          <S.ButtonsContainer>
+            <S.Buttons onClick={handleEdit} variant="contained">
+              수정
+            </S.Buttons>
+            <S.ButtonsSpace />
+            <S.Buttons onClick={handleDelete} variant="contained">
+              삭제
+            </S.Buttons>
+          </S.ButtonsContainer>
+        )}
 
         <S.DetailBottom>
           <S.horizon />

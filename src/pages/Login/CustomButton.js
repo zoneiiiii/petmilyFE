@@ -122,7 +122,7 @@ const CheckButton = styled(Button)`
 `;
 
 const DeleteButton = styled(Button)`
-  background-color: #FF8282;
+  background-color: #ff8282;
   color: white;
   width: 90px;
   height: 30px;
@@ -131,10 +131,27 @@ const DeleteButton = styled(Button)`
   float: right;
 
   &:hover {
-    background-color: #FF5555;
+    background-color: #ff5555;
   }
   &:focus {
-    background-color: #FF5555;
+    background-color: #ff5555;
+  }
+`;
+
+const WriteButton1 = styled(Button)`
+  background-color: #fbd385;
+  color: white;
+  width: 90px;
+  height: 30px;
+  margin-top: 20px;
+  margin-right: 10px;
+  float: right;
+  margin-left: auto;
+  &:hover {
+    background-color: #facc73;
+  }
+  &:focus {
+    background-color: #facc73;
   }
 `;
 
@@ -230,7 +247,16 @@ export default function CustomButton(props) {
         >
           {props.label}
         </DeleteButton>
-      ): (
+      ) : value === "글쓰기1" ? (
+        <WriteButton1
+          value={value}
+          variant="contained"
+          onClick={props.onClick}
+          fullWidth
+        >
+          {props.label}
+        </WriteButton1>
+      ) : (
         ""
       )}
     </div>

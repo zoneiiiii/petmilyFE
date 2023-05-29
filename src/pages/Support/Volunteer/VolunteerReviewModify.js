@@ -1,26 +1,67 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Loading from "../../../components/Loading/LoadingPage";
-import axios from "axios";
-import * as S from "./VolunteerNoticeModify.styled";
-import { TextField, Typography, ThemeProvider } from "@mui/material";
+import * as S from "./VolunteerReviewModify.styled";
+import {
+  TextField,
+  Typography,
+  ThemeProvider,
+  FormHelperText,
+  Modal,
+  Alert,
+} from "@mui/material";
 import { SUPPORT } from "../../../constants/PageURL";
-
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { CustomTheme } from "../../../assets/Theme/CustomTheme";
+import axios from "axios";
+import { MyCustomUploadAdapterPlugin } from "../../../components/common/UploadAdapter";
 
 const VolunteerReviewModify = () => {
-  const [post, setPost] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
   const navigate = useNavigate();
-
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [file, setFile] = useState(null);
-  // 사진 미리보기
+  const [Thumbnail, setThumbnail] = useState("");
 
+  const modalStyle = {
+    // 모달 스타일
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    p: 4,
+  };
+  const [openModal, setOpenModal] = useState(false); // 모달 상태
+  const handleModalClose = () => {
+    // 모달닫는 함수
+    setOpenModal(false);
+    navigate(SUPPORT.VOLUNTEER_REVIEW);
+  };
+
+  //유효성 검증
+  const [titleError, setTitleError] = useState(false);
+  const [contentError, setContentError] = useState(false);
+  const validate = () => {
+    let isError = false;
+    if (title === "") {
+      setTitleError(true);
+      isError = true;
+    }
+    if (content === "") {
+      setContentError(true);
+      isError = true;
+    }
+
+    return isError;
+  };
+
+  // 사진 미리보기
+  const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -42,9 +83,9 @@ const VolunteerReviewModify = () => {
           `http://localhost:8080/donate/volunteer/review/${id}`
         ); //게시글 Detail 데이터  호출
         const data = response.data;
-        setPost(data);
         setTitle(data.reviewSubject);
         setContent(data.reviewContent);
+        setThumbnail(data.imgThumbnail);
       } catch (error) {
         console.error("Error fetching data : ", error);
       } finally {
@@ -54,9 +95,51 @@ const VolunteerReviewModify = () => {
     fetchPost();
   }, [id]);
 
-  const handleSubmit = (e) => {
+  const uploadImage = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await axios.post("/upload", formData);
+      const imageUrl = response.data;
+      return imageUrl;
+    } catch (error) {
+      console.error("이미지 업로드 실패", error);
+      return null;
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // 전송 로직 구현
+    const isError = validate();
+    if (isError) return;
+
+    let imageUrl = Thumbnail;
+
+    if (file) {
+      const uploadedUrl = await uploadImage(file);
+      if (uploadedUrl) {
+        imageUrl = uploadedUrl;
+      }
+    }
+
+    const postData = {
+      reviewSubject: title,
+      reviewContent: content,
+      imgThumbnail: imageUrl,
+    };
+
+    try {
+      await axios.put(`/donate/volunteer/review/${id}`, postData, {
+        withCredentials: true,
+      });
+      setOpenModal(true);
+      setTimeout(() => {
+        handleModalClose();
+      }, 1000);
+    } catch (error) {
+      console.error("데이터 전송 실패 : ", error);
+    }
   };
 
   const handleCancel = () => {
@@ -77,15 +160,23 @@ const VolunteerReviewModify = () => {
         <ThemeProvider theme={CustomTheme}>
           <S.FormWrapper>
             <form onSubmit={handleSubmit}>
-              <S.FormRow>
+              <S.FormRowWithError>
                 <TextField
                   label="제목"
                   value={title}
                   size="small"
                   fullWidth
-                  onChange={(e) => setTitle(e.target.value)}
+                  onChange={(e) => {
+                    setTitleError(false);
+                    setTitle(e.target.value);
+                  }}
                 />
-              </S.FormRow>
+                <S.ErrorMsg>
+                  <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                    {titleError ? "제목을 입력해 주세요." : null}
+                  </FormHelperText>
+                </S.ErrorMsg>
+              </S.FormRowWithError>
 
               <S.FormRow>
                 <S.ImageWrapper>
@@ -110,7 +201,7 @@ const VolunteerReviewModify = () => {
                 )}
               </S.FormRow>
 
-              <S.FormRow>
+              <S.FormRowWithError>
                 <S.EditorWrapper>
                   <CKEditor
                     editor={ClassicEditor}
@@ -120,35 +211,27 @@ const VolunteerReviewModify = () => {
                       setContent(data);
                     }}
                     config={{
-                      toolbar: [
-                        "heading",
-                        "|",
-                        "bold",
-                        "italic",
-                        "link",
-                        "bulletedList",
-                        "numberedList",
-                        "|",
-                        "indent",
-                        "outdent",
-                        "|",
-                        "blockQuote",
-                        "insertTable",
-                        "mediaEmbed",
-                        "undo",
-                        "redo",
-                      ],
                       className: "WriteEditor",
                       placeholder: "내용을 입력하세요.",
+                      extraPlugins: [MyCustomUploadAdapterPlugin],
                     }}
                   />
                 </S.EditorWrapper>
-              </S.FormRow>
+                <S.ErrorMsg>
+                  <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                    {contentError ? "내용을 입력해 주세요." : null}
+                  </FormHelperText>
+                </S.ErrorMsg>
+              </S.FormRowWithError>
 
               <S.FormRow>
                 <S.ButtonGroup>
-                  <S.WriteButton type="submit" variant="contained">
-                    글쓰기
+                  <S.WriteButton
+                    type="submit"
+                    onClick={handleSubmit}
+                    variant="contained"
+                  >
+                    수정
                   </S.WriteButton>
                   <S.ButtonSpace />
                   <S.WriteButton onClick={handleCancel} variant="contained">
@@ -158,6 +241,16 @@ const VolunteerReviewModify = () => {
               </S.FormRow>
             </form>
           </S.FormWrapper>
+          <Modal
+            open={openModal}
+            onClose={handleModalClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Alert sx={modalStyle} severity="success">
+              수정 완료!
+            </Alert>
+          </Modal>
         </ThemeProvider>
       </S.Container>
     </>

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { SHOP } from "../../constants/PageURL";
+import axios from "axios";
 
 const Section = styled.section`
   text-align: center;
@@ -64,40 +65,6 @@ const Line = styled.hr`
 
 const categories = ["사료", "간식", "외출용품", "목욕/미용", "굿즈"];
 
-const products = [
-  { id: 1, category: "사료", name: "유기농 강아지 사료", price: 10000 },
-  { id: 1, category: "사료", name: "유기농 강아지 사료", price: 10000 },
-  { id: 1, category: "사료", name: "유기농 강아지 사료", price: 10000 },
-  { id: 1, category: "사료", name: "유기농 강아지 사료", price: 10000 },
-  { id: 1, category: "사료", name: "유기농 강아지 사료", price: 10000 },
-  { id: 1, category: "사료", name: "유기농 강아지 사료", price: 10000 },
-  { id: 1, category: "사료", name: "유기농 강아지 사료", price: 10000 },
-  { id: 1, category: "사료", name: "유기농 강아지 사료", price: 10000 },
-  { id: 3, category: "사료", name: "유기농 강아지 사료", price: 10000 },
-  { id: 4, category: "사료", name: "유기농 강아지 사료", price: 10000 },
-  { id: 5, category: "사료", name: "유기농 강아지 사료", price: 10000 },
-  { id: 6, category: "사료", name: "유기농 강아지 사료", price: 10000 },
-  { id: 7, category: "사료", name: "유기농 강아지 사료", price: 10000 },
-  { id: 8, category: "사료", name: "유기농 강아지 사료", price: 10000 },
-  { id: 9, category: "사료", name: "유기농 강아지 사료", price: 10000 },
-  { id: 10, category: "사료", name: "유기농 강아지 사료", price: 10000 },
-  { id: 11, category: "사료", name: "유기농 강아지 사료", price: 10000 },
-  { id: 2, category: "간식", name: "캣닢", price: 5000 },
-  { id: 3, category: "외출용품", name: "하네스", price: 30000 },
-  { id: 3, category: "외출용품", name: "하네스", price: 30000 },
-  { id: 4, category: "굿즈", name: "고양이 인형", price: 20000 },
-  { id: 4, category: "굿즈", name: "고양이 인형", price: 20000 },
-  { id: 4, category: "굿즈", name: "고양이 인형", price: 20000 },
-  { id: 4, category: "굿즈", name: "고양이 인형", price: 20000 },
-  { id: 4, category: "굿즈", name: "고양이 인형", price: 20000 },
-  { id: 4, category: "굿즈", name: "고양이 인형", price: 20000 },
-  { id: 4, category: "굿즈", name: "고양이 인형", price: 20000 },
-  { id: 4, category: "굿즈", name: "고양이 인형", price: 20000 },
-  { id: 4, category: "굿즈", name: "고양이 인형", price: 20000 },
-  { id: 4, category: "굿즈", name: "고양이 인형", price: 20000 },
-  { id: 4, category: "굿즈", name: "고양이 인형", price: 20000 },
-];
-
 const theme = createTheme({
   palette: {
     type: "mainColor",
@@ -108,27 +75,43 @@ const theme = createTheme({
 });
 
 const Product = () => {
-  const MAX_CARD_VIEW = 10;
-
   const [maxPageNum, setMaxPageNum] = useState(1);
   const [page, setPage] = useState(1);
   const [activeCategory, setActiveCategory] = useState(categories[0]);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/shop/product")
+      .then((response) => {
+        setProducts(response.data);
+        getPageNum(response.data.length);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+  const MAX_CARD_VIEW = 12;
+
+  useEffect(() => {
+    window.scrollTo(0, 0); // 페이지네이션 클릭시 화면을 맨 위로 스크롤함
+  }, [page]);
 
   const filteredProducts = products.filter(
-    (product) => product.category === activeCategory
+    (product) => product.productCategory === activeCategory
   );
 
   const handleChange = (event, value) => {
     setPage(value);
   };
 
-  const getPageNum = () => {
-    const maxLen = filteredProducts.length;
+  const getPageNum = (maxLen) => {
     return setMaxPageNum(Math.ceil(maxLen / MAX_CARD_VIEW));
   };
 
   useEffect(() => {
-    getPageNum();
+    getPageNum(filteredProducts.length);
     setPage(1);
   }, [activeCategory]);
 
@@ -148,9 +131,9 @@ const Product = () => {
             </Introduce>
             <Line />
             <CategoryList>
-              {categories.map((category) => (
+              {categories.map((category, idx) => (
                 <CategoryItem
-                  key={category}
+                  key={idx}
                   active={activeCategory === category}
                   onClick={() => setActiveCategory(category)}
                 >
@@ -160,13 +143,13 @@ const Product = () => {
             </CategoryList>
             <Line />
             <Container sx={{ py: 8 }} maxWidth="lg">
-              <Grid container spacing={2} columns={10}>
+              <Grid container spacing={4} columns={8}>
                 {filteredProducts.map((product, idx) => {
                   if (
                     page * MAX_CARD_VIEW <= idx ||
                     (page - 1) * MAX_CARD_VIEW > idx
                   ) {
-                    return <></>;
+                    return <span key={idx}></span>;
                   }
                   return (
                     <Grid item key={idx} xs={10} sm={6} md={2}>
@@ -181,10 +164,10 @@ const Product = () => {
                             flexDirection: "column",
                           }}
                         >
-                          <ProductImage src="http://placehold.it/500x500" />
-                          <ProductName>{product.name}</ProductName>
+                          <ProductImage src={product.imgThumbnail} />
+                          <ProductName>{product.productName}</ProductName>
                           <ProductPrice>
-                            {formatCurrency(product.price)}
+                            {formatCurrency(product.productCost)}
                           </ProductPrice>
                         </Card>
                       </Link>

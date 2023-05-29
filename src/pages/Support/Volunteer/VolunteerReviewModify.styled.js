@@ -46,6 +46,19 @@ export const ButtonGroup = styled.div`
   margin-bottom: 10px;
 `;
 
+export const FormRowWithError = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 16px;
+  align-items: center;
+`;
+
+export const ErrorMsg = styled.div`
+  width: 100%;
+  margin-left: 10px;
+`;
+
 export const ImageWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -96,5 +109,9 @@ export const EditorWrapper = styled.div`
   .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
     width: 700px;
     min-height: 500px;
+  }
+
+  .ck.ck-editor__editable:not(.ck-editor__nested-editable):focus {
+    border-color: #fbd385;
   }
 `;

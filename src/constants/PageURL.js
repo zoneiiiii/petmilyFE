@@ -315,6 +315,8 @@ export const ADOPT = {
    */
   REVIEW_WRITE: "/adopt/review/write",
 
+  REVIEW_MODIFY: "/adopt/review/modify",
+
   /**입양 신청 페이지 URL
    * @return "/adopt/application"
    */
