@@ -18,6 +18,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ABOUT } from "../../constants/PageURL";
 import styled from "styled-components";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import axios from "axios";
+import dayjs from "dayjs";
 
 const pageWidth = "100%";
 // 검색 방식
@@ -37,53 +39,78 @@ const Event = () => {
 
   const navigate = useNavigate();
   const [nowPage, setNowPage] = useState(1);
-  const [searchKeyWord, setSearchKeyWord] = useState("");
+  const [totalPage, setTotalPage] = useState(1);
+  const [searchKeyword, setSearchKeyword] = useState("");
   const [searchMode, setSearchMode] = useState();
-  const [rowsPerPage, setRowsPerPage] = useState(20);
-  const [foundData, setFoundData] = useState(dummy);
-  const [pagedData, setPagedData] = useState(dummy.slice(0, 20));
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [pagedData, setPagedData] = useState();
 
   useEffect(() => {
-    console.log("re-rendering", foundData, searchKeyWord, searchMode);
+    console.log(
+      "re-rendering",
+      "search:",
+      search,
+      "searchKeyword:",
+      searchKeyword,
+      searchMode
+    );
   });
   // 초기 세팅
   useEffect(() => {
     setNowPage(page ? parseInt(page) : 1);
-    setSearchKeyWord(search ? search : "");
+    setSearchKeyword(search ? decodeURIComponent(search) : "");
     setRowsPerPage(limit ? parseInt(limit) : 10);
     setSearchMode(search_mode ? search_mode : searchModes.subject_contents);
-    search && findDataByMode(search, search_mode);
-  }, [limit, page, search]);
+    getData(parseInt(page), limit, search, search_mode);
+  }, []);
 
-  // 페이지 표시 데이터 갱신
-  useEffect(() => {
-    setPagedData(
-      foundData.slice((nowPage - 1) * rowsPerPage, nowPage * rowsPerPage)
-    );
-  }, [nowPage, rowsPerPage, foundData]);
+  const getData = (page, limit, search, search_mode, isNavigate = false) => {
+    let queryText = "/event/list";
+    if (page) {
+      queryText += "?page=" + (page - 1);
+      if (limit) queryText += "&limit=" + limit;
+      if (search)
+        search_mode
+          ? (queryText +=
+              "&search=" +
+              encodeURIComponent(search) +
+              "&search_mode=" +
+              search_mode)
+          : (queryText += "&search=" + encodeURIComponent(search));
+    }
+    console.log("queryText:", queryText);
+    axios
+      .get(queryText)
+      .then((response) => {
+        console.log(response);
+        setPagedData(response.data.content);
+        setNowPage(parseInt(response.data.number) + 1);
+        setTotalPage(parseInt(response.data.totalPages));
+      })
+      .then(() => {
+        if (isNavigate)
+          navigate(
+            ABOUT.EVENT({
+              page: page,
+              limit: limit,
+              search: search,
+              search_mode: search_mode,
+            })
+          );
+      })
+      .catch((error) => {
+        console.error("axios 오류 : ", error);
+      });
+  };
 
   const handleChangePage = (event, newPage) => {
-    navigate(
-      ABOUT.EVENT({
-        page: newPage,
-        limit: limit,
-        search: search,
-        search_mode: search_mode,
-      })
-    );
+    getData(newPage, limit, search, search_mode, true);
   };
 
   // 페이지 표시 데이터수 변경
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value));
-    navigate(
-      ABOUT.EVENT({
-        page: nowPage,
-        limit: event.target.value,
-        search: search,
-        search_mode: search_mode,
-      })
-    );
+    getData(nowPage, event.target.value, search, search_mode);
   };
 
   // 검색 방식 변경
@@ -94,37 +121,8 @@ const Event = () => {
   // 검색
   const handleSearch = (value) => {
     setNowPage(1);
-    findDataByMode(value, searchMode);
-    navigate(
-      ABOUT.EVENT({
-        page: 1,
-        limit: rowsPerPage,
-        search: value,
-        search_mode: searchMode,
-      })
-    );
+    getData(1, rowsPerPage, encodeURIComponent(value), searchMode, true);
   };
-
-  // 검색 방식 설정
-  function findDataByMode(value, searchMode) {
-    switch (searchMode) {
-      case searchModes.subject_contents:
-        setFoundData(
-          dummy.filter(
-            (data) =>
-              data.subject.includes(value) || data.contents.includes(value)
-          )
-        );
-        break;
-      case searchModes.subject:
-        setFoundData(dummy.filter((data) => data.subject.includes(value)));
-        break;
-      case searchModes.contents:
-        setFoundData(dummy.filter((data) => data.contents.includes(value)));
-        break;
-      default:
-    }
-  }
 
   return (
     <ThemeProvider theme={CustomTheme}>
@@ -158,68 +156,86 @@ const Event = () => {
               </Select>
             </FormControl>
             <SearchBar
-              setValue={setSearchKeyWord}
-              value={searchKeyWord}
+              setValue={setSearchKeyword}
+              value={searchKeyword}
+              width={"250px"}
               onClick={handleSearch}
             />
           </Box>
         </Box>
+
         <Table sx={{ width: pageWidth }}>
           <TableBody>
-            {pagedData.map((data, index) => {
-              return (
-                <TableRow key={index}>
-                  <TableCell
-                    sx={{
-                      borderBottom: "1px solid #bfbfbf",
-                      borderTop: "1px solid #bfbfbf",
-                    }}
-                  >
-                    <StyledLink
-                      to={ABOUT.EVENT_DETAIL({
-                        no: data.no,
-                        page: nowPage,
-                        limit: rowsPerPage,
-                        search: searchKeyWord,
-                        search_mode: searchMode,
-                      })}
+            {pagedData &&
+              pagedData.map((data, index) => {
+                return (
+                  <TableRow key={index}>
+                    <TableCell
+                      sx={{
+                        borderBottom: "1px solid #bfbfbf",
+                        borderTop: "1px solid #bfbfbf",
+                      }}
                     >
-                      <Box
-                        sx={{
-                          display: "flex",
-                        }}
+                      <StyledLink
+                        to={ABOUT.EVENT_DETAIL({
+                          no: data.num,
+                          page: nowPage,
+                          limit: rowsPerPage,
+                          search: searchKeyword,
+                          search_mode: searchMode,
+                        })}
                       >
                         <Box
                           sx={{
-                            imgSx,
+                            display: "flex",
                           }}
                         >
-                          <img
-                            alt={data.no}
-                            src={data.imgThumbnail}
-                            style={{ maxWidth: "180px", maxHeight: "90px" }}
-                          />
+                          <Box
+                            sx={{
+                              ...imgSx,
+                              height: "120px",
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                imgSx,
+                              }}
+                            >
+                              <img
+                                alt={data.no}
+                                src={
+                                  data.thumbnail
+                                    ? data.thumbnail
+                                    : "/images/petmilylogo.png"
+                                }
+                                style={{ maxWidth: "180px", maxHeight: "90px" }}
+                              />
+                            </Box>
+                            <Box>
+                              {dayjs(data.startDate).format("YY/MM/DD")} ~{" "}
+                              {dayjs(data.endDate).format("YY/MM/DD")}
+                            </Box>
+                          </Box>
+                          <Box className="hover" sx={titleSx}>
+                            {data.subject}
+                          </Box>
+                          <Box sx={{ ...tdSx, minWidth: "100px" }}>
+                            {data.writer}
+                          </Box>
+                          <Box sx={{ ...tdSx, minWidth: "50px" }}>
+                            <VisibilityIcon fontSize="small" color="disabled" />
+                            &nbsp;
+                            {data.count}
+                          </Box>
+                          <Box sx={{ ...tdSx, minWidth: "90px" }}>
+                            {dayjs(data.postDate).format("YY/MM/DD HH:mm:ss")}
+                          </Box>
                         </Box>
-                        <Box className="hover" sx={titleSx}>
-                          {data.subject}
-                        </Box>
-                        <Box sx={{ ...tdSx, minWidth: "100px" }}>
-                          {member.nickname}
-                        </Box>
-                        <Box sx={{ ...tdSx, minWidth: "50px" }}>
-                          <VisibilityIcon fontSize="small" color="disabled" />
-                          &nbsp;
-                          {data.count}
-                        </Box>
-                        <Box sx={{ ...tdSx, minWidth: "90px" }}>
-                          {data.postDate}
-                        </Box>
-                      </Box>
-                    </StyledLink>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                      </StyledLink>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
         <Box
@@ -238,9 +254,9 @@ const Event = () => {
         </Box>
         <Box width={pageWidth} display={"flex"} justifyContent={"center"} m={2}>
           <Pagination
-            count={Math.ceil(foundData.length / rowsPerPage)}
-            defaultPage={page ? parseInt(page) : 1}
-            page={page ? parseInt(page) : 1}
+            count={totalPage}
+            defaultPage={nowPage}
+            page={nowPage}
             color="fbd385"
             showFirstButton
             showLastButton
