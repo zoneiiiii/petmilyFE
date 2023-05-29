@@ -49,6 +49,7 @@ import HospitalLocation from "./Adopt/HospitalLocation";
 import ShelterLocation from "./Adopt/ShelterLocation";
 import AdoptInfo from "./Adopt/AdoptInfo";
 import AnimalListNav from "./Adopt/AnimalListNav";
+import AdoptReviewModify from "./Adopt/AdoptReviewModify";
 
 // Shop
 import Cart from "./Shop/Cart";
@@ -71,15 +72,19 @@ import VolunteerReviewWrite from "./Support/Volunteer/VolunteerReviewWrite";
 import FindBoard from "./Community/FindBoard/FindBoard";
 import FindDetail from "./Community/FindBoard/FindDetail";
 import FindWrite from "./Community/FindBoard/FindWrite";
+import FindModify from "./Community/FindBoard/FindModify";
 import FleaBoard from "./Community/FleaBoard/FleaBoard";
 import FleaDetail from "./Community/FleaBoard/FleaDetail";
 import FleaWrite from "./Community/FleaBoard/FleaWrite";
+import FleaModify from "./Community/FleaBoard/FleaModify";
 import FreeBoard from "./Community/FreeBoard/FreeBoard";
 import FreeDetail from "./Community/FreeBoard/FreeDetail";
 import FreeWrite from "./Community/FreeBoard/FreeWrite";
+import FreeModify from "./Community/FreeBoard/FreeModify";
 import Missing from "./Community/Missing/MissingBoard";
 import MissingDetail from "./Community/Missing/MissingDetail";
 import MissingWrite from "./Community/Missing/MissingWrite";
+import MissingModify from "./Community/Missing/MissingModify";
 
 // Admin
 import AdminAdopt from "./Admin/AdminAdopt";
@@ -223,6 +228,7 @@ export const Adopt = {
   ShelterLocation: ShelterLocation,
   AdoptInfo: AdoptInfo,
   AnimalListNav: AnimalListNav,
+  AdoptReviewModify: AdoptReviewModify,
   // AdoptApplication: lazy(() => import("./Adopt/AdoptApplication")),
   // AdoptChecklist: lazy(() => import("./Adopt/AdoptChecklist")),
   // AdoptReview: lazy(() => import("./Adopt/AdoptReview")),
@@ -294,29 +300,37 @@ export const Support = {
  ** FindBoard
  ** FindDetail
  ** FindWrite
+ ** FindModify
  ** FleaBoard
  ** FleaDetail
  ** FleaWrite
+ ** FleaModify
  ** FreeBoard
  ** FreeDetail
  ** FreeWrite
+ ** FreeModify
  ** Missing
  ** MissingDetail
  ** MissingWrite
+ ** MissingModify
  */
 export const Community = {
   FindBoard: FindBoard,
   FindDetail: FindDetail,
   FindWrite: FindWrite,
+  FindModify: FindModify,
   FleaBoard: FleaBoard,
   FleaDetail: FleaDetail,
   FleaWrite: FleaWrite,
+  FleaModify: FleaModify,
   FreeBoard: FreeBoard,
   FreeDetail: FreeDetail,
   FreeWrite: FreeWrite,
+  FreeModify: FreeModify,
   Missing: Missing,
   MissingDetail: MissingDetail,
   MissingWrite: MissingWrite,
+  MissingModify: MissingModify,
 };
 
 /**

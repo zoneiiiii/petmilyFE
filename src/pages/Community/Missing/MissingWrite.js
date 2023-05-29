@@ -1,17 +1,30 @@
 import * as React from "react";
 import styled from "styled-components";
-import Grid from "@mui/material/Grid";
 import { useRef, useState } from "react";
-import CustomButton from "../../Login/CustomButton";
-import Modal from "@mui/material/Modal";
-import Alert from "@mui/material/Alert";
+import { useNavigate } from "react-router-dom";
+import {
+  ThemeProvider,
+  TextField,
+  Grid,
+  Modal,
+  Alert,
+  FormHelperText,
+  ToggleButton,
+  ToggleButtonGroup,
+  FormControl,
+  Button
+} from "@mui/material";
+// import Grid from "@mui/material/Grid";
+// import Modal from "@mui/material/Modal";
+// import Alert from "@mui/material/Alert";
 import { Select, MenuItem } from "@mui/material";
+import { CustomTheme } from "../../../assets/Theme/CustomTheme";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
+import { MyCustomUploadAdapterPlugin } from "../../../components/common/UploadAdapter";
 import sigungu from "./sigungu";
-import ToggleButton from './ToggleButton';
 import { COMMUNITY } from "../../../constants/PageURL";
-// import axios from "axios";
+import axios from "axios";
 
 const ITEM_HEIGHT = 50;
 const ITEM_PADDING_TOP = 8;
@@ -36,164 +49,300 @@ const modalStyle = {
 };
 
 const MissingWrite = () => {
-  const subjectRef = useRef(null);
-  const nameRef = useRef(null);
-  const locationRef = useRef(null);
-  const speciesRef = useRef(null);
-  const [location, setLocation] = useState("---");
-  const [species, setSpecies] = useState("---");
-  const [age, setAge] = useState("---");
-  const [gender, setGender] = useState("---");
+  const navigate = useNavigate();
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [name, setName] = useState("");
+  const [species, setSpecies] = useState("");
+  const [location, setLocation] = useState("서울시"); // 미구현 상태(임시 주소)
+  const [age, setAge] = useState("");
+  const [gender, setGender] = useState("");
+  const [status, setStatus] = useState("");
+
   const [val1, setVal1] = useState("");
   const [val2, setVal2] = useState("");
   const [val3, setVal3] = useState("");
   // const { sido, sigugun, dong } = sigungu;
   const { sido = [], sigugun = [], dong = [] } = sigungu;
-  const [content, setContent] = useState("");
   const [formAble, setFormAble] = useState(false);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
   const handleOpen = () => {
     if (
-      subjectRef.current.value === undefined ||
-      subjectRef.current.value === "" ||
-      content === "" ||
+      title === undefined ||
+      title === "" ||
       content === undefined ||
-      nameRef.current.value === undefined ||
-      nameRef.current.value === "" ||
-      locationRef.current.value === undefined ||
-      locationRef.current.value === "" ||
-      speciesRef.current.value === undefined ||
-      speciesRef.current.value === ""
+      content === "" ||
+      name === undefined ||
+      name === "" ||
+      species === undefined ||
+      species === "" ||
+      location === undefined ||
+      location === "" ||
+      age === undefined ||
+      age === "" ||
+      gender === undefined ||
+      gender === "" ||
+      status === undefined ||
+      status === ""
     ) {
       setFormAble(false);
       setOpen(true);
     } else {
       setFormAble(true);
       setOpen(true);
-      console.log(subjectRef.current.value);
+      console.log(title);
       console.log(content);
+      console.log(name);
+      console.log(species);
+      console.log(location);
+      console.log(age);
+      console.log(gender);
+      console.log(status);
       document.location.href = COMMUNITY.MISSING;
     }
   };
   const handleReset = () => {
-    subjectRef.current.value = "";
+    setTitle("");
     setContent("");
+    setName("");
+    setSpecies("");
+    setLocation("");
+    setAge("");
+    setGender("");
+    setStatus("");
     document.location.href = COMMUNITY.MISSING;
   };
 
-  // 파일첨부 파일명 출력(작동 안함)
-  const [fileName, setFileName] = useState('');
+  // 유효성 검증 상태
+  const [titleError, setTitleError] = useState(false);
+  const [contentError, setContentError] = useState(false);
+  const [nameError, setNameError] = useState(false);
+  const [speciesError, setSpeciesError] = useState(false);
+  const [locationError, setLocationError] = useState(false);
+  const [ageError, setAgeError] = useState(false);
+  const [genderError, setGenderError] = useState(false);
+  const [statusError, setStatusError] = useState(false);
+  const [Thumbnail, setThumbnail] = useState("");
 
-  const handleChange = (e) => {
-    setFileName(e.target.value);
-  };
-
-  // 업로드 미리보기 구현
-  // const [imageSrc, setImageSrc] = useState(null);
-
-  // const onUpload = (e) => {
-  //     const file = e.target.files[0];
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-
-  //     return new Promise((resolve) => {
-  //         reader.onload = () => {
-  //             setImageSrc(reader.result || null); // 파일의 컨텐츠
-  //             resolve();
-  //         };
-  //     });
-  // }
-
-  const [imageSrcs, setImageSrcs] = useState([]);
-
-  const onUpload = (e) => {
-    const files = e.target.files;
-    const readers = [];
-
-    for (let i = 0; i < files.length; i++) {
-      readers.push(new FileReader());
-      readers[i].readAsDataURL(files[i]);
+  const validate = () => {
+    let isError = false;
+    if (title === "") {
+      setTitleError(true);
+      isError = true;
+    }
+    if (content === "") {
+      setContentError(true);
+      isError = true;
+    }
+    if (name === "") {
+      setNameError(true);
+      isError = true;
+    }
+    if (species === "") {
+      setSpeciesError(true);
+      isError = true;
+    }
+    if (location === "") {
+      setLocationError(true);
+      isError = true;
+    }
+    if (age === "") {
+      setAgeError(true);
+      isError = true;
+    }
+    if (gender === "") {
+      setGenderError(true);
+      isError = true;
+    }
+    if (status === "") {
+      setStatusError(true);
+      isError = true;
     }
 
-    return new Promise((resolve) => {
-      const results = [];
-      let count = 0;
-
-      readers.forEach((reader, i) => {
-        reader.onload = () => {
-          results[i] = reader.result || null;
-          count++;
-          if (count === files.length) {
-            setImageSrcs(results); // 파일의 컨텐츠
-            resolve();
-          }
-        };
-      });
-    });
+    return isError;
   }
+
+  const [openModal, setOpenModal] = useState(false); // 모달 상태
+  const handleModalClose = () => {
+    // 모달닫는 함수
+    setOpenModal(false);
+    navigate(COMMUNITY.MISSING);
+  };
+
+  // 사진 미리보기
+  const [file, setFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setPreviewUrl(event.target.result);
+      };
+      reader.readAsDataURL(selectedFile);
+    }
+  };
+
+  const uploadImage = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await axios.post("/upload", formData);
+      const imageUrl = response.data;
+      // setUploadedImageUrl(imageUrl);
+      return imageUrl;
+    } catch (error) {
+      console.error("이미지 업로드 실패 : ", error);
+      return null;
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const isError = validate();
+    if (isError) return;
+    const currentDate = new Date();
+    const isoCurrentDate = new Date(
+      currentDate.getTime() + 9 * 60 * 60 * 1000
+    ).toISOString();
+    let imageUrl = "https://via.placeholder.com/150";
+
+    if (file) {
+      const uploadedUrl = await uploadImage(file);
+      if (uploadedUrl) {
+        imageUrl = uploadedUrl;
+      }
+    }
+
+    const postData = {
+      boardSubject: title,
+      boardContent: content,
+      boardName: name,
+      boardSpecies: species,
+      boardLocation: location,
+      boardAge: age,
+      boardGender: gender,
+      boardStatus: status === "실종" ? 1 : 0,
+      imgThumbnail: imageUrl,
+      boardDate: isoCurrentDate,
+    };
+
+    try {
+      await axios.post("/board/missing/write", postData, {
+        withCredentials: true,
+      });
+      setOpenModal(true);
+      setTimeout(() => {
+        handleModalClose();
+      }, 1000);
+    } catch (error) {
+      console.error("데이터 전송 실패 : ", error);
+    }
+  };
+
   return (
-    <Section className="result">
-      <MainContainer className="result-container">
-        <Board>게시글 작성</Board>
-        <Grid sx={{ minWidth: 700, mt: 5, mb: 10 }}>
-          <div style={{ margin: 'auto', maxWidth: '800px' }}>
-            <InputContainer>
-              <p className="title">제목</p>
-              <input type="text" ref={subjectRef} style={{ width: 700 }} />
-            </InputContainer>
-            <div style={{ display: "flex", justifyContent: 'space-between' }}>
-              <InputContainer>
-                <p className="title">이름</p>
-                <input type="text" ref={nameRef} style={{ width: 200 }} />
-              </InputContainer>
-              <InputContainer style={{ paddingLeft: 100 }}>
-                <p className="title">세부 종</p>
-                <input type="text" ref={speciesRef} style={{ width: 200 }} />
-              </InputContainer>
-            </div>
-            <InputContainer>
-              <p className="title">상세 지역</p>
-              <input type="text" ref={locationRef} style={{ width: 700 }} />
-            </InputContainer>
-
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <SelectContainer>
-                <p className="title">실종 지역</p>
-
-                <div style={{ margin: 'auto' }}>
-                  {/* <h1>{`${val1}-${val2}-${val3}`}</h1> */}
-                  <select onChange={(e) => setVal1(e.target.value)}>
-                    <option value="">선택</option>
-                    {sido.map((el) => (
-                      <option key={el.sido} value={el.sido}>
-                        {el.codeNm}
-                      </option>
-                    ))}
-                  </select>
-                  <select onChange={(e) => setVal2(e.target.value)}>
-                    <option value="">선택</option>
-                    {sigugun
-                      .filter((el) => el.sido === val1)
-                      .map((el) => (
-                        <option key={el.sigugun} value={el.sigugun}>
-                          {el.codeNm}
-                        </option>
-                      ))}
-                  </select>
-                  <select onChange={(e) => setVal3(e.target.value)}>
-                    <option value="">선택</option>
-                    {dong
-                      .filter((el) => el.sido === val1 && el.sigugun === val2)
-                      .map((el) => (
-                        <option key={el.dong} value={el.dong}>
-                          {el.codeNm}
-                        </option>
-                      ))}
-                  </select>
+    <ThemeProvider theme={CustomTheme}>
+      <Section className="result">
+        <MainContainer className="result-container">
+          <Board>게시글 작성</Board>
+          <Grid sx={{ minWidth: 700, mt: 5, mb: 10 }}>
+            <form onSubmit={handleSubmit}>
+              <div style={{ margin: 'auto', maxWidth: '700px' }}>
+                <FormRowWithError>
+                  <TextField
+                    label="제목"
+                    value={title}
+                    size="small"
+                    fullWidth
+                    onChange={(e) => {
+                      setTitleError(false);
+                      setTitle(e.target.value);
+                    }}
+                  />
+                  <ErrorMsg>
+                    <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                      {titleError ? "제목을 입력해 주세요." : null}
+                    </FormHelperText>
+                  </ErrorMsg>
+                </FormRowWithError>
+                <div style={{ display: "flex", justifyContent: 'space-between' }}>
+                  <FormRowWithError>
+                    <TextField
+                      label="이름"
+                      value={name}
+                      size="small"
+                      fullWidth
+                      onChange={(e) => {
+                        setNameError(false);
+                        setName(e.target.value);
+                      }}
+                    />
+                    <ErrorMsg>
+                      <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                        {nameError ? "이름을 입력해 주세요." : null}
+                      </FormHelperText>
+                    </ErrorMsg>
+                  </FormRowWithError>
+                  &nbsp;
+                  <FormRowWithError>
+                    <TextField
+                      label="세부 종"
+                      value={species}
+                      size="small"
+                      fullWidth
+                      onChange={(e) => {
+                        setSpeciesError(false);
+                        setSpecies(e.target.value);
+                      }}
+                    />
+                    <ErrorMsg>
+                      <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                        {speciesError ? "세부 종을 입력해 주세요." : null}
+                      </FormHelperText>
+                    </ErrorMsg>
+                  </FormRowWithError>
                 </div>
 
-                {/* <Select
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <SelectContainer>
+                    <p className="title">실종 지역</p>
+
+                    <div style={{ margin: 'auto' }}>
+                      {/* <h1>{`${val1}-${val2}-${val3}`}</h1> */}
+                      <select onChange={(e) => setVal1(e.target.value)}>
+                        <option value="">선택</option>
+                        {sido.map((el) => (
+                          <option key={el.sido} value={el.sido}>
+                            {el.codeNm}
+                          </option>
+                        ))}
+                      </select>
+                      <select onChange={(e) => setVal2(e.target.value)}>
+                        <option value="">선택</option>
+                        {sigugun
+                          .filter((el) => el.sido === val1)
+                          .map((el) => (
+                            <option key={el.sigugun} value={el.sigugun}>
+                              {el.codeNm}
+                            </option>
+                          ))}
+                      </select>
+                      <select onChange={(e) => setVal3(e.target.value)}>
+                        <option value="">선택</option>
+                        {dong
+                          .filter((el) => el.sido === val1 && el.sigugun === val2)
+                          .map((el) => (
+                            <option key={el.dong} value={el.dong}>
+                              {el.codeNm}
+                            </option>
+                          ))}
+                      </select>
+                    </div>
+
+                    {/* <Select
                 size="small"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
@@ -201,151 +350,205 @@ const MissingWrite = () => {
                 <MenuItem value="---">---</MenuItem>
                 <MenuItem value="서울">서울</MenuItem>
               </Select> */}
-              </SelectContainer>
-              <SelectContainer>
-                <p className="title">분류</p>
-                <Select
-                  size="small"
-                  value={species}
-                  onChange={(e) => setSpecies(e.target.value)}
-                >
-                  <MenuItem value="---">---</MenuItem>
-                  <MenuItem value="강아지">강아지</MenuItem>
-                  <MenuItem value="고양이">고양이</MenuItem>
-                </Select>
-              </SelectContainer>
-              <SelectContainer>
-                <p className="title">나이</p>
-                <Select
-                  size="small"
-                  value={age}
-                  onChange={(e) => setAge(e.target.value)}
-                  MenuProps={MenuProps}
-                  renderValue={(selected) => {
-                    if (selected.length === 0) {
-                      return <em>Placeholder</em>;
-                    }
+                  </SelectContainer>
+                  {/* <SelectContainer>
+                  <p className="title">분류</p>
+                  <Select
+                    size="small"
+                    value={species}
+                    onChange={(e) => setSpecies(e.target.value)}
+                  >
+                    <MenuItem value="---">---</MenuItem>
+                    <MenuItem value="강아지">강아지</MenuItem>
+                    <MenuItem value="고양이">고양이</MenuItem>
+                  </Select>
+                </SelectContainer> */}
+                  <SelectContainer>
+                    <p className="title">나이</p>
+                    <Select
+                      label="나이"
+                      size="small"
+                      value={age}
+                      onChange={(e) => {
+                        setAgeError(false);
+                        setAge(e.target.value);
+                      }}
+                      MenuProps={MenuProps}
+                      renderValue={(selected) => {
+                        if (selected.length === 0) {
+                          return <em>Placeholder</em>;
+                        }
 
-                    return selected;
-                  }}
-                >
-                  <MenuItem value="---">---</MenuItem>
-                  {Array.from({ length: 30 }, (_, i) => (
-                    <MenuItem key={i} value={i + 1}>
-                      {i + 1}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </SelectContainer>
-              <SelectContainer>
-                <p className="title">성별</p>
-                <Select
-                  size="small"
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                >
-                  <MenuItem value="---">---</MenuItem>
-                  <MenuItem value="수컷">수컷</MenuItem>
-                  <MenuItem value="암컷">암컷</MenuItem>
-                </Select>
-              </SelectContainer>
-            </div>
+                        return selected;
+                      }}
+                    >
+                      {Array.from({ length: 30 }, (_, i) => (
+                        <MenuItem key={i} value={i + 1}>
+                          {i + 1}살
+                        </MenuItem>
+                      ))}
+                      <ErrorMsg>
+                        <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                          {ageError ? "나이를 입력해 주세요." : null}
+                        </FormHelperText>
+                      </ErrorMsg>
+                    </Select>
+                  </SelectContainer>
+                  <SelectContainer>
+                    <p className="title">성별</p>
+                    <Select
+                      label="성별"
+                      size="small"
+                      value={gender}
+                      onChange={(e) => {
+                        setGenderError(false);
+                        setGender(e.target.value);
+                      }}
+                    >
+                      <MenuItem value="수컷">수컷</MenuItem>
+                      <MenuItem value="암컷">암컷</MenuItem>
+                      <ErrorMsg>
+                        <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                          {genderError ? "성별을 입력해 주세요." : null}
+                        </FormHelperText>
+                      </ErrorMsg>
+                    </Select>
+                  </SelectContainer>
+                </div>
 
 
-            <div style={{ display: "flex", justifyContent: 'space-between' }}>
-              <FileContainer>
-                <p className="title">첨부파일</p>
-                <label htmlFor="file">
-                  <div className="btn-upload">파일 선택</div>
-                </label>
-                <input type="file" multiple className="file" id="file" />
-              </FileContainer>
-              {/* <FileContainer2>
-            <p className="title">첨부파일</p>
-            <input className="upload-box" value={fileName} placeholder="첨부파일" readOnly />
-            <label htmlFor="file">파일찾기</label>
-            <input className="origin-box" type="file" id="file" onChange={handleChange} />
-          </FileContainer2>
+                <FormRow>
+                  <FileContainer>
+                    <p className="title">대표 이미지</p>
+                    <label htmlFor="file">
+                      <div className="btn-upload">파일 선택</div>
+                    </label>
+                    <input type="file" hidden onChange={handleFileChange} className="file" id="file" />
+                  </FileContainer>
 
-          <FileContainer3>
-            <input accept="image/*" multiple type="file" onChange={e => onUpload(e)} />
-            <img alt="" width={'40%'} src={imageSrcs} />
-          </FileContainer3> */}
+                  {/* <ToggleButton /> */}
+                  <StatusWrapper>
+                    실종 상태
+                    <CommonSpace />
+                    <FormControl>
+                      <ToggleButtonGroup
+                        size="small"
+                        value={status}
+                        exclusive
+                        onChange={(e, value) => setStatus(value)}
+                      >
+                        <ToggleButton
+                          value="실종"
+                          sx={{
+                            width: "80px",
+                            "&.Mui-selected": {
+                              backgroundColor: "#FF4646",
+                              color: "#fff",
+                            },
+                            "&.Mui-selected:hover": {
+                              backgroundColor: "#FF4646",
+                              color: "#fff",
+                            },
+                          }}
+                        >
+                          실종
+                        </ToggleButton>
+                        <ToggleButton
+                          value="완료"
+                          sx={{
+                            width: "80px",
+                            "&.Mui-selected": {
+                              backgroundColor: "#fbd385",
+                              color: "#fff",
+                            },
+                            "&.Mui-selected:hover": {
+                              backgroundColor: "#ffbe3f",
+                              color: "#fff",
+                            },
+                          }}
+                        >
+                          완료
+                        </ToggleButton>
+                      </ToggleButtonGroup>
+                    </FormControl>
+                  </StatusWrapper>
+                </FormRow>
+                <FormRow>
+                  {previewUrl && (
+                    <PreviewWrapper>
+                      <img
+                        src={previewUrl}
+                        alt="미리보기"
+                        style={{ width: "150px" }}
+                      />
+                    </PreviewWrapper>
+                  )}
+                </FormRow>
 
-              <ToggleButton />
-            </div>
+                <FormRowWithError>
+                  <EditorWrapper>
+                    <CKEditor
+                      editor={ClassicEditor}
+                      data={content}
+                      onChange={(event, editor) => {
+                        const data = editor.getData();
+                        setContent(data);
+                        setContentError(false);
+                      }}
+                      config={{
+                        className: "WriteEditor",
+                        placeholder: "내용을 입력하세요.",
+                        extraPlugins: [MyCustomUploadAdapterPlugin],
+                      }}
+                    />
+                  </EditorWrapper>
+                  <ErrorMsg>
+                    <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                      {contentError ? "내용을 입력해 주세요." : null}
+                    </FormHelperText>
+                  </ErrorMsg>
+                </FormRowWithError>
 
-            {/* <InputContainer>
-            <p className="title">내용</p>
-            <textarea
-              rows={13}
-              style={{ width: 700 }}
-              placeholder="내용을 작성해주세요."
-              ref={contentRef}
-            />
-          </InputContainer> */}
+                <br />
+                <ButtonsContainer>
+                  <WriteButton
+                    type="submit"
+                    onClick={handleSubmit}
+                    variant="contained"
+                  >글쓰기
+                  </WriteButton>
+                  <ButtonsSpace />
 
-            <FormRow>
-              <EditorWrapper>
-                <CKEditor
-                  editor={ClassicEditor}
-                  data={content}
-                  onChange={(event, editor) => {
-                    const data = editor.getData();
-                    setContent(data);
-                  }}
-                  config={{
-                    toolbar: [
-                      "heading",
-                      "|",
-                      "bold",
-                      "italic",
-                      "link",
-                      "bulletedList",
-                      "numberedList",
-                      "|",
-                      "indent",
-                      "outdent",
-                      "|",
-                      "blockQuote",
-                      "insertTable",
-                      "mediaEmbed",
-                      "undo",
-                      "redo",
-                    ],
-                    className: "WriteEditor",
-                    placeholder: "내용을 입력하세요.",
-                  }}
-                />
-              </EditorWrapper>
-            </FormRow>
+                  <ResetButton
+                    variant="contained"
+                    onClick={handleReset}
+                  >취소
+                  </ResetButton>
 
-            <br />
-            <ButtonBox>
-              <CustomButton label="취소" value="작성취소" onClick={handleReset} />
-              <CustomButton label="확인" value="글쓰기" onClick={handleOpen} />
-            </ButtonBox>
-          </div>
+                </ButtonsContainer>
+              </div>
 
-          <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            {formAble ? (
-              <Alert sx={modalStyle} severity="success">
-                작성 완료!
-              </Alert>
-            ) : (
-              <Alert sx={modalStyle} severity="warning">
-                제목과 내용을 모두 입력해주세요.
-              </Alert>
-            )}
-          </Modal>
-        </Grid >
-      </MainContainer>
-    </Section>
+              <Modal
+                open={openModal}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                {formAble ? (
+                  <Alert sx={modalStyle} severity="success">
+                    작성 완료!
+                  </Alert>
+                ) : (
+                  <Alert sx={modalStyle} severity="warning">
+                    제목과 내용을 모두 입력해주세요.
+                  </Alert>
+                )}
+              </Modal>
+            </form>
+          </Grid >
+        </MainContainer>
+      </Section >
+    </ThemeProvider >
   );
 
 };
@@ -374,41 +577,18 @@ const Board = styled.h1`
   text-align: center;
 `;
 
-const InputContainer = styled.div`
-                display: flex;
-                gap: 2rem;
-                align-items: center;
-                margin-bottom: 15px;
-                height: 60px;
-              
-                .title {
-                    min-Width: 70px;
-                }
-                input {
-                  height: 30px;
-                }
-              
-                input:hover {
-                    outline: none !important;
-                border: 2px solid #fbd385;
-                }
-                input:focus {
-                    outline: none !important;
-                border: 2px solid #fbd385;
-                }
-                textarea:hover {
-                    outline: none !important;
-                border: 2px solid #fbd385;
-                }
-                textarea:focus {
-                    outline: none !important;
-                border: 2px solid #fbd385;
-                }
-                  p {
-                      font-weight: bold;
-                  color: #474747;
-                }
-                `;
+const FormRowWithError = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 16px;
+    align-items: center;
+`;
+
+const ErrorMsg = styled.div`
+  width: 100%;
+  margin-left: 10px;
+`;
 
 const SelectContainer = styled.div`
                 display: flex;
@@ -455,51 +635,6 @@ const FileContainer = styled.div`
 }
 `;
 
-const FileContainer2 = styled.div`
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    margin-bottom: 10px;
-
-    .title {
-        font-weight: bold;
-        color: #474747;
-        margin-right: 50px;
-    }
-
-    // 인풋 스타일 변경
-    .upload-box {
-        display: inline-block;
-        height: 40px;
-        padding: 0 10px;
-        vertical-align: middle;
-        border: 1px solid #dddddd;
-        width: 55%;
-        color: #999999;
-    }
-
-    // label 스타일 변경
-    label {
-        display: flex;
-        padding: 12px 20px 12px 20px;
-        align-items: center;
-        justify-content: center;
-        color: #fff;
-        background-color: #999999;
-        cursor: pointer;
-        margin-left: 10px;
-    }
-
-    // 기존 요소 숨김 처리
-    .origin-box {
-        position: absolute;
-        width: 0;
-        height: 0;
-        padding: 0;
-        overflow: hidden;
-        border: 0;
-    }
-`
 const FormRow = styled.div`
   display: flex;
   justify-content: space-between;
@@ -508,17 +643,72 @@ const FormRow = styled.div`
   align-items: center;
 `;
 
+const PreviewWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 16px;
+`;
+
+
 const EditorWrapper = styled.div`
   .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
     min-height: 500px;
-    width: 800px;
+    min-width: 700px;
   }
 `;
 
-const ButtonBox = styled.div`
-  margin-bottom: 100px;
+const StatusWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-grow: 1;
 `;
 
-const FileContainer3 = styled.div``
+const ButtonsContainer = styled.div`
+  margin-top: 10px;
+  margin-bottom: 10px;
+  min-width: 700px;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const WriteButton = styled(Button)`
+  && {
+    color: #fff;
+    background-color: #fbd385;
+    width: auto;
+    height: 30px;
+    margin-top: 10px;
+    margin-left: auto;
+    &:hover {
+      background-color: #ffbe3f;
+    }
+  }
+`;
+
+const CommonSpace = styled.div`
+  width: 10px;
+  height: auto;
+  display: inline-block;
+`;
+
+const ButtonsSpace = styled.div`
+  width: 5px;
+  height: auto;
+  display: inline-block;
+`;
+
+const ResetButton = styled(Button)`
+&& {
+    color: #fff;
+    background-color: #bfbfbf;
+    width: auto;
+    height: 30px;
+    margin-top: 10px;
+    &:hover {
+      background-color: #b2b0b0;
+    }
+  }
+`;
 
 export default MissingWrite;

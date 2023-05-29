@@ -71,21 +71,6 @@ function Animal({
   };
 
   return (
-    // <div
-    // style={{
-    //   position: "relative",
-    //   width: "100%",
-    //   height: "100px",
-    //   display: "flex",
-    //   justifyContent: "center",
-    //   alignItems: "center",
-    //   backgroundColor: "#F5F5ED",
-    //   borderRadius: "5px",
-    // }}
-    // onMouseEnter={handleHover}
-    // onMouseLeave={handleLeave}
-    // onClick={handleOnClick}
-    // >
     <ThemeProvider theme={CustomTheme}>
       <Card
         xs={10}

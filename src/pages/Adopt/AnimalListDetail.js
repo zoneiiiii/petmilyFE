@@ -57,7 +57,27 @@ const AnimalListDetail = () => {
     navigate(ADOPT.APPLICATION, {
       state: {
         desertionNo: state.desertionNo,
+        filename: state.filename,
+        happenDt: state.happenDt,
+        happenPlace: state.happenPlace,
+        kindCd: state.kindCd,
+        colorCd: state.colorCd,
+        age: state.age,
+        weight: state.weight,
+        noticeNo: state.noticeNo,
+        noticeSdt: state.noticeSdt,
+        noticeEdt: state.noticeEdt,
         profile: state.profile,
+        processState: state.processState,
+        sexCd: state.sexCd,
+        neuterYn: state.neuterYn,
+        specialMark: state.specialMark,
+        careNm: state.careNm,
+        careTel: state.careTel,
+        careAddr: state.careAddr,
+        orgNm: state.orgNm,
+        chargeNm: state.chargeNm,
+        officetel: state.officetel,
       },
     });
   };
@@ -289,7 +309,7 @@ const AnimalListDetail = () => {
                   fontSize: "large",
                 }}
               >
-                {state.colorCd}색
+                {state.colorCd}
               </Typography>
               <Typography
                 component="h3"

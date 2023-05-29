@@ -18,7 +18,7 @@ export const Title = styled.h1`
 
 export const CardGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
   width: 95%;
   max-width: 1200px;

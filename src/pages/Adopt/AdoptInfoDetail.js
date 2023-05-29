@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Grid, Card } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
@@ -27,6 +27,8 @@ const AdoptInfoDetail = (props) => {
   const [isHover, setIsHover] = React.useState(false);
   const handleHover = () => setIsHover(true);
   const handleLeave = () => setIsHover(false);
+  const [width, setWidth] = useState("");
+
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -152,33 +154,44 @@ const AdoptInfoDetail = (props) => {
 
   useEffect(() => {
     fetchData();
+    setWidth(`${name.length * 20 + 20}px`);
   }, [uprCd]);
+
+  const textRef = useRef(null);
+
   return (
     <ThemeProvider theme={CustomTheme}>
       <>
         {data?.length !== 0 && (
           <div style={{ height: "400px", width: "1120px" }}>
-            <Typography
-              component="h2"
-              variant="h5"
-              sx={{
+            <div
+              style={{
                 marginLeft: "95px",
-                fontSize: "1.5em",
-                fontWeight: "bolder",
-                color: "black",
-                justifyContent: "center",
-                width: "150px",
-                textAlign: "left",
+                borderBottom: "3px solid #FBD385",
                 borderLeft: "3px solid",
-                borderBottom: "3px solid",
                 borderBottomColor: "#FBD385",
                 borderLeftColor: "#FBD385",
                 paddingLeft: "5px",
-                mb: "10px",
+                marginBottom: "10px",
+                display: "inline-block",
+                width: width,
               }}
             >
-              {name}
-            </Typography>
+              <Typography
+                ref={textRef}
+                component="h2"
+                variant="h5"
+                sx={{
+                  fontSize: "1.5em",
+                  fontWeight: "bolder",
+                  color: "black",
+                  width: "fit-content",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {name}
+              </Typography>
+            </div>
             <Grid
               container
               style={{
@@ -267,6 +280,7 @@ const AdoptInfoDetail = (props) => {
 };
 
 export default AdoptInfoDetail;
+
 const CardImage = styled.img`
   width: 176px;
   height: 200px;

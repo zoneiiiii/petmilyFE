@@ -156,6 +156,10 @@ const Router = () => {
               path={BROWSER_PATH.ADOPT.REVIEW_WRITE}
               element={<Page.Adopt.AdoptReviewWrite />}
             />
+            <Route
+              path={BROWSER_PATH.ADOPT.REVIEW_MODIFY}
+              element={<Page.Adopt.AdoptReviewModify />}
+            />
             {/* Shop */}
             <Route
               path={BROWSER_PATH.SHOP.PRODUCT}
@@ -226,6 +230,10 @@ const Router = () => {
               element={<Page.Community.FindDetail />}
             />
             <Route
+              path={BROWSER_PATH.COMMUNITY.FIND_MODIFY()}
+              element={<Page.Community.FindModify />}
+            />
+            <Route
               path={BROWSER_PATH.COMMUNITY.FIND_WRITE}
               element={<Page.Community.FindWrite />}
             />
@@ -237,6 +245,10 @@ const Router = () => {
               path={BROWSER_PATH.COMMUNITY.FLEA_DETAIL()}
               element={<Page.Community.FleaDetail />}
             />
+            {/* <Route
+              path={BROWSER_PATH.COMMUNITY.FLEA_MODIFY()}
+              element={<Page.Community.FleaModify />}
+            /> */}
             <Route
               path={BROWSER_PATH.COMMUNITY.FLEA_WRITE}
               element={<Page.Community.FleaWrite />}
@@ -250,6 +262,10 @@ const Router = () => {
               element={<Page.Community.FreeDetail />}
             />
             <Route
+              path={BROWSER_PATH.COMMUNITY.FREE_MODIFY()}
+              element={<Page.Community.FreeModify />}
+            />
+            <Route
               path={BROWSER_PATH.COMMUNITY.FREE_WRITE}
               element={<Page.Community.FreeWrite />}
             />
@@ -260,6 +276,10 @@ const Router = () => {
             <Route
               path={BROWSER_PATH.COMMUNITY.MISSING_DETAIL()}
               element={<Page.Community.MissingDetail />}
+            />
+            <Route
+              path={BROWSER_PATH.COMMUNITY.MISSING_MODIFY()}
+              element={<Page.Community.MissingModify />}
             />
             <Route
               path={BROWSER_PATH.COMMUNITY.MISSING_WRITE}

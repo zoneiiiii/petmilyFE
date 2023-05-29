@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 import styleds from "styled-components";
 import { styled } from '@mui/material/styles';
@@ -21,6 +21,7 @@ import SearchBar from "../../../components/common/SearchBar";
 import Container from "@mui/material/Container";
 import NotFound from "../../NotFound/NotFound";
 import Loading from "../../../components/Loading/LoadingPage";
+import { AuthContext } from "../../../contexts/AuthContexts";
 
 const theme = createTheme({
     palette: {
@@ -100,8 +101,6 @@ const useStyles = makeStyles({  // 게시글 목록 css
         lineHeight: "1.4em",
         height: "1.4em",
         textOverflow: "ellipsis",
-        // webkitlineclamp: 2,
-        // webkitboxorient: "vertical",
     },
 
     pagination: {
@@ -121,43 +120,12 @@ const useStyles = makeStyles({  // 게시글 목록 css
     },
 });
 
-function createData(num, subject, writer, views, date) {
-    return { num, subject, writer, views, date };
-}
-
-const rows = [
-    createData('001', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.19'),
-    createData('002', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.19'),
-    createData('003', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.22'),
-    createData('004', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.23'),
-    createData('005', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.24'),
-    createData('006', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.27'),
-    createData('007', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.28'),
-    createData('008', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.29'),
-    createData('009', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.19'),
-    createData('0010', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.19'),
-    createData('011', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.22'),
-    createData('012', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.23'),
-    createData('013', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.24'),
-    createData('014', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.27'),
-    createData('015', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.28'),
-    createData('016', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.29'),
-    createData('017', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.19'),
-    createData('018', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.19'),
-    createData('019', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.22'),
-    createData('020', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.23'),
-    createData('021', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.24'),
-    createData('022', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.27'),
-    createData('023', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.28'),
-    createData('024', '똘이를 찾았습니다 ㅠㅠㅠ[3]', '똘이엄마', 31, '23.04.29'),
-];
-
 const FreeBoard = () => {
     const classes = useStyles();    // css 적용을 위한 선언문.
 
     const [data, setData] = useState([]); // DB 데이터 가져오는 변수
     const [isLoading, setIsLoading] = useState(true); //로딩 상태
-    const [rowData, setRowData] = useState(rows); // 날짜 sort 기능을 위한 상수 저장 정의
+    const [rowData, setRowData] = useState(data); // 날짜 sort 기능을 위한 상수 저장 정의
     const [orderDirection, setOrderDirection] = useState("asc");
     const [page, setPage] = useState(1); // 현재 페이지 관리하는 상태 변수
     const itemsPerPage = 10; // 한페이지에 보여줄 페이지의 개수
@@ -165,6 +133,7 @@ const FreeBoard = () => {
     const endIndex = startIndex + itemsPerPage;
     const lists = data.slice(startIndex, endIndex); // 현재 페이지에 해당하는 카드 데이터 계산
     const [maxPageNum, setMaxPageNum] = useState(1);
+    const { loggedIn } = useContext(AuthContext);
 
     /* sort start */
     // 날짜 정렬 요청 처리
@@ -208,7 +177,7 @@ const FreeBoard = () => {
 
     /* axios start */
     useEffect(() => {
-        //게시글 Detail 호출
+        //게시글 목록 호출
         const fetchPost = async () => {
             try {
                 const response = await axios.get(
@@ -304,11 +273,13 @@ const FreeBoard = () => {
                                     <TableRow>
                                         <TableCell /><TableCell /><TableCell /><TableCell />
                                         <TableCell>
-                                            <Link className={classes.writelink} to={COMMUNITY.FREE_WRITE}>
-                                                <CustomButton label="글쓰기" value="글쓰기">
-                                                    글쓰기
-                                                </CustomButton>
-                                            </Link>
+                                            {loggedIn === true ?
+                                                <Link className={classes.writelink} to={COMMUNITY.FREE_WRITE}>
+                                                    <CustomButton label="글쓰기" value="글쓰기">
+                                                        글쓰기
+                                                    </CustomButton>
+                                                </Link> : <></>
+                                            }
                                         </TableCell>
                                     </TableRow>
                                 </TableFooter>
