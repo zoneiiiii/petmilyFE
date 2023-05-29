@@ -103,7 +103,6 @@ const EventDetail = () => {
               </TableCell>
               <TableCell
                 sx={{
-                  flexGrow: 1,
                   display: "flex",
                   justifyContent: "flex-start",
                   alignItems: "center",
@@ -111,6 +110,28 @@ const EventDetail = () => {
                 }}
               >
                 {data && data.nickname}
+              </TableCell>
+              <TableCell
+                sx={{
+                  flexGrow: 1,
+                  display: "flex",
+                  alignItems: "flex-start",
+                }}
+              >
+                행사기간:
+                {data && dayjs(data.postDate).format("YY/MM/DD")} ~{" "}
+                {data && data.endDate
+                  ? dayjs(data.endDate).format("YY/MM/DD")
+                  : ""}
+              </TableCell>
+              <TableCell
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                작성일자:{" "}
+                {data && dayjs(data.postDate).format("YY/MM/DD HH:mm:ss")}
               </TableCell>
               <TableCell
                 sx={{
@@ -127,14 +148,6 @@ const EventDetail = () => {
                 />
                 &nbsp;
                 {data && data.count}
-              </TableCell>
-              <TableCell
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                {data && dayjs(data.postDate).format("YY/MM/DD HH:mm:ss")}
               </TableCell>
             </TableRow>
           </TableHead>
