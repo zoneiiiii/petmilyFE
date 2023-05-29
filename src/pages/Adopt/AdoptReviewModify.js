@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import * as S from "../Support/Volunteer/VolunteerNoticeWrite.styled";
-import { TextField, Modal, Alert, ThemeProvider } from "@mui/material";
+import styled from "styled-components";
+import {
+  TextField,
+  Modal,
+  Alert,
+  ThemeProvider,
+  FormHelperText,
+} from "@mui/material";
 import { ADOPT } from "../../constants/PageURL";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -22,6 +29,8 @@ const modalStyle = {
 
 const AdoptReviewModify = () => {
   const location = useLocation();
+  const [contentError, setContentError] = useState();
+  const [subjectError, setSubjectError] = useState();
   const [formAble, setFormAble] = useState(false);
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
@@ -81,9 +90,15 @@ const AdoptReviewModify = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title || !content) {
-      setFormAble(false);
-      setOpen(true);
+    if (!title && !content) {
+      setSubjectError("제목을 입력해주세요");
+      setContentError("내용을 입력해주세요");
+    } else if (!content) {
+      setSubjectError("");
+      setContentError("내용을 입력해주세요");
+    } else if (!title) {
+      setContentError("");
+      setSubjectError("제목을 입력해주세요");
     } else {
       let imageUrl = data.imgThumbnail;
 
@@ -123,7 +138,7 @@ const AdoptReviewModify = () => {
         <ThemeProvider theme={CustomTheme}>
           <S.FormWrapper>
             <form onSubmit={handleSubmit}>
-              <S.FormRow>
+              <FormRow>
                 <TextField
                   label="제목"
                   value={title}
@@ -131,7 +146,10 @@ const AdoptReviewModify = () => {
                   fullWidth
                   onChange={(e) => setTitle(e.target.value)}
                 />
-              </S.FormRow>
+              </FormRow>
+              <FormHelperText sx={{ color: "red" }}>
+                {subjectError}
+              </FormHelperText>
 
               <S.FormRow>
                 <S.ImageWrapper>
@@ -155,7 +173,7 @@ const AdoptReviewModify = () => {
                 )}
               </S.FormRow>
 
-              <S.FormRow>
+              <FormRow>
                 <S.EditorWrapper>
                   <CKEditor
                     editor={ClassicEditor}
@@ -171,7 +189,10 @@ const AdoptReviewModify = () => {
                     }}
                   />
                 </S.EditorWrapper>
-              </S.FormRow>
+              </FormRow>
+              <FormHelperText sx={{ color: "red" }}>
+                {contentError}
+              </FormHelperText>
 
               <S.FormRow>
                 <S.ButtonGroup>
@@ -212,3 +233,9 @@ const AdoptReviewModify = () => {
   );
 };
 export default AdoptReviewModify;
+export const FormRow = styled.div`
+  display: flex;
+  width: 100%;
+  margin-bottom: 10px;
+  align-items: center;
+`;

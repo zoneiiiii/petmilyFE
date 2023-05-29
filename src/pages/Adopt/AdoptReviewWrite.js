@@ -1,7 +1,14 @@
 import React, { useLayoutEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import * as S from "../Support/Volunteer/VolunteerNoticeWrite.styled";
-import { TextField, Modal, Alert, ThemeProvider } from "@mui/material";
+import styled from "styled-components";
+import {
+  TextField,
+  Modal,
+  Alert,
+  ThemeProvider,
+  FormHelperText,
+} from "@mui/material";
 import { ADOPT } from "../../constants/PageURL";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -24,14 +31,6 @@ const AdoptReviewWrite = () => {
   const [formAble, setFormAble] = useState(false);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
-  // const currentDate = new Date();
-  // const year = currentDate.getFullYear();
-  // const month = String(currentDate.getMonth() + 1).padStart(2, "0");
-  // const day = String(currentDate.getDate()).padStart(2, "0");
-  // const hours = String(currentDate.getHours()).padStart(2, "0");
-  // const minutes = String(currentDate.getMinutes()).padStart(2, "0");
-  // const seconds = String(currentDate.getSeconds()).padStart(2, "0");
-  // const isoCurrentDateTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.000Z`;
 
   const currentDate = new Date();
   const isoCurrentDate = new Date(
@@ -44,6 +43,8 @@ const AdoptReviewWrite = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [file, setFile] = useState(null);
+  const [contentError, setContentError] = useState();
+  const [subjectError, setSubjectError] = useState();
 
   // 사진 미리보기
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -77,9 +78,15 @@ const AdoptReviewWrite = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title || !content) {
-      setFormAble(false);
-      setOpen(true);
+    if (!title && !content) {
+      setSubjectError("제목을 입력해주세요");
+      setContentError("내용을 입력해주세요");
+    } else if (!content) {
+      setSubjectError("");
+      setContentError("내용을 입력해주세요");
+    } else if (!title) {
+      setContentError("");
+      setSubjectError("제목을 입력해주세요");
     } else {
       let imageUrl = "https://via.placeholder.com/150";
 
@@ -120,7 +127,7 @@ const AdoptReviewWrite = () => {
         <ThemeProvider theme={CustomTheme}>
           <S.FormWrapper>
             <form onSubmit={handleSubmit}>
-              <S.FormRow>
+              <FormRow>
                 <TextField
                   label="제목"
                   value={title}
@@ -128,7 +135,10 @@ const AdoptReviewWrite = () => {
                   fullWidth
                   onChange={(e) => setTitle(e.target.value)}
                 />
-              </S.FormRow>
+              </FormRow>
+              <FormHelperText sx={{ color: "red" }}>
+                {subjectError}
+              </FormHelperText>
 
               <S.FormRow>
                 <S.ImageWrapper>
@@ -152,7 +162,7 @@ const AdoptReviewWrite = () => {
                 )}
               </S.FormRow>
 
-              <S.FormRow>
+              <FormRow>
                 <S.EditorWrapper>
                   <CKEditor
                     editor={ClassicEditor}
@@ -168,7 +178,10 @@ const AdoptReviewWrite = () => {
                     }}
                   />
                 </S.EditorWrapper>
-              </S.FormRow>
+              </FormRow>
+              <FormHelperText sx={{ color: "red" }}>
+                {contentError}
+              </FormHelperText>
 
               <S.FormRow>
                 <S.ButtonGroup>
@@ -200,8 +213,8 @@ const AdoptReviewWrite = () => {
             작성 완료!
           </Alert>
         ) : (
-          <Alert sx={modalStyle} severity="warning">
-            제목과 내용을 모두 입력해주세요.
+          <Alert sx={modalStyle} severity="success">
+            작성 완료!
           </Alert>
         )}
       </Modal>
@@ -209,3 +222,9 @@ const AdoptReviewWrite = () => {
   );
 };
 export default AdoptReviewWrite;
+export const FormRow = styled.div`
+  display: flex;
+  width: 100%;
+  margin-bottom: 10px;
+  align-items: center;
+`;
