@@ -18,8 +18,11 @@ const Comment = ({ boardId, boardNum }) => {
   const [page, setPage] = useState(1);
   const [totalComments, setTotalComments] = useState(0);
 
+  const commentCountRef = React.useRef(null);
   const handleChangePage = (event, value) => {
     setPage(value);
+    commentCountRef.current.scrollIntoView(); //페이지클릭 시 스크롤 이동
+    window.scrollBy(0, -100); //헤더때문에 가려져서 -100만큼 추가 이동.
   };
 
   const encodedInputValue = inputValue
@@ -129,12 +132,6 @@ const Comment = ({ boardId, boardNum }) => {
         (a, b) => a.commentNum - b.commentNum
       );
       setComments(updatedComments);
-
-      // // 페이지에 댓글이 10개를 넘으면 다음 페이지로 이동
-      // if (updatedComments.length > itemsPerPage) {
-      //   setPage(page + 1);
-      // }
-
       setTotalComments(totalComments + 1);
 
       const lastPage = Math.ceil(updatedComments.length / itemsPerPage);
@@ -276,7 +273,7 @@ const Comment = ({ boardId, boardNum }) => {
   );
 
   return (
-    <S.CommentWrapper>
+    <S.CommentWrapper ref={commentCountRef}>
       <S.CommentCount> 💬 {totalComments}개의 댓글</S.CommentCount>
       <S.CommentList>
         {displayComments.map((comment, index) => {
@@ -362,11 +359,11 @@ const Comment = ({ boardId, boardNum }) => {
                   )}
                 {comment.memberNum === userNum && ( //댓글 작성자와 현재 로그인한 사용자가 같을 경우에만 표시
                   <>
-                    <S.ReplyButton
+                    <S.UpdateButton
                       onClick={() => handleEditClick(comment.commentNum)}
                     >
                       수정
-                    </S.ReplyButton>
+                    </S.UpdateButton>
                     <S.ReplyButtonSpace />
                     <S.DeleteButton
                       onClick={() => handleDeleteClick(comment.commentNum)}
