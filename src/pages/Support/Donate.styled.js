@@ -39,6 +39,7 @@ const TotalDonation = styled.p`
 const RecentDonations = styled.div`
   display: flex;
   justify-content: space-between;
+  border-top: 1px solid #ddd;
 `;
 
 const DonationColumn = styled.div`
@@ -53,8 +54,14 @@ const DonationItem = styled.div`
   font-size: 1rem;
   padding: 10px;
   background-color: #f0f0f0;
+  flex-grow: 1;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+`;
+
+const DonationItemlist = styled.div`
+margin 20px 20px 10px 10px;
+font-size : 18px;
 `;
 
 const TransparentDisclosure = styled.div`
@@ -75,6 +82,39 @@ const IconContainer = styled.div`
   align-items: center;
   margin-bottom: 1rem;
 `;
+const TableTitle = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  margin-top: 20px;
+`;
+
+const Table = styled.table`
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+`;
+
+const TableHeader = styled.th`
+  background-color: #fbd385;
+  color: #ffffff;
+  padding: 10px;
+  border: 1px solid #fbd385;
+  text-align: center;
+`;
+
+const TableRow = styled.tr`
+  :nth-child(even) {
+    background-color: #f2f2f2;
+  }
+`;
+
+const TableData = styled.td`
+  padding: 10px;
+  border: 1px solid #dddddd;
+  text-align: center;
+`;
 
 export {
   Container,
@@ -86,4 +126,10 @@ export {
   DonationItem,
   TransparentDisclosure,
   IconContainer,
+  DonationItemlist,
+  TableTitle,
+  Table,
+  TableHeader,
+  TableRow,
+  TableData,
 };
