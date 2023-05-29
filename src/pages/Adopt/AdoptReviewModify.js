@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import * as S from "../Support/Volunteer/VolunteerNoticeWrite.styled";
 import styled from "styled-components";
@@ -27,24 +27,23 @@ const modalStyle = {
   p: 4,
 };
 
-const AdoptReviewWrite = () => {
+const AdoptReviewModify = () => {
+  const location = useLocation();
+  const [contentError, setContentError] = useState();
+  const [subjectError, setSubjectError] = useState();
   const [formAble, setFormAble] = useState(false);
+  const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
-
   const currentDate = new Date();
   const isoCurrentDate = new Date(
     currentDate.getTime() + 9 * 60 * 60 * 1000
   ).toISOString();
-  console.log("is", isoCurrentDate);
-
-  // const dateString = isoCurrentDateTime;
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [file, setFile] = useState(null);
-  const [contentError, setContentError] = useState();
-  const [subjectError, setSubjectError] = useState();
+  const boardNum = location.state;
 
   // 사진 미리보기
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -75,6 +74,19 @@ const AdoptReviewWrite = () => {
       return null;
     }
   };
+  useEffect(() => {
+    axios
+      .get(`/board/review/${boardNum.boardNum}`)
+      .then((response) => {
+        setData(response.data);
+        setPreviewUrl(response.data.imgThumbnail);
+        setTitle(response.data.reviewSubject);
+        setContent(response.data.reviewContent);
+      })
+      .catch((error) => {
+        console.error("error");
+      });
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -88,7 +100,7 @@ const AdoptReviewWrite = () => {
       setContentError("");
       setSubjectError("제목을 입력해주세요");
     } else {
-      let imageUrl = "https://via.placeholder.com/150";
+      let imageUrl = data.imgThumbnail;
 
       if (file) {
         const uploadedUrl = await uploadImage(file);
@@ -98,11 +110,10 @@ const AdoptReviewWrite = () => {
       }
 
       axios
-        .post("/board/review/insert", {
+        .put(`/board/review/${boardNum.boardNum}`, {
           reviewSubject: title,
           reviewContent: content,
           imgThumbnail: imageUrl,
-          reviewDate: isoCurrentDate,
         })
         .then(() => {
           alert("등록완료");
@@ -121,7 +132,7 @@ const AdoptReviewWrite = () => {
   return (
     <>
       <S.TitleContainer>
-        <S.Title>게시글 작성</S.Title>
+        <S.Title>게시글 수정</S.Title>
       </S.TitleContainer>
       <S.Container>
         <ThemeProvider theme={CustomTheme}>
@@ -190,7 +201,7 @@ const AdoptReviewWrite = () => {
                     variant="contained"
                     onClick={handleSubmit}
                   >
-                    글쓰기
+                    수정
                   </S.WriteButton>
                   <S.ButtonSpace />
                   <S.WriteButton onClick={handleCancel} variant="contained">
@@ -210,18 +221,18 @@ const AdoptReviewWrite = () => {
       >
         {formAble ? (
           <Alert sx={modalStyle} severity="success">
-            작성 완료!
+            수정 완료!
           </Alert>
         ) : (
-          <Alert sx={modalStyle} severity="success">
-            작성 완료!
+          <Alert sx={modalStyle} severity="warning">
+            제목과 내용을 모두 입력해주세요.
           </Alert>
         )}
       </Modal>
     </>
   );
 };
-export default AdoptReviewWrite;
+export default AdoptReviewModify;
 export const FormRow = styled.div`
   display: flex;
   width: 100%;
