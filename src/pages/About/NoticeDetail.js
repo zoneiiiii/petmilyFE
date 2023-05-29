@@ -18,8 +18,10 @@ import { ABOUT } from "../../constants/PageURL";
 import styled from "styled-components";
 import axios from "axios";
 import dayjs from "dayjs";
+import DOMPurify from "dompurify";
+import LoadingPage from "../../components/Loading/LoadingPage";
 
-const pageWidth = "100%";
+const pageWidth = "90%";
 
 const NoticeDetail = () => {
   const navigate = useNavigate();
@@ -31,7 +33,20 @@ const NoticeDetail = () => {
   const search = searchParams.get("search");
   const search_mode = searchParams.get("search_mode");
 
-  const [data, setData] = useState(null);
+  const [data, setData] = useState({
+    no: null,
+    imgSrc: "",
+    nickname: "",
+    subject: "",
+    content: "",
+    count: null,
+    postDate: "",
+    prevNo: null,
+    prevSub: "",
+    nextNo: null,
+    nextSub: "",
+  });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => console.log("re-rendering...", no, page, search));
   useEffect(() => {
@@ -41,16 +56,25 @@ const NoticeDetail = () => {
         console.log(response.data);
         setData(response.data);
       })
-      .catch((error) => console.error("에러발생: ", error));
+      .catch((error) => console.error("에러발생: ", error))
+      .finally(setIsLoading(false));
   }, [no]);
+
+  const createMarkup = (html) => {
+    return {
+      __html: DOMPurify.sanitize(html),
+    };
+  };
 
   const deleteData = () => {
     // db연결 후 삭제 구현
   };
 
-  return (
+  return isLoading ? (
+    <LoadingPage />
+  ) : (
     <ThemeProvider theme={CustomTheme}>
-      <Box width={pageWidth}>
+      <Box width={pageWidth} mt={4}>
         <Table width={pageWidth}>
           <TableHead>
             <TableRow>
@@ -122,9 +146,10 @@ const NoticeDetail = () => {
                     fontSize: "1rem",
                     mb: "200px",
                   }}
-                >
-                  {data && data.content}
-                </Box>
+                  dangerouslySetInnerHTML={createMarkup(
+                    data ? data.content : null
+                  )}
+                ></Box>
               </TableCell>
             </TableRow>
           </TableBody>
@@ -198,23 +223,29 @@ const NoticeDetail = () => {
           >
             목록
           </Button>
-          <Box display={"flex"} mt={2}>
-            <Button
-              variant="contained"
-              sx={{ ml: 2, width: "100px" }}
-              onClick={() => navigate(ABOUT.NOTICE_WRITE)}
-            >
-              수정
-            </Button>
-            <Button
-              variant="contained"
-              sx={{ ml: 2, width: "100px" }}
-              color="ff8282"
-              onClick={deleteData}
-            >
-              삭제
-            </Button>
-          </Box>
+          {
+            <Box display={"flex"} mt={2}>
+              <Button
+                variant="contained"
+                sx={{ ml: 2, width: "100px" }}
+                onClick={() =>
+                  navigate(ABOUT.NOTICE_WRITE, {
+                    state: { data: data, mode: "update" },
+                  })
+                }
+              >
+                수정
+              </Button>
+              <Button
+                variant="contained"
+                sx={{ ml: 2, width: "100px" }}
+                color="ff8282"
+                onClick={deleteData}
+              >
+                삭제
+              </Button>
+            </Box>
+          }
         </Box>
       </Box>
     </ThemeProvider>

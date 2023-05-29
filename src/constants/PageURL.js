@@ -283,7 +283,7 @@ export const ABOUT = {
   /**공지사항 작성페이지 URL
    * @return "/notice/write"
    */
-  NOTICE_WRITE: "/about/activity/write",
+  NOTICE_WRITE: "/about/notice/write",
 
   /**FAQ페이지 URL
    * @return "/faq"

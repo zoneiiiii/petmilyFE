@@ -16,8 +16,12 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { ABOUT } from "../../constants/PageURL";
 import styled from "styled-components";
+import axios from "axios";
+import LoadingPage from "../../components/Loading/LoadingPage";
+import dayjs from "dayjs";
+import DOMPurify from "dompurify";
 
-const pageWidth = "100%";
+const pageWidth = "90%";
 
 const EventDetail = () => {
   const navigate = useNavigate();
@@ -29,28 +33,49 @@ const EventDetail = () => {
   const search = searchParams.get("search");
   const search_mode = searchParams.get("search_mode");
 
-  const [data, setData] = useState(null);
-  const [beforeData, setBeforeData] = useState(null);
-  const [afterData, setAfterData] = useState(null);
+  const [data, setData] = useState({
+    no: null,
+    imgSrc: "",
+    nickname: "",
+    subject: "",
+    content: "",
+    thumbnail: "",
+    count: null,
+    postDate: "",
+    prevNo: null,
+    prevSub: "",
+    nextNo: null,
+    nextSub: "",
+  });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => console.log("re-rendering...", no, page, search));
   useEffect(() => {
-    console.log(no, beforeData, data, afterData);
-    if (no && (!data || data.no !== parseInt(no))) {
-      const index = dummy.findIndex((data) => data.no === parseInt(no));
-      setData(dummy.at(index));
-      setAfterData(index > 0 ? dummy.at(index - 1) : null);
-      setBeforeData(index < dummy.length ? dummy.at(index + 1) : null);
-    }
-  }, [no, data, beforeData, afterData]);
+    axios
+      .get("/event/view?no=" + no)
+      .then((response) => {
+        console.log(response.data);
+        setData(response.data);
+      })
+      .catch((error) => console.error("에러발생: ", error))
+      .finally(setIsLoading(false));
+  }, [no]);
+
+  const createMarkup = (html) => {
+    return {
+      __html: DOMPurify.sanitize(html),
+    };
+  };
 
   const deleteData = () => {
     // db연결 후 삭제 구현
   };
 
-  return (
+  return isLoading ? (
+    <LoadingPage />
+  ) : (
     <ThemeProvider theme={CustomTheme}>
-      <Box width={pageWidth}>
+      <Box width={pageWidth} mt={4}>
         <Table width={pageWidth}>
           <TableHead>
             <TableRow>
@@ -74,18 +99,39 @@ const EventDetail = () => {
                   borderBottom: "1px solid #bfbfbf",
                 }}
               >
-                <Avatar alt="profile" src={member.img} />
+                <Avatar alt="profile" src={data && data.imgSrc} />
               </TableCell>
               <TableCell
                 sx={{
-                  flexGrow: 1,
                   display: "flex",
                   justifyContent: "flex-start",
                   alignItems: "center",
                   fontSize: "1rem",
                 }}
               >
-                {member.nickname}
+                {data && data.nickname}
+              </TableCell>
+              <TableCell
+                sx={{
+                  flexGrow: 1,
+                  display: "flex",
+                  alignItems: "flex-start",
+                }}
+              >
+                행사기간:
+                {data && dayjs(data.postDate).format("YY/MM/DD")} ~{" "}
+                {data && data.endDate
+                  ? dayjs(data.endDate).format("YY/MM/DD")
+                  : ""}
+              </TableCell>
+              <TableCell
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                작성일자:{" "}
+                {data && dayjs(data.postDate).format("YY/MM/DD HH:mm:ss")}
               </TableCell>
               <TableCell
                 sx={{
@@ -103,14 +149,6 @@ const EventDetail = () => {
                 &nbsp;
                 {data && data.count}
               </TableCell>
-              <TableCell
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                {data && data.postDate}
-              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -122,9 +160,10 @@ const EventDetail = () => {
                     fontSize: "1rem",
                     mb: "200px",
                   }}
-                >
-                  {data && data.contents}
-                </Box>
+                  dangerouslySetInnerHTML={createMarkup(
+                    data ? data.content : null
+                  )}
+                ></Box>
               </TableCell>
             </TableRow>
           </TableBody>
@@ -138,40 +177,42 @@ const EventDetail = () => {
                 }}
               >
                 <Box display={"flex"}>
-                  {beforeData ? (
-                    <StyledLink
-                      to={ABOUT.EVENT_DETAIL({
-                        no: beforeData.no,
-                        page: page,
-                        limit: limit,
-                        search: search,
-                        search_mode: search_mode,
-                      })}
-                    >
-                      &#9664; &nbsp;
-                      <div className="subject">{beforeData.subject}</div>
-                    </StyledLink>
-                  ) : (
-                    <Box fontWeight={600}>이전글이 없습니다.</Box>
-                  )}
+                  {data &&
+                    (data.nextNo ? (
+                      <StyledLink
+                        to={ABOUT.EVENT_DETAIL({
+                          no: data.nextNo,
+                          page: page,
+                          limit: limit,
+                          search: search,
+                          search_mode: search_mode,
+                        })}
+                      >
+                        &#9664; &nbsp;
+                        <div className="subject">{data.nextSub}</div>
+                      </StyledLink>
+                    ) : (
+                      <Box>{data.nextSub}</Box>
+                    ))}
                 </Box>
                 <Box display={"flex"}>
-                  {afterData ? (
-                    <StyledLink
-                      to={ABOUT.EVENT_DETAIL({
-                        no: afterData.no,
-                        page: page,
-                        limit: limit,
-                        search: search,
-                        search_mode: search_mode,
-                      })}
-                    >
-                      <div className="subject">{afterData.subject}</div>
-                      &nbsp; &#9654;
-                    </StyledLink>
-                  ) : (
-                    <Box fontWeight={600}>다음글이 없습니다.</Box>
-                  )}
+                  {data &&
+                    (data.prevNo ? (
+                      <StyledLink
+                        to={ABOUT.EVENT_DETAIL({
+                          no: data.prevNo,
+                          page: page,
+                          limit: limit,
+                          search: search,
+                          search_mode: search_mode,
+                        })}
+                      >
+                        <div className="subject">{data && data.prevSub}</div>
+                        &nbsp; &#9654;
+                      </StyledLink>
+                    ) : (
+                      <Box>{data.prevSub}</Box>
+                    ))}
                 </Box>
               </TableCell>
             </TableRow>
@@ -199,7 +240,11 @@ const EventDetail = () => {
             <Button
               variant="contained"
               sx={{ ml: 2, width: "100px" }}
-              onClick={() => navigate(ABOUT.EVENT_WRITE)}
+              onClick={() =>
+                navigate(ABOUT.EVENT_WRITE, {
+                  state: { data: data, mode: "update" },
+                })
+              }
             >
               수정
             </Button>
