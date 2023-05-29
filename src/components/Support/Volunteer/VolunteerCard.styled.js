@@ -18,17 +18,18 @@ export const Thumbnail = styled.img`
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  border: 1px solid #ccc;
 `;
 
-export const User = styled.h3`
+export const User = styled.h4`
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+`;
+
+export const Title = styled.h3`
   font-size: 1rem;
   font-weight: bold;
   margin: 1rem 0;
-`;
-
-export const Title = styled.h4`
-  font-size: 0.9rem;
-  margin: 0.5rem 0;
 `;
 
 export const Date = styled.p`

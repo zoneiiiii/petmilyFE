@@ -29,7 +29,6 @@ import Loading from "../../../components/Loading/LoadingPage";
 import { MyCustomUploadAdapterPlugin } from "../../../components/common/UploadAdapter";
 
 const VolunteerNoticeModify = () => {
-  const [post, setPost] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -132,7 +131,6 @@ const VolunteerNoticeModify = () => {
     try {
       const response = await axios.post("/upload", formData);
       const imageUrl = response.data;
-      // setUploadedImageUrl(imageUrl);
       return imageUrl;
     } catch (error) {
       console.error("이미지 업로드 실패 : ", error);
@@ -148,7 +146,6 @@ const VolunteerNoticeModify = () => {
           `http://localhost:8080/board/volunteer/${id}`
         ); //게시글 Detail 데이터  호출
         const data = response.data;
-        setPost(data);
         setVolunteerStartPeriod(dayjs(data.volunteerStartPeriod));
         setVolunteerEndPeriod(dayjs(data.volunteerEndPeriod));
         setTitle(data.volunteerSubject);
@@ -173,10 +170,6 @@ const VolunteerNoticeModify = () => {
     e.preventDefault();
     const isError = validate();
     if (isError) return;
-    const currentDate = new Date();
-    const isoCurrentDate = new Date(
-      currentDate.getTime() + 9 * 60 * 60 * 1000
-    ).toISOString();
     let imageUrl = Thumbnail;
 
     if (file) {
@@ -198,7 +191,6 @@ const VolunteerNoticeModify = () => {
       volunteerStatus: selectedStatus === "모집중" ? 1 : 0,
       volunteerContent: content,
       imgThumbnail: imageUrl,
-      // volunteerDate: isoCurrentDate,
     };
 
     try {
@@ -558,7 +550,7 @@ const VolunteerNoticeModify = () => {
             aria-describedby="modal-modal-description"
           >
             <Alert sx={modalStyle} severity="success">
-              작성 완료!
+              수정 완료!
             </Alert>
           </Modal>
         </ThemeProvider>

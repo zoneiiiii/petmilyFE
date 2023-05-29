@@ -134,6 +134,20 @@ export const ReplyButton = styled(Button)`
   }
 `;
 
+export const UpdateButton = styled(Button)`
+  && {
+    color: #fff;
+    background-color: #bfbfbf;
+    width: auto;
+    height: 30px;
+    margin-left: auto;
+    margin-top: 8px;
+    &:hover {
+      background-color: #7f7f7f;
+    }
+  }
+`;
+
 export const DeleteButton = styled(Button)`
   && {
     color: #fff;
@@ -188,6 +202,7 @@ export const EditButton = styled(ReplyButton)``;
 export const CommentContentWrapper = styled.div`
   margin-top: 10px;
   margin-left: 20px;
+  min-height: 50px;
 `;
 
 export const SecretWrapper = styled.div`
