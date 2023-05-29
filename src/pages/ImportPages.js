@@ -87,14 +87,15 @@ import MissingWrite from "./Community/Missing/MissingWrite";
 import MissingModify from "./Community/Missing/MissingModify";
 
 // Admin
-import AdminAdopt from "./Admin/AdminAdopt";
-import AdminBoard from "./Admin/AdminBoard";
-import AdminDashBoard from "./Admin/AdminDashBoard";
-import AdminMember from "./Admin/AdminMember";
-import AdminOrder from "./Admin/AdminOrder";
-import AdminProduct from "./Admin/AdminProduct";
-import AdminProductWrite from "./Admin/AdminProductWrite";
-import AdminQnA from "./Admin/AdminQnA";
+import AdminLayout from "./Admin/AdminLayout";
+import AdminAdopt from "./Admin/Adopt/AdminAdopt";
+import AdminBoard from "./Admin/Board/AdminBoard";
+import AdminDashBoard from "./Admin/Dashboard/AdminDashBoard";
+import AdminMember from "./Admin/Member/AdminMember";
+import AdminOrder from "./Admin//Orders/AdminOrder";
+import AdminProduct from "./Admin/Products/AdminProduct";
+import AdminProductWrite from "./Admin/Products/AdminProductWrite";
+import AdminQnA from "./Admin/QnA/AdminQnA";
 
 /**
  ** Layout
@@ -334,6 +335,7 @@ export const Community = {
 };
 
 /**
+ ** AdminLayout
  ** AdminAdopt
  ** AdminBoard
  ** AdminDashBoard
@@ -344,6 +346,7 @@ export const Community = {
  ** AdminQnA
  */
 export const Admin = {
+  AdminLayout: AdminLayout,
   AdminAdopt: AdminAdopt,
   AdminBoard: AdminBoard,
   AdminDashBoard: AdminDashBoard,

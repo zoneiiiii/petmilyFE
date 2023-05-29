@@ -13,8 +13,9 @@ import { Link } from "react-router-dom";
 import { MYPAGE } from "../../constants/PageURL";
 import { ThemeProvider, Typography } from "@mui/material";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { AuthContext } from "../../contexts/AuthContexts";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -46,15 +47,15 @@ const MyPageQnA = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/board/qna")
+      .get(`http://localhost:8080/board/qna`)
       .then((response) => {
         setData(response.data);
-       console.log(response.data);
-       console.log(data.memberNum);
+        console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (data.length === 0) {
@@ -80,20 +81,26 @@ const MyPageQnA = () => {
           >
             <TableHead>
               <StyledTableRow>
-                <StyledTableCell colSpan={4} align="center" sx={{height:250}}>문의 내역이 없습니다.</StyledTableCell>
+                <StyledTableCell
+                  colSpan={4}
+                  align="center"
+                  sx={{ height: 250 }}
+                >
+                  문의 내역이 없습니다.
+                </StyledTableCell>
               </StyledTableRow>
             </TableHead>
           </Table>
-          <Link to={MYPAGE.QNA_WRITE} style={{ textDecoration: "none" }} state={{num : data.memberNum }}>
+          <Link to={MYPAGE.QNA_WRITE} style={{ textDecoration: "none" }}>
             <CustomButton label="문의하기" value="문의하기">
               문의하기
             </CustomButton>
           </Link>
         </Grid>
       </ThemeProvider>
-  );
-  }else {
-  return (
+    );
+  } else {
+    return (
       <ThemeProvider theme={CustomTheme}>
         <Typography
           className="myOrderListTitle"
@@ -151,7 +158,7 @@ const MyPageQnA = () => {
                     <StyledTableCell align="center" sx={{ minWidth: 30 }}>
                       {qna.qnaDate}
                     </StyledTableCell>
-                    {qna.qnaStatus===false ? (
+                    {qna.qnaStatus === false ? (
                       <StyledTableCell
                         align="center"
                         sx={{
@@ -176,7 +183,7 @@ const MyPageQnA = () => {
                 ))}
             </TableBody>
           </Table>
-          <Link to={MYPAGE.QNA_WRITE} style={{ textDecoration: "none" }} state={{num : data.memberNum }}>
+          <Link to={MYPAGE.QNA_WRITE} style={{ textDecoration: "none" }}>
             <CustomButton label="문의하기" value="문의하기">
               문의하기
             </CustomButton>
@@ -196,8 +203,9 @@ const MyPageQnA = () => {
           </Stack>
         </Grid>
       </ThemeProvider>
-  );
-}};
+    );
+  }
+};
 
 const titleSx = {
   width: "200px",

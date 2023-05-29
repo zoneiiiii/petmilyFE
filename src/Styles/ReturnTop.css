@@ -15,9 +15,9 @@
 .returnTop {
     position: fixed;
     bottom: 80px;
-    right: 30px;
-    background-image: url("../../public/images/navigator/upArrow.png");
-    background-size: cover;
+    right: 14px; /*수정*/
+    /* background-image: url("../../public/images/navigator/upArrow.png");
+    background-size: cover; */
     cursor: pointer;
     opacity: 0;
     visibility: hidden;

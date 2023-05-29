@@ -20,7 +20,13 @@ const Header = ({ page }) => {
         <div className="headerLeft">
           <div className="logo">
             <Link to="/">
-              <img alt="petmily icon" src="/images/petmilylogo.png" />
+              <img
+                alt="petmily icon"
+                src="/images/petLogo.png"
+                width="164px"
+                height="50px"
+                style={{ marginTop: "15px" }}
+              />
             </Link>
           </div>
         </div>

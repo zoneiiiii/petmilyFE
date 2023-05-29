@@ -17,7 +17,6 @@ import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 
-
 function ModifyInfo() {
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
@@ -25,7 +24,7 @@ function ModifyInfo() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [Image, setImage] = useState("/images/emptyProfile.png");
-  const [file, setFile] = useState();
+  const [file, setFile] = useState("");
 
   const [nicknameError, setNicknameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -33,13 +32,14 @@ function ModifyInfo() {
   const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
 
-  const [nickAble, setNickAble]= useState(0);
-  const [pwAble, setPwAble]= useState(0);
-  const [confirmAble, setConfirmAble]= useState(0);
-  const [emailAble, setEmailAble]= useState(0);
-  const [phoneAble, setPhoneAble]= useState(0);
-  const [checkAble, setCheckAble]= useState(0);
- 
+  const [nickAble, setNickAble] = useState(false);
+  const [pwAble, setPwAble] = useState(false);
+  const [confirmAble, setConfirmAble] = useState(false);
+  const [emailAble, setEmailAble] = useState(false);
+  const [phoneAble, setPhoneAble] = useState(false);
+  const [checkAble, setCheckAble] = useState(false);
+  const [imgAble, setImageAble] = useState(false);
+
   const fileInput = useRef(null);
   const nickRef = useRef();
   const passRef = useRef();
@@ -47,82 +47,75 @@ function ModifyInfo() {
   const emailRef = useRef();
   const phoneRef = useRef();
 
-  //memberNum 값 매칭
   const location = useLocation();
   const memberNum = location.state.num;
-  // const memberNickname = "봉천동물주먹"
-  // const memberPw = location.state.member.pw;
-  // const memberConfirmPw = memberPw;
-  // const memberEmail = location.state.member.email;
-  // const memberPhone = location.state.member.tel;
-  // const mem = location.state.member;
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
         const response = await axios.get(
           `http://localhost:8080/memberInfo/${memberNum}`
-        ); 
+        );
         const data = response.data;
         console.log(response);
         setNickname(data.memberNickname);
         setEmail(data.memberEmail);
         setPhone(data.memberTel);
         setImage(data.memberImg);
+        setNickAble(true);
+        setEmailAble(true);
+        setPhoneAble(true);
+        setImageAble(true);
       } catch (error) {
         console.error("Error fetching data : ", error);
-      } 
+      }
     };
     fetchPost();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
 
   // 닉네임
   const onChangeNickname = (e) => {
     setNickname(e.target.value);
     if (e.target.value.length < 2 || e.target.value.length > 5) {
       setNicknameError("2글자 이상 5글자 미만으로 입력해주세요.");
-      setNickAble(0);
+      setNickAble(false);
     } else {
       setNicknameError("");
-      setNickAble(1);
+      setNickAble(true);
     }
   };
 
   // 비밀번호
   const onChangePassword = (e) => {
-    const passwordRegex =
-    /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,20}$/;
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,20}$/;
     const passwordCurrent = e.target.value;
     setPassword(passwordCurrent);
 
     if (!passwordRegex.test(passwordCurrent)) {
-      setPasswordError(
-        "숫자+영문자 조합으로 8~20자리로 입력해주세요!"
-      );
-      setPwAble(0);
+      setPasswordError("숫자+영문자 조합으로 8~20자리로 입력해주세요!");
+      setPwAble(false);
     } else {
       setPasswordError("");
-      setPwAble(1);
+      setPwAble(true);
+      setCheckAble(true);
     }
   };
 
   // 비밀번호 확인
-  const onChangePasswordConfirm = 
-    (e) => {
-      const passwordConfirmCurrent = e.target.value;
-      setConfirmPw(passwordConfirmCurrent);
+  const onChangePasswordConfirm = (e) => {
+    const passwordConfirmCurrent = e.target.value;
+    setConfirmPw(passwordConfirmCurrent);
 
-      if (password === passwordConfirmCurrent) {
-        setConfirmPwError("");
-        setConfirmAble(1);
-      } else {
-        setConfirmPwError("비밀번호가 일치하지 않습니다.");
-        setConfirmAble(0);
-      }
+    if (password === passwordConfirmCurrent) {
+      setConfirmPwError("");
+      setConfirmAble(true);
+      setCheckAble(true);
+    } else {
+      setConfirmPwError("비밀번호가 일치하지 않습니다.");
+      setConfirmAble(false);
     }
- ;
+  };
 
   // 이메일
   const onChangeEmail = (e) => {
@@ -133,37 +126,28 @@ function ModifyInfo() {
 
     if (!emailRegex.test(emailCurrent)) {
       setEmailError("이메일 형식을 다시 확인해주세요.");
-      setEmailAble(0);
+      setEmailAble(false);
     } else {
       setEmailError("");
-      setEmailAble(1);
+      setEmailAble(true);
     }
   };
 
-  //전화번호 하이픈 자동완성 
-  const formatPhoneNumber = (number) => {
-    const numericOnly = number.replace(/[^0-9]/g, "");
-    const formattedNumber = numericOnly
-      .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/, "$1-$2-$3")
-      .replace(/-{1,2}$/g, "");
-    return formattedNumber;
-  };
- 
-  //전화번호
+  // 전화번호
   const onChangePhone = (e) => {
-    const input = e.target.value;
-    const formattedNumber = formatPhoneNumber(input);
-    setPhone(formattedNumber);
-    const regPhone= /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
-
-    if (regPhone.test(formattedNumber) === true)  {
+    const input = e.target.value
+      .replace(/[^0-9]/g, "")
+      .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/, `$1-$2-$3`)
+      .replace(/-{1,2}$/g, "");
+    setPhone(input);
+    const regPhone = /^\d{3}-\d{4}-\d{4}$/;
+    if (!regPhone.test(input)) {
+      setPhoneError("전화번호 형식을 확인해주세요.");
+      setPhoneAble(false);
+    } else {
       setPhoneError("");
-      setPhoneAble(1);
-    }else {
-      setPhoneError("전화번호 형식을 다시 확인해주세요.");
-      setPhoneAble(0);
+      setPhoneAble(true);
     }
-
   };
 
   //이미지 파일
@@ -183,6 +167,32 @@ function ModifyInfo() {
       }
     };
     reader.readAsDataURL(e.target.files[0]);
+  };
+  // const [previewUrl, setPreviewUrl] = useState(null);
+  // const onChange = (event) => {
+  //   const selectedFile = event.target.files[0];
+  //   if (selectedFile) {
+  //     setFile(selectedFile);
+  //     const reader = new FileReader();
+  //     reader.onload = (event) => {
+  //       setPreviewUrl(event.target.result);
+  //     };
+  //     reader.readAsDataURL(selectedFile);
+  //   }
+  // };
+  //이미지 업로드
+  const uploadImage = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await axios.post("/upload", formData);
+      const imageUrl = response.data;
+      return imageUrl;
+    } catch (error) {
+      console.error("이미지 업로드 실패 : ", error);
+      return null;
+    }
   };
 
   //엔터 키 이벤트
@@ -207,25 +217,10 @@ function ModifyInfo() {
     }
   };
 
-  //이미지 업로드 
-  const uploadImage = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const response = await axios.post("/upload", formData);
-      const imageUrl = response.data;
-      return imageUrl;
-    } catch (error) {
-      console.error("이미지 업로드 실패 : ", error);
-      return null;
-    }
-  };
-
   //submitCheck
-  const submitCheck =  () => {
+  const submitCheck = () => {
     if (!nickname) {
-      setNicknameError("닉네임을 입력해주세요.");
+      setNicknameError("닉네임을 확인해주세요.");
     }
     if (!password) {
       setPasswordError("패스워드를 입력해주세요.");
@@ -238,131 +233,102 @@ function ModifyInfo() {
     }
     if (!phone) {
       setPhoneError("전화번호를 입력해주세요.");
-    } 
+    }
   };
 
   //submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    //닉네임, 이메일, 전화번호 중복체크
     try {
-      const response = await axios.post('/updateValid',{
+      const response = await axios.post("/updateValid", {
+        memberNum: memberNum,
         memberNickname: nickname,
         memberEmail: email,
         memberTel: phone,
-      })
+      });
       const { data } = response;
-      if (data===1) {
+      console.log(data);
+      if (data === 1) {
         setNicknameError("이미 사용중인 닉네임입니다.");
-        nickRef.current= "";
-        setNickAble(0);
-      } else if (data===2) {
+        nickRef.current = "";
+        setNickAble(false);
+        return;
+      } else if (data === 2) {
         setEmailError("이미 사용중인 이메일입니다.");
         emailRef.current = "";
-        setEmailAble(0);
-      } else if (data===3) {
+        setEmailAble(false);
+        return;
+      } else if (data === 3) {
         setPhoneError("이미 사용중인 전화번호입니다.");
-        phoneRef.current= "";
-        setPhoneAble(0);
-      } else if (data === 0){
-        setCheckAble(1);
+        phoneRef.current = "";
+        setPhoneAble(false);
+        return;
+      } else if (data === 0) {
+        setNickAble(true);
+        setEmailAble(true);
+        setPhoneAble(true);
         setEmailError("");
         setPhoneError("");
         setNicknameError("");
-      } 
-    }catch(err) {
+      }
+    } catch (err) {
       console.log("Error >>", err);
-      setCheckAble(0);
     }
-    // axios
-    // .post(`/updateValid`, 
-    // .then((res) => {
-    //   const { data } = res;
-    //   if (data===1) {
-    //      setNicknameError("이미 사용중인 닉네임입니다.");
-    //     nickRef.current= "";
-    //     setNickAble(0);
-    //   } else if (data===2) {
-    //    setEmailError("이미 사용중인 이메일입니다.");
-    //    emailRef.current = "";
-    //    setEmailAble(0);
-    //   } else if (data===3) {
-    //     setPhoneError("이미 사용중인 전화번호입니다.");
-    //     phoneRef.current= "";
-    //     setPhoneAble(0);
-    //   } else if (data === 0){
-    //     setCheckAble(1);
-    //     setEmailError("");
-    //     setPhoneError("");
-    //     setNicknameError("");
-    //   } 
-    // })
-    // .catch((err) => {
-    //   console.error(err);
-    // });
-    
-    if (nickAble === 0 || pwAble === 0 || confirmAble === 0 || emailAble === 0 || phoneAble === 0 || checkAble ===0) {
+    //이미지 업로드
+    let imageUrl = "https://via.placeholder.com/150";
+    if (file) {
+      const uploadedUrl = await uploadImage(file);
+      if (uploadedUrl) {
+        imageUrl = uploadedUrl;
+      }
+    }
+    //유효성검사 통과 시 수정 폼 submit
+    console.log(nickAble, pwAble, confirmAble, emailAble, phoneAble, checkAble);
+    if (
+      !nickAble ||
+      !pwAble ||
+      !confirmAble ||
+      !emailAble ||
+      !phoneAble ||
+      !checkAble
+    ) {
       console.log("요청 실패");
       return;
     } else {
-      
-      let imageUrl = "https://via.placeholder.com/150";
-      if (file) {
-        const uploadedUrl = await uploadImage(file);
-        if (uploadedUrl) {
-          imageUrl = uploadedUrl;
+      console.log("memberNum 수정 : ", memberNum);
+      const memberData = {
+        memberNickname: nickname,
+        memberPw: password,
+        memberEmail: email,
+        memberTel: phone,
+        memberImg: imageUrl,
+      };
+
+      try {
+        const res = await axios.put(`/update/${memberNum}`, memberData);
+        console.log(res.data);
+        if (res.data) {
+          alert("수정 성공");
+          document.location.href = "/mypage";
+        } else {
+          alert("수정에 실패하셨습니다.");
         }
+      } catch (err) {
+        console.log("Error >>", err);
       }
 
-        console.log(memberNum);
-        const memberData = {
-          memberNickname: nickname,
-          memberPw: password,
-          memberEmail: email,
-          memberTel: phone,
-          memberImg: imageUrl,
-        };
-        // axios.put(`/update/${memberNum}`, memberData)
-        //   .then((res) => {
-        //     console.log(res.data);
-        //     if (res.data) {
-        //       alert("수정 성공");
-        //       //document.location.href = "/mypage";
-        //     } else {
-        //       alert("수정에 실패하셨습니다.");
-        //     }
-        //   })
-        //   .catch((e) => {
-        //     console.error(e);
-        //   });
+      console.log(`submit->${nickname},${password},${email},${phone},${Image}`);
+    }
+  };
 
-        try {
-          const res = await axios.put(`/update/${memberNum}`, memberData);
-          console.log(res.data);
-          if (res.data) {
-            alert("수정 성공");
-            //document.location.href = "/mypage";
-          } else {
-            alert("수정에 실패하셨습니다.");
-          }
-        }catch(err) {
-          console.log("Error >>", err);
-        };
-
-    console.log(`submit->${nickname},${password},${email},${phone},${Image}`); 
-  }
-}
-   
   return (
     <ThemeProvider theme={CustomTheme}>
-      <Container
-        component="main"
-        sx={{ width: "50vw" }}
-      >
+      <Container component="main" sx={{ width: "50vw" }}>
         <Box
-        component="form"
-        validate="true"
-        onSubmit={handleSubmit}
+          component="form"
+          validate="true"
+          onSubmit={handleSubmit}
           sx={{
             marginTop: "30px",
             display: "flex",
@@ -370,11 +336,7 @@ function ModifyInfo() {
             alignItems: "center",
           }}
         >
-          <Typography
-            component="h1"
-            variant="h4"
-            fontWeight="bold"
-          >
+          <Typography component="h1" variant="h4" fontWeight="bold">
             회원 정보 수정
           </Typography>
           <br />
@@ -403,9 +365,7 @@ function ModifyInfo() {
               ref={fileInput}
             />
           </Badge>
-          <Box
-            sx={{ mt: 3 }}
-          >
+          <Box sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -483,7 +443,7 @@ function ModifyInfo() {
                   name="phone"
                   autoComplete="phone"
                   onChange={onChangePhone}
-                  inputProps={{ maxLength: 13}}
+                  inputProps={{ maxLength: 13 }}
                   InputProps={{
                     inputMode: "numeric",
                   }}
@@ -508,7 +468,7 @@ function ModifyInfo() {
               color="primary"
               onClick={submitCheck}
             >
-              <Typography  component="h1" variant="h6" color="white">
+              <Typography component="h1" variant="h6" color="white">
                 수정
               </Typography>
             </Button>

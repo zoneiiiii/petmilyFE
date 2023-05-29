@@ -169,11 +169,6 @@ const HospitalLocation = () => {
         <div
           style={{ display: "flex", alignItems: "center", marginTop: "30px" }}
         >
-          <img
-            alt="hospital"
-            style={{ width: "60px", height: "60px", marginRight: "10px" }}
-            src="./../images/hospital.png"
-          />
           <h1
             sx={{
               color: "black",
@@ -185,6 +180,16 @@ const HospitalLocation = () => {
           >
             동물병원 정보
           </h1>
+          <img
+            alt="hospital"
+            style={{
+              width: "60px",
+              height: "50px",
+              marginLeft: "10px",
+              marginBottom: "15px",
+            }}
+            src="./../images/hop.png"
+          />
         </div>
         <div style={{ display: "flex", alignItems: "center" }}>
           <TextField
@@ -203,6 +208,7 @@ const HospitalLocation = () => {
             variant="outlined"
             value={inputText}
             onChange={onChange}
+            placeholder="가까운 동물병원을 검색해보세요!"
           />
           <CustomButton
             type="submit"

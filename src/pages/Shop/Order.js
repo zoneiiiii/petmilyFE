@@ -18,74 +18,90 @@ import {
 } from "@mui/material";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
+import OrderComplete from "./OrderComplete";
 
 const Order = () => {
   //필수 항목 입력 상태 확인
   const [receiverName, setReceiverName] = useState("");
   const [receiverPhone, setReceiverPhone] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
   const [nameError, setNameError] = useState("");
   const [phoneError, setPhoneError] = useState("");
-  const [addressError, setAddressError] = useState("");
+  const [addressError, setAddressError] = useState(false);
   const [payError, setPayError] = useState("");
 
-  const onChangeName = useCallback(
-    (e) => {
-      const nameRegex = /^[가-힣]{2,4}$/;
-      setReceiverName(e.target.value);
-      if (!nameRegex.test(receiverName)) {
-        setNameError("한글 2글자 이상 4글자 이하로 입력해주세요.");
-      } else {
-        setNameError("");
-      }
-    },
-    [receiverName]
-  );
- 
-  const onChangePhone = useCallback(
-    (e) => {
-    setReceiverPhone(
-    e.target.value
+  const [nameAble, setNameAble] = useState(false);
+  const [phoneAble, setPhoneAble] = useState(false);
+  const [zipAble, setZipAble] = useState(false);
+  const [addrAble, setAddrAble] = useState(false);
+  const [detailAble, setDetailAble] = useState(false);
+
+  const reset = () => {
+    setOrderCompleted(false);
+    setIsSuccess(false);
+    setErrorMsg("");
+  };
+
+  //수령인 이름
+  const onChangeName = (e) => {
+    const checkName = e.target.value;
+    setReceiverName(checkName);
+    if (checkName.length < 2 || checkName.length > 5) {
+      setNameError("2글자 이상 5글자 이하로 입력해주세요.");
+      setNameAble(false);
+    } else {
+      setNameError("");
+      setNameAble(true);
+    }
+  };
+
+  //수령인 전화번호
+  const onChangePhone = (e) => {
+    const input = e.target.value
       .replace(/[^0-9]/g, "")
       .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/, `$1-$2-$3`)
-      .replace(/-{1,2}$/g, "")
-  )
-  setPhoneError("");
-    },
-    []
-  );
-
-
-
-    
+      .replace(/-{1,2}$/g, "");
+    setReceiverPhone(input);
+    const regPhone = /^\d{3}-\d{4}-\d{4}$/;
+    if (regPhone.test(input)) {
+      setPhoneError("");
+      setPhoneAble(true);
+    } else {
+      setPhoneError("전화번호 형식을 확인해주세요.");
+      setPhoneAble(false);
+    }
+  };
 
   const submitCheck = () => {
-    if (!receiverName) {
-      setNameError("받는 사람의 이름을 입력해주세요.");
+    let isValid = true;
+    if (!nameAble) {
+      setNameError("2글자 이상 5글자 이하로 입력해주세요.");
+      isValid = false;
+    } else {
+      setNameError("");
     }
-    if (!receiverPhone) {
-      setPhoneError("전화번호를 입력해주세요.");
+    if (!phoneAble) {
+      setPhoneError("전화번호 형식을 확인해주세요.");
+      isValid = false;
+    } else {
+      setPhoneError("");
     }
-    if (!zipcode || !address || !detailAddress) {
+    if (!zipAble || !addrAble || !detailAble) {
       setAddressError("주소를 모두 입력해주세요.");
+      isValid = false;
     } else {
       setAddressError("");
     }
     if (!paymentMethod) {
       setPayError("결제 수단을 선택하세요.");
+      isValid = false;
     } else {
       setPayError("");
     }
 
-    if (
-      receiverName &&
-      receiverPhone &&
-      zipcode &&
-      address &&
-      detailAddress &&
-      paymentMethod
-    ) {
-      handlePayment();
-    }
+    return isValid;
   };
 
   //우편번호 API
@@ -113,6 +129,8 @@ const Order = () => {
     console.log(fullAddress);
     setAddress(formattedAddress);
     setZipcode(zonecode);
+    setAddrAble(true);
+    setZipAble(true);
   };
 
   const handleClick = () => {
@@ -144,6 +162,7 @@ const Order = () => {
   }, 0);
   //배송비 설정
   const shippingCost = totalPrice >= 50000 ? 0 : 2500;
+
   //결제방식
   const [orderCompleted, setOrderCompleted] = useState(false);
   const [orderDate, setOrderDate] = useState("");
@@ -151,6 +170,7 @@ const Order = () => {
 
   const paymentSelect = (method) => {
     setPaymentMethod(method);
+    setPayError("");
   };
 
   function onClickPayment() {
@@ -174,22 +194,61 @@ const Order = () => {
     };
     IMP.request_pay(data, callback);
   }
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   function callback(response) {
     //콜백함수 정의하기
-    const { success, merchant_uid, error_msg } = response;
+    const { success, merchant_uid, imp_uid, error_msg } = response;
 
     if (success) {
-      //alert("결제 성공");
-      navigate(SHOP.ORDER_COMPLETE, { state: { orderState: orderCompleted } });
-      setOrderDate(new Date().toLocaleDateString());
+      // //alert("결제 성공");
+      // navigate(SHOP.ORDER_COMPLETE, { state: { orderState: orderCompleted } });
+      // setOrderDate(new Date().toLocaleDateString());
+      // setOrderCompleted(true);
+      const currentDate = new Date();
+      const isoCurrentDate = new Date(
+        currentDate.getTime() + 9 * 60 * 60 * 1000
+      ).toISOString();
+      // axios
+      //   .post("/donate/apply", {
+      //     donationDto: {
+      //       donationDonor: donor,
+      //       donationName: name,
+      //       donationTel: tel,
+      //       donationEmail: email,
+      //       donationCost: amount,
+      //       donationDate: isoCurrentDate,
+      //     },
+      //     paymentDto: {
+      //       merchantUid: merchant_uid,
+      //       impUid: imp_uid,
+      //       paymentState: "결제완료",
+      //       amount: amount,
+      //       paymentDate: isoCurrentDate,
+      //     },
+      //   })
+      //   .then((response) => {
+      //     console.log(response.data);
+      setOrderDate(isoCurrentDate);
       setOrderCompleted(true);
+      setIsSuccess(true);
+      // })
+      // .catch((error) => {
+      //   console.error(error);
+      //   setErrorMsg(error_msg);
+      //   setDonationCompleted(true);
+      //   setIsSuccess(false);
+      // });
     } else {
-      navigate(SHOP.ORDER_COMPLETE, {
-        state: { orderState: orderCompleted, error_msg: error_msg },
-      });
-      //alert(`결제 실패: ${error_msg}`);
+      // alert(`결제 실패: ${error_msg}`);
+      setErrorMsg(error_msg);
+      setOrderCompleted(true);
+      setIsSuccess(false);
     }
+    // } else {
+    //   navigate(SHOP.ORDER_COMPLETE, {
+    //     state: { orderState: orderCompleted, error_msg: error_msg },
+    //   });
+    //alert(`결제 실패: ${error_msg}`);
   }
 
   function onClickVbankPayment() {
@@ -237,14 +296,28 @@ const Order = () => {
   }
 
   const handlePayment = () => {
-    if (paymentMethod === "신용카드") {
-      onClickPayment();
-    } else if (paymentMethod === "카카오페이") {
-      onClickKAKAOPayment();
-    } else if (paymentMethod === "계좌이체") {
-      onClickVbankPayment();
+    if (submitCheck()) {
+      setErrorMsg("");
+      if (paymentMethod === "신용카드") {
+        onClickPayment();
+      } else if (paymentMethod === "카카오페이") {
+        onClickKAKAOPayment();
+      } else if (paymentMethod === "계좌이체") {
+        onClickVbankPayment();
+      }
     }
   };
+
+  if (orderCompleted) {
+    return (
+      <OrderComplete
+        orderDate={orderDate}
+        isSuccess={isSuccess}
+        errorMsg={errorMsg}
+        reset={reset}
+      />
+    );
+  }
 
   return (
     <>
@@ -362,7 +435,9 @@ const Order = () => {
                     sx={{ mb: 3 }}
                     size="small"
                     value={zipcode}
-                    onChange={(e) => setZipcode(e.target.value)}
+                    onChange={(e) => {
+                      setZipcode(e.target.value);
+                    }}
                   />
                   <Button className="address" onClick={handleClick}>
                     우편번호 검색
@@ -377,7 +452,9 @@ const Order = () => {
                     size="small"
                     sx={{ width: "500px" }}
                     value={address}
-                    onChange={(e) => setAddress(e.target.value)}
+                    onChange={(e) => {
+                      setAddress(e.target.value);
+                    }}
                   />
                   <br />
                   <TextField
@@ -388,10 +465,14 @@ const Order = () => {
                     size="small"
                     sx={{ width: "500px" }}
                     value={detailAddress}
-                    onChange={(e) => setDetailAddress(e.target.value)}
+                    onChange={(e) => {
+                      setAddressError(false);
+                      setDetailAddress(e.target.value);
+                      setDetailAble(true);
+                    }}
                   />
                   <FormHelperText sx={{ color: "red" }}>
-                    {addressError}
+                    {addressError ? "주소를 모두 입력해 주세요" : null}
                   </FormHelperText>
                 </TableCell>
               </TableRow>
@@ -527,7 +608,7 @@ const Order = () => {
             </TableBody>
           </Table>
           <div style={{ textAlign: "center" }}>
-            <Button type="submit" className="order" onClick={submitCheck}>
+            <Button type="submit" className="order" onClick={handlePayment}>
               결제하기
             </Button>
           </div>
