@@ -1,48 +1,111 @@
 import {
-  Avatar,
   Box,
   Button,
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableRow,
   TextField,
   ThemeProvider,
-  Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
-import { ABOUT } from "../../constants/PageURL";
+import { ABOUT, ACCOUNT } from "../../constants/PageURL";
 import styled from "styled-components";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import dayjs from "dayjs";
-import {
-  MyCustomUploadAdapterPlugin,
-  MyUploadAdapter,
-} from "../../components/common/UploadAdapter";
+import { MyCustomUploadAdapterPlugin } from "../../components/common/UploadAdapter";
+import axios from "axios";
 
-const pageWidth = "80%";
+const pageWidth = "100%";
 
 const NoticeWrite = () => {
+  const { state } = useLocation();
   const navigate = useNavigate();
-  const fileList = []; // 업로드한 파일들을 저장하는 배열
-  const [data, setData] = useState({
-    no: null,
-    memberNo: 1,
-    category: "",
-    subject: "",
-    contents: "",
-    count: 0,
-    postDate: dayjs(),
-    imgThumbnail: "",
+  const [subject, setSubject] = useState("");
+  const [content, setContent] = useState("");
+  const [mode, setMode] = useState("create");
+  const titleRef = useRef();
+  const editorRef = useRef();
+
+  useEffect(() => {
+    console.log("re-rendering...");
   });
 
-  useEffect(() => console.log("re-rendering...", data, fileList));
+  useEffect(() => {
+    axios
+      .get("/check-login")
+      .then((response) => {
+        if (!response.data) {
+          alert("로그인 해주세요.");
+          navigate(ACCOUNT.LOGIN);
+        } else if (state !== null && state.data !== null) {
+          setMode("update");
+          axios
+            .get("/notice/check-writer?no=" + state.data.no)
+            .then((response) => {
+              if (response.data) {
+                setSubject(state.data.subject);
+                setContent(state.data.content);
+              } else {
+                alert("권한이 없습니다.");
+                navigate(-1);
+              }
+            })
+            .catch((error) => console.error("에러발생:", error));
+        }
+      })
+      .catch((error) => console.error("에러발생! :", error));
+  }, []);
+
+  const handleInsert = (event) => {
+    console.log("click: ", event);
+    const editorInstance = editorRef.current.editor;
+    console.log(subject.trim());
+    if (subject.trim() === "") {
+      alert("제목을 입력하세요.");
+      titleRef.current.focus();
+    } else if (content.trim() === "") {
+      alert("내용을 입력하세요.");
+      editorInstance.editing.view.focus();
+      editorInstance.ui.view.element.scrollIntoView({
+        block: "center",
+      });
+    } else {
+      switch (mode) {
+        case "create":
+          axios
+            .post("/notice/insert", {
+              subject: subject,
+              content: content,
+            })
+            .then((response) => console.log("등록?:", response.data))
+            .catch((error) => console.error("에러 발생! :", error))
+            .finally(() => {
+              alert("등록되었습니다!");
+              navigate(ABOUT.NOTICE());
+            });
+          break;
+        case "update":
+          axios
+            .post("/notice/update", {
+              no: state.data.no,
+              subject: subject,
+              content: content,
+            })
+            .then((response) => console.log("수정?:", response.data))
+            .catch((error) => console.error("에러 발생! :", error))
+            .finally(() => {
+              alert("수정되었습니다!");
+              navigate(ABOUT.NOTICE());
+            });
+          break;
+        default:
+      }
+    }
+  };
 
   return (
     <ThemeProvider theme={CustomTheme}>
@@ -70,7 +133,7 @@ const NoticeWrite = () => {
                   fontSize: "1.5rem",
                   fontWeight: 600,
                   textAlign: "left",
-                  width: "60px",
+                  width: "10%",
                 }}
               >
                 제목
@@ -79,6 +142,12 @@ const NoticeWrite = () => {
                 <TextField
                   size="small"
                   fullWidth
+                  value={subject}
+                  onChange={
+                    (event) => setSubject(event.target.value)
+                    // setData({ ...data, subject: event.target.value })
+                  }
+                  inputRef={titleRef}
                   // placeholder="제목을 입력하세요."
                 />
               </TableCell>
@@ -89,7 +158,7 @@ const NoticeWrite = () => {
                   fontSize: "1.5rem",
                   fontWeight: 600,
                   textAlign: "left",
-                  width: "60px",
+                  width: "10%",
                   verticalAlign: "top",
                 }}
               >
@@ -99,16 +168,23 @@ const NoticeWrite = () => {
                 <EditorWrapper>
                   <CKEditor
                     editor={ClassicEditor}
+                    ref={editorRef}
+                    autoFocus={false}
                     config={{
                       extraPlugins: [MyCustomUploadAdapterPlugin],
                     }}
-                    data={data.contents}
+                    data={
+                      state
+                        ? state.data
+                          ? state.data.content
+                          : content
+                        : content
+                    }
                     onReady={(editor) => {
-                      // You can store the "editor" and use when it is needed.
                       console.log("Editor is ready to use!", editor);
                     }}
                     onChange={(event, editor) => {
-                      setData({ ...data, contents: editor.getData() });
+                      setContent(editor.getData());
                     }}
                     onBlur={(event, editor) => {
                       console.log("Blur.", editor);
@@ -128,8 +204,7 @@ const NoticeWrite = () => {
             <Button
               variant="contained"
               sx={{ m: 2, width: "100px" }}
-              color="fbd385"
-              onClick={() => navigate(ABOUT.NOTICE_WRITE)}
+              onClick={handleInsert}
             >
               등록
             </Button>
@@ -142,9 +217,6 @@ const NoticeWrite = () => {
               취소
             </Button>
           </Box>
-        </Box>
-        <Box>
-          <div dangerouslySetInnerHTML={{ __html: data.contents }}></div>
         </Box>
       </Box>
     </ThemeProvider>
@@ -160,29 +232,5 @@ export const EditorWrapper = styled.div`
     border-color: #fbd385;
   }
 `;
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: black;
-  font-weight: 600;
-  :hover {
-    text-decoration: underline;
-  }
-`;
-
-const member = {
-  num: 1,
-  id: "Admin",
-  pw: "1234",
-  nickname: "관리자",
-  email: "asdf@naver.com",
-  name: "관리자",
-  gender: "남자",
-  birth: "2023-01-01",
-  tel: "010-1234-5678",
-  addr: "서울특별시 강남구 선릉로 428",
-  img: "/images/emptyProfile.png",
-  role: "admin",
-};
 
 export default NoticeWrite;

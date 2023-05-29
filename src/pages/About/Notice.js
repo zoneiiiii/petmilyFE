@@ -42,13 +42,16 @@ const Notice = () => {
   const [searchKeyword, setSearchKeyWord] = useState("");
   const [searchMode, setSearchMode] = useState();
   const [rowsPerPage, setRowsPerPage] = useState(20);
-  const [foundData, setFoundData] = useState();
   const [pagedData, setPagedData] = useState();
+
+  useEffect(() => {
+    console.log("search:", search, "searchKeyword:", searchKeyword);
+  });
 
   // 초기 세팅
   useEffect(() => {
     setNowPage(page ? parseInt(page) : 1);
-    setSearchKeyWord(search ? search : "");
+    setSearchKeyWord(search ? decodeURIComponent(search) : "");
     setRowsPerPage(limit ? parseInt(limit) : 20);
     setSearchMode(search_mode ? search_mode : searchModes.subject_content);
     console.log(page, limit, search, search_mode);
@@ -62,9 +65,14 @@ const Notice = () => {
       if (limit) queryText += "&limit=" + limit;
       if (search)
         search_mode
-          ? (queryText += "&search=" + search + "&search_mode=" + search_mode)
-          : (queryText += "&search=" + search);
+          ? (queryText +=
+              "&search=" +
+              encodeURIComponent(search) +
+              "&search_mode=" +
+              search_mode)
+          : (queryText += "&search=" + encodeURIComponent(search));
     }
+    console.log("queryText:", queryText);
     axios
       .get(queryText)
       .then((response) => {
@@ -107,11 +115,14 @@ const Notice = () => {
 
   // 검색
   const handleSearch = (value) => {
+    // if (value.length < 2) {
+    //   alert("두 글자 이상 입력하세요.");
+    // } else if (/[<>]/.test(value)) {
+    //   alert("'<'와 '>'는 검색하실 수 없습니다.");
+    // } else {
+    // }
     setNowPage(1);
-    // findDataByMode(value, searchMode);
-    console.log(page, limit, search, search_mode);
-    console.log(nowPage, rowsPerPage, searchKeyword, searchMode);
-    getData(1, rowsPerPage, value, searchMode, true);
+    getData(1, rowsPerPage, encodeURIComponent(value), searchMode, true);
   };
 
   return (
@@ -148,6 +159,7 @@ const Notice = () => {
             <SearchBar
               setValue={setSearchKeyWord}
               value={searchKeyword}
+              width={"250px"}
               onClick={handleSearch}
             />
           </Box>
@@ -219,14 +231,14 @@ const Notice = () => {
             variant="contained"
             sx={{ mr: 3, width: "100px" }}
             onClick={() => {
-              axios
-                .post("/notice/insert")
-                .then((response) => {
-                  console.log(response);
-                })
-                .catch((error) => {
-                  console.error(error);
-                });
+              // axios
+              //   .post("/notice/insert")
+              //   .then((response) => {
+              //     console.log(response);
+              //   })
+              //   .catch((error) => {
+              //     console.error(error);
+              //   });
               navigate(ABOUT.NOTICE_WRITE);
             }}
           >
