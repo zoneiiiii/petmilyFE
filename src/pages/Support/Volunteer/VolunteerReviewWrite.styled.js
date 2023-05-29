@@ -36,6 +36,19 @@ export const FormRow = styled.div`
   align-items: center;
 `;
 
+export const FormRowWithError = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 16px;
+  align-items: center;
+`;
+
+export const ErrorMsg = styled.div`
+  width: 100%;
+  margin-left: 10px;
+`;
+
 export const ButtonGroup = styled.div`
   font-size: 0.8rem;
   color: gray;
@@ -95,5 +108,9 @@ export const EditorWrapper = styled.div`
   .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
     min-height: 500px;
     width: 700px;
+  }
+
+  .ck.ck-editor__editable:not(.ck-editor__nested-editable):focus {
+    border-color: #fbd385;
   }
 `;
