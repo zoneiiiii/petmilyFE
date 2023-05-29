@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-// import Grid from "@mui/material/Grid";
 import {
     ThemeProvider,
     TextField,
@@ -11,17 +10,19 @@ import {
     FormHelperText,
     Button
 } from "@mui/material";
-// import Modal from "@mui/material/Modal";
-// import Alert from "@mui/material/Alert";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { MyCustomUploadAdapterPlugin } from "../../../components/common/UploadAdapter";
+import Loading from "../../../components/Loading/LoadingPage";
 import { CustomTheme } from "../../../assets/Theme/CustomTheme";
 import axios from "axios";
 import { COMMUNITY } from "../../../constants/PageURL";
 
-const FreeWrite = () => {
+const FreeModify = () => {
     const navigate = useNavigate();
+    const [post, setPost] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const { id } = useParams();
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [formAble, setFormAble] = useState(false);
@@ -44,10 +45,10 @@ const FreeWrite = () => {
             document.location.href = "/board/free";
         }
     };
-    const handleReset = () => {
+    const handleCancel = () => {
         setTitle("");
         setContent("");
-        document.location.href = "/board/free";
+        document.location.href = `/board/free/${id}`;
     };
 
     // 유효성 검증 상태
@@ -82,7 +83,7 @@ const FreeWrite = () => {
     const handleModalClose = () => {
         // 모달닫는 함수
         setOpenModal(false);
-        navigate(COMMUNITY.FREE);
+        navigate(COMMUNITY.FREE_DETAIL(id));
     };
 
     // 사진 미리보기
@@ -115,6 +116,26 @@ const FreeWrite = () => {
         }
     };
 
+    //게시글 Detail 호출
+    useEffect(() => {
+        const fetchPost = async () => {
+            try {
+                const response = await axios.get(
+                    `http://localhost:8080/board/free/${id}`
+                ); //게시글 Detail 데이터  호출
+                const data = response.data;
+                setPost(data);
+                setTitle(data.freeSubject);
+                setContent(data.freeContent);
+            } catch (error) {
+                console.error("Error fetching data : ", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchPost();
+    }, [id]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const isError = validate();
@@ -140,7 +161,7 @@ const FreeWrite = () => {
         };
 
         try {
-            await axios.post("/board/free/write", postData, {
+            await axios.put(`http://localhost:8080/board/free/${id}`, postData, {
                 withCredentials: true,
             });
             setOpenModal(true);
@@ -151,6 +172,10 @@ const FreeWrite = () => {
             console.error("데이터 전송 실패 : ", error);
         }
     };
+
+    if (isLoading) {
+        return <Loading />; // 로딩 중일 때 표시할 컴포넌트
+    }
 
     return (
         <Section className="result">
@@ -224,13 +249,12 @@ const FreeWrite = () => {
                                         type="submit"
                                         onClick={handleSubmit}
                                         variant="contained"
-                                    >글쓰기
+                                    >수정
                                     </WriteButton>
                                     <ButtonsSpace />
-
                                     <ResetButton
+                                        onClick={handleCancel}
                                         variant="contained"
-                                        onClick={handleReset}
                                     >취소
                                     </ResetButton>
 
@@ -391,4 +415,4 @@ const ResetButton = styled(Button)`
   }
 `;
 
-export default FreeWrite;
+export default FreeModify;

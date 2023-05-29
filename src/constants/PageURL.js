@@ -483,6 +483,16 @@ export const COMMUNITY = {
    */
   FIND_WRITE: "/board/find/write",
 
+  /**목격 제보 게시판 수정 페이지 URL
+   * **사용법: COMMUNITY.FIND_MODIFY(id)
+   * @return "/board/find/modify/:id" (id 없음)
+   * @return "/board/find/modify/ + id (id 존재)
+   */
+  FIND_MODIFY: (id) => {
+    if (id === undefined) return "/board/find/modify/:id";
+    else return "/board/find/modify/" + id;
+  },
+
   /**자유게시판 페이지 URL
    * @return "/board/free"
    */
@@ -502,6 +512,16 @@ export const COMMUNITY = {
    * @return "/board/free/write"
    */
   FREE_WRITE: "/board/free/write",
+
+  /**자유게시판 수정 페이지 URL
+   * **사용법: COMMUNITY.FREE_MODIFY(id)
+   * @return "/board/free/modify/:id" (id 없음)
+   * @return "/board/free/modify/ + id (id 존재)
+   */
+  FREE_MODIFY: (id) => {
+    if (id === undefined) return "/board/free/modify/:id";
+    else return "/board/free/modify/" + id;
+  },
 
   /**매매장터 페이지 URL
    * @return "/board/flea"
@@ -523,6 +543,16 @@ export const COMMUNITY = {
    */
   FLEA_WRITE: "/board/flea/write",
 
+  /**매매장터 수정 페이지 URL
+   * **사용법: COMMUNITY.FLEA_MODIFY(id)
+   * @return "/board/flea/modify/:id" (id 없음)
+   * @return "/board/flea/modify/ + id (id 존재)
+   */
+  FLEA_MODIFY: (id) => {
+    if (id === undefined) return "/board/flea/modify/:id";
+    else return "/board/flea/modify/" + id;
+  },
+
   /**실종 동물 게시판 페이지 URL
    * @return "/board/missing"
    */
@@ -538,11 +568,23 @@ export const COMMUNITY = {
     else return "/board/missing/" + id;
   },
 
-  /**실종 동물 게시판 페이지 URL
+  /**실종 동물 게시판 작성 페이지 URL
    * @return "/board/missing/:id"
    */
   MISSING_WRITE: "/board/missing/write",
+
+  /**실종 동물 게시판 수정 페이지 URL
+   * **사용법: COMMUNITY.MISSING_MODIFY(id)
+   * @return "/board/missing/modify/:id" (id 없음)
+   * @return "/board/missing/modify/ + id (id 존재)
+   */
+  MISSING_MODIFY: (id) => {
+    if (id === undefined) return "/board/missing/modify/:id";
+    else return "/board/missing/modify/" + id;
+  },
 };
+
+
 
 /** ADMIN: 관리자 관련 URL 리스트*/
 export const ADMIN = {

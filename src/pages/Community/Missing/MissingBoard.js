@@ -1,38 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { COMMUNITY } from '../../../constants/PageURL';
 import styled from "styled-components";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Card } from '@mui/material';
-import Grid from "@mui/material/Grid";
-import Container from "@mui/material/Container";
-import SearchBar from "../../../components/common/SearchBar";
+import { CustomTheme } from "../../../assets/Theme/CustomTheme";
+import {
+  ThemeProvider,
+  Grid,
+  Card,
+  Container,
+} from '@mui/material';
 import Pagination from "@mui/material/Pagination";
+import SearchBar from "../../../components/common/SearchBar";
 import CustomButton from "../../Login/CustomButton";
+import NotFound from "../../NotFound/NotFound";
+import Loading from "../../../components/Loading/LoadingPage";
+import { AuthContext } from "../../../contexts/AuthContexts";
 import axios from "axios";
-
-//board_num, member_num, board_id, subject, content, count, date, state
-const categories = ["목격", "실종"]
-
-
-const dummy = [
-  { id: 1, title: "골든 리트리버 똘이를 찾습니다", region: "서울", writter: "똘이엄마", date: "2023.05.04", count: 34 },
-  { id: 2, title: "푸들 복이를 찾습니다", region: "서울", writter: "똘이엄마", date: "2023.05.04", count: 34 },
-  { id: 3, title: "코리안숏헤어 가이를 찾습니다", region: "서울", writter: "똘이엄마", date: "2023.05.04", count: 34 },
-  { id: 4, title: "골든 리트리버 라이를 찾습니다", region: "서울", writter: "똘이엄마", date: "2023.05.04", count: 34 },
-  { id: 5, title: "골든 리트리버 마이를 찾습니다", region: "서울", writter: "똘이엄마", date: "2023.05.04", count: 34 },
-  { id: 6, title: "골든 리트리버 바이를 찾습니다", region: "서울", writter: "똘이엄마", date: "2023.05.04", count: 34 },
-  { id: 7, title: "코리안숏헤어 사이를 찾습니다", region: "서울", writter: "똘이엄마", date: "2023.05.04", count: 34 },
-  { id: 8, title: "골든 리트리버 아이를 찾습니다", region: "서울", writter: "똘이엄마", date: "2023.05.04", count: 34 },
-  { id: 9, title: "골든 리트리버 똘이를 찾습니다", region: "서울", writter: "똘이엄마", date: "2023.05.04", count: 34 },
-  { id: 10, title: "골든 리트리버 복이를 찾습니다", region: "서울", writter: "똘이엄마", date: "2023.05.04", count: 34 },
-  { id: 11, title: "코리안숏헤어 가이를 찾습니다", region: "서울", writter: "똘이엄마", date: "2023.05.04", count: 34 },
-  { id: 12, title: "골든 리트리버 라이를 찾습니다", region: "서울", writter: "똘이엄마", date: "2023.05.04", count: 34 },
-  { id: 13, title: "코리안숏헤어 마이를 찾습니다", region: "서울", writter: "똘이엄마", date: "2023.05.04", count: 34 },
-  { id: 14, title: "골든 리트리버 바이를 찾습니다", region: "서울", writter: "똘이엄마", date: "2023.05.04", count: 34 },
-  { id: 15, title: "푸들 사이를 찾습니다", region: "서울", writter: "똘이엄마", date: "2023.05.04", count: 34 },
-  { id: 16, title: "골든 리트리버 아이를 찾습니다", region: "서울", writter: "똘이엄마", date: "2023.05.04", count: 34 },
-]
 
 const MissingBoard = () => {
   const [data, setData] = useState([]); // DB 데이터 가져오는 변수
@@ -42,8 +25,10 @@ const MissingBoard = () => {
   const endIndex = startIndex + itemsPerPage;
   const cards = data.slice(startIndex, endIndex); // 현재 페이지에 해당하는 카드 데이터 계산
   const [maxPageNum, setMaxPageNum] = useState(1);
-  // const pageCount = Math.ceil(data.length / itemsPerPage); // 페이지 수 계산
+  const { loggedIn } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(true); //로딩 상태
 
+  /* pagenation start */
   const handleChange = (event, value) => {
     //페이지 변경 시 호출, 새 페이지의 번호를 value에 저장함.
     setPage(value);
@@ -51,34 +36,48 @@ const MissingBoard = () => {
   };
 
   const getPageNum = () => {
-    const maxLength = dummy.length;
+    const maxLength = data.length;
     return setMaxPageNum(Math.ceil(maxLength / itemsPerPage));
   }
 
   useEffect(() => {
     getPageNum();
-  }, []);
+  });
+  /* pagenation end */
 
   /* axios start */
   useEffect(() => {
-    axios
-      .get("http://localhost:8080/board/missing")
-      .then((response) => {
+    //게시글 목록 호출
+    const fetchPost = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/board/missing`
+        ); //게시글 데이터 호출
         setData(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+      } catch (error) {
+        console.error("Error fetching data : ", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchPost();
   }, []);
   /* axios end */
 
+  if (isLoading) {
+    return <Loading />; // 로딩 중일 때 표시할 컴포넌트
+  }
+
+  if (!data) {
+    return <NotFound />; //존재하지 않는 번호를 넣었을 때 표시할 컴포넌트
+  }
+
   return (
-    <Section className="result">
-      <MainContainer className="result-container">
-        <ThemeProvider theme={theme}>
+    <ThemeProvider theme={CustomTheme}>
+      <Section className="result">
+        <MainContainer className="result-container">
           <ContainerBox>
             <Top>실종 동물 게시판</Top>
-
             <Container sx={{ py: '30px' }} maxWidth="60vw">
               <SearchContainer>
                 <SearchBar />
@@ -101,7 +100,7 @@ const MissingBoard = () => {
                               flexDirection: "column",
                             }}
                           >
-                            <CardImage src="http://placeimg.com/300/300/animals/sepia" />
+                            <CardImage src={card.imgThumbnail} />
                             <div>
                               <CardTitle>{card.boardSubject}</CardTitle>
                               <CardWritter>{card.memberNickName}</CardWritter>
@@ -113,11 +112,14 @@ const MissingBoard = () => {
                     );
                   })}
               </Grid>
-              <Link className="button" to={COMMUNITY.MISSING_WRITE}>
-                <CustomButton label="글쓰기" value="글쓰기" />
-              </Link>
+              {loggedIn === true ?
+                <Link to={COMMUNITY.MISSING_WRITE}>
+                  <CustomButton label="글쓰기" value="글쓰기">
+                    글쓰기
+                  </CustomButton>
+                </Link> : <></>
+              }
             </Container>
-
 
             <Pagination
               color="primary"
@@ -130,23 +132,13 @@ const MissingBoard = () => {
                 margin: '50px 0 0 0px'
               }}
             />
-
           </ContainerBox >
-        </ThemeProvider>
+        </MainContainer>
+      </Section >
+    </ThemeProvider>
 
-      </MainContainer>
-    </Section >
   );
 };
-
-const theme = createTheme({
-  palette: {
-    type: "mainColor",
-    primary: {
-      main: "#FBD385",
-    },
-  },
-});
 
 const Section = styled.section`
   background: #f8f9fa;
@@ -213,7 +205,5 @@ const CardCount = styled.p`
 
 const ContainerBox = styled.div`
       `
-const CardBoxList = styled.div``
-const CardBox = styled.div``
 
 export default MissingBoard;

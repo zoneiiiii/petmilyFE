@@ -1,92 +1,105 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { CustomTheme } from "../../../assets/Theme/CustomTheme";
+import {
+    ThemeProvider,
+    Grid,
+    Card,
+} from '@mui/material';
 import { COMMUNITY } from '../../../constants/PageURL';
 import SearchBar from "../../../components/common/SearchBar";
 import CustomButton from "../../Login/CustomButton";
+import NotFound from "../../NotFound/NotFound";
+import Loading from "../../../components/Loading/LoadingPage";
+import { AuthContext } from "../../../contexts/AuthContexts";
+import axios from "axios";
 
-function createData(num, boardId, subject, writer, cost, like, content, views, date, img) {
-    return { num, boardId, subject, writer, cost, like, content, views, date, img };
-}
-
-const items = [
-    createData('001', 'flea', '캣타워캣타워캣타워캣타워캣타워캣타워캣타워캣타워캣타워캣타워캣타워캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('002', 'flea', '사료', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('003', 'flea', '캣휠', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('004', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('005', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('006', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('007', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('008', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('009', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('010', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('011', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('012', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('002', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('003', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('004', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('005', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('006', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('007', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('008', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('009', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('010', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('011', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-    createData('012', 'flea', '캣타워', '핏불', '120,500', '12', '캣타워 팔아요~', '132', '2023.05.05', 'https://picsum.photos/250/250'),
-];
 
 const FleaBoard = () => {
     const navigate = useNavigate();
+    const [data, setData] = useState([]); // DB 데이터 가져오는 변수
+    const { loggedIn } = useContext(AuthContext);
+    const [isLoading, setIsLoading] = useState(true); //로딩 상태
     const [visibleCount, setVisibleCount] = React.useState(9);  // 더보기 기능
 
     const handleLoadMore = () => {
         setVisibleCount(visibleCount + 6);  // 더보기 클릭시 추가되는 아이템 개수
     };
 
-    const visibleItems = items.slice(0, visibleCount);
-    const isLastPage = visibleCount >= items.length;    // 더 이상 불러올 상품이 없는 경우 true, 더보기 버튼 사라짐.
+    const visibleItems = data.slice(0, visibleCount);
+    const isLastPage = visibleCount >= data.length;    // 더 이상 불러올 상품이 없는 경우 true, 더보기 버튼 사라짐.
+
+    /* axios start */
+    useEffect(() => {
+        //게시글 목록 호출
+        const fetchPost = async () => {
+            try {
+                const response = await axios.get(
+                    `http://localhost:8080/board/flea`
+                ); //게시글 데이터 호출
+                setData(response.data);
+            } catch (error) {
+                console.error("Error fetching data : ", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchPost();
+    }, []);
+    /* axios end */
+
+    if (isLoading) {
+        return <Loading />; // 로딩 중일 때 표시할 컴포넌트
+    }
+
+    if (!data) {
+        return <NotFound />; //존재하지 않는 번호를 넣었을 때 표시할 컴포넌트
+    }
+
 
     return (
-        <Section className="result">
-            <Container className="result-container">
-                <div className="articles-wrap">
-                    <div className="articles-searchbar">
-                        <p className="article-kind">중고장터</p>
-                        <SearchContainer>
-                            <SearchBar />
-                        </SearchContainer>
-                    </div>
-                    <div className="card-container">
-                        {visibleItems.map((item, index) => (
-                            <article className="flat-card" key={index}>
-                                <Link className="article-link" to={'{COMMUNITY.FLEA_DETAIL(item.num)}'} >
-                                    <div className="card-photo">
-                                        <img alt="noImg" src={item.img} onClick={() => navigate(COMMUNITY.FLEA_DETAIL)} />
-                                    </div>
-                                    <div className="article-info">
-                                        <div className="article-title-content">
-                                            <span className="article-title">{item.subject}</span>
-                                            <span className="article-content">{item.content}</span>
-                                        </div>
-                                        <p className="article-price">{item.cost}</p>
-                                        <section className="article-sub-info">
-                                            <span className="article-watch">
-                                                <img className="watch-icon" alt="Watch count" src="/images/like.png" />
-                                                {item.like}
-                                            </span>
-                                        </section>
-                                    </div>
-                                </Link>
-                            </article>
-                        ))}
-                    </div>
-                    {!isLastPage && (
-                        <div className="more-item">
-                            <button className="more-btn" onClick={handleLoadMore}>더보기</button>
+        <ThemeProvider theme={CustomTheme}>
+            <Section className="result">
+                <Container className="result-container">
+                    <div className="articles-wrap">
+                        <div className="articles-searchbar">
+                            <p className="article-kind">중고장터</p>
+                            <SearchContainer>
+                                <SearchBar />
+                            </SearchContainer>
                         </div>
-                    )}
+                        <div className="card-container">
+                            {visibleItems.map((item, index) => (
+                                <article className="flat-card" key={index}>
+                                    <Link className="article-link" to={COMMUNITY.FLEA_DETAIL(item.boardNum)} >
+                                        <div className="card-photo">
+                                            <img alt="noImg" src={item.imgThumbnail} onClick={() => navigate(COMMUNITY.FLEA_DETAIL)} />
+                                        </div>
+                                        <div className="article-info">
+                                            <div className="article-title-content">
+                                                <span className="article-title">{item.boardSubject}</span>
+                                                <span className="article-content">{item.boardContent}</span>
+                                            </div>
+                                            <p className="article-price">{item.boardCost}</p>
+                                            <section className="article-sub-info">
+                                                <span className="article-watch">
+                                                    <img className="watch-icon" alt="Watch count" src="/images/like.png" />
+                                                    {item.boardCount}
+                                                </span>
+                                            </section>
+                                        </div>
+                                    </Link>
+                                </article>
+                            ))}
+                        </div>
+                        {!isLastPage && (
+                            <div className="more-item">
+                                <button className="more-btn" onClick={handleLoadMore}>더보기</button>
+                            </div>
+                        )}
 
-                    {/* {!isLastPage && (
+                        {/* {!isLastPage && (
                         <div className="more-btn" onclick={handleLoadMore} >
                             <span className="more-text">더보기</span>
                             <div className="more-loading" style={{ display: 'none' }}>
@@ -94,14 +107,17 @@ const FleaBoard = () => {
                             </div>
                         </div>
                     )} */}
-                </div>
-                <div className="write-item">
-                    <Link to={COMMUNITY.FLEA_WRITE}>
-                        <CustomButton label="글쓰기" value="글쓰기" />
-                    </Link>
-                </div>
-            </Container>
-        </Section >
+                    </div>
+                    {loggedIn === true ?
+                        <Link to={COMMUNITY.FLEA_WRITE}>
+                            <CustomButton label="글쓰기" value="글쓰기">
+                                글쓰기
+                            </CustomButton>
+                        </Link> : <></>
+                    }
+                </Container>
+            </Section >
+        </ThemeProvider>
     );
 }
 
