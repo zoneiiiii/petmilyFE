@@ -31,8 +31,8 @@ const VolunteerCard = ({
             style={{ textDecoration: "none", color: "inherit", width: "100%" }}
           >
             <S.Thumbnail src={imgThumbnail} alt="thumbnail" />
-            <S.User>{shelterName}</S.User>
             <S.Title>{volunteerSubject}</S.Title>
+            <S.User>{shelterName}</S.User>
             <S.Date>{formatDate(volunteerDate)}</S.Date>
             <S.CountWrapper>
               <S.Count>조회수 : {volunteerCount} </S.Count>
@@ -46,8 +46,8 @@ const VolunteerCard = ({
             style={{ textDecoration: "none", color: "inherit", width: "100%" }}
           >
             <S.Thumbnail src={imgThumbnail} alt="thumbnail" />
-            <S.User>{shelterName}</S.User>
             <S.Title>{volunteerSubject}</S.Title>
+            <S.User>{shelterName}</S.User>
             <S.Date>{formatDate(volunteerDate)}</S.Date>
             <S.CountWrapper>
               <S.Count>조회수 : {volunteerCount} </S.Count>

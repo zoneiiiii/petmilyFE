@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Button } from "@mui/material";
+import { Button, Avatar } from "@mui/material";
 
 export const DetailContainer = styled.div`
   width: 70vw;
@@ -31,13 +31,24 @@ export const horizon = styled.hr`
 export const TopInfo = styled.div`
   display: flex;
   align-items: center;
-  height: 40px;
+  height: 50px;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
 `;
 
+export const UserImg = styled(Avatar)`
+  && {
+    margin-right: 8px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 5px;
+  }
+`;
+
 export const TopNickname = styled.div`
   font-weight: bold;
+  align-items: center;
 `;
 
 export const TopDate = styled.div`
@@ -61,6 +72,11 @@ export const DetailMiddle = styled.div`
   padding-top: 15px;
   min-height: 300px;
   min-width: 70vw;
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
 `;
 
 export const DetailBottom = styled.div`
