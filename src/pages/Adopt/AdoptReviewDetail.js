@@ -75,7 +75,7 @@ const AdoptReviewDetail = () => {
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell sx={{ width: 600 }}>{data.memberNum}</TableCell>
+                  <TableCell sx={{ width: 600 }}>{number.nickName}</TableCell>
                   <TableCell align="right" sx={{ color: "lightgray" }}>
                     {formatDate()}
                   </TableCell>

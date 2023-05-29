@@ -78,11 +78,12 @@ const AdoptReview = () => {
                         }}
                         state={{
                           boardNum: item.boardNum,
+                          nickName: item.memberNickName,
                         }}
                       >
                         <S.Thumbnail src={item.imgThumbnail} alt="thumbnail" />
-                        <S.User>{item.memberNickName}</S.User>
-                        <S.Title>{item.reviewSubject}</S.Title>
+                        <S.User>{item.reviewSubject}</S.User>
+                        <S.Title>{item.memberNickName}</S.Title>
                         <S.Date>{item.reviewDate}</S.Date>
                         <S.CountWrapper>
                           <S.Count>조회수: {item.reviewCount}</S.Count>
