@@ -628,5 +628,11 @@ export const ADMIN = {
   /**게시글 관리 페이지 URL
    * @return "/a/board"
    */
+
+  DONATION: "/a/donation",
+
+  /**기부 관리 페이지 URL
+   * @return "/a/donation"
+   */
   BOARD: "/a/board",
 };

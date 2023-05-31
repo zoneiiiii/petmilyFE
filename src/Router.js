@@ -326,6 +326,10 @@ const Router = () => {
               path={BROWSER_PATH.ADMIN.QNA}
               element={<Page.Admin.AdminQnA />}
             />
+            <Route
+              path={BROWSER_PATH.ADMIN.DONATION}
+              element={<Page.Admin.AdminDonation />}
+            />
           </Route>
         </Routes>
       </React.Suspense>
