@@ -96,6 +96,7 @@ import AdminOrder from "./Admin//Orders/AdminOrder";
 import AdminProduct from "./Admin/Products/AdminProduct";
 import AdminProductWrite from "./Admin/Products/AdminProductWrite";
 import AdminQnA from "./Admin/QnA/AdminQnA";
+import AdminAdoptDetail from "./Admin/Adopt/AdmingAdoptInfo";
 
 /**
  ** Layout
@@ -348,6 +349,7 @@ export const Community = {
 export const Admin = {
   AdminLayout: AdminLayout,
   AdminAdopt: AdminAdopt,
+  AdminAdoptDetail: AdminAdoptDetail,
   AdminBoard: AdminBoard,
   AdminDashBoard: AdminDashBoard,
   AdminMember: AdminMember,

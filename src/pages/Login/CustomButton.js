@@ -155,6 +155,22 @@ const WriteButton1 = styled(Button)`
   }
 `;
 
+const failButton = styled(Button)`
+  background-color: #fbd385;
+  color: white;
+  width: 90px;
+  height: 30px;
+  margin-top: 10px;
+  margin-right: 10px;
+  float: right;
+  &:hover {
+    background-color: #facc73;
+  }
+  &:focus {
+    background-color: #facc73;
+  }
+`;
+
 export default function CustomButton(props) {
   const { value, label } = props;
 

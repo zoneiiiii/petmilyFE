@@ -599,6 +599,10 @@ export const ADMIN = {
    * @return "/a/adopt"
    */
   ADOPT: "/a/adopt",
+  ADMIN_ADOPT: (id) => {
+    if (id === undefined) return "/a/adopt/:id";
+    else return "/a/adopt/" + id;
+  },
 
   /**사용자 대쉬보드 페이지 URL
    * @return "/a/dashboard"
