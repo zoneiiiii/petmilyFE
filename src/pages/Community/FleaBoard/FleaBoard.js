@@ -86,8 +86,9 @@ const FleaBoard = () => {
                                             </p>
                                             <section className="article-sub-info">
                                                 <span className="article-watch">
-                                                    <img className="watch-icon" alt="Watch count" src="/images/like.png" />
-                                                    {item.boardCount}
+                                                    {(item.boardStatus === true) ?
+                                                        (<p>판매중</p>) :
+                                                        (<p style={{ color: "gray" }}>판매완료</p>)}
                                                 </span>
                                             </section>
                                         </div>
@@ -238,14 +239,14 @@ const Container = styled.div`
 
     .article-sub-info {
         position: absolute;
-        right: 10px;
-        bottom: 18px;
+        right: 12px;
+        bottom: 7px;
     }
 
     .article-watch {
         color: rgb(33, 37, 41);
         display: flex;
-        font-size: 14px;
+        font-size: 16px;
     }
 
     .watch-icon {

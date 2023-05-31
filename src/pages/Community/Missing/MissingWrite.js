@@ -12,7 +12,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   FormControl,
-  Button
+  Button,
 } from "@mui/material";
 import { Select, MenuItem } from "@mui/material";
 import { CustomTheme } from "../../../assets/Theme/CustomTheme";
@@ -303,7 +303,7 @@ const MissingWrite = () => {
                   </FormRowWithError>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <FormRow>
                   <SelectContainer>
                     <p className="title">실종 지역</p>
 
@@ -384,11 +384,6 @@ const MissingWrite = () => {
                           {i + 1}살
                         </MenuItem>
                       ))}
-                      <ErrorMsg>
-                        <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
-                          {ageError ? "나이를 입력해 주세요." : null}
-                        </FormHelperText>
-                      </ErrorMsg>
                     </Select>
                   </SelectContainer>
                   <SelectContainer>
@@ -404,14 +399,26 @@ const MissingWrite = () => {
                     >
                       <MenuItem value="수컷">수컷</MenuItem>
                       <MenuItem value="암컷">암컷</MenuItem>
-                      <ErrorMsg>
-                        <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
-                          {genderError ? "성별을 입력해 주세요." : null}
-                        </FormHelperText>
-                      </ErrorMsg>
                     </Select>
                   </SelectContainer>
-                </div>
+                </FormRow>
+                <FormRow>
+                  <ErrorMsg>
+                    <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                      {ageError ? "지역을 선택해 주세요." : null}
+                    </FormHelperText>
+                  </ErrorMsg>
+                  <ErrorMsg>
+                    <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                      {ageError ? "나이를 선택해 주세요." : null}
+                    </FormHelperText>
+                  </ErrorMsg>
+                  <ErrorMsg>
+                    <FormHelperText sx={{ color: "red", fontSize: "15px", float: "right" }}>
+                      {genderError ? "성별을 선택해 주세요." : null}
+                    </FormHelperText>
+                  </ErrorMsg>
+                </FormRow>
 
 
                 <FormRow>
@@ -432,7 +439,10 @@ const MissingWrite = () => {
                         size="small"
                         value={status}
                         exclusive
-                        onChange={(e, value) => setStatus(value)}
+                        onChange={(e, value) => {
+                          setStatusError(false);
+                          setStatus(value);
+                        }}
                       >
                         <ToggleButton
                           value="실종"
@@ -480,6 +490,12 @@ const MissingWrite = () => {
                       />
                     </PreviewWrapper>
                   )}
+
+                  <ErrorMsg>
+                    <FormHelperText sx={{ color: "red", fontSize: "15px", float: "right" }}>
+                      {statusError ? "실종 상태를 선택해 주세요." : null}
+                    </FormHelperText>
+                  </ErrorMsg>
                 </FormRow>
 
                 <FormRowWithError>
@@ -527,19 +543,13 @@ const MissingWrite = () => {
 
               <Modal
                 open={openModal}
-                onClose={handleClose}
+                onClose={handleModalClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
               >
-                {formAble ? (
-                  <Alert sx={modalStyle} severity="success">
-                    작성 완료!
-                  </Alert>
-                ) : (
-                  <Alert sx={modalStyle} severity="warning">
-                    제목과 내용을 모두 입력해주세요.
-                  </Alert>
-                )}
+                <Alert sx={modalStyle} severity="success">
+                  작성 완료!
+                </Alert>
               </Modal>
             </form>
           </Grid >

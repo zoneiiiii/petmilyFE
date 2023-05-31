@@ -26,7 +26,7 @@ const MenuProps = {
     PaperProps: {
         style: {
             maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 50,
+            width: 100,
         },
     },
 };
@@ -291,7 +291,7 @@ const FindModify = () => {
                                     </FormRowWithError>
                                 </div>
 
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <FormRow>
                                     <SelectContainer>
                                         <p className="title">목격 지역</p>
                                         <nav id="hot-articles-navigation" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '2rem' }}>
@@ -377,8 +377,16 @@ const FindModify = () => {
                                                 <option value="삼성2동">삼성2동</option></select>
                                         </nav>
                                     </SelectContainer>
-                                </div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                </FormRow>
+                                <FormRow>
+                                    <ErrorMsg>
+                                        <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                                            {speciesError ? "지역을 선택해 주세요." : null}
+                                        </FormHelperText>
+                                    </ErrorMsg>
+                                </FormRow>
+
+                                <FormRow2>
                                     <SelectContainer>
                                         <p className="title">나이</p>
                                         <Select
@@ -403,12 +411,8 @@ const FindModify = () => {
                                                     {i + 1}살
                                                 </MenuItem>
                                             ))}
-                                            <ErrorMsg>
-                                                <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
-                                                    {ageError ? "나이를 입력해 주세요." : null}
-                                                </FormHelperText>
-                                            </ErrorMsg>
                                         </Select>
+                                        <CommonSpace />
                                         <p className="title">성별</p>
                                         <Select
                                             label="성별"
@@ -421,14 +425,21 @@ const FindModify = () => {
                                         >
                                             <MenuItem value="수컷">수컷</MenuItem>
                                             <MenuItem value="암컷">암컷</MenuItem>
-                                            <ErrorMsg>
-                                                <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
-                                                    {genderError ? "성별을 입력해 주세요." : null}
-                                                </FormHelperText>
-                                            </ErrorMsg>
                                         </Select>
                                     </SelectContainer>
-                                </div>
+                                </FormRow2>
+                                <FormRow>
+                                    <ErrorMsg>
+                                        <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                                            {ageError ? "나이를 선택해 주세요." : null}
+                                        </FormHelperText>
+                                    </ErrorMsg>
+                                    <ErrorMsg>
+                                        <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                                            {genderError ? "성별을 선택해 주세요." : null}
+                                        </FormHelperText>
+                                    </ErrorMsg>
+                                </FormRow>
 
                                 <FormRow>
                                     <FileContainer>
@@ -497,19 +508,13 @@ const FindModify = () => {
 
                             <Modal
                                 open={openModal}
-                                onClose={handleClose}
+                                onClose={handleModalClose}
                                 aria-labelledby="modal-modal-title"
                                 aria-describedby="modal-modal-description"
                             >
-                                {formAble ? (
-                                    <Alert sx={modalStyle} severity="success">
-                                        작성 완료!
-                                    </Alert>
-                                ) : (
-                                    <Alert sx={modalStyle} severity="warning">
-                                        제목과 내용을 모두 입력해주세요.
-                                    </Alert>
-                                )}
+                                <Alert sx={modalStyle} severity="success">
+                                    작성 완료!
+                                </Alert>
                             </Modal>
                         </form>
                     </Grid >
@@ -521,149 +526,163 @@ const FindModify = () => {
 };
 
 const Section = styled.section`
-  background: #f8f9fa;
-  padding: 30px 0 40px 0;
-`
+      background: #f8f9fa;
+      padding: 30px 0 40px 0;
+    `
 
 const MainContainer = styled.div`
-  width: 60vw;
-  // width: 1150px;
-  max-width: 1150px;
-  min-width: 790px;
-  border-radius: 8px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgb(233, 236, 239);
-  border-image: initial;
-  margin: 0px auto 20px;
-  background: rgb(255, 255, 255);
-`
+      width: 60vw;
+      // width: 1150px;
+      max-width: 1150px;
+      min-width: 790px;
+      border-radius: 8px;
+      border-width: 1px;
+      border-style: solid;
+      border-color: rgb(233, 236, 239);
+      border-image: initial;
+      margin: 0px auto 20px;
+      background: rgb(255, 255, 255);
+    `
 
 const Board = styled.h1`
-  margin-top: 2vw;
-  text-align: center;
-`;
+      margin-top: 2vw;
+      text-align: center;
+    `;
 
 const FormRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 16px;
-  align-items: center;
-`;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-bottom: 16px;
+      align-items: center;
+    `;
+
+const FormRow2 = styled.div`
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-bottom: 16px;
+    `;
 
 const PreviewWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  margin-left: 16px;
-`;
+      display: flex;
+      align-items: center;
+      margin-left: 16px;
+    `;
 
 const FormRowWithError = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin-bottom: 16px;
-    align-items: center;
-`;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-bottom: 16px;
+        align-items: center;
+    `;
 
 const ErrorMsg = styled.div`
-  width: 100%;
-  margin-left: 10px;
-`;
+      width: 100%;
+      margin-left: 10px;
+    `;
 
 const SelectContainer = styled.div`
-                display: flex;
-                gap: 1rem;
-                align-items: flex;
-                margin-bottom: 10px;
-                p {
-                  font-weight: bold;
-                  color: #474747;
-                }
-              `
+                    display: flex;
+                    gap: 1rem;
+                    align-items: flex;
+                    margin-bottom: 10px;
+                    p {
+                      font-weight: bold;
+                      color: #474747;
+                    }
+                  `
 
 const FileContainer = styled.div`
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-      margin-bottom: 10px;
-
-      .title {
-        font - weight: bold;
-      color: #474747;
-      margin-right: 50px;
-}
-
-      .btn-upload {
-        width: 150px;
-      height: 30px;
-      background: #ffffff;
-      border: 1px solid #000000;
-      border-radius: 10px;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      &:hover {
-        background: #fbd385;
-      border: 1px solid #fbd385;
-      color: #fff;
+          display: flex;
+          gap: 1rem;
+          align-items: center;
+          margin-bottom: 10px;
+    
+          .title {
+            font - weight: bold;
+          color: #474747;
+          margin-right: 50px;
     }
-}
-      .file {
-        display: none;
-}
-      `;
+    
+          .btn-upload {
+            width: 150px;
+          height: 30px;
+          background: #ffffff;
+          border: 1px solid #000000;
+          border-radius: 10px;
+          font-weight: 500;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          &:hover {
+            background: #fbd385;
+          border: 1px solid #fbd385;
+          color: #fff;
+        }
+    }
+          .file {
+            display: none;
+    }
+          `;
 
 
 const EditorWrapper = styled.div`
-      .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
-        min-height: 500px;
-      width: 700px;
-  }
-      `;
+          .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
+            min-height: 500px;
+          width: 700px;
+      }
+          `;
 
 const ButtonsContainer = styled.div`
-      margin-top: 10px;
-      margin-bottom: 10px;
-      min-width: 700px;
-      display: flex;
-      justify-content: flex-end;
-    `;
+          margin-top: 10px;
+          margin-bottom: 10px;
+          min-width: 700px;
+          display: flex;
+          justify-content: flex-end;
+        `;
 
 const WriteButton = styled(Button)`
-      && {
-        color: #fff;
-        background-color: #fbd385;
-        width: auto;
-        height: 30px;
-        margin-top: 10px;
-        margin-left: auto;
-        &:hover {
-          background-color: #ffbe3f;
-        }
-      }
-    `;
+          && {
+            color: #fff;
+            background-color: #fbd385;
+            width: auto;
+            height: 30px;
+            margin-top: 10px;
+            margin-left: auto;
+            &:hover {
+              background-color: #ffbe3f;
+            }
+          }
+        `;
 
 const ButtonsSpace = styled.div`
-      width: 5px;
+          width: 5px;
+          height: auto;
+          display: inline-block;
+        `;
+
+const ResetButton = styled(Button)`
+        && {
+            color: #fff;
+            background-color: #bfbfbf;
+            width: auto;
+            height: 30px;
+            margin-top: 10px;
+            &:hover {
+              background-color: #b2b0b0;
+            }
+          }
+        `;
+
+const CommonSpace = styled.div`
+      width: 230px;
       height: auto;
       display: inline-block;
     `;
 
-const ResetButton = styled(Button)`
-    && {
-        color: #fff;
-        background-color: #bfbfbf;
-        width: auto;
-        height: 30px;
-        margin-top: 10px;
-        &:hover {
-          background-color: #b2b0b0;
-        }
-      }
-    `;
 
 
 export default FindModify;

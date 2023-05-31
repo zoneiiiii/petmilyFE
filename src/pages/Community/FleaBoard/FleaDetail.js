@@ -21,6 +21,13 @@ const FleaDetail = (props) => {
   const { id } = useParams(); //게시글 id
   const { userNum } = useContext(AuthContext); // 로그인 상태 체크
   const navigate = useNavigate();
+  const [totalComents, setTotalComments] = useState(0); // 댓글 갯수 관리 변수
+
+  // 댓글 갯수 호출
+  const getData = (totalComents) => {
+    setTotalComments(totalComents);
+    console.log(totalComents);
+  }
 
   const Slider1 = data.imgThumbnail;
   // const Slider2 = 'https://picsum.photos/700/500';
@@ -130,7 +137,7 @@ const FleaDetail = (props) => {
                 </div>
                 <div className="article-profile-left">
                   <div className="nickname">{profile.profileNickname}</div>
-                  <div className="region">{profile.region}</div>
+                  {/* <div className="region">{profile.region}</div> */}
                 </div>
               </div>
             </div>
@@ -152,7 +159,7 @@ const FleaDetail = (props) => {
                 dangerouslySetInnerHTML={createMarkup(data.boardContent)}
               />
             </div>
-            <p className="article-counts"> 댓글 0 · 조회 {data.boardCount}</p>
+            <p className="article-counts"> 댓글 {totalComents} · 조회 {data.boardCount}</p>
 
             <div className="article-btn">
               <ButtonsContainer>
@@ -176,7 +183,7 @@ const FleaDetail = (props) => {
           </section>
 
           <section className="comment">
-            <Comment boardId="flea" boardNum={id} />
+            <Comment boardId="flea" boardNum={id} getData={getData} />
           </section>
         </Container>
       </Section>
@@ -225,7 +232,7 @@ const Container = styled.div`
     text-decoration: none;
     display: block;
     margin-top: 25px;
-    padding-bottom: 23px;
+    padding-bottom: 10px;
     position: relative;
     border-bottom: 1px solid #e9ecef;
   }
@@ -247,9 +254,10 @@ const Container = styled.div`
 
     .nickname {
       text-decoration: underline;
-      font-size: 15px;
+      text-underline-position:under;
+      font-size: 20px;
       font-weight: 600;
-      line-height: 1.5;
+      line-height: 2.7;
       letter-spacing: -0.6px;
       color: #212529;
     }

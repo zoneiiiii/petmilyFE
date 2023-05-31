@@ -23,7 +23,7 @@ const formatDate = (dateString) => {
     const day = String(date.getDate()).padStart(2, "0");
     const hour = String(date.getHours()).padStart(2, "0");
     const minute = String(date.getMinutes()).padStart(2, "0");
-    return `${year}년 ${month}월 ${day}일 ${hour}시 ${minute}분`;
+    return `${year}.${month}.${day} ${hour}:${minute}`;
 };
 
 const FreeDetail = () => {
@@ -32,7 +32,19 @@ const FreeDetail = () => {
     const { id } = useParams(); //게시글 id
     const { userNum } = useContext(AuthContext); // 로그인 상태 체크
     const navigate = useNavigate();
+    const [totalComents, setTotalComments] = useState(0); // 댓글 갯수 관리 변수
 
+    // 댓글 갯수 호출
+    const getData = (totalComents) => {
+        setTotalComments(totalComents);
+        console.log(totalComents);
+    }
+
+    const profile = {
+        profileImg: data.memberImg, // 사용자 프로필 이미지
+        profileNickname: data.memberNickName, // 사용자 닉네임
+        region: "관악구 신림동"
+    }
 
     /* axios start */
     useEffect(() => {
@@ -109,23 +121,28 @@ const FreeDetail = () => {
                             <hr />
                             <p className="title">{data.freeSubject}</p>
                             <div className="subtitle">
-                                <p className="name">{data.memberNickName}</p>
-                                <p className="date">{formatDate(data.freeDate)}</p>
-                                <p className="cnt">조회수: {data.freeCount} · 댓글: 3</p>
+                                {/* 유저 프로필사진 & 닉네임 */}
+                                <section className="article-profile">
+                                    <h3 className="hide">프로필</h3>
+                                    <div className="space-between">
+                                        <div style={{ display: 'flex' }}>
+                                            <div className="article-profile-image">
+                                                <img alt="프로필 이미지" src={profile.profileImg} />
+                                            </div>
+                                            <div className="article-profile-left">
+                                                <div className="nickname">{profile.profileNickname}</div>
+                                                {/* <div className="region">{profile.region}</div> */}
+                                            </div>
+                                            <p className="date">{formatDate(data.freeDate)}</p>
+                                            <p className="cnt">조회수: {data.freeCount} · 댓글: {totalComents}</p>
+                                        </div>
+                                    </div>
+                                </section>
                             </div>
-                            <hr /><br />
+
                         </Head>
+                        <hr /><br />
                         <Body>
-                            <img
-                                src={data.imgThumbnail}
-                                alt="img"
-                                style={{
-                                    maxWidth: "100%",
-                                    maxHeight: "100%",
-                                    width: "auto !important",
-                                    height: "auto",
-                                }}
-                            />
                             <DetailMiddle
                                 dangerouslySetInnerHTML={createMarkup(data.freeContent)}
                             />
@@ -151,7 +168,7 @@ const FreeDetail = () => {
                         <Comments>
                             <hr />
                             <p className="comment">댓글</p>
-                            <Comment boardId="free" boardNum={id} />
+                            <Comment boardId="free" boardNum={id} getData={getData} />
                         </Comments>
                     </Container>
                 </MainContainer>
@@ -198,23 +215,73 @@ const Head = styled.div`
     }
 
     .subtitle {
-        display: flex;
-    flex-wrap: wrap;
-    .name {
+      display: flex;
+      flex-wrap: wrap;
+      .name {
         width: 15%;
-    }
-    .date {
+      }
+      .date-cnt {
+        display: flex;
+      }
+
+      .date {
         width: 65%;
-    }
-    .cnt {
-        text-align: right;
-        width: 20%;
-    }
-    .comment {
-        text-align: right;
-        width: 5%;
-    }
+        text-align: right
+      }
+      .cnt {
+          text-align: right;
+          float:right;
+          min-width: 200px;
+      }
+
+      .article-profile {
+        width: 100%;
+        text-decoration: none;
+        display: block;
+        margin-top: 25px;
+        position: relative;
+      }
+    
+      .article-profile-image {
+        display: inline-block;
+    
+        img {
+          width: 40px;
+          height: 40px;
+          object-fit: cover;
+          -webkit-border-radius: 50%;
+        }
+      }
+    
+      .article-profile-left {
+        display: inline-block;
+        margin-left: 8px;
+    
+        .nickname {
+          text-decoration: underline;
+          text-underline-position:under;
+          font-size: 20px;
+          font-weight: 600;
+          line-height: 2.7;
+          letter-spacing: -0.6px;
+          color: #212529;
+        }
+        .region {
+          font-size: 13px;
+          line-height: 1.46;
+          letter-spacing: -0.6px;
+          color: #212529;
+        }
+      }
+
+      .hide {
+        position: absolute;
+        left: -9999px;
+        top: -9999px;
+      }
+  }
 `;
+
 
 const Body = styled.div`
     margin: auto;

@@ -6,7 +6,7 @@ import axios from "axios";
 import LockIcon from "@mui/icons-material/Lock";
 import { AuthContext } from "../../contexts/AuthContexts";
 
-const Comment = ({ boardId, boardNum }) => {
+const Comment = ({ boardId, boardNum, getData }) => {
   const [comments, setComments] = useState([]);
   const [inputValue, setInputValue] = useState(""); //댓글 입력 상태
   const [replyValue, setReplyValue] = useState(""); //답글 입력 상태
@@ -63,6 +63,7 @@ const Comment = ({ boardId, boardNum }) => {
 
         setComments(orderedComments);
         setTotalComments(orderedComments.length);
+        getData(orderedComments.length); // 상세보기 페이지 댓글 갯수 가져오기
       } catch (error) {
         console.error("댓글 불러오기 실패: ", error.response || error.message);
       }
