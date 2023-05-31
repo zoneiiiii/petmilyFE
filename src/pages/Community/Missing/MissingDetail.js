@@ -157,7 +157,7 @@ const MissingDetail = () => {
             <Comments>
               <hr />
               <p className="comment">댓글</p>
-              <Comment />
+              <Comment boardId="missing" boardNum={id} />
             </Comments>
           </Container>
 
@@ -235,7 +235,7 @@ const Comments = styled.div`
 const DetailMiddle = styled.div`
   padding-top: 15px;
   min-height: 300px;
-  min-width: 1050px;
+  min-width: 700px;
   img {
     max-width: 100%;
     height: auto;

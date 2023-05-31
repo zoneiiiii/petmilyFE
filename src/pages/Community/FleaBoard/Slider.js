@@ -28,21 +28,17 @@ const Slider = ({ images }) => {
             overflow: 'hidden',
           }}>
           {index === 1 ? (
-            <Link to="/about/activity/list">
-              <img
-                src={image}
-                alt={`Slide ${index}`}
-                style={{ height: "500px", width: "100%", objectFit: "cover" }}
-              />
-            </Link>
+            <img
+              src={image}
+              alt={`Slide ${index}`}
+              style={{ height: "500px", width: "100%", objectFit: "cover" }}
+            />
           ) : index === 2 ? (
-            <Link to="/donate">
-              <img
-                src={image}
-                alt={`Slide ${index}`}
-                style={{ height: "500px", width: "100%", objectFit: "cover" }}
-              />
-            </Link>
+            <img
+              src={image}
+              alt={`Slide ${index}`}
+              style={{ height: "500px", width: "100%", objectFit: "cover" }}
+            />
           ) : (
             <img
               src={image}

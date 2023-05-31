@@ -121,7 +121,7 @@ const MissingModify = () => {
         setAge("");
         setGender("");
         setStatus("");
-        document.location.href = COMMUNITY.MISSING;
+        document.location.href = COMMUNITY.MISSING_DETAIL(id);
     };
 
     // 유효성 검증 상태

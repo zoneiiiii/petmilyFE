@@ -14,9 +14,6 @@ import {
   FormControl,
   Button
 } from "@mui/material";
-// import Grid from "@mui/material/Grid";
-// import Modal from "@mui/material/Modal";
-// import Alert from "@mui/material/Alert";
 import { Select, MenuItem } from "@mui/material";
 import { CustomTheme } from "../../../assets/Theme/CustomTheme";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -458,11 +455,11 @@ const MissingWrite = () => {
                           sx={{
                             width: "80px",
                             "&.Mui-selected": {
-                              backgroundColor: "#fbd385",
+                              backgroundColor: "#bfbfbf",
                               color: "#fff",
                             },
                             "&.Mui-selected:hover": {
-                              backgroundColor: "#ffbe3f",
+                              backgroundColor: "#b2b0b0",
                               color: "#fff",
                             },
                           }}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
   Button,
@@ -7,7 +7,6 @@ import {
 } from "@mui/material";
 import { CustomTheme } from "../../../assets/Theme/CustomTheme";
 import { COMMUNITY } from '../../../constants/PageURL';
-import CustomButton from "../../Login/CustomButton";
 import Comment from "../../../components/Comment/Comment";
 import Slider from "./Slider";
 import DOMPurify from "dompurify";
@@ -23,14 +22,14 @@ const FleaDetail = (props) => {
   const { userNum } = useContext(AuthContext); // 로그인 상태 체크
   const navigate = useNavigate();
 
-  const Slider1 = 'https://picsum.photos/700/500';
-  const Slider2 = 'https://picsum.photos/700/500';
-  const Slider3 = 'https://picsum.photos/700/500';
-  const carouselImage = [Slider1, Slider2, Slider3];
+  const Slider1 = data.imgThumbnail;
+  // const Slider2 = 'https://picsum.photos/700/500';
+  // const Slider3 = 'https://picsum.photos/700/500';
+  const carouselImage = [Slider1, Slider1, Slider1];
 
   const profile = {
-    profileImg: "https://picsum.photos/300/300", // 사용자 프로필 이미지
-    profileNickname: "Petmilyer", // 사용자 닉네임
+    profileImg: data.memberImg, // 사용자 프로필 이미지
+    profileNickname: data.memberNickName, // 사용자 닉네임
     region: "관악구 신림동"
   }
 
@@ -109,77 +108,79 @@ const FleaDetail = (props) => {
   };
 
   return (
-    <Section className="result">
-      <Container className="result-container">
-        <article className="content">
-          <h1 className="hide">캣타워 팝니다.</h1>
-        </article>
+    <ThemeProvider theme={CustomTheme}>
+      <Section className="result">
+        <Container className="result-container">
+          <article className="content">
+            <h1 className="hide">캣타워 팝니다.</h1>
+          </article>
 
-        <section className="article-images">
-          <h3 className="hide">이미지</h3>
-          <Slider images={carouselImage} />
-        </section>
+          <section className="article-images">
+            <h3 className="hide">이미지</h3>
+            <Slider images={carouselImage} />
+          </section>
 
-        {/* 유저 프로필사진 & 닉네임 */}
-        <section className="article-profile">
-          <h3 className="hide">프로필</h3>
-          <div className="space-between">
-            <div style={{ display: 'flex' }}>
-              <div className="article-profile-image">
-                <img alt="프로필 이미지" src={data.memberImg} />
-              </div>
-              <div className="article-profile-left">
-                <div className="nickname">{data.memberNickName}</div>
-                <div className="region">{profile.region}</div>
+          {/* 유저 프로필사진 & 닉네임 */}
+          <section className="article-profile">
+            <h3 className="hide">프로필</h3>
+            <div className="space-between">
+              <div style={{ display: 'flex' }}>
+                <div className="article-profile-image">
+                  <img alt="프로필 이미지" src={profile.profileImg} />
+                </div>
+                <div className="article-profile-left">
+                  <div className="nickname">{profile.profileNickname}</div>
+                  <div className="region">{profile.region}</div>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section className="article-description">
-          <h1 property="schema:name" className="article-title" style={{ marginTop: '0px' }}>{data.boardSubject}</h1>
-          <p className="article-category">
-            " {data.boardCategory} . "
-            <time> {formatDate(data.boardDate)} </time>
-          </p>
-          <p property="schema:priceValdUntil" datatype="xsd:date" content="2023-05-11"></p>
-          <p className="article-price" property="schema:price" content="50000.0">{data.boardCost}원</p>
+          <section className="article-description">
+            <h1 property="schema:name" className="article-title" style={{ marginTop: '0px' }}>{data.boardSubject}</h1>
+            <p className="article-category">
+              " {data.boardCategory} . "
+              <time> {formatDate(data.boardDate)} </time>
+            </p>
+            <p property="schema:priceValdUntil" datatype="xsd:date" content="2023-05-11"></p>
+            <p className="article-price" property="schema:price" content="50000.0">
+              {(data.boardCost).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원
+            </p>
 
-          <div property="schema:description" className="article-detail">
-            <DetailMiddle
-              dangerouslySetInnerHTML={createMarkup(data.boardContent)}
-            />
-          </div>
-          <p className="article-counts"> 댓글 0 · 조회 {data.boardCount}</p>
+            <div property="schema:description" className="article-detail">
+              <DetailMiddle
+                dangerouslySetInnerHTML={createMarkup(data.boardContent)}
+              />
+            </div>
+            <p className="article-counts"> 댓글 0 · 조회 {data.boardCount}</p>
 
-          <div className="article-btn">
-            <ButtonsContainer>
-              {data.memberNum === userNum && (
-                <div>
-                  <EditButton onClick={handleEdit} variant="contained">
-                    수정
-                  </EditButton>
-                  <ButtonsSpace />
-                  <DeleteButton onClick={handleDelete} variant="contained">
-                    삭제
-                  </DeleteButton>
-                  <ButtonsSpace />
-                </div>
-              )}
-              <ReturnButton onClick={handleReturn} variant="contained">
-                돌아가기
-              </ReturnButton>
-            </ButtonsContainer>
-          </div>
-        </section>
+            <div className="article-btn">
+              <ButtonsContainer>
+                {data.memberNum === userNum && (
+                  <div>
+                    <EditButton onClick={handleEdit} variant="contained">
+                      수정
+                    </EditButton>
+                    <ButtonsSpace />
+                    <DeleteButton onClick={handleDelete} variant="contained">
+                      삭제
+                    </DeleteButton>
+                    <ButtonsSpace />
+                  </div>
+                )}
+                <ReturnButton onClick={handleReturn} variant="contained">
+                  돌아가기
+                </ReturnButton>
+              </ButtonsContainer>
+            </div>
+          </section>
 
-        <section className="comment">
-          <Comment />
-        </section>
-
-      </Container>
-
-    </Section>
+          <section className="comment">
+            <Comment boardId="flea" boardNum={id} />
+          </section>
+        </Container>
+      </Section>
+    </ThemeProvider>
   );
 };
 
@@ -275,7 +276,7 @@ const Container = styled.div`
 
   .article-title {
     margin-top: 16px;
-    font-size: 22px;
+    font-size: 23px;
     font-weight: 600;
     line-height: 1.5;
     letter-spacing: -0.6px;
@@ -291,10 +292,11 @@ const Container = styled.div`
 
   .article-price {
     margin-top: 4px;
-    font-size: 17px;
+    font-size: 20px;
     font-weight: 600;
     line-height: 1.76;
     letter-spacing: -0.6px;
+    color: rgb(255, 138, 61);
   }
 
   .article-detail {
@@ -323,7 +325,7 @@ const Container = styled.div`
 const DetailMiddle = styled.div`
   padding-top: 15px;
   min-height: 300px;
-  min-width: 1050px;
+  min-width: 700px;
   img {
     max-width: 100%;
     height: auto;

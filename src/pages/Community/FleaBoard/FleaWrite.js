@@ -2,21 +2,25 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
+  ThemeProvider,
   TextField,
   Typography,
   ToggleButtonGroup,
   ToggleButton,
   FormControl,
+  FormHelperText,
   Button,
   Modal,
   Alert,
   Select, MenuItem
 } from "@mui/material";
+import { CustomTheme } from "../../../assets/Theme/CustomTheme";
 import { makeStyles } from '@material-ui/core/styles';
 import { COMMUNITY } from "../../../constants/PageURL";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import CustomButton from "../../Login/CustomButton";
+import { MyCustomUploadAdapterPlugin } from "../../../components/common/UploadAdapter";
+import axios from "axios";
 
 const modalStyle = {
   position: "absolute",
@@ -70,7 +74,64 @@ const FleaWrite = () => {
   const [content, setContent] = useState(""); // 상품 설명
   const [selectedCategory, setSelectedCategory] = useState('');  // 상품 카테고리
   const [selectedStatus, setSelectedStatus] = useState(""); // 거래 완료 여부
-  const [method, setMethod] = useState("") // 거래 방법
+  const [img, setImg] = useState("")  // 이미지 첨부
+  // const [method, setMethod] = useState("") // 거래 방법
+
+  const handleReset = () => {
+    setTitle("");
+    setContent("");
+    document.location.href = COMMUNITY.FLEA;
+  };
+
+  const handleChange = (event) => {
+    setSelectedCategoryError(false);
+    setSelectedCategory(event.target.value);
+  };
+
+  // 유효성 검증 상태
+  const [titleError, setTitleError] = useState(false);
+  const [contentError, setContentError] = useState(false);
+  const [costError, setCostError] = useState(false);
+  const [selectedCategoryError, setSelectedCategoryError] = useState(false);
+  const [selectedStatusError, setSelectedStatusError] = useState(false);
+  const [imgError, setImgError] = useState(false);
+
+  const validate = () => {
+    let isError = false;
+    if (title === "") {
+      setTitleError(true);
+      isError = true;
+    }
+    if (content === "") {
+      setContentError(true);
+      isError = true;
+    }
+    if (cost === "") {
+      setCostError(true);
+      isError = true;
+    }
+    if (selectedCategory === "") {
+      setSelectedCategoryError(true);
+      isError = true;
+    }
+    if (selectedStatus === "") {
+      setSelectedStatusError(true);
+      isError = true;
+    }
+    // if (img === "") {
+    //   setImgError(true);
+    //   isError = true;
+    // }
+
+    return isError;
+  }
+
+  const [openModal, setOpenModal] = useState(false); // 모달 상태
+  const handleModalClose = () => {
+    // 모달닫는 함수
+    setOpenModal(false);
+    navigate(COMMUNITY.FLEA);
+  };
 
   // 사진 미리보기
   const [file, setFile] = useState(null);
@@ -87,49 +148,63 @@ const FleaWrite = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // 전송 로직 구현
-  };
+  const uploadImage = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
 
-  const [formAble, setFormAble] = useState(false);
-  const [open, setOpen] = useState(false);
-  const handleClose = () => setOpen(false);
-  const handleOpen = () => {
-    if (
-      title === "" ||
-      title === undefined ||
-      content === "" ||
-      content === undefined ||
-      cost === undefined ||
-      cost === "" ||
-      content === undefined ||
-      content === "" ||
-      selectedCategory === undefined ||
-      selectedCategory === ""
-    ) {
-      setFormAble(false);
-      setOpen(true);
-    } else {
-      setFormAble(true);
-      setOpen(true);
-      console.log(title);
-      console.log(content);
-      document.location.href = COMMUNITY.FLEA;
+    try {
+      const response = await axios.post("/upload", formData);
+      const imageUrl = response.data;
+      // setUploadedImageUrl(imageUrl);
+      return imageUrl;
+    } catch (error) {
+      console.error("이미지 업로드 실패 : ", error);
+      return null;
     }
   };
-  const handleReset = () => {
-    setTitle("");
-    setContent("");
-    document.location.href = COMMUNITY.FLEA;
-  };
 
-  const handleChange = (event) => {
-    setSelectedCategory(event.target.value);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const isError = validate();
+    if (isError) return;
+    const currentDate = new Date();
+    const isoCurrentDate = new Date(
+      currentDate.getTime() + 9 * 60 * 60 * 1000
+    ).toISOString();
+    let imageUrl = "https://via.placeholder.com/150";
+
+    if (file) {
+      const uploadedUrl = await uploadImage(file);
+      if (uploadedUrl) {
+        imageUrl = uploadedUrl;
+      }
+    }
+
+    const postData = {
+      boardSubject: title,
+      boardContent: content,
+      boardCost: cost,
+      boardCategory: selectedCategory,
+      boardStatus: selectedStatus === "판매중" ? 1 : 0,
+      imgThumbnail: imageUrl,
+      boardDate: isoCurrentDate,
+    };
+
+    try {
+      await axios.post("/board/flea/write", postData, {
+        withCredentials: true,
+      });
+      setOpenModal(true);
+      setTimeout(() => {
+        handleModalClose();
+      }, 1000);
+    } catch (error) {
+      console.error("데이터 전송 실패 : ", error);
+    }
   };
 
   return (
-    <>
+    <ThemeProvider theme={CustomTheme}>
       <Section className="result">
         <MainContainer className="result-container">
           <TitleContainer>
@@ -139,33 +214,53 @@ const FleaWrite = () => {
           <Container>
             <FormWrapper>
               <form onSubmit={handleSubmit}>
-                <FormRow>
-                  <TextField
-                    label="제목"
-                    value={title}
-                    size="small"
-                    fullWidth
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                </FormRow>
+                <FormRowWithError>
+                  <FormRow>
+                    <TextField
+                      label="제목"
+                      value={title}
+                      size="small"
+                      fullWidth
+                      onChange={(e) => {
+                        setTitleError(false);
+                        setTitle(e.target.value);
+                      }}
+                    />
+                  </FormRow>
+                  <ErrorMsg>
+                    <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                      {titleError ? "제목을 입력해 주세요." : null}
+                    </FormHelperText>
+                  </ErrorMsg>
+                </FormRowWithError>
 
-                <FormRow2>
-                  <TextField
-                    label="가격"
-                    value={cost}
-                    size="small"
-                    sx={{ marginRight: '50px', width: '300px' }}
-                    onChange={(e) => setCost(e.target.value)}
-                  />
-                </FormRow2>
+                <FormRowWithError>
+                  <FormRow2>
+                    <TextField
+                      label="가격"
+                      value={cost}
+                      size="small"
+                      sx={{ marginRight: '50px', width: '300px' }}
+                      onChange={(e) => {
+                        setCostError(false);
+                        setCost(e.target.value);
+                      }}
+                    />
+                  </FormRow2>
+                  <ErrorMsg>
+                    <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                      {costError ? "가격을 입력해 주세요." : null}
+                    </FormHelperText>
+                  </ErrorMsg>
+                </FormRowWithError>
 
                 <FormRow3>
                   <ImageWrapper>
-                    <span>이미지 첨부</span>
+                    <span>대표 이미지</span>
                     <CommonSpace />
                     <CommonButton component="label">
                       사진 업로드
-                      <input type="file" hidden onChange={handleFileChange} />
+                      <input type="file" hidden onChange={handleFileChange} className="file" id="file" />
                     </CommonButton>
                   </ImageWrapper>
 
@@ -174,11 +269,13 @@ const FleaWrite = () => {
                       labelId="category-select-label"
                       id="category-select"
                       value={selectedCategory}
-                      onChange={handleChange}
+                      onChange={(e) => {
+                        setSelectedCategoryError(false);
+                        setSelectedCategory(e.target.value);
+                      }}
                       sx={{ margin: '10px 0 10px 10px', height: '40px' }}
                       MenuProps={MenuProps}
                     >
-                      <MenuItem value="">카테고리 선택</MenuItem>
                       {categories.map((category) => (
                         <MenuItem key={category} value={category}>
                           {category}
@@ -195,7 +292,10 @@ const FleaWrite = () => {
                         size="small"
                         value={selectedStatus}
                         exclusive
-                        onChange={(e, value) => setSelectedStatus(value)}
+                        onChange={(e, value) => {
+                          setSelectedStatusError(false);
+                          setSelectedStatus(value);
+                        }}
                       >
                         <ToggleButton
                           value="판매중"
@@ -233,6 +333,23 @@ const FleaWrite = () => {
                     </FormControl>
                   </StatusWrapper>
                 </FormRow3>
+                <FormRow2>
+                  <ErrorMsg>
+                    <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                      {imgError ? "대표 이미지를 첨부해주세요" : null}
+                    </FormHelperText>
+                  </ErrorMsg>
+                  <ErrorMsg>
+                    <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                      {selectedCategoryError ? "카테고리를 선택해 주세요." : null}
+                    </FormHelperText>
+                  </ErrorMsg>
+                  <ErrorMsg>
+                    <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                      {selectedStatusError ? "판매 여부를 선택해주세요." : null}
+                    </FormHelperText>
+                  </ErrorMsg>
+                </FormRow2>
 
                 <FormRow>
                   {previewUrl && (
@@ -246,7 +363,7 @@ const FleaWrite = () => {
                   )}
                 </FormRow>
 
-                <FormRow>
+                <FormRowWithError>
                   <EditorWrapper>
                     <CKEditor
                       editor={ClassicEditor}
@@ -254,60 +371,55 @@ const FleaWrite = () => {
                       onChange={(event, editor) => {
                         const data = editor.getData();
                         setContent(data);
+                        setContentError(false);
                       }}
                       config={{
-                        toolbar: [
-                          "heading",
-                          "|",
-                          "bold",
-                          "italic",
-                          "link",
-                          "bulletedList",
-                          "numberedList",
-                          "|",
-                          "indent",
-                          "outdent",
-                          "|",
-                          "blockQuote",
-                          "insertTable",
-                          "mediaEmbed",
-                          "undo",
-                          "redo",
-                        ],
                         className: "WriteEditor",
                         placeholder: "내용을 입력하세요.",
+                        extraPlugins: [MyCustomUploadAdapterPlugin],
                       }}
                     />
                   </EditorWrapper>
-                </FormRow>
+                  <ErrorMsg>
+                    <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                      {contentError ? "내용을 입력해 주세요." : null}
+                    </FormHelperText>
+                  </ErrorMsg>
+                </FormRowWithError>
 
-                <ButtonGroup>
-                  <CustomButton label="취소" value="작성취소" onClick={handleReset} />
-                  <CustomButton label="확인" value="글쓰기" onClick={handleOpen} />
-                </ButtonGroup>
+                <ButtonsContainer>
+                  <WriteButton
+                    type="submit"
+                    onClick={handleSubmit}
+                    variant="contained"
+                  >글쓰기
+                  </WriteButton>
+                  <ButtonsSpace />
 
-                <Modal
-                  open={open}
-                  onClose={handleClose}
-                  aria-labelledby="modal-modal-title"
-                  aria-describedby="modal-modal-description"
-                >
-                  {formAble ? (
-                    <Alert sx={modalStyle} severity="success">
-                      작성 완료!
-                    </Alert>
-                  ) : (
-                    <Alert sx={modalStyle} severity="warning">
-                      제목과 내용을 모두 입력해주세요.
-                    </Alert>
-                  )}
-                </Modal>
+                  <ResetButton
+                    variant="contained"
+                    onClick={handleReset}
+                  >취소
+                  </ResetButton>
+
+                </ButtonsContainer>
               </form>
+              <Modal
+                open={openModal}
+                onClose={handleModalClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Alert sx={modalStyle} severity="success">
+                  작성 완료!
+                </Alert>
+              </Modal>
+
             </FormWrapper>
           </Container>
         </MainContainer>
       </Section >
-    </>
+    </ThemeProvider>
   );
 };
 
@@ -374,6 +486,7 @@ const FormRow2 = styled.div`
 
 const FormRow3 = styled.div`
   display: flex;
+  justify-content: space-between;
   width: 100%;
   margin-bottom: 16px;
   align-items: center;
@@ -413,18 +526,6 @@ const PreviewWrapper = styled.div`
   margin-left: 16px;
 `;
 
-const ButtonSpace = styled.div`
-  width: 4px;
-  height: auto;
-  display: inline-block;
-`;
-
-const CommonSpace = styled.div`
-  width: 10px;
-  height: auto;
-  display: inline-block;
-`;
-
 const CommonButton = styled(Button)`
   && {
     color: #fff;
@@ -440,6 +541,66 @@ const EditorWrapper = styled.div`
   .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
     min-height: 500px;
     width: 700px;
+  }
+`;
+
+const FormRowWithError = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 16px;
+    align-items: center;
+`;
+
+const ErrorMsg = styled.div`
+  width: 100%;
+  margin-left: 10px;
+`;
+
+const ButtonsContainer = styled.div`
+  margin-top: 10px;
+  margin-bottom: 10px;
+  min-width: 700px;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const WriteButton = styled(Button)`
+  && {
+    color: #fff;
+    background-color: #fbd385;
+    width: auto;
+    height: 30px;
+    margin-top: 10px;
+    margin-left: auto;
+    &:hover {
+      background-color: #ffbe3f;
+    }
+  }
+`;
+
+const CommonSpace = styled.div`
+  width: 10px;
+  height: auto;
+  display: inline-block;
+`;
+
+const ButtonsSpace = styled.div`
+  width: 5px;
+  height: auto;
+  display: inline-block;
+`;
+
+const ResetButton = styled(Button)`
+&& {
+    color: #fff;
+    background-color: #bfbfbf;
+    width: auto;
+    height: 30px;
+    margin-top: 10px;
+    &:hover {
+      background-color: #b2b0b0;
+    }
   }
 `;
 

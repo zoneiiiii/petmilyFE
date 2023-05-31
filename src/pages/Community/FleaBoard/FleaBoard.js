@@ -81,7 +81,9 @@ const FleaBoard = () => {
                                                 <span className="article-title">{item.boardSubject}</span>
                                                 <span className="article-content">{item.boardContent}</span>
                                             </div>
-                                            <p className="article-price">{item.boardCost}</p>
+                                            <p className="article-price">
+                                                {(item.boardCost).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원
+                                            </p>
                                             <section className="article-sub-info">
                                                 <span className="article-watch">
                                                     <img className="watch-icon" alt="Watch count" src="/images/like.png" />
@@ -175,8 +177,9 @@ const Container = styled.div`
         position: relative;
         text-align: left;
         display: inline-block;
-        width: 310px;
+        width: auto;
         min-width: 310px;
+        max-width: 310px;
         margin: 0 20px 30px 20px;
         // margin-right: 45px;
         // margin-bottom: 30px;
@@ -192,16 +195,22 @@ const Container = styled.div`
     }
 
     .card-photo {
-        height: 250px;
+        height: 260px;
         background-color: rgb(248, 249, 250);
         overflow: hidden;
-        border-radius: 8px;
+        border-radius: 0.5rem;
+        margin: 0.5rem;
     }
 
     img {
         width: 100%;
+        // height: 100%
         display: block;
         transform: translate(0px, -13%);
+    }
+
+    .article-info {
+        margin: 0.5rem;
     }
     
     .article-title {
@@ -210,7 +219,6 @@ const Container = styled.div`
         color: rgb(33, 37, 41);
         font-size: 22px;
         line-height: 30px;
-        margin-top: 10px;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
@@ -225,13 +233,13 @@ const Container = styled.div`
         color: rgb(255, 138, 61);
         font-size: 20px;
         line-height: 22px;
-        margin: 10px 5px;
+        // margin: 10px 5px;
     }
 
     .article-sub-info {
         position: absolute;
         right: 10px;
-        bottom: 8px;
+        bottom: 18px;
     }
 
     .article-watch {

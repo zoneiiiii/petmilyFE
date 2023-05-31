@@ -245,10 +245,10 @@ const Router = () => {
               path={BROWSER_PATH.COMMUNITY.FLEA_DETAIL()}
               element={<Page.Community.FleaDetail />}
             />
-            {/* <Route
+            <Route
               path={BROWSER_PATH.COMMUNITY.FLEA_MODIFY()}
               element={<Page.Community.FleaModify />}
-            /> */}
+            />
             <Route
               path={BROWSER_PATH.COMMUNITY.FLEA_WRITE}
               element={<Page.Community.FleaWrite />}
