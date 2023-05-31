@@ -6,6 +6,8 @@ import Paper from "@mui/material/Paper";
 import Chart from "./Chart";
 import Deposits from "./Deposits";
 import Orders from "./Orders";
+import Member from "./Member";
+import DonationChart from "./DonationChart";
 
 const defaultTheme = createTheme();
 
@@ -44,6 +46,23 @@ export default function AdminDashboard() {
           <Grid item xs={12}>
             <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
               <Orders />
+            </Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+              <Member />
+            </Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <Paper
+              sx={{
+                p: 2,
+                display: "flex",
+                flexDirection: "column",
+                height: 1000,
+              }}
+            >
+              <DonationChart />
             </Paper>
           </Grid>
         </Grid>
