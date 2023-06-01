@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ThemeProvider,
@@ -56,49 +56,52 @@ const MissingWrite = () => {
   const [gender, setGender] = useState("");
   const [status, setStatus] = useState("");
 
-  const [val1, setVal1] = useState("");
-  const [val2, setVal2] = useState("");
-  const [val3, setVal3] = useState("");
+  // const [val1, setVal1] = useState("");
+  // const [val2, setVal2] = useState("");
+  // const [val3, setVal3] = useState("");
   // const { sido, sigugun, dong } = sigungu;
-  const { sido = [], sigugun = [], dong = [] } = sigungu;
+  // const { sido = [], sigugun = [], dong = [] } = sigungu;
+  const [sidos, setSidos] = useState([]);
+  const [siguguns, setSiguguns] = useState([]);
+  const [dongs, setDongs] = useState([]);
+  const [weatherUrl, setWeatherUrl] = useState('');
+  const [selectedSido, setSelectedSido] = useState('');
+  const [selectedSigugun, setSelectedSigugun] = useState('');
+
+  useEffect(() => {
+    axios.get('<https://zelkun.tistory.com/attachment/cfile8.uf@99BB7A3D5D45C065343307.js>')
+      .then(res => {
+        const hangjungdong = res.data.match(/var hangjungdong = (.+);/)[1];
+        const parsedData = JSON.parse(hangjungdong);
+        setSidos(parsedData.sido);
+      })
+      .catch(err => console.log(err));
+  }, []);
+
+  const handleSidoChange = (e) => {
+    const selectedSido = e.target.value;
+    const filteredSiguguns = sidos.find(sido => sido.sido === selectedSido).sigugun;
+    setSiguguns(filteredSiguguns);
+  };
+
+  const handleSigugunChange = (e) => {
+    const selectedSigugun = e.target.value;
+    const filteredDongs = dongs.filter(dong => dong.sido === selectedSido && dong.sigugun === selectedSigugun);
+    setDongs(filteredDongs);
+  };
+
+  const handleDongChange = (e) => {
+    const sido = selectedSido;
+    const sigugun = selectedSigugun;
+    const dong = e.target.value;
+    const dongCode = sido + sigugun + dong + '00';
+    const url = `https://www.weather.go.kr/weather/process/timeseries-dfs-body-ajax.jsp?myPointCode=${dongCode}&unit=K`;
+    setWeatherUrl(url);
+  };
+
   const [formAble, setFormAble] = useState(false);
   const [open, setOpen] = useState(false);
-  const handleClose = () => setOpen(false);
-  const handleOpen = () => {
-    if (
-      title === undefined ||
-      title === "" ||
-      content === undefined ||
-      content === "" ||
-      name === undefined ||
-      name === "" ||
-      species === undefined ||
-      species === "" ||
-      location === undefined ||
-      location === "" ||
-      age === undefined ||
-      age === "" ||
-      gender === undefined ||
-      gender === "" ||
-      status === undefined ||
-      status === ""
-    ) {
-      setFormAble(false);
-      setOpen(true);
-    } else {
-      setFormAble(true);
-      setOpen(true);
-      console.log(title);
-      console.log(content);
-      console.log(name);
-      console.log(species);
-      console.log(location);
-      console.log(age);
-      console.log(gender);
-      console.log(status);
-      document.location.href = COMMUNITY.MISSING;
-    }
-  };
+
   const handleReset = () => {
     setTitle("");
     setContent("");
@@ -306,9 +309,38 @@ const MissingWrite = () => {
                 <FormRow>
                   <SelectContainer>
                     <p className="title">실종 지역</p>
+                    <div>
+                      <select id="sido" onChange={handleSidoChange}>
+                        <option value="">선택</option>
+                        {sidos.map(sido => (
+                          <option key={sido.codeNm} value={sido.sido}>{sido.codeNm}</option>
+                        ))}
+                      </select>
+                      <select id="sigugun" onChange={handleSigugunChange}>
+                        <option value="">선택</option>
+                        {siguguns.map(sigugun => (
+                          <option key={sigugun.codeNm} value={sigugun.sigugun}>{sigugun.codeNm}</option>
+                        ))}
+                      </select>
+                      <select id="dong" onChange={handleDongChange}>
+                        <option value="">선택</option>
+                        {dongs.map(dong => (
+                          <option key={dong.codeNm} value={dong.dong}>{dong.codeNm}</option>
+                        ))}
+                      </select>
+                    </div>
+                    {/* <div>
+                      <iframe id="iframe" style={{ width: '100%', height: '500px' }} src={weatherUrl} />
+                    </div> */}
 
-                    <div style={{ margin: 'auto' }}>
-                      {/* <h1>{`${val1}-${val2}-${val3}`}</h1> */}
+
+
+
+
+
+
+                    {/* <div style={{ margin: 'auto' }}>
+                      <h1>{`${val1}-${val2}-${val3}`}</h1>
                       <select onChange={(e) => setVal1(e.target.value)}>
                         <option value="">선택</option>
                         {sido.map((el) => (
@@ -337,16 +369,8 @@ const MissingWrite = () => {
                             </option>
                           ))}
                       </select>
-                    </div>
+                    </div> */}
 
-                    {/* <Select
-                size="small"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-              >
-                <MenuItem value="---">---</MenuItem>
-                <MenuItem value="서울">서울</MenuItem>
-              </Select> */}
                   </SelectContainer>
                   {/* <SelectContainer>
                   <p className="title">분류</p>

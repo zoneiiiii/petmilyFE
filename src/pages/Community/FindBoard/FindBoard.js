@@ -174,7 +174,7 @@ const SearchContainer = styled.div`
 
 const CardImage = styled.img`
   // width: auto;
-  height: auto;
+  height: 100%;
   object-fit: cover;
   background-size: cover;
   background-repeat: no-repeat;
@@ -186,10 +186,10 @@ const CardImage = styled.img`
 
 const CardTitle = styled.p`
       font-weight: bold;
-      font-size: 0.9rem;
-      margin: 0.5rem 0.5rem;
-      line-height: 1.4em;
-      height: 2.8em;
+      font-size: 1.1rem;
+      margin: 0.3em 0.5em 0em 0.5em;
+      line-height: 1.2em;
+      height: 2.4em;
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
@@ -200,7 +200,6 @@ const CardTitle = styled.p`
 const CardWritter = styled.p`
       font-size: 14px;
       color: #888;
-      float: left;
       margin-left: 10px
       `;
 
