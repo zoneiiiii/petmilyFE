@@ -22,13 +22,13 @@ const MissingDetail = () => {
   const { id } = useParams(); //게시글 id
   const { userNum } = useContext(AuthContext); // 로그인 상태 체크
   const navigate = useNavigate();
-  const [totalComents, setTotalComments] = useState(0); // 댓글 갯수 관리 변수
+  // const [totalComents, setTotalComments] = useState(0); // 댓글 갯수 관리 변수
 
-  // 댓글 갯수 호출
-  const getData = (totalComents) => {
-    setTotalComments(totalComents);
-    console.log(totalComents);
-  }
+  // // 댓글 갯수 호출
+  // const getData = (totalComents) => {
+  //   setTotalComments(totalComents);
+  //   console.log(totalComents);
+  // }
 
   const profile = {
     profileImg: data.memberImg, // 사용자 프로필 이미지
@@ -134,7 +134,7 @@ const MissingDetail = () => {
                         {/* <div className="region">{profile.region}</div> */}
                       </div>
                       <p className="date">{formatDate(data.boardDate)}</p>
-                      <p className="cnt">조회수: {data.boardCount} · 댓글: {totalComents}</p>
+                      <p className="cnt">조회수: {data.boardCount}</p>
                     </div>
                   </div>
                 </section>
@@ -184,7 +184,7 @@ const MissingDetail = () => {
             <Comments>
               <hr />
               <p className="comment">댓글</p>
-              <Comment boardId="missing" boardNum={id} getData={getData} />
+              <Comment boardId="missing" boardNum={id} />
             </Comments>
           </Container>
 
@@ -234,20 +234,22 @@ const Head = styled.div`
       display: flex;
       flex-wrap: wrap;
       .name {
-        width: 15%;
+        width: 20%;
       }
       .date-cnt {
         display: flex;
       }
 
       .date {
-        width: 65%;
+        min-width: 50%;
+        max-width: 60%;
+        // width: 600px;
         text-align: right
       }
       .cnt {
           text-align: right;
           float:right;
-          min-width: 200px;
+          min-width: 150px;
       }
 
       .article-profile {
@@ -272,6 +274,7 @@ const Head = styled.div`
       .article-profile-left {
         display: inline-block;
         margin-left: 8px;
+        width: 100%;
     
         .nickname {
           text-decoration: underline;

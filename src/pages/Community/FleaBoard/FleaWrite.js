@@ -241,6 +241,8 @@ const FleaWrite = () => {
                       value={cost}
                       size="small"
                       sx={{ marginRight: '50px', width: '300px' }}
+                      inputProps={{ maxLength: 8, inputMode: 'numeric', pattern: '[0-9]*' }}
+                      type="text"
                       onChange={(e) => {
                         setCostError(false);
                         setCost(e.target.value);

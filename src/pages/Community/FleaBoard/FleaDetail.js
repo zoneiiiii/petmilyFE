@@ -21,13 +21,13 @@ const FleaDetail = (props) => {
   const { id } = useParams(); //게시글 id
   const { userNum } = useContext(AuthContext); // 로그인 상태 체크
   const navigate = useNavigate();
-  const [totalComents, setTotalComments] = useState(0); // 댓글 갯수 관리 변수
+  // const [totalComents, setTotalComments] = useState(0); // 댓글 갯수 관리 변수
 
-  // 댓글 갯수 호출
-  const getData = (totalComents) => {
-    setTotalComments(totalComents);
-    console.log(totalComents);
-  }
+  // // 댓글 갯수 호출
+  // const getData = (totalComents) => {
+  //   setTotalComments(totalComents);
+  //   console.log(totalComents);
+  // }
 
   const Slider1 = data.imgThumbnail;
   // const Slider2 = 'https://picsum.photos/700/500';
@@ -159,7 +159,7 @@ const FleaDetail = (props) => {
                 dangerouslySetInnerHTML={createMarkup(data.boardContent)}
               />
             </div>
-            <p className="article-counts"> 댓글 {totalComents} · 조회 {data.boardCount}</p>
+            <p className="article-counts">조회 {data.boardCount}</p>
 
             <div className="article-btn">
               <ButtonsContainer>
@@ -183,7 +183,7 @@ const FleaDetail = (props) => {
           </section>
 
           <section className="comment">
-            <Comment boardId="flea" boardNum={id} getData={getData} />
+            <Comment boardId="flea" boardNum={id} />
           </section>
         </Container>
       </Section>

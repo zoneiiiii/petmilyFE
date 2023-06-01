@@ -21,7 +21,7 @@ const FleaBoard = () => {
     const [data, setData] = useState([]); // DB 데이터 가져오는 변수
     const { loggedIn } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(true); //로딩 상태
-    const [visibleCount, setVisibleCount] = React.useState(9);  // 더보기 기능
+    const [visibleCount, setVisibleCount] = React.useState(12);  // 더보기 기능
 
     const handleLoadMore = () => {
         setVisibleCount(visibleCount + 6);  // 더보기 클릭시 추가되는 아이템 개수
@@ -69,7 +69,8 @@ const FleaBoard = () => {
                                 <SearchBar />
                             </SearchContainer>
                         </div>
-                        <div className="card-container">
+                        <CardGrid container spacing={2}>
+                            {/* <div className="card-container" > */}
                             {visibleItems.map((item, index) => (
                                 <article className="flat-card" key={index}>
                                     <Link className="article-link" to={COMMUNITY.FLEA_DETAIL(item.boardNum)} >
@@ -95,7 +96,8 @@ const FleaBoard = () => {
                                     </Link>
                                 </article>
                             ))}
-                        </div>
+                            {/* </div> */}
+                        </CardGrid>
                         {!isLastPage && (
                             <div className="more-item">
                                 <button className="more-btn" onClick={handleLoadMore}>더보기</button>
@@ -179,8 +181,8 @@ const Container = styled.div`
         text-align: left;
         display: inline-block;
         width: auto;
-        min-width: 310px;
-        max-width: 310px;
+        min-width: 200px;
+        max-width: 200px;
         margin: 0 20px 30px 20px;
         // margin-right: 45px;
         // margin-bottom: 30px;
@@ -196,7 +198,7 @@ const Container = styled.div`
     }
 
     .card-photo {
-        height: 260px;
+        height: 160px;
         background-color: rgb(248, 249, 250);
         overflow: hidden;
         border-radius: 0.5rem;
@@ -235,6 +237,9 @@ const Container = styled.div`
         font-size: 20px;
         line-height: 22px;
         // margin: 10px 5px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 
     .article-sub-info {
@@ -246,7 +251,7 @@ const Container = styled.div`
     .article-watch {
         color: rgb(33, 37, 41);
         display: flex;
-        font-size: 16px;
+        font-size: 14px;
     }
 
     .watch-icon {
@@ -289,5 +294,17 @@ const Container = styled.div`
         animation: 1.4s linear 0s infinite normal none running animation;
     }
 `
+const CardGrid = styled.div`
+  display: grid;
+  width: 95%;
+  justify-items: center; // 변경된 부분
+
+  @media (max-width: 1700px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (min-width: 1700px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+`;
 
 export default FleaBoard;
