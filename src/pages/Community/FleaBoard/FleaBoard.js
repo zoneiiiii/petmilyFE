@@ -21,7 +21,7 @@ const FleaBoard = () => {
     const [data, setData] = useState([]); // DB 데이터 가져오는 변수
     const { loggedIn } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(true); //로딩 상태
-    const [visibleCount, setVisibleCount] = React.useState(9);  // 더보기 기능
+    const [visibleCount, setVisibleCount] = React.useState(12);  // 더보기 기능
 
     const handleLoadMore = () => {
         setVisibleCount(visibleCount + 6);  // 더보기 클릭시 추가되는 아이템 개수
@@ -69,7 +69,8 @@ const FleaBoard = () => {
                                 <SearchBar />
                             </SearchContainer>
                         </div>
-                        <div className="card-container">
+                        <CardGrid container spacing={2}>
+                            {/* <div className="card-container" > */}
                             {visibleItems.map((item, index) => (
                                 <article className="flat-card" key={index}>
                                     <Link className="article-link" to={COMMUNITY.FLEA_DETAIL(item.boardNum)} >
@@ -81,18 +82,22 @@ const FleaBoard = () => {
                                                 <span className="article-title">{item.boardSubject}</span>
                                                 <span className="article-content">{item.boardContent}</span>
                                             </div>
-                                            <p className="article-price">{item.boardCost}</p>
+                                            <p className="article-price">
+                                                {(item.boardCost).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원
+                                            </p>
                                             <section className="article-sub-info">
                                                 <span className="article-watch">
-                                                    <img className="watch-icon" alt="Watch count" src="/images/like.png" />
-                                                    {item.boardCount}
+                                                    {(item.boardStatus === true) ?
+                                                        (<p>판매중</p>) :
+                                                        (<p style={{ color: "gray" }}>판매완료</p>)}
                                                 </span>
                                             </section>
                                         </div>
                                     </Link>
                                 </article>
                             ))}
-                        </div>
+                            {/* </div> */}
+                        </CardGrid>
                         {!isLastPage && (
                             <div className="more-item">
                                 <button className="more-btn" onClick={handleLoadMore}>더보기</button>
@@ -175,8 +180,9 @@ const Container = styled.div`
         position: relative;
         text-align: left;
         display: inline-block;
-        width: 310px;
-        min-width: 310px;
+        width: auto;
+        min-width: 200px;
+        max-width: 200px;
         margin: 0 20px 30px 20px;
         // margin-right: 45px;
         // margin-bottom: 30px;
@@ -192,16 +198,22 @@ const Container = styled.div`
     }
 
     .card-photo {
-        height: 250px;
+        height: 160px;
         background-color: rgb(248, 249, 250);
         overflow: hidden;
-        border-radius: 8px;
+        border-radius: 0.5rem;
+        margin: 0.5rem;
     }
 
     img {
         width: 100%;
+        // height: 100%
         display: block;
         transform: translate(0px, -13%);
+    }
+
+    .article-info {
+        margin: 0.5rem;
     }
     
     .article-title {
@@ -210,7 +222,6 @@ const Container = styled.div`
         color: rgb(33, 37, 41);
         font-size: 22px;
         line-height: 30px;
-        margin-top: 10px;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
@@ -225,13 +236,16 @@ const Container = styled.div`
         color: rgb(255, 138, 61);
         font-size: 20px;
         line-height: 22px;
-        margin: 10px 5px;
+        // margin: 10px 5px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 
     .article-sub-info {
         position: absolute;
-        right: 10px;
-        bottom: 8px;
+        right: 12px;
+        bottom: 7px;
     }
 
     .article-watch {
@@ -280,5 +294,17 @@ const Container = styled.div`
         animation: 1.4s linear 0s infinite normal none running animation;
     }
 `
+const CardGrid = styled.div`
+  display: grid;
+  width: 95%;
+  justify-items: center; // 변경된 부분
+
+  @media (max-width: 1700px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (min-width: 1700px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+`;
 
 export default FleaBoard;

@@ -202,24 +202,7 @@ const FreeModify = () => {
                                         </FormHelperText>
                                     </ErrorMsg>
                                 </FormRowWithError>
-                                <FileContainer>
-                                    <p className="title">대표 이미지</p>
-                                    <label htmlFor="file">
-                                        <div className="btn-upload">파일 선택</div>
-                                    </label>
-                                    <input type="file" hidden onChange={handleFileChange} className="file" id="file" />
-                                </FileContainer>
-                                <FormRow>
-                                    {previewUrl && (
-                                        <PreviewWrapper>
-                                            <img
-                                                src={previewUrl}
-                                                alt="미리보기"
-                                                style={{ width: "150px" }}
-                                            />
-                                        </PreviewWrapper>
-                                    )}
-                                </FormRow>
+
                                 <FormRowWithError>
                                     <EditorWrapper>
                                         <CKEditor
@@ -249,12 +232,13 @@ const FreeModify = () => {
                                         type="submit"
                                         onClick={handleSubmit}
                                         variant="contained"
-                                    >수정
+                                    >글쓰기
                                     </WriteButton>
                                     <ButtonsSpace />
+
                                     <ResetButton
-                                        onClick={handleCancel}
                                         variant="contained"
+                                        onClick={handleCancel}
                                     >취소
                                     </ResetButton>
 
@@ -263,19 +247,13 @@ const FreeModify = () => {
                         </form>
                         <Modal
                             open={openModal}
-                            onClose={handleClose}
+                            onClose={handleModalClose}
                             aria-labelledby="modal-modal-title"
                             aria-describedby="modal-modal-description"
                         >
-                            {formAble ? (
-                                <Alert sx={modalStyle} severity="success">
-                                    작성 완료!
-                                </Alert>
-                            ) : (
-                                <Alert sx={modalStyle} severity="warning">
-                                    제목과 내용을 모두 입력해주세요.
-                                </Alert>
-                            )}
+                            <Alert sx={modalStyle} severity="success">
+                                작성 완료!
+                            </Alert>
                         </Modal>
                     </Grid>
                 </ThemeProvider>

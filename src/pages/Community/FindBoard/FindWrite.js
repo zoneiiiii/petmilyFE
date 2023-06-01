@@ -25,7 +25,7 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 50,
+      width: 100,
     },
   },
 };
@@ -261,7 +261,7 @@ const FindWrite = () => {
                   </FormRowWithError>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <FormRow>
                   <SelectContainer>
                     <p className="title">목격 지역</p>
                     <nav id="hot-articles-navigation" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '2rem' }}>
@@ -347,8 +347,16 @@ const FindWrite = () => {
                         <option value="삼성2동">삼성2동</option></select>
                     </nav>
                   </SelectContainer>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                </FormRow>
+                <FormRow>
+                  <ErrorMsg>
+                    <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                      {speciesError ? "지역을 선택해 주세요." : null}
+                    </FormHelperText>
+                  </ErrorMsg>
+                </FormRow>
+
+                <FormRow2>
                   <SelectContainer>
                     <p className="title">나이</p>
                     <Select
@@ -373,12 +381,8 @@ const FindWrite = () => {
                           {i + 1}살
                         </MenuItem>
                       ))}
-                      <ErrorMsg>
-                        <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
-                          {ageError ? "나이를 입력해 주세요." : null}
-                        </FormHelperText>
-                      </ErrorMsg>
                     </Select>
+                    <CommonSpace />
                     <p className="title">성별</p>
                     <Select
                       label="성별"
@@ -391,14 +395,21 @@ const FindWrite = () => {
                     >
                       <MenuItem value="수컷">수컷</MenuItem>
                       <MenuItem value="암컷">암컷</MenuItem>
-                      <ErrorMsg>
-                        <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
-                          {genderError ? "성별을 입력해 주세요." : null}
-                        </FormHelperText>
-                      </ErrorMsg>
                     </Select>
                   </SelectContainer>
-                </div>
+                </FormRow2>
+                <FormRow>
+                  <ErrorMsg>
+                    <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                      {ageError ? "나이를 선택해 주세요." : null}
+                    </FormHelperText>
+                  </ErrorMsg>
+                  <ErrorMsg>
+                    <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                      {genderError ? "성별을 선택해 주세요." : null}
+                    </FormHelperText>
+                  </ErrorMsg>
+                </FormRow>
 
                 <FormRow>
                   <FileContainer>
@@ -467,19 +478,13 @@ const FindWrite = () => {
 
               <Modal
                 open={openModal}
-                onClose={handleClose}
+                onClose={handleModalClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
               >
-                {formAble ? (
-                  <Alert sx={modalStyle} severity="success">
-                    작성 완료!
-                  </Alert>
-                ) : (
-                  <Alert sx={modalStyle} severity="warning">
-                    제목과 내용을 모두 입력해주세요.
-                  </Alert>
-                )}
+                <Alert sx={modalStyle} severity="success">
+                  작성 완료!
+                </Alert>
               </Modal>
             </form>
           </Grid >
@@ -520,6 +525,13 @@ const FormRow = styled.div`
   width: 100%;
   margin-bottom: 16px;
   align-items: center;
+`;
+
+const FormRow2 = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 16px;
 `;
 
 const PreviewWrapper = styled.div`
@@ -634,6 +646,12 @@ const ResetButton = styled(Button)`
         }
       }
     `;
+
+const CommonSpace = styled.div`
+  width: 230px;
+  height: auto;
+  display: inline-block;
+`;
 
 
 export default FindWrite;

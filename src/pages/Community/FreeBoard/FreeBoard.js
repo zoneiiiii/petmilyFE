@@ -22,6 +22,8 @@ import Container from "@mui/material/Container";
 import NotFound from "../../NotFound/NotFound";
 import Loading from "../../../components/Loading/LoadingPage";
 import { AuthContext } from "../../../contexts/AuthContexts";
+import { CustomTheme } from "../../../assets/Theme/CustomTheme";
+import { fontWeight } from "@mui/system";
 
 const theme = createTheme({
     palette: {
@@ -110,7 +112,7 @@ const useStyles = makeStyles({  // 게시글 목록 css
 
     write: {
         display: "flex",
-        float: "right"
+        float: "right",
         // display: "flex",
         // justifyContent: "center",
     },
@@ -203,7 +205,7 @@ const FreeBoard = () => {
     }
 
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={CustomTheme}>
             <Section className="result">
                 <MainContainer className="result-container">
 
