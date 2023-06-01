@@ -115,10 +115,10 @@ const Product = () => {
     setPage(1);
   }, [activeCategory]);
 
-  const formatCurrency = (number) => {
-    //3번째 자릿수 마다 ',' 와 마지막에 '원' 붙혀주는 함수
-    return number.toLocaleString("ko-KR", { currency: "KRW" }) + "원";
-  };
+  // const formatCurrency = (number) => {
+  //   //3번째 자릿수 마다 ',' 와 마지막에 '원' 붙혀주는 함수
+  //   return number.toLocaleString("ko-KR", { currency: "KRW" }) + "원";
+  // };
 
   return (
     <>
@@ -154,7 +154,7 @@ const Product = () => {
                   return (
                     <Grid item key={idx} xs={10} sm={6} md={2}>
                       <Link
-                        to={SHOP.PRODUCT_DETAIL()}
+                        to={SHOP.PRODUCT_DETAIL(product.boardNum)}
                         style={{ textDecoration: "none" }}
                       >
                         <Card
@@ -166,8 +166,13 @@ const Product = () => {
                         >
                           <ProductImage src={product.imgThumbnail} />
                           <ProductName>{product.productName}</ProductName>
-                          <ProductPrice>
+                          {/* <ProductPrice>
                             {formatCurrency(product.productCost)}
+                          </ProductPrice> */}
+                          <ProductPrice>
+                            {`${product.productCost
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원`}
                           </ProductPrice>
                         </Card>
                       </Link>

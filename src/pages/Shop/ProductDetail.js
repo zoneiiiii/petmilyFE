@@ -1,16 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Link } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { SHOP } from "../../constants/PageURL";
+import axios from "axios";
 
-const product = {
-  name: "유기농 강아지 사료",
-  price: 10000,
-};
-
-const ProductDetail = ({ cartItems, setCartItems }) => {
+const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
+  const [cartItems, setCartItems] = useState([]);
+  const { id } = useParams();
+  const [products, setProducts] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/shop/product/${id}`
+        );
+        setProducts(response.data);
+      } catch (error) {
+        console.error("Error fetching data : ", error);
+      }
+    };
+    fetchPost();
+  }, [id]);
+
+  useEffect(() => {
+    console.log(isModalOpen);
+  }, [isModalOpen]);
 
   const handleQuantityChange = (event) => {
     setQuantity(Number(event.target.value));
@@ -18,11 +36,24 @@ const ProductDetail = ({ cartItems, setCartItems }) => {
 
   const handleBuy = () => {};
 
-  const handleCart = () => {};
+  const handleCart = () => {
+    setIsModalOpen(true);
+    console.log(quantity);
+    axios.post("/shop/product/addCart", {
+      productName: products.productName,
+      productCost: products.productCost,
+      imgThumbnail: products.imgThumbnail,
+      quantity: quantity,
+    });
+  };
 
-  const formatCurrency = (number) => {
-    //3번째 자릿수 마다 ',' 와 마지막에 '원' 붙혀주는 함수
-    return number.toLocaleString("ko-KR", { currency: "KRW" }) + "원";
+  const handleContinueShopping = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleGoToCart = () => {
+    setIsModalOpen(false);
+    window.location.href = SHOP.CART;
   };
 
   return (
@@ -31,8 +62,14 @@ const ProductDetail = ({ cartItems, setCartItems }) => {
         <ProductContainer>
           <ProductImage src="/images/product.png" />
           <ProductInfo>
-            <ProductTitle>{product.name}</ProductTitle>
-            <ProductPrice>{formatCurrency(product.price)}</ProductPrice>
+            <ProductTitle>{products.productName}</ProductTitle>
+            <ProductPrice>
+              {products.productCost
+                ? `${products.productCost
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원`
+                : ""}
+            </ProductPrice>
             <ProductQuantity>
               <label htmlFor="quantity">구매수량</label>
               <QuantitySelect
@@ -51,9 +88,7 @@ const ProductDetail = ({ cartItems, setCartItems }) => {
               <Link to={SHOP.ORDER} style={{ textDecoration: "none" }}>
                 <BuyButton onClick={handleBuy}>구매하기</BuyButton>
               </Link>
-              <Link to={SHOP.CART} style={{ textDecoration: "none" }}>
-                <CartButton onClick={handleCart}>장바구니</CartButton>
-              </Link>
+              <CartButton onClick={handleCart}>장바구니</CartButton>
             </ButtonsWrapper>
           </ProductInfo>
         </ProductContainer>
@@ -62,9 +97,74 @@ const ProductDetail = ({ cartItems, setCartItems }) => {
       <ProductDescription>제품 상세 정보</ProductDescription>
       <Line />
       <ProductDetailImage src="/images/productdetail.png" />
+
+      {isModalOpen && (
+        <Modal>
+          <ModalContent>
+            <ModalMessage>장바구니에 추가되었습니다</ModalMessage>
+            <ModalButtonsWrapper>
+              <ContinueShoppingButton onClick={handleContinueShopping}>
+                계속 쇼핑하기
+              </ContinueShoppingButton>
+              <GoToCartButton onClick={handleGoToCart}>
+                장바구니 이동
+              </GoToCartButton>
+            </ModalButtonsWrapper>
+          </ModalContent>
+        </Modal>
+      )}
     </ThemeProvider>
   );
 };
+
+const Modal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+`;
+
+const ModalContent = styled.div`
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 4px;
+`;
+
+const ModalMessage = styled.p`
+  font-size: 18px;
+  margin-bottom: 20px;
+`;
+
+const ModalButtonsWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const ContinueShoppingButton = styled.button`
+  padding: 10px 20px;
+  margin-right: 10px;
+  background-color: #ccc;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #fff;
+  cursor: pointer;
+`;
+
+const GoToCartButton = styled.button`
+  padding: 10px 20px;
+  background-color: #fbd385;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #fff;
+  cursor: pointer;
+`;
 
 const theme = createTheme({
   palette: {
@@ -90,14 +190,16 @@ const ProductContainer = styled.div`
 `;
 
 const ProductImage = styled.img`
-  max-width: 50%;
+  width: 550px;
+  height: 600px;
   margin-right: 7rem;
-  padding: 10px;
+  padding-top: 25px;
 `;
 
 const ProductInfo = styled.div`
   display: flex;
   flex-direction: column;
+  margin-left: 8rem;
 `;
 
 const ProductTitle = styled.h2`
