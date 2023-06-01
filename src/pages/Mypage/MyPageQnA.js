@@ -38,25 +38,27 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const MyPageQnA = () => {
+  const { userNum } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const rowsPerPage = 5;
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
+  console.log(userNum);
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/board/qna`)
-      .then((response) => {
-        setData(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (userNum) {
+      axios
+        .get(`http://localhost:8080/board/qna/list/${userNum}`)
+        .then((response) => {
+          setData(response.data);
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    }
+  }, [userNum]);
 
   if (data.length === 0) {
     return (

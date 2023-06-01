@@ -55,8 +55,24 @@ const Router = () => {
                 element={<Page.MyPage.MyPageAdoptList />}
               />
               <Route
-                path={BROWSER_PATH.MYPAGE.BOARD()}
-                element={<Page.MyPage.MyPageBoard />}
+                path={BROWSER_PATH.MYPAGE.BOARD_MISSING}
+                element={<Page.MyPage.MyPageMissing />}
+              />
+              <Route
+                path={BROWSER_PATH.MYPAGE.BOARD_FIND}
+                element={<Page.MyPage.MyPageFind />}
+              />
+              <Route
+                path={BROWSER_PATH.MYPAGE.BOARD_FREE}
+                element={<Page.MyPage.MyPageFree />}
+              />
+              <Route
+                path={BROWSER_PATH.MYPAGE.BOARD_FLEA}
+                element={<Page.MyPage.MyPageFlea />}
+              />
+              <Route
+                path={BROWSER_PATH.MYPAGE.BOARD_VOLUNTEER}
+                element={<Page.MyPage.MyPageVolunteer />}
               />
               <Route
                 path={BROWSER_PATH.MYPAGE.QNA}
