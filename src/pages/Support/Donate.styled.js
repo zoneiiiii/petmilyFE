@@ -111,7 +111,7 @@ const TableRow = styled.tr`
 `;
 
 const TableData = styled.td`
-  padding: 10px;
+  padding: 10px 5px 5px 10px;
   border: 1px solid #dddddd;
   text-align: center;
 `;

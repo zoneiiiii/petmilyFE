@@ -38,7 +38,7 @@ const VolunteerReview = () => {
       .get(`http://localhost:8080/donate/volunteer/review?${requestParams}`)
       .then((response) => {
         const totalPages = response.data.totalPages;
-        if (urlPage > totalPages) {
+        if (totalPages !== 0 && urlPage > totalPages) {
           setValidPage(false);
           return;
         }
@@ -92,11 +92,15 @@ const VolunteerReview = () => {
     <S.Container>
       <S.Title>봉사 후기 게시판</S.Title>
       <S.CardContainer>
-        <S.CardGrid>
-          {data.map((card) => (
-            <VolunteerReviewCard {...card} key={card.boardNum} />
-          ))}
-        </S.CardGrid>
+        {data.length === 0 ? (
+          <S.NoDataContainer>게시글이 없습니다.</S.NoDataContainer>
+        ) : (
+          <S.CardGrid>
+            {data.map((card) => (
+              <VolunteerReviewCard {...card} key={card.boardNum} />
+            ))}
+          </S.CardGrid>
+        )}
       </S.CardContainer>
       <ThemeProvider theme={CustomTheme}>
         <VolunteerPagination
@@ -107,7 +111,7 @@ const VolunteerReview = () => {
         {loggedIn && (
           <S.ButtonContainer>
             <Link to={SUPPORT.VOLUNTEER_REVIEW_WRITE}>
-              <S.VolunteerButton>글작성</S.VolunteerButton>
+              <S.VolunteerButton>글쓰기</S.VolunteerButton>
             </Link>
           </S.ButtonContainer>
         )}

@@ -96,6 +96,7 @@ import AdminOrder from "./Admin//Orders/AdminOrder";
 import AdminProduct from "./Admin/Products/AdminProduct";
 import AdminProductWrite from "./Admin/Products/AdminProductWrite";
 import AdminQnA from "./Admin/QnA/AdminQnA";
+import AdminDonation from "./Admin/Donation/AdminDonation";
 
 /**
  ** Layout
@@ -355,4 +356,5 @@ export const Admin = {
   AdminProduct: AdminProduct,
   AdminProductWrite: AdminProductWrite,
   AdminQnA: AdminQnA,
+  AdminDonation: AdminDonation,
 };

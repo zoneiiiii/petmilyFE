@@ -123,6 +123,18 @@ export const WriteButton = styled(Button)`
   }
 `;
 
+export const CancleButton = styled(Button)`
+  && {
+    color: #fff;
+    background-color: #bfbfbf;
+    width: auto;
+    margin-left: auto;
+    &:hover {
+      background-color: #7f7f7f;
+    }
+  }
+`;
+
 export const EditorWrapper = styled.div`
   .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
     min-height: 500px;
