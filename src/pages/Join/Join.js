@@ -163,19 +163,6 @@ const Join = () => {
     }
   }, []);
 
-  // const onChangePhone = useCallback((e) => {
-  //   const phonenumberRegex = /^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/;
-  //   const phoneCurrent = e.target.value;
-  //   setPhonenumber(phoneCurrent);
-
-  //   if (!phonenumberRegex.test(phoneCurrent)) {
-  //     setPhonenumberError("전화번호를 다시 확인해주세요.");
-  //   } else {
-  //     setPhonenumberError("");
-  //   }
-  // }, []);
-
-  //전화번호
   const onChangePhone = (e) => {
     const input = e.target.value;
     const formattedNumber = formatPhoneNumber(input);
