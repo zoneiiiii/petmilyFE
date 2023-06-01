@@ -3,9 +3,11 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import Chart from "./Chart";
+import OrderChart from "./OrderChart";
 import Deposits from "./Deposits";
 import Orders from "./Orders";
+import Member from "./Member";
+import DonationChart from "./DonationChart";
 
 const defaultTheme = createTheme();
 
@@ -21,10 +23,10 @@ export default function AdminDashboard() {
                 p: 2,
                 display: "flex",
                 flexDirection: "column",
-                height: 240,
+                height: 600,
               }}
             >
-              <Chart />
+              <OrderChart />
             </Paper>
           </Grid>
           {/* Recent Deposits */}
@@ -41,9 +43,26 @@ export default function AdminDashboard() {
             </Paper>
           </Grid>
           {/* Recent Orders */}
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
               <Orders />
+            </Paper>
+          </Grid> */}
+          <Grid item xs={12}>
+            <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+              <Member />
+            </Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <Paper
+              sx={{
+                p: 2,
+                display: "flex",
+                flexDirection: "column",
+                height: 1000,
+              }}
+            >
+              <DonationChart />
             </Paper>
           </Grid>
         </Grid>

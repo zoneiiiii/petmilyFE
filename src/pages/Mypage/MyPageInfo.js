@@ -10,14 +10,25 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // import styled from "styled-components";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { MYPAGE } from "../../constants/PageURL";
+import axios from "axios";
 const noProfile = "/images/emptyProfile.png";
 function MyInfo() {
   const navigate = useNavigate();
+  const [data, setData] = useState();
+  useEffect(() => {
+    axios
+      .get("/mypage/getInfo")
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((error) => console.error("에러발생:", error));
+  }, []);
+
   const member = {
     num: 1,
     id: "PetLove",
@@ -32,6 +43,10 @@ function MyInfo() {
     role: "user",
   };
 
+  const gender = (value) => {
+    if (value === "male") return "남자";
+    if (value === "female") return "여자";
+  };
   // const columnWidth = 100;
   return (
     <ThemeProvider theme={CustomTheme}>
@@ -70,7 +85,7 @@ function MyInfo() {
                   <Box display={"flex"} justifyContent={"center"} m={4}>
                     <Avatar
                       alt="profile"
-                      src={member.img ? member.img : noProfile}
+                      src={data && data.memberImg ? data.memberImg : noProfile}
                       sx={{ width: 200, height: 200 }}
                     />
                   </Box>
@@ -80,31 +95,33 @@ function MyInfo() {
             <TableBody>
               <TableRow>
                 <TableCell sx={thSx}>ID</TableCell>
-                <TableCell sx={tdSx}>{member.id}</TableCell>
+                <TableCell sx={tdSx}>{data && data.memberId}</TableCell>
               </TableRow>
-              <TableRow>
+              {/* <TableRow>
                 <TableCell sx={thSx}>PW</TableCell>
-                <TableCell sx={tdSx}>{"*".repeat(member.pw.length)}</TableCell>
-              </TableRow>
+                <TableCell sx={tdSx}>{data && "*".repeat(data.memberPw)}</TableCell>
+              </TableRow> */}
               <TableRow>
                 <TableCell sx={thSx}>이름</TableCell>
-                <TableCell sx={tdSx}>{member.name}</TableCell>
+                <TableCell sx={tdSx}>{data && data.memberName}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell sx={thSx}>성별</TableCell>
-                <TableCell sx={tdSx}>{member.gender}</TableCell>
+                <TableCell sx={tdSx}>
+                  {data && gender(data.memberGender)}
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell sx={thSx}>생일</TableCell>
-                <TableCell sx={tdSx}>{member.birth}</TableCell>
+                <TableCell sx={tdSx}>{data && data.memberBirth}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell sx={thSx}>연락처</TableCell>
-                <TableCell sx={tdSx}>{member.tel}</TableCell>
+                <TableCell sx={tdSx}>{data && data.memberTel}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell sx={thSx}>이메일</TableCell>
-                <TableCell sx={tdSx}>{member.email}</TableCell>
+                <TableCell sx={tdSx}>{data && data.memberEmail}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
@@ -120,7 +137,9 @@ function MyInfo() {
           <Button
             variant="contained"
             sx={{ m: 2, width: "100px" }}
-            onClick={() => navigate(MYPAGE.MODIFY_INFO, { state: { num: member.num } })}
+            onClick={() =>
+              navigate(MYPAGE.MODIFY_INFO, { state: { num: data.memberNum } })
+            }
           >
             수정
           </Button>

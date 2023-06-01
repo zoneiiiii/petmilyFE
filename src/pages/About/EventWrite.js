@@ -11,7 +11,7 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { ABOUT, ACCOUNT } from "../../constants/PageURL";
 import styled from "styled-components";
@@ -105,8 +105,8 @@ const EventWrite = () => {
               subject: subject,
               content: content,
               thumbnail: thumbnail,
-              startDate: startDate.toISOString(),
-              endDate: endDate.toISOString(),
+              startDate: startDate,
+              endDate: endDate,
             })
             .then((response) => console.log("수정?:", response.data))
             .catch((error) => console.error("에러 발생! :", error))
@@ -314,29 +314,5 @@ export const EditorWrapper = styled.div`
     border-color: #fbd385;
   }
 `;
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: black;
-  font-weight: 600;
-  :hover {
-    text-decoration: underline;
-  }
-`;
-
-const member = {
-  num: 1,
-  id: "Admin",
-  pw: "1234",
-  nickname: "관리자",
-  email: "asdf@naver.com",
-  name: "관리자",
-  gender: "남자",
-  birth: "2023-01-01",
-  tel: "010-1234-5678",
-  addr: "서울특별시 강남구 선릉로 428",
-  img: "/images/emptyProfile.png",
-  role: "admin",
-};
 
 export default EventWrite;
