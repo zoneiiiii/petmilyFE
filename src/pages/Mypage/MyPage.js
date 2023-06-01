@@ -5,6 +5,16 @@ import { useRef } from "react";
 
 const MyPage = () => {
   const pageRef = useRef();
+  const ads = [
+    { id: 1, image: "/images/Ad1.png", link: "#" },
+    { id: 2, image: "/images/Ad2.png", link: "#" },
+    { id: 3, image: "/images/Ad3.png", link: "#" },
+    { id: 4, image: "/images/Ad4.png", link: "#" },
+  ];
+
+  const randomAdIndex = Math.floor(Math.random() * ads.length);
+  const randomAd = ads[randomAdIndex];
+
   return (
     <MyPageLayout className="MyPageLayout">
       <PageSizeLimit>
@@ -16,7 +26,9 @@ const MyPage = () => {
         </MyPageContainer>
         <AdContainer>
           <div>
-            <img alt="ad" src="http://placehold.it/160x600" />
+            <a href={randomAd.link}>
+              <img alt="ad" src={randomAd.image} />
+            </a>
           </div>
         </AdContainer>
       </PageSizeLimit>

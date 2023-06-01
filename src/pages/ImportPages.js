@@ -16,7 +16,11 @@ import ModifyInfo from "./Mypage/ModifyInfo";
 import MyPageLayout from "./Mypage/MyPage";
 import MyPageAdoptList from "./Mypage/MyPageAdoptList";
 import MyPageAdoptReview from "./Mypage/MyPageAdoptReview";
-import MyPageBoard from "./Mypage/MyPageBoard";
+import MyPageMissing from "./Mypage/MyPageMissing";
+import MyPageFind from "./Mypage/MyPageFind";
+import MyPageFree from "./Mypage/MyPageFree";
+import MyPageFlea from "./Mypage/MyPageFlea";
+import MyPageVolunteer from "./Mypage/MyPageVolunteer";
 import MyPageInfo from "./Mypage/MyPageInfo";
 import MyPageOrderDetail from "./Mypage/MyPageOrderDetail";
 import MyPageOrderList from "./Mypage/MyPageOrderList";
@@ -139,7 +143,11 @@ export const Account = {
  ** MyPage
  ** MyPageAdoptList
  ** MyPageAdoptReview
- ** MyPageBoard
+ ** MyPageMissing
+ ** MyPageFind
+ ** MyPageFree
+ ** MyPageFlea
+ ** MyPageVolunteer
  ** MyPageInfo
  ** MyPageOrderDetail
  ** MyPageOrderList
@@ -152,7 +160,11 @@ export const MyPage = {
   MyPage: MyPageLayout,
   MyPageAdoptList: MyPageAdoptList,
   MyPageAdoptReview: MyPageAdoptReview,
-  MyPageBoard: MyPageBoard,
+  MyPageMissing: MyPageMissing,
+  MyPageFind: MyPageFind,
+  MyPageFree: MyPageFree,
+  MyPageFlea: MyPageFlea,
+  MyPageVolunteer: MyPageVolunteer,
   MyPageInfo: MyPageInfo,
   MyPageOrderDetail: MyPageOrderDetail,
   MyPageOrderList: MyPageOrderList,

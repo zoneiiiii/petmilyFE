@@ -35,15 +35,15 @@ const MyPageNav = () => {
         navList={[
           {
             linkName: "실종 동물 게시판",
-            link: MYPAGE.BOARD("missing"),
+            link: MYPAGE.BOARD_MISSING,
           }, // 페이지 없음
           {
             linkName: "목격 제보 게시판",
-            link: MYPAGE.BOARD("find"),
+            link: MYPAGE.BOARD_FIND,
           }, // 페이지 없음
-          { linkName: "자유게시판", link: MYPAGE.BOARD("free") }, // 페이지 없음
-          { linkName: "봉사 후기", link: MYPAGE.BOARD("review") }, // 페이지 없음
-          { linkName: "매매 장터", link: MYPAGE.BOARD("flea") }, // 페이지 없음
+          { linkName: "자유게시판", link: MYPAGE.BOARD_FREE }, // 페이지 없음
+          { linkName: "봉사 후기", link: MYPAGE.BOARD_VOLUNTEER }, // 페이지 없음
+          { linkName: "매매 장터", link: MYPAGE.BOARD_FLEA }, // 페이지 없음
         ]}
       />
       <NavList
