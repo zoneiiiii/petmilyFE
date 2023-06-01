@@ -50,9 +50,9 @@ const AdoptReview = () => {
   }, [pageChk]);
 
   return (
-    <Section className="result">
-      <MainContainer className="result-container">
-        <ThemeProvider theme={CustomTheme}>
+    <ThemeProvider theme={CustomTheme}>
+      <Section className="result">
+        <MainContainer className="result-container">
           <ContainerBox>
             <Top>입양 후기 게시판</Top>
             <Container sx={{ py: "30px" }} maxWidth="60vw">
@@ -71,18 +71,13 @@ const AdoptReview = () => {
                       <Grid item xs={10} sm={6} md={2} key={item.boardNum}>
                         <Link
                           to={ADOPT.REVIEW_DETAIL(item.boardNum)}
-                          style={{
-                            textDecoration: "none",
-                            color: "inherit",
-                            width: "100%",
-                          }}
+                          style={{ textDecoration: "none" }}
                           state={{
                             boardNum: item.boardNum,
                             nickName: item.memberNickName,
                           }}
                         >
                           <Card
-                            key={item.boardNum}
                             sx={{
                               height: "100%",
                               display: "flex",
@@ -93,7 +88,7 @@ const AdoptReview = () => {
                           >
                             <CardImage src={item.imgThumbnail} />
                             <div>
-                              <CardTitle>{item.boardSubject}</CardTitle>
+                              <CardTitle>{item.reviewSubject}</CardTitle>
                               <CardWritter>{item.memberNickName}</CardWritter>
                               <CardCount>조회 {item.reviewCount}</CardCount>
                             </div>
@@ -129,9 +124,9 @@ const AdoptReview = () => {
               }}
             />
           </ContainerBox>
-        </ThemeProvider>
-      </MainContainer>
-    </Section>
+        </MainContainer>
+      </Section>
+    </ThemeProvider>
   );
 };
 // const Section = styled.section`
@@ -203,7 +198,7 @@ const Section = styled.section`
 `;
 
 const MainContainer = styled.div`
-  width: 60vw;
+  width: 1008px;
   // width: 1150px;
   max-width: 1150px;
   min-width: 790px;
@@ -230,8 +225,8 @@ const SearchContainer = styled.div`
 `;
 
 const CardImage = styled.img`
-  // width: auto;
-  height: auto;
+  width: auto;
+  height: 196px;
   object-fit: cover;
   background-size: cover;
   background-repeat: no-repeat;
@@ -257,7 +252,7 @@ const CardTitle = styled.p`
 const CardWritter = styled.p`
   font-size: 14px;
   color: #888;
-  float: left;
+  // float: left;
   margin-left: 10px;
 `;
 
