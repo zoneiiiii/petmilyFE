@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import Modal from "@mui/material/Modal";
 import Alert from "@mui/material/Alert";
 import {
@@ -12,6 +12,7 @@ import {
   TableCell,
   Typography,
   ThemeProvider,
+  FormHelperText,
 } from "@mui/material";
 import axios from "axios";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -19,8 +20,6 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { MYPAGE } from "../../constants/PageURL";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { MyCustomUploadAdapterPlugin } from "../../components/common/UploadAdapter";
-import { useLocation } from "react-router-dom";
-import { AuthContext } from "../../contexts/AuthContexts";
 
 const modalStyle = {
   position: "absolute",
@@ -34,12 +33,12 @@ const modalStyle = {
 };
 
 const MyPageQnAWrite = () => {
-  const { userNum } = useContext(AuthContext);
   const [content, setContent] = useState("");
   const [subject, setSubject] = useState("");
+  const [subjectError, setSubjectError] = useState(false);
+  const [contentError, setContentError] = useState(false);
   // const [data, setData] = useState("");
   const [file, setFile] = useState("");
-  const [formAble, setFormAble] = useState(false);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
 
@@ -51,10 +50,13 @@ const MyPageQnAWrite = () => {
 
   const validate = () => {
     let isError = false;
-    if (subject === "" || content === "") {
+    if (subject === "") {
       isError = true;
-    } else {
-      isError = false;
+      setSubjectError(true);
+    }
+    if (content === "") {
+      isError = true;
+      setContentError(true);
     }
     return isError;
   };
@@ -80,11 +82,7 @@ const MyPageQnAWrite = () => {
     e.preventDefault();
     const isError = validate();
     if (isError) {
-      setFormAble(false);
-      setOpen(true);
       return;
-    } else {
-      setFormAble(true);
     }
     const currentDate = new Date();
     const isoCurrentDate = new Date(
@@ -143,22 +141,27 @@ const MyPageQnAWrite = () => {
         >
           <TableBody>
             <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>제목</TableCell>
+              {/* <TableCell sx={{ fontWeight: "bold" }}>제목</TableCell> */}
               <TableCell>
                 <TextField
                   type="text"
                   size="small"
+                  label="제목"
                   value={subject}
                   fullWidth
                   onChange={(event) => {
                     setSubject(event.target.value);
+                    setSubjectError(false);
                   }}
                   sx={{ borderColor: "#ccced1" }}
                 />
+                <FormHelperText sx={{ color: "red" }}>
+                  {subjectError ? "제목을 입력해 주세요." : null}
+                </FormHelperText>
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>내용</TableCell>
+              {/* <TableCell sx={{ fontWeight: "bold" }}>내용</TableCell> */}
               <TableCell sx={{ width: "828px" }}>
                 <EditorWrapper>
                   <CKEditor
@@ -167,14 +170,19 @@ const MyPageQnAWrite = () => {
                     onChange={(event, editor) => {
                       const data = editor.getData();
                       setContent(data);
+                      setContentError(false);
                     }}
                     config={{
                       className: "WriteEditor",
                       placeholder: "내용을 입력하세요.",
                       extraPlugins: [MyCustomUploadAdapterPlugin],
                     }}
+                    fullWidth
                   />
                 </EditorWrapper>
+                <FormHelperText sx={{ color: "red" }}>
+                  {contentError ? "내용을 입력해 주세요." : null}
+                </FormHelperText>
               </TableCell>
             </TableRow>
           </TableBody>
@@ -193,15 +201,9 @@ const MyPageQnAWrite = () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          {formAble ? (
-            <Alert sx={modalStyle} severity="success">
-              작성 완료!
-            </Alert>
-          ) : (
-            <Alert sx={modalStyle} severity="warning">
-              제목과 내용을 모두 입력해주세요.
-            </Alert>
-          )}
+          <Alert sx={modalStyle} severity="success">
+            작성 완료!
+          </Alert>
         </Modal>
       </ThemeProvider>
     </>
@@ -219,7 +221,7 @@ const titleSx = {
 const EditorWrapper = styled.div`
   .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
     min-height: 300px;
-    width: 828px;
+    // width: 940px;
     &:focus {
       border: 1px solid #fbd385;
     }

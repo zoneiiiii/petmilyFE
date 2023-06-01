@@ -1,27 +1,24 @@
-import styled from "styled-components";
-import * as React from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
-  Grid,
-  Pagination,
-  ThemeProvider,
   Typography,
+  ThemeProvider,
   Table,
+  TableCell,
   TableHead,
   TableRow,
-  TableCell,
+  Grid,
 } from "@mui/material";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
-import { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
-import { ADOPT } from "../../constants/PageURL";
 import { AuthContext } from "../../contexts/AuthContexts";
 import axios from "axios";
-import * as S from "../../components/Support/Volunteer/VolunteerCard.styled";
-import { useNavigate, useLocation } from "react-router-dom";
+import VolunteerReviewCard from "../../components/Support/Volunteer/VolunteerReviewCard";
+import VolunteerPagination from "../../components/Support/Volunteer/VolunteerPagination";
+import styled from "styled-components";
 
-const MyPageAdoptReview = () => {
+const MyPageVolunteer = () => {
   const { userNum } = useContext(AuthContext);
-  const [reviewData, setReviewData] = useState([]);
+  const [review, setReview] = useState([]);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(0); // 페이지 수 계산
 
@@ -40,15 +37,18 @@ const MyPageAdoptReview = () => {
     }
 
     const requestParams = new URLSearchParams({ page: urlPage - 1 });
+
     if (userNum) {
+      // API 호출
       axios
-        .get(`/mypage/adoptReview/${userNum}?${requestParams}`)
+        .get(`/mypage/review/${userNum}?${requestParams}`)
         .then((response) => {
           const totalPages = response.data.totalPages;
           if (urlPage > totalPages) {
             return;
           }
-          setReviewData(response.data.content);
+
+          setReview(response.data.content);
           setPageCount(totalPages);
           setPage(urlPage);
         })
@@ -89,7 +89,7 @@ const MyPageAdoptReview = () => {
     );
   };
 
-  if (reviewData.length === 0) {
+  if (review.length === 0) {
     return (
       <ThemeProvider theme={CustomTheme}>
         <Typography
@@ -99,7 +99,7 @@ const MyPageAdoptReview = () => {
           borderColor="#ffbd59"
           mb={4}
         >
-          입양 후기
+          봉사 후기
         </Typography>
         <Grid sx={{ width: "940px", height: "50vh" }}>
           <Table
@@ -120,55 +120,29 @@ const MyPageAdoptReview = () => {
     );
   } else {
     return (
-      <ThemeProvider theme={CustomTheme}>
-        <Typography
-          className="myOrderListTitle"
-          sx={titleSx}
-          border={3}
-          borderColor="#ffbd59"
-          mb={4}
-        >
-          입양 후기
-        </Typography>
-        <CardGrid container spacing={4} sx={{ width: "940px" }}>
-          {reviewData &&
-            reviewData.map((item) => (
-              <S.Container key={item.boardNum}>
-                <Link
-                  to={ADOPT.REVIEW_DETAIL(item.boardNum)}
-                  style={{
-                    textDecoration: "none",
-                    color: "inherit",
-                    width: "100%",
-                  }}
-                  state={{
-                    boardNum: item.boardNum,
-                    nickName: item.memberNickName,
-                  }}
-                >
-                  <S.Thumbnail src={item.imgThumbnail} alt="thumbnail" />
-                  <S.User>{item.reviewSubject}</S.User>
-                  <S.Title>{item.memberNickName}</S.Title>
-                  <S.Date>{item.reviewDate}</S.Date>
-                  <S.CountWrapper>
-                    <S.Count>조회수: {item.reviewCount}</S.Count>
-                  </S.CountWrapper>
-                </Link>
-              </S.Container>
+      <>
+        <ThemeProvider theme={CustomTheme}>
+          <Typography
+            className="myOrderListTitle"
+            sx={titleSx}
+            border={3}
+            borderColor="#ffbd59"
+            mb={4}
+          >
+            봉사 후기
+          </Typography>
+          <CardGrid>
+            {review.map((card) => (
+              <VolunteerReviewCard {...card} key={card.boardNum} />
             ))}
-        </CardGrid>
-        <Pagination
-          count={pageCount}
-          page={page}
-          color="primary"
-          onChange={handleChange}
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            margin: "50px 0 0px 0px",
-          }}
-        />
-      </ThemeProvider>
+          </CardGrid>
+          <VolunteerPagination
+            count={pageCount}
+            page={page}
+            onChange={handleChange}
+          />
+        </ThemeProvider>
+      </>
     );
   }
 };
@@ -184,10 +158,11 @@ const titleSx = {
 
 const CardGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
-  width: 95%;
-  max-width: 940px;
+  width: 940px;
+  max-width: 1200px;
   justify-items: center; // 변경된 부분
 `;
-export default MyPageAdoptReview;
+
+export default MyPageVolunteer;
