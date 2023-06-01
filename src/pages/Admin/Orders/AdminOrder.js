@@ -271,27 +271,6 @@ const AdminOrder = () => {
                     <StyledTableCell align="center" sx={{ minWidth: 30 }}>
                       {order.date}
                     </StyledTableCell>
-                    {/* {order.delivery === "배송중" ? (
-                      <StyledTableCell
-                        align="center"
-                        sx={{
-                          minWidth: 10,
-                          color: "red",
-                        }}
-                      >
-                        {order.delivery}
-                      </StyledTableCell>
-                    ) : (
-                      <StyledTableCell
-                        align="center"
-                        sx={{
-                          minWidth: 10,
-                          color: "blue",
-                        }}
-                      >
-                        {order.delivery}
-                      </StyledTableCell>
-                    )} */}
                     <StyledTableCell align="center" sx={{ minWidth: 30 }}>
                       <FormControl sx={{ m: 1, minWidth: 120 }}>
                         <Select
@@ -357,13 +336,13 @@ const MyPageStyle = styleds.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 30px 0 0 150px;
   }
   .prodDelete {
     float: left;
     background-color: #fbd385;
     color: white;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin: 20px 0 20px 150px;
     &:hover {
       background-color: #facc73;
     }
