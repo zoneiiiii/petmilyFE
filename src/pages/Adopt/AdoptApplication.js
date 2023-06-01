@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { ADOPT } from "../../constants/PageURL";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { ThemeProvider } from "@mui/material";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import * as React from "react";
@@ -64,8 +64,9 @@ const CustomizedButton = styled(Button)`
 const AdoptApplication = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
+  const { userNickName, userImg } = useContext(AuthContext);
   const currentDate = new Date();
+  console.log(userNickName);
   const isoCurrentDate = new Date(
     currentDate.getTime() + 9 * 60 * 60 * 1000
   ).toISOString();
@@ -127,6 +128,8 @@ const AdoptApplication = () => {
     }
   };
 
+  useEffect(() => {});
+
   return (
     <ThemeProvider theme={CustomTheme}>
       <div
@@ -147,6 +150,7 @@ const AdoptApplication = () => {
                 color: "black",
                 mt: "30px",
                 mb: "30px",
+                fontSize: "35px",
                 fontWeight: "bolder",
               }}
             >
@@ -191,12 +195,13 @@ const AdoptApplication = () => {
         ) : (
           <div>
             <Typography
-              component="h1"
+              component="h3"
               variant="h2"
               sx={{
                 color: "black",
                 mt: "30px",
                 mb: "30px",
+                fontSize: "35px",
                 fontWeight: "bolder",
               }}
             >
@@ -242,8 +247,8 @@ const AdoptApplication = () => {
               className="ProfileImg"
               src={"./../images/emptyProfile.png"}
               alt="profile"
-              width={"300px"}
-              height={"300px"}
+              width={"250px"}
+              height={"250px"}
               style={{ borderRadius: "50%", marginRight: "20px" }}
             />
             <Typography
@@ -254,7 +259,7 @@ const AdoptApplication = () => {
                 mt: "30px",
               }}
             >
-              user
+              {userNickName}
             </Typography>
           </div>
           <img
@@ -268,60 +273,62 @@ const AdoptApplication = () => {
             }}
           />
           {state === 0 ? (
-            <div style={{ position: "relative", display: "inline-block" }}>
-              <img
-                className="AdoptedCat"
-                src="./../images/pet.png"
-                alt="profile"
-                width={"300px"}
-                height={"300px"}
-                style={{
-                  borderRadius: "50%",
-                  cursor: "pointer",
-                  transition: "all 0.3s ease-out",
-                  transform: isHover ? "scale(1.05)" : "scale(1)",
-                }}
-                onMouseEnter={handleHover}
-                onMouseLeave={handleLeave}
-                onClick={() => navigate(ADOPT.ADOPT)}
-              />
-
-              {isHover && (
-                <div
-                  onClick={() => navigate(ADOPT.ADOPT)}
+            <div>
+              <div style={{ position: "relative", display: "inline-block" }}>
+                <img
+                  className="AdoptedCat"
+                  src="./../images/pet.png"
+                  alt="profile"
+                  width={"250px"}
+                  height={"250px"}
                   style={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    zIndex: 10,
-                    backgroundColor: "rgba(0,0,0,0.8)",
-                    cursor: "pointer",
                     borderRadius: "50%",
-                    width: "90%",
-                    height: "90%",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease-out",
+                    transform: isHover ? "scale(1.05)" : "scale(1)",
                   }}
                   onMouseEnter={handleHover}
                   onMouseLeave={handleLeave}
-                >
-                  <Typography
-                    variant="h6"
-                    component="span"
-                    sx={{
-                      color: "white",
-                      p: 2,
-                      animation: isHover
-                        ? "none"
-                        : "$fadeInOut 2s ease-out infinite",
+                  onClick={() => navigate(ADOPT.ADOPT)}
+                />
+
+                {isHover && (
+                  <div
+                    onClick={() => navigate(ADOPT.ADOPT)}
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      zIndex: 10,
+                      backgroundColor: "rgba(0,0,0,0.8)",
+                      cursor: "pointer",
+                      borderRadius: "50%",
+                      width: "90%",
+                      height: "90%",
                     }}
+                    onMouseEnter={handleHover}
+                    onMouseLeave={handleLeave}
                   >
-                    유기동물 보러가기
-                  </Typography>
-                </div>
-              )}
+                    <Typography
+                      variant="h6"
+                      component="span"
+                      sx={{
+                        color: "white",
+                        p: 2,
+                        animation: isHover
+                          ? "none"
+                          : "$fadeInOut 2s ease-out infinite",
+                      }}
+                    >
+                      유기동물 보러가기
+                    </Typography>
+                  </div>
+                )}
+              </div>
               <Typography
                 component="h4"
                 variant="h5"
@@ -339,8 +346,8 @@ const AdoptApplication = () => {
                 className="AdoptedCat"
                 src={state.profile}
                 alt="profile"
-                width={"300px"}
-                height={"300px"}
+                width={"250px"}
+                height={"250px"}
                 style={{ borderRadius: "50%" }}
               />
               <Typography
