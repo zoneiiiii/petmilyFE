@@ -177,8 +177,8 @@ const SearchContainer = styled.div`
 `;
 
 const CardImage = styled.img`
-  // width: auto;
-  height: 100%;
+  width: auto;
+  height: 250px;
   object-fit: cover;
   background-size: cover;
   background-repeat: no-repeat;
