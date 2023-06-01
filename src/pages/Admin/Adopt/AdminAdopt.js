@@ -185,14 +185,14 @@ const AdminAdopt = () => {
                     (page - 1) * rowsPerPage,
                     (page - 1) * rowsPerPage + rowsPerPage
                   )
-                  .map((adopt) => (
+                  .map((adopt, index) => (
                     <StyledTableRow
                       key={adopt.adoptNum}
                       style={{ cursor: "pointer" }}
                       onClick={() => handleOnClick(adopt.adoptNum, adopt)}
                     >
                       <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                        {adopt.adoptNum}
+                        {data.length - index}
                       </StyledTableCell>
                       <StyledTableCell align="center" sx={{ minWidth: 30 }}>
                         {adopt.adopterName}

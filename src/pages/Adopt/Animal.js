@@ -89,7 +89,7 @@ function Animal({
       >
         <CardImage src={profile} />
         <div>
-          <CardTitle>{kindCd}</CardTitle>
+          <CardTitle>{kindCd.replace(/\[[^\]]*\]/g, "")}</CardTitle>
           <div
             style={{
               display: "flex",

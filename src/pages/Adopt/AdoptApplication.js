@@ -337,7 +337,7 @@ const AdoptApplication = () => {
               mt: "30px",
             }}
           >
-            user1
+            user
           </Typography>
           {state === 0 ? (
             <Typography
@@ -348,7 +348,7 @@ const AdoptApplication = () => {
                 mt: "30px",
               }}
             >
-              고양이
+              유기동물
             </Typography>
           ) : (
             <Typography

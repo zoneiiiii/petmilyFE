@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import AdoptInfoDetail from "./AdoptInfoDetail";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
@@ -32,6 +32,7 @@ const AdoptInfo = () => {
     }
     setLoading(false);
   };
+
   useEffect(() => {
     fetchData();
   }, []);
