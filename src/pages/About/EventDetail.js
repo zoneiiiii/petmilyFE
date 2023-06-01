@@ -84,9 +84,10 @@ const EventDetail = () => {
                   borderBottom: "unset",
                   fontSize: "2rem",
                   fontWeight: 600,
+                  lineHeight: "2.5rem",
                 }}
               >
-                [이벤트] {data && data.subject}
+                {data && data.subject}
               </TableCell>
             </TableRow>
             <TableRow sx={{ display: "flex" }}>
@@ -96,42 +97,25 @@ const EventDetail = () => {
                   ml: 2,
                   display: "flex",
                   alignItems: "center",
-                  borderBottom: "1px solid #bfbfbf",
+                  fontSize: "1rem",
+                  flexGrow: 1,
                 }}
               >
                 <Avatar alt="profile" src={data && data.imgSrc} />
-              </TableCell>
-              <TableCell
-                sx={{
-                  display: "flex",
-                  justifyContent: "flex-start",
-                  alignItems: "center",
-                  fontSize: "1rem",
-                }}
-              >
+                &nbsp;
                 {data && data.nickname}
               </TableCell>
               <TableCell
                 sx={{
-                  flexGrow: 1,
                   display: "flex",
-                  alignItems: "flex-start",
+                  alignItems: "center",
+                  fontWeight: 600,
                 }}
               >
-                행사기간:
-                {data && dayjs(data.postDate).format("YY/MM/DD")} ~{" "}
+                행사기간: {data && dayjs(data.startDate).format("YY/MM/DD")} ~{" "}
                 {data && data.endDate
                   ? dayjs(data.endDate).format("YY/MM/DD")
                   : ""}
-              </TableCell>
-              <TableCell
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                작성일자:{" "}
-                {data && dayjs(data.postDate).format("YY/MM/DD HH:mm:ss")}
               </TableCell>
               <TableCell
                 sx={{
