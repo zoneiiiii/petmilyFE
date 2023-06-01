@@ -120,6 +120,18 @@ const useStyles = makeStyles({  // 게시글 목록 css
     writelink: {
         textDecoration: "none",
     },
+
+    subject: {
+        // fontWeight: "bold",
+        fontSize: "0.9rem",
+        lineHeight: "1.4em",
+        height: "1.4em",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        display: "-webkit-box",
+        WebkitLineClamp: "2",
+        WebkitBoxOrient: "vertical",
+    }
 });
 
 const FreeBoard = () => {
@@ -233,7 +245,7 @@ const FreeBoard = () => {
                                     <StyledTableRow>
                                         <StyledTableCell align="center" sx={{ minWidth: 10, background: '#FBD385' }}>No.</StyledTableCell>
                                         <StyledTableCell align="center" sx={{ minWidth: 200, background: '#FBD385' }}>제목</StyledTableCell>
-                                        <StyledTableCell align="center" sx={{ minWidth: 50, background: '#FBD385' }}>작성자</StyledTableCell>
+                                        <StyledTableCell align="center" sx={{ minWidth: 40, maxWidth: 40, background: '#FBD385' }}>작성자</StyledTableCell>
                                         <StyledTableCell align="center" sx={{ minWidth: 50, background: '#FBD385' }}>조회수</StyledTableCell>
                                         <StyledTableCell align="center" sx={{ minWidth: 10, background: '#FBD385' }} onClick={handleSortRequest}>
                                             <TableSortLabel active={false} direction={orderDirection}>
@@ -253,6 +265,7 @@ const FreeBoard = () => {
                                                     <StyledTableCell align="center" sx={{ minWidth: 300 }}>
                                                         <Link
                                                             to={COMMUNITY.FREE_DETAIL(list.boardNum)}
+                                                            className={classes.subject}
                                                             style={{ textDecoration: "none", color: "black" }}
                                                         >
                                                             {list.freeSubject}
