@@ -245,10 +245,10 @@ const Router = () => {
               path={BROWSER_PATH.COMMUNITY.FLEA_DETAIL()}
               element={<Page.Community.FleaDetail />}
             />
-            {/* <Route
+            <Route
               path={BROWSER_PATH.COMMUNITY.FLEA_MODIFY()}
               element={<Page.Community.FleaModify />}
-            /> */}
+            />
             <Route
               path={BROWSER_PATH.COMMUNITY.FLEA_WRITE}
               element={<Page.Community.FleaWrite />}
@@ -329,6 +329,10 @@ const Router = () => {
             <Route
               path={BROWSER_PATH.ADMIN.QNA}
               element={<Page.Admin.AdminQnA />}
+            />
+            <Route
+              path={BROWSER_PATH.ADMIN.DONATION}
+              element={<Page.Admin.AdminDonation />}
             />
           </Route>
         </Routes>

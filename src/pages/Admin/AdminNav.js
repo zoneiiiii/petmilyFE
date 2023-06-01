@@ -11,6 +11,7 @@ import NoteAltIcon from "@mui/icons-material/NoteAlt";
 import HelpCenterIcon from "@mui/icons-material/HelpCenter";
 import PetsIcon from "@mui/icons-material/Pets";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
+import VolunteerActivismOutlinedIcon from "@mui/icons-material/VolunteerActivismOutlined";
 import { ADMIN } from "../../constants/PageURL";
 import { Link } from "react-router-dom";
 
@@ -77,6 +78,17 @@ export const mainListItems = (
           <HelpCenterIcon />
         </ListItemIcon>
         <ListItemText primary="1:1문의" />
+      </ListItemButton>
+    </Link>
+    <Link
+      to={ADMIN.DONATION}
+      style={{ textDecoration: "none", color: "black" }}
+    >
+      <ListItemButton>
+        <ListItemIcon>
+          <VolunteerActivismOutlinedIcon />
+        </ListItemIcon>
+        <ListItemText primary="기부관리" />
       </ListItemButton>
     </Link>
   </React.Fragment>

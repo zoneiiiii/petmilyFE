@@ -98,6 +98,8 @@ const MissingBoard = () => {
                               height: "100%",
                               display: "flex",
                               flexDirection: "column",
+                              border: "1px solid rgb(233, 236, 239)",
+                              boxShadow: "1px 1px 4px 0px rgb(233, 236, 239)"
                             }}
                           >
                             <CardImage src={card.imgThumbnail} />
@@ -167,19 +169,27 @@ const Top = styled.h1`
       `;
 
 const SearchContainer = styled.div`
-      float:right;
-      `;
+  float: right;
+  margin-left: auto;
+  margin-bottom: 20px;
+`;
 
 const CardImage = styled.img`
-      width: 100%;
-      height: auto;
-      margin-bottom: 10px;
-      `;
+  // width: auto;
+  height: auto;
+  object-fit: cover;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  margin: 0.5rem;
+  `;
 
 const CardTitle = styled.p`
       font-weight: bold;
-      font-size: 16px;
-      margin-bottom: 5px;
+      font-size: 0.9rem;
+      margin: 0.5rem 0.5rem;
       line-height: 1.4em;
       height: 2.8em;
       overflow: hidden;

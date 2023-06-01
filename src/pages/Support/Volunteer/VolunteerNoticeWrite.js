@@ -513,9 +513,9 @@ const VolunteerNoticeWrite = () => {
                     글쓰기
                   </S.WriteButton>
                   <S.ButtonSpace />
-                  <S.WriteButton onClick={handleCancel} variant="contained">
+                  <S.CancleButton onClick={handleCancel} variant="contained">
                     취소
-                  </S.WriteButton>
+                  </S.CancleButton>
                 </S.ButtonGroup>
               </S.FormRow>
             </form>

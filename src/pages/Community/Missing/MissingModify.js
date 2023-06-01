@@ -121,7 +121,7 @@ const MissingModify = () => {
         setAge("");
         setGender("");
         setStatus("");
-        document.location.href = COMMUNITY.MISSING;
+        document.location.href = COMMUNITY.MISSING_DETAIL(id);
     };
 
     // 유효성 검증 상태
@@ -347,7 +347,7 @@ const MissingModify = () => {
                                     </FormRowWithError>
                                 </div>
 
-                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <FormRow>
                                     <SelectContainer>
                                         <p className="title">실종 지역</p>
 
@@ -384,26 +384,26 @@ const MissingModify = () => {
                                         </div>
 
                                         {/* <Select
-                size="small"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-              >
-                <MenuItem value="---">---</MenuItem>
-                <MenuItem value="서울">서울</MenuItem>
-              </Select> */}
-                                    </SelectContainer>
-                                    {/* <SelectContainer>
-                  <p className="title">분류</p>
-                  <Select
                     size="small"
-                    value={species}
-                    onChange={(e) => setSpecies(e.target.value)}
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
                   >
                     <MenuItem value="---">---</MenuItem>
-                    <MenuItem value="강아지">강아지</MenuItem>
-                    <MenuItem value="고양이">고양이</MenuItem>
-                  </Select>
-                </SelectContainer> */}
+                    <MenuItem value="서울">서울</MenuItem>
+                  </Select> */}
+                                    </SelectContainer>
+                                    {/* <SelectContainer>
+                      <p className="title">분류</p>
+                      <Select
+                        size="small"
+                        value={species}
+                        onChange={(e) => setSpecies(e.target.value)}
+                      >
+                        <MenuItem value="---">---</MenuItem>
+                        <MenuItem value="강아지">강아지</MenuItem>
+                        <MenuItem value="고양이">고양이</MenuItem>
+                      </Select>
+                    </SelectContainer> */}
                                     <SelectContainer>
                                         <p className="title">나이</p>
                                         <Select
@@ -428,11 +428,6 @@ const MissingModify = () => {
                                                     {i + 1}살
                                                 </MenuItem>
                                             ))}
-                                            <ErrorMsg>
-                                                <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
-                                                    {ageError ? "나이를 입력해 주세요." : null}
-                                                </FormHelperText>
-                                            </ErrorMsg>
                                         </Select>
                                     </SelectContainer>
                                     <SelectContainer>
@@ -448,14 +443,26 @@ const MissingModify = () => {
                                         >
                                             <MenuItem value="수컷">수컷</MenuItem>
                                             <MenuItem value="암컷">암컷</MenuItem>
-                                            <ErrorMsg>
-                                                <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
-                                                    {genderError ? "성별을 입력해 주세요." : null}
-                                                </FormHelperText>
-                                            </ErrorMsg>
                                         </Select>
                                     </SelectContainer>
-                                </div>
+                                </FormRow>
+                                <FormRow>
+                                    <ErrorMsg>
+                                        <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                                            {ageError ? "지역을 선택해 주세요." : null}
+                                        </FormHelperText>
+                                    </ErrorMsg>
+                                    <ErrorMsg>
+                                        <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                                            {ageError ? "나이를 선택해 주세요." : null}
+                                        </FormHelperText>
+                                    </ErrorMsg>
+                                    <ErrorMsg>
+                                        <FormHelperText sx={{ color: "red", fontSize: "15px", float: "right" }}>
+                                            {genderError ? "성별을 선택해 주세요." : null}
+                                        </FormHelperText>
+                                    </ErrorMsg>
+                                </FormRow>
 
 
                                 <FormRow>
@@ -476,10 +483,13 @@ const MissingModify = () => {
                                                 size="small"
                                                 value={status}
                                                 exclusive
-                                                onChange={(e, value) => setStatus(value)}
+                                                onChange={(e, value) => {
+                                                    setStatusError(false);
+                                                    setStatus(value);
+                                                }}
                                             >
                                                 <ToggleButton
-                                                    value={true}
+                                                    value="실종"
                                                     sx={{
                                                         width: "80px",
                                                         "&.Mui-selected": {
@@ -495,15 +505,15 @@ const MissingModify = () => {
                                                     실종
                                                 </ToggleButton>
                                                 <ToggleButton
-                                                    value={false}
+                                                    value="완료"
                                                     sx={{
                                                         width: "80px",
                                                         "&.Mui-selected": {
-                                                            backgroundColor: "#fbd385",
+                                                            backgroundColor: "#bfbfbf",
                                                             color: "#fff",
                                                         },
                                                         "&.Mui-selected:hover": {
-                                                            backgroundColor: "#ffbe3f",
+                                                            backgroundColor: "#b2b0b0",
                                                             color: "#fff",
                                                         },
                                                     }}
@@ -524,6 +534,12 @@ const MissingModify = () => {
                                             />
                                         </PreviewWrapper>
                                     )}
+
+                                    <ErrorMsg>
+                                        <FormHelperText sx={{ color: "red", fontSize: "15px", float: "right" }}>
+                                            {statusError ? "실종 상태를 선택해 주세요." : null}
+                                        </FormHelperText>
+                                    </ErrorMsg>
                                 </FormRow>
 
                                 <FormRowWithError>
@@ -571,19 +587,13 @@ const MissingModify = () => {
 
                             <Modal
                                 open={openModal}
-                                onClose={handleClose}
+                                onClose={handleModalClose}
                                 aria-labelledby="modal-modal-title"
                                 aria-describedby="modal-modal-description"
                             >
-                                {formAble ? (
-                                    <Alert sx={modalStyle} severity="success">
-                                        작성 완료!
-                                    </Alert>
-                                ) : (
-                                    <Alert sx={modalStyle} severity="warning">
-                                        제목과 내용을 모두 입력해주세요.
-                                    </Alert>
-                                )}
+                                <Alert sx={modalStyle} severity="success">
+                                    작성 완료!
+                                </Alert>
                             </Modal>
                         </form>
                     </Grid >
