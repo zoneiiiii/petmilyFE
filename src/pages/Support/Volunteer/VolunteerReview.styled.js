@@ -44,11 +44,26 @@ export const ButtonContainer = styled.div`
 
 export const VolunteerButton = styled(Button)`
   && {
-    color: #fff;
     background-color: #fbd385;
-    width: auto;
+    color: white;
+    width: 90px;
+    height: 30px;
+    margin-top: 10px;
+    margin-right: 10px;
+    float: right;
     &:hover {
-      background-color: #ffbe3f;
+      background-color: #facc73;
+    }
+    &:focus {
+      background-color: #facc73;
     }
   }
+`;
+
+export const NoDataContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 250px;
+  font-size: 20px;
 `;

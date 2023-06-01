@@ -40,7 +40,7 @@ const VolunteerNotice = () => {
       .then((response) => {
         const totalPages = response.data.totalPages;
 
-        if (urlPage > totalPages) {
+        if (totalPages !== 0 && urlPage > totalPages) {
           setValidPage(false);
           return;
         }
@@ -95,15 +95,19 @@ const VolunteerNotice = () => {
     <S.Container>
       <S.Title>봉사 게시판</S.Title>
       <S.CardContainer>
-        <S.CardGrid>
-          {data.map(
-            (
-              card //map함수로 cards에 있는 데이터 전부 보여줌.
-            ) => (
-              <VolunteerCard {...card} key={card.boardNum} />
-            )
-          )}
-        </S.CardGrid>
+        {data.length === 0 ? (
+          <S.NoDataContainer>게시글이 없습니다.</S.NoDataContainer>
+        ) : (
+          <S.CardGrid>
+            {data.map(
+              (
+                card //map함수로 cards에 있는 데이터 전부 보여줌.
+              ) => (
+                <VolunteerCard {...card} key={card.boardNum} />
+              )
+            )}
+          </S.CardGrid>
+        )}
       </S.CardContainer>
       <ThemeProvider theme={CustomTheme}>
         <VolunteerPagination
@@ -115,7 +119,7 @@ const VolunteerNotice = () => {
         {loggedIn && (
           <S.ButtonContainer>
             <Link to={SUPPORT.VOLUNTEER_NOTICE_WRITE}>
-              <S.VolunteerButton>글 작성</S.VolunteerButton>
+              <S.VolunteerButton>글쓰기</S.VolunteerButton>
             </Link>
           </S.ButtonContainer>
         )}
