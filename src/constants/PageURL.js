@@ -58,15 +58,34 @@ export const MYPAGE = {
   ADOPTLIST: "/mypage/adoptlist",
 
   /**
-   ** 내가 쓴 글 페이지 URL
-   ** 사용법: MYPAGE.BOARD(id)
-   * @return "/mypage/board/:id" (id 없음)
-   * @return "/mypage/board/" + id (id 존재)
+   ** 내가 쓴 글 페이지(실종) URL
+   * @return "/mypage/board/missing
    **/
-  BOARD: (id) => {
-    if (id === undefined) return "/mypage/board/:id";
-    else return "/mypage/board/" + id;
-  },
+  BOARD_MISSING: "/mypage/board/missing",
+
+  /**
+   ** 내가 쓴 글 페이지(목격) URL
+   * @return "/mypage/board/find
+   **/
+  BOARD_FIND: "/mypage/board/find",
+
+  /**
+   ** 내가 쓴 글 페이지(자유) URL
+   * @return "/mypage/board/free
+   **/
+  BOARD_FREE: "/mypage/board/free",
+
+  /**
+   ** 내가 쓴 글 페이지(매매장터) URL
+   * @return "/mypage/board/flea
+   **/
+  BOARD_FLEA: "/mypage/board/flea",
+
+  /**
+   ** 내가 쓴 글 페이지(봉사후기) URL
+   * @return "/mypage/board/volunteer
+   **/
+  BOARD_VOLUNTEER: "/mypage/board/volunteer",
 
   /**1:1 문의 페이지 URL
    * @return "/mypage/qna"
