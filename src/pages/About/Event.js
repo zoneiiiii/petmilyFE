@@ -174,6 +174,7 @@ const Event = () => {
                       sx={{
                         borderBottom: "1px solid #bfbfbf",
                         borderTop: "1px solid #bfbfbf",
+                        MaxWidth: { pageWidth },
                       }}
                     >
                       <StyledLink
@@ -190,45 +191,57 @@ const Event = () => {
                             display: "flex",
                           }}
                         >
+                          <Box>
+                            <img
+                              alt={data.no}
+                              src={
+                                data.thumbnail
+                                  ? data.thumbnail
+                                  : "/images/petmilylogo.png"
+                              }
+                              style={{ width: "300px", height: "150px" }}
+                            />
+                          </Box>
                           <Box
                             sx={{
-                              ...imgSx,
-                              height: "120px",
+                              height: "150px",
+                              width: "768px",
+                              display: "flex",
+                              flexWrap: "wrap",
+                              flexDirection: "column",
+                              justifyContent: "center",
+                              AlignContents: "space-between",
                             }}
                           >
                             <Box
+                              className="hover"
                               sx={{
-                                imgSx,
+                                maxWidth: "768px",
+                                // justifySelf: "center",
+                                fontSize: "1.5rem",
+                                fontWeight: "bold",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "wrap",
+                                p: 2,
                               }}
                             >
-                              <img
-                                alt={data.no}
-                                src={
-                                  data.thumbnail
-                                    ? data.thumbnail
-                                    : "/images/petmilylogo.png"
-                                }
-                                style={{ maxWidth: "180px", maxHeight: "90px" }}
-                              />
+                              {data.subject}
                             </Box>
-                            <Box>
+                            <Box
+                              sx={{
+                                minWidth: "90px",
+                                alignSelf: "flex-end",
+                                justifySelf: "flex-end",
+                                // flexWrap: "nowrap",
+                                padding: "8px",
+                                fontWeight: 600,
+                              }}
+                            >
+                              행사기간:{" "}
                               {dayjs(data.startDate).format("YY/MM/DD")} ~{" "}
                               {dayjs(data.endDate).format("YY/MM/DD")}
                             </Box>
-                          </Box>
-                          <Box className="hover" sx={titleSx}>
-                            {data.subject}
-                          </Box>
-                          <Box sx={{ ...tdSx, minWidth: "100px" }}>
-                            {data.writer}
-                          </Box>
-                          <Box sx={{ ...tdSx, minWidth: "50px" }}>
-                            <VisibilityIcon fontSize="small" color="disabled" />
-                            &nbsp;
-                            {data.count}
-                          </Box>
-                          <Box sx={{ ...tdSx, minWidth: "90px" }}>
-                            {dayjs(data.postDate).format("YY/MM/DD HH:mm:ss")}
                           </Box>
                         </Box>
                       </StyledLink>
@@ -291,8 +304,8 @@ const imgSx = {
   flexWrap: "wrap",
   justifyContent: "center",
   alignContent: "center",
-  width: "180px",
-  height: "90px",
+  width: "300px",
+  height: "150px",
 };
 const tdSx = {
   p: 2,
@@ -309,13 +322,15 @@ const titleSx = {
   flexGrow: 1,
   textAlign: "left",
   justifyContent: "left",
-  fontSize: "1.2rem",
+  fontSize: "1.5rem",
+  fontWeight: "bold",
   overflow: "hidden",
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
 };
 const StyledLink = styled(Link)`
   text-decoration: none;
+  text-underline-offset: 5px;
   color: black;
   :hover {
     .hover {
