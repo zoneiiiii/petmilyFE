@@ -29,20 +29,6 @@ function MyInfo() {
       .catch((error) => console.error("에러발생:", error));
   }, []);
 
-  const member = {
-    num: 1,
-    id: "PetLove",
-    pw: "12345678",
-    nickname: "",
-    email: "asdf@naver.com",
-    name: "이기자",
-    gender: "남자",
-    birth: "2023-01-01",
-    tel: "010-1234-5678",
-    img: "",
-    role: "user",
-  };
-
   const gender = (value) => {
     if (value === "male") return "남자";
     if (value === "female") return "여자";
