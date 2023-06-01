@@ -237,14 +237,26 @@ const AdoptApplication = () => {
             marginTop: "30px",
           }}
         >
-          <img
-            className="ProfileImg"
-            src={"./../images/emptyProfile.png"}
-            alt="profile"
-            width={"300px"}
-            height={"300px"}
-            style={{ borderRadius: "50%", marginRight: "20px" }}
-          />
+          <div>
+            <img
+              className="ProfileImg"
+              src={"./../images/emptyProfile.png"}
+              alt="profile"
+              width={"300px"}
+              height={"300px"}
+              style={{ borderRadius: "50%", marginRight: "20px" }}
+            />
+            <Typography
+              component="h4"
+              variant="h5"
+              sx={{
+                color: "black",
+                mt: "30px",
+              }}
+            >
+              user
+            </Typography>
+          </div>
           <img
             className="Arrow"
             src="./../images/Arrow.png"
@@ -252,6 +264,7 @@ const AdoptApplication = () => {
             style={{
               objectFit: "contian",
               marginRight: "20px",
+              paddingBottom: "60px",
             }}
           />
           {state === 0 ? (
@@ -272,6 +285,7 @@ const AdoptApplication = () => {
                 onMouseLeave={handleLeave}
                 onClick={() => navigate(ADOPT.ADOPT)}
               />
+
               {isHover && (
                 <div
                   onClick={() => navigate(ADOPT.ADOPT)}
@@ -308,16 +322,38 @@ const AdoptApplication = () => {
                   </Typography>
                 </div>
               )}
+              <Typography
+                component="h4"
+                variant="h5"
+                sx={{
+                  color: "black",
+                  mt: "30px",
+                }}
+              >
+                유기동물
+              </Typography>
             </div>
           ) : (
-            <img
-              className="AdoptedCat"
-              src={state.profile}
-              alt="profile"
-              width={"300px"}
-              height={"300px"}
-              style={{ borderRadius: "50%" }}
-            />
+            <div>
+              <img
+                className="AdoptedCat"
+                src={state.profile}
+                alt="profile"
+                width={"300px"}
+                height={"300px"}
+                style={{ borderRadius: "50%" }}
+              />
+              <Typography
+                component="h4"
+                variant="h5"
+                sx={{
+                  color: "black",
+                  mt: "30px",
+                }}
+              >
+                {state.desertionNo}
+              </Typography>
+            </div>
           )}
         </div>
         <div
@@ -328,41 +364,7 @@ const AdoptApplication = () => {
             width: "650px",
             justifyContent: "space-between",
           }}
-        >
-          <Typography
-            component="h4"
-            variant="h5"
-            sx={{
-              color: "black",
-              mt: "30px",
-            }}
-          >
-            user
-          </Typography>
-          {state === 0 ? (
-            <Typography
-              component="h4"
-              variant="h5"
-              sx={{
-                color: "black",
-                mt: "30px",
-              }}
-            >
-              유기동물
-            </Typography>
-          ) : (
-            <Typography
-              component="h4"
-              variant="h5"
-              sx={{
-                color: "black",
-                mt: "30px",
-              }}
-            >
-              {state.desertionNo}
-            </Typography>
-          )}
-        </div>
+        ></div>
         <div
           style={{
             display: "flex",
