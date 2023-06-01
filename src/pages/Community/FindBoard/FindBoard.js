@@ -173,15 +173,15 @@ const SearchContainer = styled.div`
 `;
 
 const CardImage = styled.img`
-  // width: auto;
-  height: 100%;
-  object-fit: cover;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-  margin: 0.5rem;
+    width: auto;
+    height: 250px;
+    object-fit: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    margin: 0.5rem;
   `;
 
 const CardTitle = styled.p`
