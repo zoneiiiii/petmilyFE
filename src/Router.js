@@ -299,6 +299,10 @@ const Router = () => {
               element={<Page.Admin.AdminAdopt />}
             />
             <Route
+              path={BROWSER_PATH.ADMIN.ADMIN_ADOPT()}
+              element={<Page.Admin.AdminAdoptDetail />}
+            />
+            <Route
               path={BROWSER_PATH.ADMIN.BOARD}
               element={<Page.Admin.AdminBoard />}
             />

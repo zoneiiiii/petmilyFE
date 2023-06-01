@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Grid, Card } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
@@ -15,9 +15,11 @@ const AdoptInfoDetail = (props) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [animalIndex, setAnimalIndex] = useState(0);
+  const [petChk, setPetChk] = useState([]);
   const [animallength, setAnimalLength] = useState("");
   const [displayData, setDisplayedData] = useState();
   const { uprCd, name, code } = props;
+  const [isLoading, setIsLoading] = useState(true);
   const today = new Date();
   const year = today.getFullYear();
   const month = ("0" + (today.getMonth() + 1)).slice(-2);
@@ -31,22 +33,32 @@ const AdoptInfoDetail = (props) => {
 
   const fetchData = async () => {
     try {
-      setLoading(true);
-      const response = await axios.get(
-        `http://apis.data.go.kr/1543061/abandonmentPublicSrvc/abandonmentPublic?bgnde=20230101&endde=${dateString}&upr_cd=${uprCd}&org_cd=${code}&pageNo=1&numOfRows=100&serviceKey=AhrFaZaAefMdQ7n5tWepAOM5tzLw5%2BCiT3stOXtEl3uTyXNtr0xlgtAn6WZppVVYaZdAuyqJvj%2FS65SSV4iapw%3D%3D&_type=json`
-      );
+      const [petChkResponse, response] = await Promise.all([
+        axios.get(`/pet/list`),
+        axios.get(
+          `http://apis.data.go.kr/1543061/abandonmentPublicSrvc/abandonmentPublic?bgnde=20230101&endde=${dateString}&upr_cd=${uprCd}&org_cd=${code}&pageNo=1&numOfRows=100&serviceKey=AhrFaZaAefMdQ7n5tWepAOM5tzLw5%2BCiT3stOXtEl3uTyXNtr0xlgtAn6WZppVVYaZdAuyqJvj%2FS65SSV4iapw%3D%3D&_type=json`
+        ),
+      ]);
+
+      const petChkData = petChkResponse.data;
+      setPetChk(petChkData);
+
       const data2 = response.data.response.body.items.item;
 
-      const filteredData = data2.filter(
-        (item) => item.processState === "보호중"
-      );
+      const desertionNoList = petChkData.map((pet) => pet.petName);
+
+      const filteredData = data2.filter((item) => {
+        return (
+          !desertionNoList.includes(item.desertionNo) &&
+          item.processState === "보호중"
+        );
+      });
 
       setData(filteredData);
       setAnimalLength(filteredData.length);
     } catch (e) {
       setError(e);
     }
-    setLoading(false);
   };
 
   const moveLeft = useCallback(() => {
@@ -150,7 +162,7 @@ const AdoptInfoDetail = (props) => {
     }
 
     return result;
-  }, [data, animalIndex, loading]);
+  }, [data, animalIndex]);
 
   useEffect(() => {
     fetchData();

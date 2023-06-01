@@ -99,6 +99,8 @@ const AdoptApplication = () => {
           shelterTel: state.careTel,
           shelterAddr: state.careAddr,
           shelterDate: isoCurrentDate,
+          sexCd: state.sexCd,
+          neuterYn: state.neuterYn,
         });
         const adoptRequest = axios.post("/adopt/insert", {
           petName: state.desertionNo,
@@ -335,7 +337,7 @@ const AdoptApplication = () => {
               mt: "30px",
             }}
           >
-            user1
+            user
           </Typography>
           {state === 0 ? (
             <Typography
@@ -346,7 +348,7 @@ const AdoptApplication = () => {
                 mt: "30px",
               }}
             >
-              고양이
+              유기동물
             </Typography>
           ) : (
             <Typography
