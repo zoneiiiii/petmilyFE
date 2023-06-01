@@ -105,8 +105,6 @@ const MissingBoard = () => {
                             <CardImage src={card.imgThumbnail} />
                             <div>
                               <CardTitle>{card.boardSubject}</CardTitle>
-                            </div>
-                            <div>
                               <CardWritter>{card.memberNickName}</CardWritter>
                               <CardCount>조회 {card.boardCount}</CardCount>
                             </div>
@@ -150,8 +148,7 @@ const Section = styled.section`
 `
 
 const MainContainer = styled.div`
-  width: 60vw;
-  // width: 1150px;
+  width: 1008px;
   max-width: 1150px;
   min-width: 790px;
   border-radius: 8px;
@@ -177,8 +174,9 @@ const SearchContainer = styled.div`
 `;
 
 const CardImage = styled.img`
+  // fullWidth;
   width: auto;
-  height: 250px;
+  height: 196px;
   object-fit: cover;
   background-size: cover;
   background-repeat: no-repeat;

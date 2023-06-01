@@ -146,8 +146,7 @@ const Section = styled.section`
 `
 
 const MainContainer = styled.div`
-  width: 60vw;
-  // width: 1150px;
+  width: 1008px;
   max-width: 1150px;
   min-width: 790px;
   border-radius: 8px;
@@ -173,8 +172,8 @@ const SearchContainer = styled.div`
 `;
 
 const CardImage = styled.img`
-    width: auto;
-    height: 250px;
+width: auto;
+height: 196px;
     object-fit: cover;
     background-size: cover;
     background-repeat: no-repeat;
