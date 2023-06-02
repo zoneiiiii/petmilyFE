@@ -206,7 +206,7 @@ const EventDetail = () => {
           <Button
             variant="contained"
             sx={{ mt: 2, width: "100px" }}
-            color="bfbfbf"
+            color="warning"
             onClick={() =>
               navigate(
                 ABOUT.EVENT({
@@ -235,7 +235,7 @@ const EventDetail = () => {
             <Button
               variant="contained"
               sx={{ ml: 2, width: "100px" }}
-              color="ff8282"
+              color="error"
               onClick={deleteData}
             >
               삭제
@@ -252,6 +252,14 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   color: black;
   font-weight: 600;
+
+  .subject {
+    max-width: 450px;
+    text-align: start;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
   :hover {
     .subject {

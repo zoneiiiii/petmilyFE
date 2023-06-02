@@ -216,13 +216,13 @@ const Event = () => {
                             <Box
                               className="hover"
                               sx={{
-                                maxWidth: "768px",
+                                maxWidth: "736px",
                                 // justifySelf: "center",
                                 fontSize: "1.5rem",
                                 fontWeight: "bold",
                                 overflow: "hidden",
                                 textOverflow: "ellipsis",
-                                whiteSpace: "wrap",
+                                whiteSpace: "nowrap",
                                 p: 2,
                               }}
                             >
@@ -270,7 +270,7 @@ const Event = () => {
             count={totalPage}
             defaultPage={nowPage}
             page={nowPage}
-            color="fbd385"
+            color="primary"
             showFirstButton
             showLastButton
             onChange={handleChangePage}
