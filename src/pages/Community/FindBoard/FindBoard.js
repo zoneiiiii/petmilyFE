@@ -72,6 +72,15 @@ const FindBoard = () => {
         return <NotFound />; //존재하지 않는 번호를 넣었을 때 표시할 컴포넌트
     }
 
+    const formatDate = (dateString) => {
+        //날짜 변환함수
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}/${month}/${day}`;
+    };
+
     return (
         <ThemeProvider theme={CustomTheme}>
             <Section className="result">
@@ -106,6 +115,7 @@ const FindBoard = () => {
                                                         <div>
                                                             <CardTitle>{card.boardSubject}</CardTitle>
                                                             <CardWritter>{card.memberNickName}</CardWritter>
+                                                            <CardDate>{formatDate(card.boardDate)}</CardDate>
                                                             <CardCount>조회 {card.boardCount}</CardCount>
                                                         </div>
                                                     </Card>
@@ -136,7 +146,7 @@ const FindBoard = () => {
                     </ContainerBox >
                 </MainContainer>
             </Section>
-        </ThemeProvider>
+        </ThemeProvider >
     );
 };
 
@@ -172,8 +182,8 @@ const SearchContainer = styled.div`
 `;
 
 const CardImage = styled.img`
-width: auto;
-height: 196px;
+    width: auto;
+    height: 196px;
     object-fit: cover;
     background-size: cover;
     background-repeat: no-repeat;
@@ -208,6 +218,13 @@ const CardCount = styled.p`
       float: right;
       margin-right: 10px;
       `
+
+const CardDate = styled.p`
+font-size: 14px;
+color: #888;
+float: left;
+margin-left: 10px
+`
 
 const ContainerBox = styled.div`
     

@@ -58,6 +58,14 @@ const FleaBoard = () => {
         return <NotFound />; //존재하지 않는 번호를 넣었을 때 표시할 컴포넌트
     }
 
+    const formatDate = (dateString) => {
+        //날짜 변환함수
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}/${month}/${day}`;
+    };
 
     return (
         <ThemeProvider theme={CustomTheme}>
@@ -65,7 +73,7 @@ const FleaBoard = () => {
                 <MainContainer>
                     <Top>중고장터</Top>
 
-                    <Container sx={{ py: '30px' }} maxWidth="60vw">
+                    <Container maxWidth="60vw">
                         <SearchContainer>
                             <SearchBar />
                         </SearchContainer>
@@ -89,6 +97,7 @@ const FleaBoard = () => {
                                                 </div>
                                                 <div>
                                                     <CardCost>{(item.boardCost).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원</CardCost>
+                                                    <CardDate>{formatDate(item.boardDate)}</CardDate>
                                                     <CardStatus>
                                                         {(item.boardStatus === true) ?
                                                             (<p>판매중</p>) :
@@ -182,6 +191,13 @@ color: rgb(255, 138, 61);
 font-size: 20px;
 margin-left: 0.5em;
 `;
+
+const CardDate = styled.p`
+    font-size: 14px;
+    color: #888;
+    float: left;
+    margin-left: 10px
+`
 
 const CardStatus = styled.div`
     font-size: 16px;
