@@ -9,7 +9,7 @@ const Container = styled.div`
 
 const TotalDonation = styled.p`
   text-align: right;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: bold;
   margin: 20px 0;
 `;
@@ -23,6 +23,7 @@ const RecentDonations = styled.div`
 const DonationColumn = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 20px;
   width: 100%;
   margin-bottom: 40px;
@@ -37,7 +38,7 @@ const TableTitle = styled.div`
 `;
 
 const Table = styled.table`
-  width: 100%;
+  width: 90%;
   text-align: left;
   border-collapse: collapse;
 `;

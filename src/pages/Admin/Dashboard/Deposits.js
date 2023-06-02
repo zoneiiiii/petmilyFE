@@ -1,27 +1,30 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import Title from "./Title";
-
-function preventDefault(event) {
-  event.preventDefault();
-}
+import dayjs from "dayjs";
+import "dayjs/locale/ko";
+import axios from "axios";
 
 export default function Deposits() {
+  const formatCurrency = (number) => {
+    return number.toLocaleString("ko-KR", { currency: "KRW" }) + "원";
+  };
+
   return (
     <React.Fragment>
-      <Title>Recent Deposits</Title>
+      <Title>누적 판매금</Title>
       <Typography component="p" variant="h4">
-        $3,024.00
+        {formatCurrency(447220)}
       </Typography>
-      <Typography color="text.secondary" sx={{ flex: 1 }}>
-        on 15 월요일, 2019
+      <Typography
+        color="text.secondary"
+        sx={{ flex: 1 }}
+        style={{ marginTop: "16px" }}
+      >
+        {dayjs().locale("ko").format("YYYY-MM-DD dddd")}
       </Typography>
-      <div>
-        <Link color="primary" href="#" onClick={preventDefault}>
-          View balance
-        </Link>
-      </div>
+      <div></div>
     </React.Fragment>
   );
 }
