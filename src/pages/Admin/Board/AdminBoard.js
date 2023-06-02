@@ -23,45 +23,60 @@ import { useEffect, useState } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import axios from "axios";
 import dayjs from "dayjs";
-
-const boardName = {
-  notice: "공지사항",
-  event: "이벤트",
-  adoptReview: "입양후기게시판",
-  missing: "실종동물게시판",
-  find: "목격제보게시판",
-  free: "자유게시판",
-  flea: "매매장터",
-  volunteer: "봉사하기",
-  volunteerReview: "봉사후기",
-};
+import BoardCategorySelector from "./BoardCategorySelector";
+import SearchBox from "./SearchBox";
+import AdminTable from "./AdminTable";
 
 const AdminBoard = () => {
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState({ value: "", path: "" });
   const [board, setBoard] = useState(null);
   const [page, setPage] = useState(0);
+  const [search, setSearch] = useState();
+  const [search_mode, setSearch_mode] = useState();
   const [totalElements, setTotalElements] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [orderTarget, setOrderTarget] = useState();
-  const [orderBy, setOrderBy] = useState("asc");
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
-    switch (category) {
-      case boardName.notice:
-        getData(page, rowsPerPage, null, null);
-        break;
-      case boardName.event:
-        break;
-      default:
-        setBoard(null);
-    }
+    if (category.value.length > 0) getData();
+    console.log("after getData page", page);
   }, [category, page, rowsPerPage]);
 
-  const getData = (page, limit, search, search_mode) => {
-    let queryText = "/notice/list";
-    if (page) {
+  const getData = () => {
+    axios
+      .get(setQuery(category, page, rowsPerPage))
+      .then((response) => {
+        console.log(response);
+        setBoard(
+          response.data.length !== 0 && response.data.content.length !== 0
+            ? response.data.content
+            : []
+        );
+        setPage(
+          response.data.length !== 0 && response.data.content.length !== 0
+            ? parseInt(response.data.number)
+            : 0
+        );
+        setTotalElements(
+          response.data.length !== 0 && response.data.content.length !== 0
+            ? parseInt(response.data.totalElements)
+            : 0
+        );
+      })
+      .catch((error) => {
+        console.error("axios 오류 : ", error);
+        setBoard(null);
+        setPage(0);
+        setTotalElements(0);
+      });
+  };
+
+  const setQuery = () => {
+    console.log("query:", category);
+    let queryText = category.path;
+    if (page !== undefined) {
       queryText += "?page=" + page;
-      if (limit) queryText += "&limit=" + limit;
+      if (rowsPerPage) queryText += "&limit=" + rowsPerPage;
       if (search)
         search_mode
           ? (queryText +=
@@ -71,115 +86,66 @@ const AdminBoard = () => {
               search_mode)
           : (queryText += "&search=" + encodeURIComponent(search));
     }
-    console.log("queryText:", queryText);
-    axios
-      .get(queryText)
-      .then((response) => {
-        console.log(response);
-        setBoard(response.data.content);
-        setPage(parseInt(response.data.number));
-        setTotalElements(parseInt(response.data.totalElements));
-      })
-      .catch((error) => {
-        console.error("axios 오류 : ", error);
-      });
+    return queryText;
   };
 
-  const handleChangeCategory = (event) => {
-    setCategory(event.target.value);
-  };
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const handleOrderBy = () => {
-    orderBy === "asc" ? setOrderBy("desc") : setOrderBy("asc");
-  };
-
-  const handleCheck = () => {};
-
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      },
-    },
-  };
-
-  const headCells = {
-    no: "No",
-    category: "카테고리",
-    title: "제목",
-    writer: "작성자",
-    postDate: "작성날짜",
-    content: "내용",
-  };
+  // const getData = (page, limit, search, search_mode) => {
+  //   console.log("page:", page, "rowsPerPage", rowsPerPage);
+  //   let queryText = "/notice/list";
+  //   if (page !== undefined) {
+  //     queryText += "?page=" + page;
+  //     if (limit) queryText += "&limit=" + limit;
+  //     if (search)
+  //       search_mode
+  //         ? (queryText +=
+  //             "&search=" +
+  //             encodeURIComponent(search) +
+  //             "&search_mode=" +
+  //             search_mode)
+  //         : (queryText += "&search=" + encodeURIComponent(search));
+  //   }
+  //   // console.log("queryText:", queryText);
+  //   axios
+  //     .get(queryText)
+  //     .then((response) => {
+  //       console.log(response);
+  //       setBoard(response.data.content);
+  //       setPage(parseInt(response.data.number));
+  //       setTotalElements(parseInt(response.data.totalElements));
+  //       setShow(true);
+  //     })
+  //     .catch((error) => {
+  //       console.error("axios 오류 : ", error);
+  //     });
+  // };
 
   return (
     <ThemeProvider theme={CustomTheme}>
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <Paper sx={{ p: 1, mb: 2 }}>
           <Box display={"flex"} justifyContent={"space-between"} mt={2} mb={2}>
-            <FormControl size="small">
-              <InputLabel id="category-label">카테고리</InputLabel>
-              <Select
-                value={category}
-                onChange={handleChangeCategory}
-                labelId="category-label"
-                label="카테고리"
-                MenuProps={MenuProps}
-                sx={{ width: "160px" }}
-              >
-                <MenuItem value={""}>선택</MenuItem>
-                <ListSubheader>------ 소개 ------</ListSubheader>
-                <MenuItem value={boardName.notice}>{boardName.notice}</MenuItem>
-                <MenuItem value={boardName.event}>{boardName.event}</MenuItem>
-                <ListSubheader>------ 입양 ------</ListSubheader>
-                <MenuItem value={boardName.adoptReview}>
-                  {boardName.adoptReview}
-                </MenuItem>
-                <ListSubheader>---- 커뮤니티 ----</ListSubheader>
-                <MenuItem value={boardName.missing}>
-                  {boardName.missing}
-                </MenuItem>
-                <MenuItem value={boardName.find}>{boardName.find}</MenuItem>
-                <MenuItem value={boardName.free}>{boardName.free}</MenuItem>
-                <MenuItem value={boardName.flea}>{boardName.flea}</MenuItem>
-                <ListSubheader>------ 후원 ------</ListSubheader>
-                <MenuItem value={boardName.volunteer}>
-                  {boardName.volunteer}
-                </MenuItem>
-                <MenuItem value={boardName.volunteerReview}>
-                  {boardName.volunteerReview}
-                </MenuItem>
-              </Select>
-            </FormControl>
-            <Box display={"flex"} justifyContent={"flex-end"}>
-              <FormControl size="small" sx={{ mr: 2 }}>
-                <Select defaultValue={1}>
-                  <MenuItem value={1}>제목 + 내용</MenuItem>
-                  <MenuItem value={2}>제목</MenuItem>
-                  <MenuItem value={3}>내용</MenuItem>
-                </Select>
-              </FormControl>
-              <SearchBar />
-            </Box>
+            <BoardCategorySelector
+              category={category}
+              setCategory={setCategory}
+            />
+            <SearchBox />
           </Box>
         </Paper>
-        <Paper>
+        <AdminTable
+          board={board}
+          category={category}
+          page={page}
+          setPage={setPage}
+          totalElements={totalElements}
+          rowsPerPage={rowsPerPage}
+          setRowsPerPage={setRowsPerPage}
+        />
+        {/* <Paper>
           <Table>
             <TableHead>
-              <TableRow>
+              <TableRow sx={{ textAlign: "center" }}>
                 <TableCell>
-                  <Checkbox onClick={handleCheck} />
+                  <Checkbox onClick={handleAllCheckboxClick} />
                 </TableCell>
                 <TableCell>
                   <TableSortLabel
@@ -243,7 +209,11 @@ const AdminBoard = () => {
                   return (
                     <TableRow key={index}>
                       <TableCell>
-                        <Checkbox className="item-checkbox" />
+                        <Checkbox
+                          key={index}
+                          checked={checkboxes[index]}
+                          onClick={(event) => handleCheckboxClick(event, index)}
+                        />
                       </TableCell>
                       <TableCell>{item.num}</TableCell>
                       <TableCell>{category}</TableCell>
@@ -275,7 +245,7 @@ const AdminBoard = () => {
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
           </Box>
-        </Paper>
+        </Paper> */}
       </Container>
     </ThemeProvider>
   );
