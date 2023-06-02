@@ -5,6 +5,7 @@ import { ThemeProvider } from "@mui/material";
 import axios from "axios";
 import NotFound from "../../NotFound/NotFound";
 import Loading from "../../../components/Loading/LoadingPage";
+import styled from "styled-components";
 import Comment from "../../../components/Comment/Comment";
 import { SUPPORT } from "../../../constants/PageURL";
 import DOMPurify from "dompurify";
@@ -61,6 +62,10 @@ const VolunteerReviewDetail = () => {
     navigate(SUPPORT.VOLUNTEER_REVIEW_MODIFY(id));
   };
 
+  const handleReturn = () => {
+    navigate(SUPPORT.VOLUNTEER_REVIEW);
+  };
+
   const handleDelete = async () => {
     // 삭제
     const result = window.confirm("정말 삭제하시겠습니까?");
@@ -87,52 +92,91 @@ const VolunteerReviewDetail = () => {
   };
 
   return (
-    <S.DetailContainer>
-      <S.Title>봉사 후기 게시판</S.Title>
-      <S.DetailTop>
-        <h2>제목 {post.reviewSubject}</h2>
-      </S.DetailTop>
-      <S.TopInfo>
-        <S.UserImg src={post.memberImg}></S.UserImg>
-        <S.TopNickname>{post.memberNickname}</S.TopNickname>
-        <S.TopDate>
-          <AccessTimeIcon sx={{ color: "#808080", width: 18, height: 18 }} />
-          {formatDate(post.reviewDate)}
-        </S.TopDate>
-        <S.TopViewCount>
-          <VisibilityOutlinedIcon
-            sx={{ color: "#808080", width: 18, height: 18 }}
-          />{" "}
-          {post.reviewCount}
-        </S.TopViewCount>
-      </S.TopInfo>
-      <S.DetailMiddle>
-        <div dangerouslySetInnerHTML={createMarkup(post.reviewContent)} />
-      </S.DetailMiddle>
-      <ThemeProvider theme={CustomTheme}>
-        {post.memberNum === userNum && (
-          <S.ButtonsContainer>
-            <S.Buttons onClick={handleEdit} variant="contained">
-              수정
-            </S.Buttons>
-            <S.ButtonsSpace />
-            <S.Buttons onClick={handleDelete} variant="contained">
-              삭제
-            </S.Buttons>
-          </S.ButtonsContainer>
-        )}
+    <ThemeProvider theme={CustomTheme}>
+      <Section className="result">
+        <MainContainer className="result-container">
+          <Container>
+            <Top>봉사 후기 게시판</Top>
+            <S.DetailTop>
+              <h2>제목 {post.reviewSubject}</h2>
+            </S.DetailTop>
 
-        <S.DetailBottom>
-          <S.horizon />
-          <h2>댓글 </h2>
-          <S.horizon />
-          <div style={{ width: "100%" }}>
-            <Comment boardId="volunteerReview" boardNum={id} />
-          </div>
-        </S.DetailBottom>
-      </ThemeProvider>
-    </S.DetailContainer>
+            <S.TopInfo>
+              <S.UserImg src={post.memberImg}></S.UserImg>
+              <S.TopNickname>{post.memberNickname}</S.TopNickname>
+              <S.TopDate>
+                <AccessTimeIcon
+                  sx={{ color: "#808080", width: 18, height: 18 }}
+                />
+                {formatDate(post.reviewDate)}
+              </S.TopDate>
+              <S.TopViewCount>
+                <VisibilityOutlinedIcon
+                  sx={{ color: "#808080", width: 18, height: 18 }}
+                />{" "}
+                {post.reviewCount}
+              </S.TopViewCount>
+            </S.TopInfo>
+            <S.DetailMiddle>
+              <div dangerouslySetInnerHTML={createMarkup(post.reviewContent)} />
+            </S.DetailMiddle>
+            <S.ButtonsContainer>
+              {post.memberNum === userNum && (
+                <>
+                  <S.EditButton onClick={handleEdit} variant="contained">
+                    수정
+                  </S.EditButton>
+                  <S.ButtonsSpace />
+                  <S.DeleteButton onClick={handleDelete} variant="contained">
+                    삭제
+                  </S.DeleteButton>
+                  <S.ButtonsSpace />
+                </>
+              )}
+              <S.ReturnButton onClick={handleReturn}>돌아가기</S.ReturnButton>
+            </S.ButtonsContainer>
+            <S.DetailBottom>
+              <S.horizon />
+              <h2>댓글 </h2>
+              <S.horizon />
+              <div style={{ width: "100%" }}>
+                <Comment boardId="volunteerReview" boardNum={id} />
+              </div>
+            </S.DetailBottom>
+          </Container>
+        </MainContainer>
+      </Section>
+    </ThemeProvider>
   );
 };
 
 export default VolunteerReviewDetail;
+const Section = styled.section`
+  background: #f8f9fa;
+  padding: 30px 0 40px 0;
+`;
+
+const MainContainer = styled.div`
+  width: 60vw;
+  // width: 1150px;
+  max-width: 1150px;
+  min-width: 790px;
+  border-radius: 8px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(233, 236, 239);
+  border-image: initial;
+  margin: 0px auto 20px;
+  background: rgb(255, 255, 255);
+`;
+
+const Container = styled.div`
+  margin: 30px;
+`;
+
+const Top = styled.h1`
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+`;

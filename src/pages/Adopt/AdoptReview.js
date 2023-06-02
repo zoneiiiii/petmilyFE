@@ -90,6 +90,9 @@ const AdoptReview = () => {
                             <div>
                               <CardTitle>{item.reviewSubject}</CardTitle>
                               <CardWritter>{item.memberNickName}</CardWritter>
+                              <CardDate>
+                                {item.reviewDate.replace(/-/g, "/")}
+                              </CardDate>
                               <CardCount>조회 {item.reviewCount}</CardCount>
                             </div>
                           </Card>
@@ -255,7 +258,12 @@ const CardWritter = styled.p`
   // float: left;
   margin-left: 10px;
 `;
-
+const CardDate = styled.p`
+  font-size: 14px;
+  color: #888;
+  float: left;
+  margin-left: 10px;
+`;
 const CardCount = styled.p`
   font-size: 14px;
   color: #888;
