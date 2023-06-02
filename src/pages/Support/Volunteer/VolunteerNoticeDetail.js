@@ -20,6 +20,7 @@ import { SUPPORT } from "../../../constants/PageURL";
 import DOMPurify from "dompurify";
 import { CustomTheme } from "../../../assets/Theme/CustomTheme";
 import { AuthContext } from "../../../contexts/AuthContexts";
+import styled from "styled-components";
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -87,6 +88,10 @@ const VolunteerNoticeDetail = () => {
     //수정
     navigate(SUPPORT.VOLUNTEER_NOTICE_MODIFY(id));
   };
+  const handleReturn = () => {
+    //수정
+    navigate(SUPPORT.VOLUNTEER_NOTICE);
+  };
 
   const handleDelete = async () => {
     // 삭제
@@ -116,142 +121,157 @@ const VolunteerNoticeDetail = () => {
 
   return (
     <ThemeProvider theme={CustomTheme}>
-      <S.DetailContainer>
-        <S.DetailTop>
-          <S.ImageSection>
-            <S.Thumbnail src={post.imgThumbnail} alt="Thumbnail" />
-          </S.ImageSection>
-          <S.InfoSection>
-            <S.DetailInfo>
-              <S.TitleSection>
-                <h1>{post.volunteerSubject}</h1>
-              </S.TitleSection>
-              <TableContainer align="center" sx={{ width: "100%" }}>
-                <Table sx={{ maxWidth: 700 }}>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          fontWeight: "bold",
-                          width: "100px",
-                        }}
-                      >
-                        보호소
-                      </TableCell>
-                      <TableCell>{post.shelterName}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="center" sx={{ fontWeight: "bold" }}>
-                        활동기간
-                      </TableCell>
-                      <TableCell>
-                        {formatDate(post.volunteerStartPeriod)} ~{" "}
-                        {formatDate(post.volunteerEndPeriod)}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="center" sx={{ fontWeight: "bold" }}>
-                        모집인원
-                      </TableCell>
-                      <TableCell>{post.volunteerNumber} 명</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="center" sx={{ fontWeight: "bold" }}>
-                        나이제한
-                      </TableCell>
-                      <TableCell>{post.volunteerAge}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="center" sx={{ fontWeight: "bold" }}>
-                        모집상태
-                      </TableCell>
-                      <TableCell>
-                        {post.volunteerStatus ? "모집중" : "모집완료"}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          fontWeight: "bold",
-                          borderBottom: "none",
-                        }}
-                      >
-                        주소
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          borderBottom: "none",
-                        }}
-                      >
-                        {post.volunteerAddr} {post.volunteerAddrDetail}
-                        &nbsp;
-                        <Button
-                          onClick={handleMapButtonClick}
-                          size="small"
-                          sx={{
-                            color: "#FBD385",
-                            height: "50%",
-                            "&:hover": {
-                              backgroundColor: "#FBD385",
-                              color: "#FFF",
-                            },
-                          }}
-                        >
-                          지도보기
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </S.DetailInfo>
-          </S.InfoSection>
-        </S.DetailTop>
-        <S.horizon />
-        <S.DetailMiddle
-          dangerouslySetInnerHTML={createMarkup(post.volunteerContent)}
-        />
-        {post.memberNum === userNum && (
-          <S.ButtonsContainer>
-            <S.Buttons onClick={handleEdit} variant="contained">
-              수정
-            </S.Buttons>
-            <S.ButtonsSpace />
-            <S.DeleteButton onClick={handleDelete} variant="contained">
-              삭제
-            </S.DeleteButton>
-          </S.ButtonsContainer>
-        )}
-        <S.DetailBottom>
-          <S.horizon />
-          <h2>댓글 </h2>
-          <S.horizon />
-          <div style={{ width: "100%" }}>
-            <Comment boardId="volunteer" boardNum={id} />
-          </div>
-        </S.DetailBottom>
-      </S.DetailContainer>
-      <Popover
-        open={isMapVisible}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-      >
-        {isMapVisible && (
-          <MapModal address={post.volunteerAddr} onClose={handleClose} />
-        )}
-      </Popover>
+      <S.Section className="result">
+        <S.DetailContainer>
+          <Container>
+            <S.DetailTop>
+              <S.ImageSection>
+                <S.Thumbnail src={post.imgThumbnail} alt="Thumbnail" />
+              </S.ImageSection>
+              <S.InfoSection>
+                <S.DetailInfo>
+                  <S.TitleSection>
+                    <h1>{post.volunteerSubject}</h1>
+                  </S.TitleSection>
+                  <TableContainer align="center" sx={{ width: "100%" }}>
+                    <Table sx={{ maxWidth: 700 }}>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell
+                            align="center"
+                            sx={{
+                              fontWeight: "bold",
+                              width: "100px",
+                            }}
+                          >
+                            보호소
+                          </TableCell>
+                          <TableCell>{post.shelterName}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                            활동기간
+                          </TableCell>
+                          <TableCell>
+                            {formatDate(post.volunteerStartPeriod)} ~{" "}
+                            {formatDate(post.volunteerEndPeriod)}
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                            모집인원
+                          </TableCell>
+                          <TableCell>{post.volunteerNumber} 명</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                            나이제한
+                          </TableCell>
+                          <TableCell>{post.volunteerAge}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                            모집상태
+                          </TableCell>
+                          <TableCell>
+                            {post.volunteerStatus ? "모집중" : "모집완료"}
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell
+                            align="center"
+                            sx={{
+                              fontWeight: "bold",
+                              borderBottom: "none",
+                            }}
+                          >
+                            주소 &nbsp;
+                            <Button
+                              onClick={handleMapButtonClick}
+                              size="small"
+                              sx={{
+                                color: "#FBD385",
+                                height: "50%",
+                                "&:hover": {
+                                  backgroundColor: "#FBD385",
+                                  color: "#FFF",
+                                },
+                              }}
+                            >
+                              지도보기
+                            </Button>
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              borderBottom: "none",
+                              alignItems: "center",
+                            }}
+                          >
+                            {post.volunteerAddr} {post.volunteerAddrDetail}
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </S.DetailInfo>
+              </S.InfoSection>
+            </S.DetailTop>
+            <S.horizon />
+            <S.DetailMiddle
+              dangerouslySetInnerHTML={createMarkup(post.volunteerContent)}
+            />
+            <S.ButtonsContainer>
+              {post.memberNum === userNum && (
+                <>
+                  <S.EditButton onClick={handleEdit} variant="contained">
+                    수정
+                  </S.EditButton>
+                  <S.ButtonsSpace />
+                  <S.DeleteButton onClick={handleDelete} variant="contained">
+                    삭제
+                  </S.DeleteButton>
+                  <S.ButtonsSpace />
+                </>
+              )}
+              <S.ReturnButton onClick={handleReturn}>돌아가기</S.ReturnButton>
+            </S.ButtonsContainer>
+            {/* <S.DetailBottom>
+            <S.horizon />
+            <h2>댓글 </h2>
+            <S.horizon />
+            <div style={{ width: "90%" }}>
+              <Comment boardId="volunteer" boardNum={id} />
+            </div>
+          </S.DetailBottom> */}
+
+            <div style={{ width: "100%" }}>
+              <Comment boardId="review" boardNum={id} />
+            </div>
+          </Container>
+        </S.DetailContainer>
+        <Popover
+          open={isMapVisible}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+        >
+          {isMapVisible && (
+            <MapModal address={post.volunteerAddr} onClose={handleClose} />
+          )}
+        </Popover>
+      </S.Section>
     </ThemeProvider>
   );
 };
 
 export default VolunteerNoticeDetail;
+const Container = styled.div`
+  margin: 20px;
+`;

@@ -64,29 +64,36 @@ const MissingWrite = () => {
   const [sidos, setSidos] = useState([]);
   const [siguguns, setSiguguns] = useState([]);
   const [dongs, setDongs] = useState([]);
-  const [weatherUrl, setWeatherUrl] = useState('');
-  const [selectedSido, setSelectedSido] = useState('');
-  const [selectedSigugun, setSelectedSigugun] = useState('');
+  const [weatherUrl, setWeatherUrl] = useState("");
+  const [selectedSido, setSelectedSido] = useState("");
+  const [selectedSigugun, setSelectedSigugun] = useState("");
 
   useEffect(() => {
-    axios.get('<https://zelkun.tistory.com/attachment/cfile8.uf@99BB7A3D5D45C065343307.js>')
-      .then(res => {
+    axios
+      .get(
+        "<https://zelkun.tistory.com/attachment/cfile8.uf@99BB7A3D5D45C065343307.js>"
+      )
+      .then((res) => {
         const hangjungdong = res.data.match(/var hangjungdong = (.+);/)[1];
         const parsedData = JSON.parse(hangjungdong);
         setSidos(parsedData.sido);
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }, []);
 
   const handleSidoChange = (e) => {
     const selectedSido = e.target.value;
-    const filteredSiguguns = sidos.find(sido => sido.sido === selectedSido).sigugun;
+    const filteredSiguguns = sidos.find(
+      (sido) => sido.sido === selectedSido
+    ).sigugun;
     setSiguguns(filteredSiguguns);
   };
 
   const handleSigugunChange = (e) => {
     const selectedSigugun = e.target.value;
-    const filteredDongs = dongs.filter(dong => dong.sido === selectedSido && dong.sigugun === selectedSigugun);
+    const filteredDongs = dongs.filter(
+      (dong) => dong.sido === selectedSido && dong.sigugun === selectedSigugun
+    );
     setDongs(filteredDongs);
   };
 
@@ -94,7 +101,7 @@ const MissingWrite = () => {
     const sido = selectedSido;
     const sigugun = selectedSigugun;
     const dong = e.target.value;
-    const dongCode = sido + sigugun + dong + '00';
+    const dongCode = sido + sigugun + dong + "00";
     const url = `https://www.weather.go.kr/weather/process/timeseries-dfs-body-ajax.jsp?myPointCode=${dongCode}&unit=K`;
     setWeatherUrl(url);
   };
@@ -161,7 +168,7 @@ const MissingWrite = () => {
     }
 
     return isError;
-  }
+  };
 
   const [openModal, setOpenModal] = useState(false); // 모달 상태
   const handleModalClose = () => {
@@ -250,7 +257,7 @@ const MissingWrite = () => {
           <Board>게시글 작성</Board>
           <Grid sx={{ minWidth: 700, mt: 5, mb: 10 }}>
             <form onSubmit={handleSubmit}>
-              <div style={{ margin: 'auto', maxWidth: '700px' }}>
+              <div style={{ margin: "auto", maxWidth: "700px" }}>
                 <FormRowWithError>
                   <TextField
                     label="제목"
@@ -268,7 +275,9 @@ const MissingWrite = () => {
                     </FormHelperText>
                   </ErrorMsg>
                 </FormRowWithError>
-                <div style={{ display: "flex", justifyContent: 'space-between' }}>
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
                   <FormRowWithError>
                     <TextField
                       label="이름"
@@ -312,32 +321,32 @@ const MissingWrite = () => {
                     <div>
                       <select id="sido" onChange={handleSidoChange}>
                         <option value="">선택</option>
-                        {sidos.map(sido => (
-                          <option key={sido.codeNm} value={sido.sido}>{sido.codeNm}</option>
+                        {sidos.map((sido) => (
+                          <option key={sido.codeNm} value={sido.sido}>
+                            {sido.codeNm}
+                          </option>
                         ))}
                       </select>
                       <select id="sigugun" onChange={handleSigugunChange}>
                         <option value="">선택</option>
-                        {siguguns.map(sigugun => (
-                          <option key={sigugun.codeNm} value={sigugun.sigugun}>{sigugun.codeNm}</option>
+                        {siguguns.map((sigugun) => (
+                          <option key={sigugun.codeNm} value={sigugun.sigugun}>
+                            {sigugun.codeNm}
+                          </option>
                         ))}
                       </select>
                       <select id="dong" onChange={handleDongChange}>
                         <option value="">선택</option>
-                        {dongs.map(dong => (
-                          <option key={dong.codeNm} value={dong.dong}>{dong.codeNm}</option>
+                        {dongs.map((dong) => (
+                          <option key={dong.codeNm} value={dong.dong}>
+                            {dong.codeNm}
+                          </option>
                         ))}
                       </select>
                     </div>
                     {/* <div>
                       <iframe id="iframe" style={{ width: '100%', height: '500px' }} src={weatherUrl} />
                     </div> */}
-
-
-
-
-
-
 
                     {/* <div style={{ margin: 'auto' }}>
                       <h1>{`${val1}-${val2}-${val3}`}</h1>
@@ -362,7 +371,9 @@ const MissingWrite = () => {
                       <select onChange={(e) => setVal3(e.target.value)}>
                         <option value="">선택</option>
                         {dong
-                          .filter((el) => el.sido === val1 && el.sigugun === val2)
+                          .filter(
+                            (el) => el.sido === val1 && el.sigugun === val2
+                          )
                           .map((el) => (
                             <option key={el.dong} value={el.dong}>
                               {el.codeNm}
@@ -370,7 +381,6 @@ const MissingWrite = () => {
                           ))}
                       </select>
                     </div> */}
-
                   </SelectContainer>
                   {/* <SelectContainer>
                   <p className="title">분류</p>
@@ -438,12 +448,13 @@ const MissingWrite = () => {
                     </FormHelperText>
                   </ErrorMsg>
                   <ErrorMsg>
-                    <FormHelperText sx={{ color: "red", fontSize: "15px", float: "right" }}>
+                    <FormHelperText
+                      sx={{ color: "red", fontSize: "15px", float: "right" }}
+                    >
                       {genderError ? "성별을 선택해 주세요." : null}
                     </FormHelperText>
                   </ErrorMsg>
                 </FormRow>
-
 
                 <FormRow>
                   <FileContainer>
@@ -451,7 +462,13 @@ const MissingWrite = () => {
                     <label htmlFor="file">
                       <div className="btn-upload">파일 선택</div>
                     </label>
-                    <input type="file" hidden onChange={handleFileChange} className="file" id="file" />
+                    <input
+                      type="file"
+                      hidden
+                      onChange={handleFileChange}
+                      className="file"
+                      id="file"
+                    />
                   </FileContainer>
 
                   {/* <ToggleButton /> */}
@@ -516,7 +533,9 @@ const MissingWrite = () => {
                   )}
 
                   <ErrorMsg>
-                    <FormHelperText sx={{ color: "red", fontSize: "15px", float: "right" }}>
+                    <FormHelperText
+                      sx={{ color: "red", fontSize: "15px", float: "right" }}
+                    >
                       {statusError ? "실종 상태를 선택해 주세요." : null}
                     </FormHelperText>
                   </ErrorMsg>
@@ -552,16 +571,14 @@ const MissingWrite = () => {
                     type="submit"
                     onClick={handleSubmit}
                     variant="contained"
-                  >글쓰기
+                  >
+                    글쓰기
                   </WriteButton>
                   <ButtonsSpace />
 
-                  <ResetButton
-                    variant="contained"
-                    onClick={handleReset}
-                  >취소
+                  <ResetButton variant="contained" onClick={handleReset}>
+                    취소
                   </ResetButton>
-
                 </ButtonsContainer>
               </div>
 
@@ -576,18 +593,17 @@ const MissingWrite = () => {
                 </Alert>
               </Modal>
             </form>
-          </Grid >
+          </Grid>
         </MainContainer>
-      </Section >
-    </ThemeProvider >
+      </Section>
+    </ThemeProvider>
   );
-
 };
 
 const Section = styled.section`
   background: #f8f9fa;
   padding: 30px 0 40px 0;
-`
+`;
 
 const MainContainer = styled.div`
   width: 60vw;
@@ -601,7 +617,7 @@ const MainContainer = styled.div`
   border-image: initial;
   margin: 0px auto 20px;
   background: rgb(255, 255, 255);
-`
+`;
 
 const Board = styled.h1`
   margin-top: 2vw;
@@ -609,11 +625,11 @@ const Board = styled.h1`
 `;
 
 const FormRowWithError = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin-bottom: 16px;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 16px;
+  align-items: center;
 `;
 
 const ErrorMsg = styled.div`
@@ -622,48 +638,48 @@ const ErrorMsg = styled.div`
 `;
 
 const SelectContainer = styled.div`
-                display: flex;
-                gap: 1rem;
-                align-items: flex;
-                margin-bottom: 10px;
-                p {
-                  font-weight: bold;
-                  color: #474747;
-                }
-              `
+  display: flex;
+  gap: 1rem;
+  align-items: flex;
+  margin-bottom: 10px;
+  p {
+    font-weight: bold;
+    color: #474747;
+  }
+`;
 
 const FileContainer = styled.div`
-        display: flex;
-        gap: 1rem;
-        align-items: center;
-        margin-bottom: 10px;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 10px;
 
-        .title {
-            font-weight: bold;
-            color: #474747;
-            margin-right: 50px;
-}
+  .title {
+    font-weight: bold;
+    color: #474747;
+    margin-right: 50px;
+  }
 
-        .btn-upload {
-            width: 150px;
-            height: 30px;
-            background: #ffffff;
-            border: 1px solid #000000;
-            border-radius: 10px;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            &:hover {
-                background: #fbd385;
-                border: 1px solid #fbd385;
-                color: #fff;
+  .btn-upload {
+    width: 150px;
+    height: 30px;
+    background: #ffffff;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover {
+      background: #fbd385;
+      border: 1px solid #fbd385;
+      color: #fff;
     }
-}
-                .file {
-                    display: none;
-}
+  }
+  .file {
+    display: none;
+  }
 `;
 
 const FormRow = styled.div`
@@ -679,7 +695,6 @@ const PreviewWrapper = styled.div`
   align-items: center;
   margin-left: 16px;
 `;
-
 
 const EditorWrapper = styled.div`
   .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
@@ -730,7 +745,7 @@ const ButtonsSpace = styled.div`
 `;
 
 const ResetButton = styled(Button)`
-&& {
+  && {
     color: #fff;
     background-color: #bfbfbf;
     width: auto;

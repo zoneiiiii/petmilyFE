@@ -5,13 +5,15 @@ import Grid from "@mui/material/Grid";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { tableCellClasses } from "@mui/material/TableCell";
-import { Pagination } from "@mui/material";
+import Container from "@mui/material/Container";
+import { Pagination, Paper } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import CustomButton from "../../Login/CustomButton";
 import { styled } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { ADMIN, MYPAGE } from "../../../constants/PageURL";
 import { ThemeProvider, Typography } from "@mui/material";
+
 import { CustomTheme } from "../../../assets/Theme/CustomTheme";
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
@@ -81,29 +83,15 @@ const AdminAdopt = () => {
   };
   return (
     <ThemeProvider theme={CustomTheme}>
-      <div
-        style={{
-          // textAlign: "center",
-
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          margin: "50px auto",
+      <Container
+        sx={{
+          mt: 4,
+          mb: 4,
         }}
       >
-        <Typography
-          component="h1"
-          variant="h4"
-          fontWeight="bold"
-          fontSize="40px"
-          sx={{ marginBttom: "20px" }}
-        >
-          입양 현황
-        </Typography>
-        <Grid sx={{ width: "940px", height: "20px" }}>
+        <Paper>
           <Table
             sx={{
-              mt: 10,
               border: "1px solid lightgray",
             }}
             aria-label="caption table"
@@ -126,12 +114,11 @@ const AdminAdopt = () => {
               </StyledTableRow>
             </TableHead>
           </Table>
-        </Grid>
-        {data.length === 0 ? (
-          <Grid sx={{ width: "940px", height: "50vh" }}>
+        </Paper>
+        <Paper sx={{ mt: 2 }}>
+          {data.length === 0 ? (
             <Table
               sx={{
-                mt: 15,
                 border: "1px solid lightgray",
               }}
               aria-label="caption table"
@@ -149,112 +136,111 @@ const AdminAdopt = () => {
                 </StyledTableRow>
               </TableHead>
             </Table>
-          </Grid>
-        ) : (
-          <Grid sx={{ width: "940px", height: "50vh" }}>
-            <Table
-              sx={{
-                mt: 15,
-                border: "1px solid lightgray",
-              }}
-              aria-label="caption table"
-              overflow="hidden"
-            >
-              <TableHead>
-                <StyledTableRow>
-                  <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                    No.
-                  </StyledTableCell>
-                  <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                    입양자 이름
-                  </StyledTableCell>
-                  <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                    동물고유번호
-                  </StyledTableCell>
-                  <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                    신청일자
-                  </StyledTableCell>
-                  <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                    입양상태
-                  </StyledTableCell>
-                </StyledTableRow>
-              </TableHead>
-              <TableBody>
-                {data
-                  .slice(
-                    (page - 1) * rowsPerPage,
-                    (page - 1) * rowsPerPage + rowsPerPage
-                  )
-                  .map((adopt, index) => (
-                    <StyledTableRow
-                      key={adopt.adoptNum}
-                      style={{ cursor: "pointer" }}
-                      onClick={() => handleOnClick(adopt.adoptNum, adopt)}
-                    >
-                      <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                        {data.length - index}
-                      </StyledTableCell>
-                      <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                        {adopt.adopterName}
-                      </StyledTableCell>
-                      <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                        {adopt.petName}
-                      </StyledTableCell>
-                      <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                        {adopt.adoptDate.substring(0, 10)}
-                      </StyledTableCell>
-                      {adopt.adoptState === "wait" ? (
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            minWidth: 10,
-                            color: "darkgray",
-                          }}
-                        >
-                          대기중
-                        </StyledTableCell>
-                      ) : adopt.adoptState === "success" ? (
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            minWidth: 10,
-                            color: "blue",
-                          }}
-                        >
-                          입양승인
-                        </StyledTableCell>
-                      ) : (
-                        <StyledTableCell
-                          align="center"
-                          sx={{
-                            minWidth: 10,
-                            color: "red",
-                          }}
-                        >
-                          입양반려
-                        </StyledTableCell>
-                      )}
-                    </StyledTableRow>
-                  ))}
-              </TableBody>
-            </Table>
-
-            <Stack spacing={2} sx={{ mt: 5 }}>
-              <Pagination
-                color="primary"
-                page={page}
+          ) : (
+            <>
+              <Table
                 sx={{
-                  display: "flex",
-                  justifyContent: "center",
+                  border: "1px solid lightgray",
                 }}
-                onChange={handleChangePage}
-                component="div"
-                count={Math.ceil(data.length / rowsPerPage)}
-              />
-            </Stack>
-          </Grid>
-        )}
-      </div>
+                aria-label="caption table"
+                overflow="hidden"
+              >
+                <TableHead>
+                  <StyledTableRow>
+                    <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                      No.
+                    </StyledTableCell>
+                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                      입양자 이름
+                    </StyledTableCell>
+                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                      동물고유번호
+                    </StyledTableCell>
+                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                      신청일자
+                    </StyledTableCell>
+                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                      입양상태
+                    </StyledTableCell>
+                  </StyledTableRow>
+                </TableHead>
+                <TableBody>
+                  {data
+                    .slice(
+                      (page - 1) * rowsPerPage,
+                      (page - 1) * rowsPerPage + rowsPerPage
+                    )
+                    .map((adopt, index) => (
+                      <StyledTableRow
+                        key={adopt.adoptNum}
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handleOnClick(adopt.adoptNum, adopt)}
+                      >
+                        <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                          {data.length - index}
+                        </StyledTableCell>
+                        <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                          {adopt.adopterName}
+                        </StyledTableCell>
+                        <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                          {adopt.petName}
+                        </StyledTableCell>
+                        <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                          {adopt.adoptDate.substring(0, 10)}
+                        </StyledTableCell>
+                        {adopt.adoptState === "wait" ? (
+                          <StyledTableCell
+                            align="center"
+                            sx={{
+                              minWidth: 10,
+                              color: "darkgray",
+                            }}
+                          >
+                            대기중
+                          </StyledTableCell>
+                        ) : adopt.adoptState === "success" ? (
+                          <StyledTableCell
+                            align="center"
+                            sx={{
+                              minWidth: 10,
+                              color: "blue",
+                            }}
+                          >
+                            입양승인
+                          </StyledTableCell>
+                        ) : (
+                          <StyledTableCell
+                            align="center"
+                            sx={{
+                              minWidth: 10,
+                              color: "red",
+                            }}
+                          >
+                            입양반려
+                          </StyledTableCell>
+                        )}
+                      </StyledTableRow>
+                    ))}
+                </TableBody>
+              </Table>
+
+              <Stack spacing={2} sx={{ mt: 5 }}>
+                <Pagination
+                  color="primary"
+                  page={page}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                  onChange={handleChangePage}
+                  component="div"
+                  count={Math.ceil(data.length / rowsPerPage)}
+                />
+              </Stack>
+            </>
+          )}
+        </Paper>
+      </Container>
     </ThemeProvider>
   );
 };

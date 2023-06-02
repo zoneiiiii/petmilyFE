@@ -15,7 +15,7 @@ export const Title = styled.h1`
 
 export const DetailTop = styled.div`
   display: flex;
-  min-width: 70vw;
+  // min-width: 70vw;
   border-top: 1px solid #ccc;
   padding-top: 7px;
 `;
@@ -25,7 +25,7 @@ export const horizon = styled.hr`
   border-style: solid;
   color: #ccc;
   height: 1px;
-  min-width: 70vw;
+  // min-width: 70vw;
 `;
 
 export const TopInfo = styled.div`
@@ -71,7 +71,7 @@ export const TopViewCount = styled.div`
 export const DetailMiddle = styled.div`
   padding-top: 15px;
   min-height: 300px;
-  min-width: 70vw;
+  // min-width: 70vw;
 
   img {
     max-width: 100%;
@@ -80,13 +80,13 @@ export const DetailMiddle = styled.div`
 `;
 
 export const DetailBottom = styled.div`
-  min-width: 70vw;
+  // min-width: 70vw;
 `;
 
 export const ButtonsContainer = styled.div`
   margin-top: 10px;
   margin-bottom: 10px;
-  min-width: 70vw;
+  // min-width: 70vw;
   display: flex;
   justify-content: flex-end;
 `;
@@ -97,7 +97,7 @@ export const ButtonsSpace = styled.div`
   display: inline-block;
 `;
 
-export const Buttons = styled(Button)`
+export const EditButton = styled(Button)`
   && {
     color: #fff;
     background-color: #fbd385;
@@ -107,6 +107,33 @@ export const Buttons = styled(Button)`
     margin-bottom: 5px;
     &:hover {
       background-color: #ffbe3f;
+    }
+  }
+`;
+
+export const DeleteButton = styled(Button)`
+  && {
+    color: #fff;
+    background-color: #ff8282;
+    width: auto;
+    height: 30px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    &:hover {
+      background-color: #ed4f4f;
+    }
+  }
+`;
+export const ReturnButton = styled(Button)`
+  && {
+    color: #fff;
+    background-color: #bfbfbf;
+    width: auto;
+    height: 30px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    &:hover {
+      background-color: #b2b0b0;
     }
   }
 `;
