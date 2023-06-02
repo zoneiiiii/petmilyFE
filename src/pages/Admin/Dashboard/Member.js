@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -9,31 +9,7 @@ import Typography from "@mui/material/Typography";
 import { Avatar } from "@mui/material";
 import styled from "styled-components";
 import { ADMIN } from "../../../constants/PageURL";
-
-// Generate Order Data
-function createData(
-  memberNum,
-  memberId,
-  memberNickName,
-  memberEmail,
-  memberName,
-  memberGender,
-  memberBirth,
-  memberRole,
-  memberImg
-) {
-  return {
-    memberNum,
-    memberId,
-    memberNickName,
-    memberEmail,
-    memberName,
-    memberGender,
-    memberBirth,
-    memberRole,
-    memberImg,
-  };
-}
+import axios from "axios";
 
 const UserImg = styled(Avatar)`
   && {
@@ -45,72 +21,33 @@ const UserImg = styled(Avatar)`
   }
 `;
 
-const rows = [
-  createData(
-    1,
-    "admin1234",
-    "관리자",
-    "admin1@test.com",
-    "관리자",
-    "male",
-    "2000-01-01",
-    "Admin",
-    "https://taemin-testbucket.s3.ap-northeast-2.amazonaws.com/petmily/8f230276-3448-4a42-b3fa-8bac6dc06e83.png"
-  ),
-  createData(
-    2,
-    "test1234",
-    "닉네임1",
-    "test1@test.com",
-    "홍길동",
-    "male",
-    "2000-01-01",
-    "User",
-    "https://taemin-testbucket.s3.ap-northeast-2.amazonaws.com/petmily/5a395426-5d25-45b4-80e1-1ca846e1b5fc.png"
-  ),
-  createData(
-    3,
-    "test1235",
-    "닉네임2",
-    "test2@test.com",
-    "김길동",
-    "male",
-    "2000-01-01",
-    "User",
-    "https://taemin-testbucket.s3.ap-northeast-2.amazonaws.com/petmily/66336982-ecdb-44fe-9488-1d8f7a777bfa.png"
-  ),
-  createData(
-    4,
-    "test1236",
-    "닉네임3",
-    "test1@test.com",
-    "이길동",
-    "male",
-    "2000-01-01",
-    "User",
-    "https://taemin-testbucket.s3.ap-northeast-2.amazonaws.com/petmily/efe36b62-5e96-4c5b-8ce7-064bc0ca6f95.png"
-  ),
-  createData(
-    5,
-    "test1237",
-    "닉네임4",
-    "test1@test.com",
-    "박길동",
-    "male",
-    "2000-01-01",
-    "User",
-    "https://taemin-testbucket.s3.ap-northeast-2.amazonaws.com/petmily/2d014257-7fc4-4b7a-ae2e-b554d7c3f464.png"
-  ),
-];
-
-function preventDefault(event) {
-  event.preventDefault();
-}
-
 export default function Members() {
+  const [members, setMembers] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/members", {
+        params: {
+          page: 0,
+          size: 5,
+        },
+      })
+      .then((response) => {
+        setMembers(response.data.content); // 페이지네이션을 사용할 경우에는 data.content로 받아야합니다.
+      })
+      .catch((error) => {
+        console.error("There was an error!", error);
+      });
+  }, []);
+
   return (
     <React.Fragment>
-      <Typography variant="h6" component="div" style={{ marginBottom: "16px" }}>
+      <Typography
+        variant="h6"
+        component="div"
+        color="primary"
+        style={{ marginBottom: "16px" }}
+      >
         회원
       </Typography>
       <Table size="small">
@@ -127,18 +64,18 @@ export default function Members() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
+          {members.map((member) => (
+            <TableRow key={member.memberNum}>
               <TableCell>
-                <UserImg src={row.memberImg} />
+                <UserImg src={member.memberImg} />
               </TableCell>
-              <TableCell>{row.memberId}</TableCell>
-              <TableCell>{row.memberNickName}</TableCell>
-              <TableCell>{row.memberEmail}</TableCell>
-              <TableCell>{row.memberName}</TableCell>
-              <TableCell>{row.memberGender}</TableCell>
-              <TableCell>{row.memberBirth}</TableCell>
-              <TableCell align="right">{row.memberRole}</TableCell>
+              <TableCell>{member.memberId}</TableCell>
+              <TableCell>{member.memberNickname}</TableCell>
+              <TableCell>{member.memberEmail}</TableCell>
+              <TableCell>{member.memberName}</TableCell>
+              <TableCell>{member.memberGender}</TableCell>
+              <TableCell>{member.memberBirth}</TableCell>
+              <TableCell align="right">{member.memberRole}</TableCell>
             </TableRow>
           ))}
         </TableBody>

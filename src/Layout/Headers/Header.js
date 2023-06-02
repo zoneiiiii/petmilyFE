@@ -39,7 +39,7 @@ const Header = ({ page }) => {
               { linkName: "공지사항", link: ABOUT.NOTICE() },
               { linkName: "이벤트", link: ABOUT.EVENT() },
               { linkName: "자주 묻는 질문", link: ABOUT.FAQ },
-              { linkName: "마이페이지", link: MYPAGE.INFO }, // 임시로 확인하기 편하게 추가(이후 삭제)
+              // { linkName: "마이페이지", link: MYPAGE.INFO }, // 임시로 확인하기 편하게 추가(이후 삭제)
             ]}
           />
           <NavList

@@ -1,145 +1,158 @@
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { tableCellClasses } from "@mui/material/TableCell";
-import { Pagination } from "@mui/material";
-import Stack from "@mui/material/Stack";
-import CustomButton from "../../Login/CustomButton";
-import { styled } from "@mui/material/styles";
+import TablePagination from "@mui/material/TablePagination";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
 import { Link } from "react-router-dom";
-import { MYPAGE } from "../../../constants/PageURL";
-import { ThemeProvider, Typography } from "@mui/material";
+import { ADMIN } from "../../../constants/PageURL";
+import { ThemeProvider } from "@mui/material";
 import { CustomTheme } from "../../../assets/Theme/CustomTheme";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.white,
-    color: theme.palette.common.black,
-    fontWeight: "bold",
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-  "td,th": {
-    border: "1px solid lightgray",
-  },
-}));
 const AdminQnA = () => {
   const [data, setData] = useState([]);
-  const [page, setPage] = useState(1);
-  const rowsPerPage = 10;
+  const [page, setPage] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  useEffect(() => {
+    getData(page, rowsPerPage);
+  }, [page, rowsPerPage]);
+
+  const getData = (page) => {
+    let queryText = "/board/qna";
+    if (page) {
+      queryText += "?page=" + page;
+    }
+    console.log("queryText:", queryText);
+    axios
+      .get(queryText)
+      .then((response) => {
+        console.log(response);
+        setData(response.data.content);
+        setPage(parseInt(response.data.number));
+        setTotalElements(parseInt(response.data.totalElements));
+      })
+      .catch((error) => {
+        console.error("axios 오류 : ", error);
+      });
+  };
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-  useEffect(() => {
-    axios
-      .get(`http://localhost:8080/board/qna`)
-      .then((response) => {
-        setData(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
 
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const qnaTotal = data.length;
   if (data.length === 0) {
     return (
       <ThemeProvider theme={CustomTheme}>
-        <Grid sx={{ width: "70vw", height: "50vh", margin: "0 auto" }}>
-          <Table
-            sx={{
-              mt: 15,
-              border: "1px solid lightgray",
-            }}
-            aria-label="caption table"
-            overflow="hidden"
-          >
-            <TableHead>
-              <StyledTableRow>
-                <StyledTableCell
-                  colSpan={4}
-                  align="center"
-                  sx={{ height: 250 }}
-                >
-                  문의 내역이 없습니다.
-                </StyledTableCell>
-              </StyledTableRow>
-            </TableHead>
-          </Table>
-          {/* <Link to={MYPAGE.QNA_WRITE} style={{ textDecoration: "none" }}> */}
-          {/* <CustomButton label="문의하기" value="문의하기">
-            답변
-          </CustomButton> */}
-          {/* </Link> */}
-        </Grid>
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Paper>
+            <Table
+              sx={{
+                border: "1px solid lightgray",
+              }}
+              aria-label="caption table"
+              overflow="hidden"
+            >
+              <TableHead>
+                <TableRow>
+                  <TableCell colSpan={4} align="center" sx={{ height: 250 }}>
+                    문의 내역이 없습니다.
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+            </Table>
+          </Paper>
+        </Container>
       </ThemeProvider>
     );
   } else {
     return (
       <ThemeProvider theme={CustomTheme}>
-        <Grid sx={{ width: "70vw", height: "50vh", margin: "0 auto" }}>
-          <Table
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Paper
             sx={{
-              mt: 15,
-              border: "1px solid lightgray",
+              p: 1,
+              mb: 2,
+              fontWeight: "bold",
+              textAlign: "center",
+              height: "57px",
+              lineHeight: "46px",
             }}
-            aria-label="caption table"
-            overflow="hidden"
           >
-            <TableHead>
-              <StyledTableRow>
-                <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                  No.
-                </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                  회원번호
-                </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 300 }}>
-                  제목
-                </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                  작성날짜
-                </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                  답변상태
-                </StyledTableCell>
-              </StyledTableRow>
-            </TableHead>
-            <TableBody>
-              {data
-                .slice(
-                  (page - 1) * rowsPerPage,
-                  (page - 1) * rowsPerPage + rowsPerPage
-                )
-                .map((qna) => (
-                  <StyledTableRow key={qna.boardNum}>
-                    <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                      {qna.boardNum}
-                    </StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                      {qna.memberNum}
-                    </StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 300 }}>
-                      {qna.qnaSubject}
-                    </StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                      {qna.qnaDate}
-                    </StyledTableCell>
+            총 문의 수 : {qnaTotal}
+          </Paper>
+          <Paper>
+            <Table
+              sx={{
+                border: "1px solid lightgray",
+              }}
+              aria-label="caption table"
+              overflow="hidden"
+            >
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", width: "140px" }}
+                  >
+                    No.
+                  </TableCell>
+
+                  <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                    제목
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", width: "160px" }}
+                  >
+                    작성날짜
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", width: "110px" }}
+                  >
+                    회원번호
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", width: "160px" }}
+                  >
+                    답변상태
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.map((qna) => (
+                  <TableRow key={qna.boardNum}>
+                    <TableCell align="center">{qna.boardNum}</TableCell>
+                    <TableCell align="center">
+                      <Link
+                        to={ADMIN.QNA_DETAIL(qna.boardNum)}
+                        style={{
+                          textDecoration: "none",
+                          color: "black",
+                        }}
+                      >
+                        {qna.qnaSubject}
+                      </Link>
+                    </TableCell>
+
+                    <TableCell align="center">{qna.qnaDate}</TableCell>
+                    <TableCell align="center">{qna.memberNum}</TableCell>
                     {qna.qnaStatus === false ? (
-                      <StyledTableCell
+                      <TableCell
                         align="center"
                         sx={{
                           minWidth: 10,
@@ -147,9 +160,9 @@ const AdminQnA = () => {
                         }}
                       >
                         진행중
-                      </StyledTableCell>
+                      </TableCell>
                     ) : (
-                      <StyledTableCell
+                      <TableCell
                         align="center"
                         sx={{
                           minWidth: 10,
@@ -157,29 +170,22 @@ const AdminQnA = () => {
                         }}
                       >
                         답변완료
-                      </StyledTableCell>
+                      </TableCell>
                     )}
-                  </StyledTableRow>
+                  </TableRow>
                 ))}
-            </TableBody>
-          </Table>
-          {/* <Link to={MYPAGE.QNA_WRITE} style={{ textDecoration: "none" }}> */}
-          {/* <CustomButton label="답변하기" value="문의하기"></CustomButton> */}
-          {/* </Link> */}
-          <Stack spacing={2} sx={{ mt: 5 }}>
-            <Pagination
-              color="primary"
-              page={page}
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-              onChange={handleChangePage}
+              </TableBody>
+            </Table>
+            <TablePagination
               component="div"
-              count={Math.ceil(data.length / rowsPerPage)}
+              count={totalElements}
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
             />
-          </Stack>
-        </Grid>
+          </Paper>
+        </Container>
       </ThemeProvider>
     );
   }

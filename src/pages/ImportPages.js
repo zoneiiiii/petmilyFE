@@ -100,6 +100,7 @@ import AdminOrder from "./Admin//Orders/AdminOrder";
 import AdminProduct from "./Admin/Products/AdminProduct";
 import AdminProductWrite from "./Admin/Products/AdminProductWrite";
 import AdminQnA from "./Admin/QnA/AdminQnA";
+import AdminQnADetail from "./Admin/QnA/AdminQnADetail";
 import AdminAdoptDetail from "./Admin/Adopt/AdmingAdoptInfo";
 import AdminDonation from "./Admin/Donation/AdminDonation";
 
@@ -351,6 +352,7 @@ export const Community = {
 /**
  ** AdminLayout
  ** AdminAdopt
+ ** AdminAdoptDetail
  ** AdminBoard
  ** AdminDashBoard
  ** AdminMember
@@ -358,6 +360,8 @@ export const Community = {
  ** AdminProduct
  ** AdminProductWrite
  ** AdminQnA
+ ** AdminQnADetail
+ ** AdminDonation
  */
 export const Admin = {
   AdminLayout: AdminLayout,
@@ -370,5 +374,6 @@ export const Admin = {
   AdminProduct: AdminProduct,
   AdminProductWrite: AdminProductWrite,
   AdminQnA: AdminQnA,
+  AdminQnADetail: AdminQnADetail,
   AdminDonation: AdminDonation,
 };

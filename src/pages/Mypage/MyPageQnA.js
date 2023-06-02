@@ -9,7 +9,7 @@ import { Pagination } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import CustomButton from "../Login/CustomButton";
 import { styled } from "@mui/material/styles";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { MYPAGE } from "../../constants/PageURL";
 import { ThemeProvider, Typography } from "@mui/material";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
@@ -41,25 +41,71 @@ const MyPageQnA = () => {
   const { userNum } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
-  const rowsPerPage = 5;
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-  console.log(userNum);
+  const [pageCount, setPageCount] = useState(0); // 페이지 수 계산
+  let navigate = useNavigate();
+  let location = useLocation();
+
   useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    let urlPage = Number(params.get("page"));
+
+    if (urlPage < 1 || isNaN(urlPage)) {
+      urlPage = 1;
+      params.set("page", urlPage);
+      navigate({ ...location, search: params.toString() }, { replace: true });
+      return;
+    }
+
+    const requestParams = new URLSearchParams({ page: urlPage - 1 });
+
     if (userNum) {
       axios
-        .get(`http://localhost:8080/board/qna/list/${userNum}`)
+        .get(`http://localhost:8080/board/qna/list/${userNum}?${requestParams}`)
         .then((response) => {
-          setData(response.data);
-          console.log(response.data);
+          const totalPages = response.data.totalPages;
+          if (urlPage > totalPages) {
+            return;
+          }
+
+          setData(response.data.content);
+          setPageCount(totalPages);
+          setPage(urlPage);
         })
         .catch((error) => {
-          console.error("Error fetching data:", error);
+          console.error("데이터 수신 오류 :", error);
         });
-    }
-  }, [userNum]);
 
+      window.scrollTo(0, 0);
+    }
+  }, [location, navigate, location.search, userNum]);
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+
+    if (!params.get("page")) {
+      params.set("page", "1");
+
+      navigate(
+        {
+          ...location,
+          search: params.toString(),
+        },
+        { replace: true }
+      );
+    }
+  }, [location, navigate]);
+
+  const handleChange = (event, value) => {
+    const params = new URLSearchParams(location.search);
+    params.set("page", value);
+
+    navigate(
+      {
+        ...location,
+        search: params.toString(),
+      },
+      { replace: true }
+    );
+  };
   if (data.length === 0) {
     return (
       <ThemeProvider theme={CustomTheme}>
@@ -75,7 +121,6 @@ const MyPageQnA = () => {
         <Grid sx={{ width: "940px", height: "50vh" }}>
           <Table
             sx={{
-              mt: 15,
               border: "1px solid lightgray",
             }}
             aria-label="caption table"
@@ -116,7 +161,6 @@ const MyPageQnA = () => {
         <Grid sx={{ width: "940px", height: "50vh" }}>
           <Table
             sx={{
-              mt: 15,
               border: "1px solid lightgray",
             }}
             aria-label="caption table"
@@ -139,50 +183,45 @@ const MyPageQnA = () => {
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {data
-                .slice(
-                  (page - 1) * rowsPerPage,
-                  (page - 1) * rowsPerPage + rowsPerPage
-                )
-                .map((qna) => (
-                  <StyledTableRow key={qna.boardNum}>
-                    <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                      {qna.boardNum}
+              {data.map((qna) => (
+                <StyledTableRow key={qna.boardNum}>
+                  <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                    {qna.boardNum}
+                  </StyledTableCell>
+                  <StyledTableCell align="center" sx={{ minWidth: 300 }}>
+                    <Link
+                      to={MYPAGE.QNA_DETAIL(qna.boardNum)}
+                      style={{ textDecoration: "none", color: "black" }}
+                    >
+                      {qna.qnaSubject}
+                    </Link>
+                  </StyledTableCell>
+                  <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                    {qna.qnaDate}
+                  </StyledTableCell>
+                  {qna.qnaStatus === false ? (
+                    <StyledTableCell
+                      align="center"
+                      sx={{
+                        minWidth: 10,
+                        color: "blue",
+                      }}
+                    >
+                      진행중
                     </StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 300 }}>
-                      <Link
-                        to={MYPAGE.QNA_DETAIL(qna.boardNum)}
-                        style={{ textDecoration: "none", color: "black" }}
-                      >
-                        {qna.qnaSubject}
-                      </Link>
+                  ) : (
+                    <StyledTableCell
+                      align="center"
+                      sx={{
+                        minWidth: 10,
+                        color: "darkgray",
+                      }}
+                    >
+                      답변완료
                     </StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                      {qna.qnaDate}
-                    </StyledTableCell>
-                    {qna.qnaStatus === false ? (
-                      <StyledTableCell
-                        align="center"
-                        sx={{
-                          minWidth: 10,
-                          color: "blue",
-                        }}
-                      >
-                        진행중
-                      </StyledTableCell>
-                    ) : (
-                      <StyledTableCell
-                        align="center"
-                        sx={{
-                          minWidth: 10,
-                          color: "darkgray",
-                        }}
-                      >
-                        답변완료
-                      </StyledTableCell>
-                    )}
-                  </StyledTableRow>
-                ))}
+                  )}
+                </StyledTableRow>
+              ))}
             </TableBody>
           </Table>
           <Link to={MYPAGE.QNA_WRITE} style={{ textDecoration: "none" }}>
@@ -198,9 +237,9 @@ const MyPageQnA = () => {
                 display: "flex",
                 justifyContent: "center",
               }}
-              onChange={handleChangePage}
+              onChange={handleChange}
               component="div"
-              count={Math.ceil(data.length / rowsPerPage)}
+              count={pageCount}
             />
           </Stack>
         </Grid>
