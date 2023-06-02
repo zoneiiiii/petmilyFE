@@ -38,8 +38,10 @@ const ProductDetail = () => {
 
   const handleCart = () => {
     setIsModalOpen(true);
-    console.log(quantity);
+    console.log(products);
     axios.post("/shop/product/addCart", {
+      boardNum: products.boardNum,
+      memberId: sessionStorage.getItem("id"),
       productName: products.productName,
       productCost: products.productCost,
       imgThumbnail: products.imgThumbnail,

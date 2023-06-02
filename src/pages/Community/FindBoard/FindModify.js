@@ -228,7 +228,7 @@ const FindModify = () => {
         };
 
         try {
-            await axios.put(`http://localhost:8080/board/missing/${id}`, postData, {
+            await axios.put(`http://localhost:8080/board/find/${id}`, postData, {
                 withCredentials: true,
             });
             setOpenModal(true);

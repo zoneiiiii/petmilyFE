@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { tableCellClasses } from "@mui/material/TableCell";
-import { Pagination } from "@mui/material";
+import { Container, Pagination, Paper } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
 import { Link } from "react-router-dom";
@@ -188,141 +188,145 @@ const AdminOrder = () => {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <MyPageStyle>
-          <div className="navTitle">
-            <h5>주문 배송 관리</h5>
-          </div>
-          <Button className="prodDelete" onClick={handleDeleteSelected}>
-            선택 주문 삭제
-          </Button>
-        </MyPageStyle>
-        <Grid style={{ width: 1300 }}>
-          <Table
-            sx={{
-              mt: 5,
-              border: "1px solid lightgray",
-            }}
-            aria-label="caption table"
-            overflow="hidden"
-          >
-            <TableHead>
-              <StyledTableRow>
-                <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                  <Checkbox
-                    edge="start"
-                    checked={allChecked}
-                    indeterminate={indeterminate}
-                    onClick={handleToggleAll}
-                    tabIndex={-1}
-                  />
-                  전체선택
-                </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                  주문번호
-                </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 20 }}>
-                  주문일자
-                </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                  배송상태
-                </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                  상품코드
-                </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                  상품명
-                </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                  구매수량
-                </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                  구매자ID
-                </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                  결제방식
-                </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                  결제여부
-                </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                  총 결제금액(원)
-                </StyledTableCell>
-              </StyledTableRow>
-            </TableHead>
-            <TableBody>
-              {orders
-                .slice(
-                  (page - 1) * rowsPerPage,
-                  (page - 1) * rowsPerPage + rowsPerPage
-                )
-                .map((order) => (
-                  <StyledTableRow key={order.num}>
-                    <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Paper sx={{ p: 1, mb: 2 }}>
+            <MyPageStyle>
+              <div className="navTitle">
+                <h5>주문 배송 관리</h5>
+              </div>
+              <Button className="prodDelete" onClick={handleDeleteSelected}>
+                선택 주문 삭제
+              </Button>
+            </MyPageStyle>
+            <Grid style={{ width: 1135 }}>
+              <Table
+                sx={{
+                  mt: 5,
+                  border: "1px solid lightgray",
+                }}
+                aria-label="caption table"
+                overflow="hidden"
+              >
+                <TableHead>
+                  <StyledTableRow>
+                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
                       <Checkbox
                         edge="start"
-                        checked={order.checked}
-                        onClick={() => handleToggle(order.num)}
+                        checked={allChecked}
+                        indeterminate={indeterminate}
+                        onClick={handleToggleAll}
                         tabIndex={-1}
                       />
+                      전체선택
                     </StyledTableCell>
                     <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                      {order.num}
+                      주문번호
                     </StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                      {order.date}
+                    <StyledTableCell align="center" sx={{ minWidth: 20 }}>
+                      주문일자
                     </StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                      <FormControl sx={{ m: 1, minWidth: 120 }}>
-                        <Select
-                          defaultValue={order.delivery}
-                          onChange={handleChange}
-                          displayEmpty
-                        >
-                          <MenuItem value="complete">배송완료</MenuItem>
-                          <MenuItem value="shipping">배송중</MenuItem>
-                        </Select>
-                      </FormControl>
+                    <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                      배송상태
                     </StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                      {order.PRcode}
+                    <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                      상품코드
                     </StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                      {order.PRname}
+                    <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                      상품명
                     </StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                      {order.count}
+                    <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                      구매수량
                     </StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                      {order.buyerID}
+                    <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                      구매자ID
                     </StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                      {order.payment}
+                    <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                      결제방식
                     </StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                      {order.paymentCheck}
+                    <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                      결제여부
                     </StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                      {order.paymentAmount}
+                    <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                      총 결제금액(원)
                     </StyledTableCell>
                   </StyledTableRow>
-                ))}
-            </TableBody>
-          </Table>
+                </TableHead>
+                <TableBody>
+                  {orders
+                    .slice(
+                      (page - 1) * rowsPerPage,
+                      (page - 1) * rowsPerPage + rowsPerPage
+                    )
+                    .map((order) => (
+                      <StyledTableRow key={order.num}>
+                        <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                          <Checkbox
+                            edge="start"
+                            checked={order.checked}
+                            onClick={() => handleToggle(order.num)}
+                            tabIndex={-1}
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                          {order.num}
+                        </StyledTableCell>
+                        <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                          {order.date}
+                        </StyledTableCell>
+                        <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                          <FormControl sx={{ m: 1, minWidth: 120 }}>
+                            <Select
+                              defaultValue={order.delivery}
+                              onChange={handleChange}
+                              displayEmpty
+                            >
+                              <MenuItem value="complete">배송완료</MenuItem>
+                              <MenuItem value="shipping">배송중</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </StyledTableCell>
+                        <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                          {order.PRcode}
+                        </StyledTableCell>
+                        <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                          {order.PRname}
+                        </StyledTableCell>
+                        <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                          {order.count}
+                        </StyledTableCell>
+                        <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                          {order.buyerID}
+                        </StyledTableCell>
+                        <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                          {order.payment}
+                        </StyledTableCell>
+                        <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                          {order.paymentCheck}
+                        </StyledTableCell>
+                        <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                          {order.paymentAmount}
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                </TableBody>
+              </Table>
 
-          <Stack spacing={2} sx={{ mt: 5 }}>
-            <Pagination
-              color="primary"
-              page={page}
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-              onChange={handleChangePage}
-              component="div"
-              count={Math.ceil(orders.length / rowsPerPage)}
-            />
-          </Stack>
-        </Grid>
+              <Stack spacing={2} sx={{ mt: 5 }}>
+                <Pagination
+                  color="primary"
+                  page={page}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                  onChange={handleChangePage}
+                  component="div"
+                  count={Math.ceil(orders.length / rowsPerPage)}
+                />
+              </Stack>
+            </Grid>
+          </Paper>
+        </Container>
       </ThemeProvider>
     </>
   );
@@ -336,13 +340,13 @@ const MyPageStyle = styleds.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 30px 0 0 150px;
+    margin: 30px 0 0 0;
   }
   .prodDelete {
     float: left;
     background-color: #fbd385;
     color: white;
-    margin: 20px 0 20px 150px;
+    margin: 20px 0 20px 0;
     &:hover {
       background-color: #facc73;
     }
