@@ -3,20 +3,31 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import styled from "styled-components";
 import axios from "axios";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../contexts/AuthContexts";
 
 const HeaderRight = ({ page }) => {
-  const { setLoggedIn } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { loggedIn, setLoggedIn, userNum } = useContext(AuthContext);
+  const [userRoll, setUserRoll] = useState("");
 
-  //임시 sessionStorage
-  // sessionStorage.setItem('id', 'admin');
-  // sessionStorage.setItem('name', '관리자');
-  // alert(sessionStorage.getItem('id'));
+  useEffect(() => {
+    if (userNum) {
+      //API 호출
+      axios
+        .get(`/get-userroll/${userNum}`)
+        .then((userRollResponse) => {
+          console.log("AAA:", userRollResponse.data);
+          if (userRollResponse.status === 200) {
+            setUserRoll(userRollResponse.data);
+          }
+        })
+        .catch((error) => {
+          console.error("데이터 수신 오류 :", error);
+        });
+    };
+  }, [userNum]);
 
-  const loginId = window.sessionStorage.getItem("id");
-  const loginName = window.sessionStorage.getItem("name");
 
   // 마이페이지 버튼
   const myPageClick = () => {
@@ -49,44 +60,89 @@ const HeaderRight = ({ page }) => {
     return navigate("/login"); // 로그인 페이지로 이동.
   };
 
+  // 관리자 페이지 버튼
+  const adminClick = () => {
+    return navigate("/a");  // 관리자 페이지로 이동.
+  }
+
   // 로그인 상태일때
-  if (loginId != null) {
-    return (
-      <HeadrRight className="headright">
-        <Stack className="stack" spacing={2} direction="row">
-          <Button
-            onClick={logoutClick}
-            variant="outlined"
-            size="large"
-            sx={{
-              m: 1,
-              minWidth: "100",
-              color: "#FFFFFF",
-              background: "#FF8282",
-              borderColor: "#FF8282",
-              ":hover": { borderColor: "#ED4F4F", background: "#ED4F4F" },
-            }}
-          >
-            로그아웃
-          </Button>
-          <Button
-            onClick={myPageClick}
-            variant="outlined"
-            size="large"
-            sx={{
-              m: 1,
-              color: "#FFFFFF",
-              background: "#FBD385",
-              borderColor: "#FBD385",
-              ":hover": { borderColor: "#FFBE3F", background: "#FFBE3F" },
-            }}
-          >
-            {" "}
-            마이페이지{" "}
-          </Button>
-        </Stack>
-      </HeadrRight>
-    );
+  if (loggedIn === true) {
+    if (userRoll === "Admin") {
+      return (
+        <HeadrRight className="headright">
+          <Stack className="stack" spacing={2} direction="row">
+            <Button
+              onClick={logoutClick}
+              variant="outlined"
+              size="large"
+              sx={{
+                m: 1,
+                minWidth: "100",
+                color: "#FFFFFF",
+                background: "#FF8282",
+                borderColor: "#FF8282",
+                ":hover": { borderColor: "#ED4F4F", background: "#ED4F4F" },
+              }}
+            >
+              로그아웃
+            </Button>
+            <Button
+              onClick={adminClick}
+              variant="outlined"
+              size="large"
+              sx={{
+                m: 1,
+                color: "#FFFFFF",
+                background: "#5DADE2",
+                borderColor: "#5DADE2",
+                ":hover": { borderColor: "#2E6DD1", background: "#2E6DD1" },
+              }}
+            >
+              {" "}
+              관리자페이지{" "}
+            </Button>
+          </Stack>
+        </HeadrRight>
+      );
+    }
+    else {
+      return (
+        <HeadrRight className="headright">
+          <Stack className="stack" spacing={2} direction="row">
+            <Button
+              onClick={logoutClick}
+              variant="outlined"
+              size="large"
+              sx={{
+                m: 1,
+                minWidth: "100",
+                color: "#FFFFFF",
+                background: "#FF8282",
+                borderColor: "#FF8282",
+                ":hover": { borderColor: "#ED4F4F", background: "#ED4F4F" },
+              }}
+            >
+              로그아웃
+            </Button>
+            <Button
+              onClick={myPageClick}
+              variant="outlined"
+              size="large"
+              sx={{
+                m: 1,
+                color: "#FFFFFF",
+                background: "#FBD385",
+                borderColor: "#FBD385",
+                ":hover": { borderColor: "#FFBE3F", background: "#FFBE3F" },
+              }}
+            >
+              {" "}
+              마이페이지{" "}
+            </Button>
+          </Stack>
+        </HeadrRight>
+      );
+    }
   }
 
   // 로그아웃 상태일때
