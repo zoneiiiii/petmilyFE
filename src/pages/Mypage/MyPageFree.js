@@ -21,8 +21,8 @@ import { AuthContext } from "../../contexts/AuthContexts";
 import axios from "axios";
 import { COMMUNITY } from "../../constants/PageURL";
 import { styled } from "@mui/material/styles";
+import styleds from "styled-components";
 
-//freeboard테이블 테마
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.primary.main,
@@ -45,34 +45,58 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
+const MainContainer = styleds.div`
+width: 940px;
+// width: 1150px;
+max-width: 1150px;
+min-width: 790px;
+`;
+
 const useStyles = makeStyles({
   // 게시글 목록 css
   title: {
     textAlign: "center",
   },
+
   tablecontainer: {
     minWidth: 700,
     margin: "auto",
   },
+
   table: {
     margin: "auto",
   },
+
   content: {
     overflow: "hidden",
     lineHeight: "1.4em",
     height: "1.4em",
     textOverflow: "ellipsis",
   },
+
   pagination: {
     display: "flex",
     justifyContent: "center",
   },
+
   write: {
     display: "flex",
     float: "right",
   },
+
   writelink: {
     textDecoration: "none",
+  },
+
+  subject: {
+    fontSize: "0.9rem",
+    lineHeight: "1.4em",
+    height: "1.4em",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    display: "-webkit-box",
+    WebkitLineClamp: "2",
+    WebkitBoxOrient: "vertical",
   },
 });
 
@@ -84,7 +108,10 @@ const MyPageFree = () => {
   const [orderDirection, setOrderDirection] = useState("asc"); // 날짜 sort 기능(freeboard)
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(0); // 페이지 수 계산
-
+  const itemsPerPage = 10; // 한페이지에 보여줄 페이지의 개수
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const lists = free.slice(startIndex, endIndex); // 현재 페이지에 해당하는 카드 데이터 계산
   let navigate = useNavigate();
   let location = useLocation();
 
@@ -152,7 +179,7 @@ const MyPageFree = () => {
   };
 
   /* sort start */
-  // 날짜 정렬 요청 처리(freeboard)
+  // 날짜 정렬 요청 처리
   const sortArray = (arr, orderBy) => {
     switch (orderBy) {
       case "asc":
@@ -168,7 +195,7 @@ const MyPageFree = () => {
   };
 
   const handleSortRequest = () => {
-    setRowData(sortArray(free, orderDirection));
+    setRowData(sortArray(lists, orderDirection));
     setOrderDirection(orderDirection === "asc" ? "desc" : "asc");
   };
   /* sort end */
@@ -176,13 +203,7 @@ const MyPageFree = () => {
   if (free.length === 0) {
     return (
       <ThemeProvider theme={CustomTheme}>
-        <Typography
-          className="myOrderListTitle"
-          sx={titleSx}
-          border={3}
-          borderColor="#ffbd59"
-          mb={4}
-        >
+        <Typography sx={titleSx} border={3} borderColor="#ffbd59" mb={4}>
           자유게시판
         </Typography>
         <Grid sx={{ width: "940px", height: "50vh" }}>
@@ -205,15 +226,10 @@ const MyPageFree = () => {
   } else {
     return (
       <ThemeProvider theme={CustomTheme}>
-        <Typography
-          sx={titleSx}
-          border={3}
-          borderColor="#ffbd59"
-          className="myOrderListTitle"
-          mb={4}
-        >
+        <Typography sx={titleSx} border={3} borderColor="#ffbd59" mb={4}>
           자유게시판
         </Typography>
+        <MainContainer className="result-container"></MainContainer>
         <TableContainer className={classes.tablecontainer} component={Paper}>
           <Table aria-label="customized table" className={classes.table}>
             <TableHead>
@@ -232,7 +248,7 @@ const MyPageFree = () => {
                 </StyledTableCell>
                 <StyledTableCell
                   align="center"
-                  sx={{ minWidth: 50, background: "#FBD385" }}
+                  sx={{ minWidth: 40, maxWidth: 40, background: "#FBD385" }}
                 >
                   작성자
                 </StyledTableCell>
@@ -244,7 +260,7 @@ const MyPageFree = () => {
                 </StyledTableCell>
                 <StyledTableCell
                   align="center"
-                  sx={{ minWidth: 10, background: "#FBD385" }}
+                  sx={{ minWidth: 90, background: "#FBD385" }}
                   onClick={handleSortRequest}
                 >
                   <TableSortLabel active={false} direction={orderDirection}>
@@ -254,35 +270,37 @@ const MyPageFree = () => {
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {free.map((card) => {
-                return (
-                  <StyledTableRow
-                    key={card.boardNum}
-                    className={classes.content}
-                  >
-                    <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                      {card.boardNum}
-                    </StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 300 }}>
-                      <Link
-                        to={COMMUNITY.FREE_DETAIL(card.boardNum)}
-                        style={{ textDecoration: "none", color: "black" }}
-                      >
-                        {card.freeSubject}
-                      </Link>
-                    </StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                      {card.memberNickName}
-                    </StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                      {card.freeCount}
-                    </StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                      {card.freeDate}
-                    </StyledTableCell>
-                  </StyledTableRow>
-                );
-              })}
+              {free &&
+                free.map((list) => {
+                  return (
+                    <StyledTableRow
+                      key={list.boardNum}
+                      className={classes.content}
+                    >
+                      <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                        {list.boardNum}
+                      </StyledTableCell>
+                      <StyledTableCell align="center" sx={{ minWidth: 300 }}>
+                        <Link
+                          to={COMMUNITY.FREE_DETAIL(list.boardNum)}
+                          className={classes.subject}
+                          style={{ textDecoration: "none", color: "black" }}
+                        >
+                          {list.freeSubject}
+                        </Link>
+                      </StyledTableCell>
+                      <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                        {list.memberNickName}
+                      </StyledTableCell>
+                      <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                        {list.freeCount}
+                      </StyledTableCell>
+                      <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                        {list.freeDate}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  );
+                })}
             </TableBody>
           </Table>
         </TableContainer>

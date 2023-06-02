@@ -10,10 +10,10 @@ const SignInButton = styled(Button)`
   margin-top: 10px;
   font-weight: bold;
   &:hover {
-    background-color: #facc73;
+    background-color: #af935d;
   }
   &:focus {
-    background-color: #facc73;
+    background-color: #af935d;
   }
 `;
 const CustomizedButton = styled(Button)`
@@ -24,10 +24,10 @@ const CustomizedButton = styled(Button)`
   margin-top: 10px;
   font-weight: bold;
   &:hover {
-    background-color: #facc73;
+    background-color: #af935d;
   }
   &:focus {
-    background-color: #facc73;
+    background-color: #af935d;
   }
 `;
 const SubmitButton = styled(Button)`
@@ -36,10 +36,10 @@ const SubmitButton = styled(Button)`
   width: 90px;
   height: 30px;
   &:hover {
-    background-color: #facc73;
+    background-color: #af935d;
   }
   &:focus {
-    background-color: #facc73;
+    background-color: #af935d;
   }
 `;
 
@@ -52,10 +52,10 @@ const QuestionButton = styled(Button)`
   margin-right: 10px;
   float: right;
   &:hover {
-    background-color: #facc73;
+    background-color: #af935d;
   }
   &:focus {
-    background-color: #facc73;
+    background-color: #af935d;
   }
 `;
 
@@ -67,10 +67,10 @@ const ResetButton = styled(Button)`
   margin-top: 10px;
   float: right;
   &:hover {
-    background-color: #b2b0b0;
+    background-color: #858585;
   }
   &:focus {
-    background-color: #b2b0b0;
+    background-color: #858585;
   }
 `;
 
@@ -83,10 +83,10 @@ const WriteButton = styled(Button)`
   margin-right: 10px;
   float: right;
   &:hover {
-    background-color: #facc73;
+    background-color: #af935d;
   }
   &:focus {
-    background-color: #facc73;
+    background-color: #af935d;
   }
 `;
 const AdoptButton = styled(Button)`
@@ -98,10 +98,10 @@ const AdoptButton = styled(Button)`
   margin-right: 10px;
 
   &:hover {
-    background-color: #facc73;
+    background-color: #af935d;
   }
   &:focus {
-    background-color: #facc73;
+    background-color: #af935d;
   }
 `;
 
@@ -114,10 +114,10 @@ const CheckButton = styled(Button)`
   margin-right: 10px;
 
   &:hover {
-    background-color: #facc73;
+    background-color: #af935d;
   }
   &:focus {
-    background-color: #facc73;
+    background-color: #af935d;
   }
 `;
 
@@ -131,10 +131,10 @@ const DeleteButton = styled(Button)`
   float: right;
 
   &:hover {
-    background-color: #ff5555;
+    background-color: #b25b5b;
   }
   &:focus {
-    background-color: #ff5555;
+    background-color: #b25b5b;
   }
 `;
 
@@ -148,10 +148,10 @@ const WriteButton1 = styled(Button)`
   float: right;
   margin-left: auto;
   &:hover {
-    background-color: #facc73;
+    background-color: #af935d;
   }
   &:focus {
-    background-color: #facc73;
+    background-color: #af935d;
   }
 `;
 
@@ -164,10 +164,10 @@ const failButton = styled(Button)`
   margin-right: 10px;
   float: right;
   &:hover {
-    background-color: #facc73;
+    background-color: #af935d;
   }
   &:focus {
-    background-color: #facc73;
+    background-color: #af935d;
   }
 `;
 

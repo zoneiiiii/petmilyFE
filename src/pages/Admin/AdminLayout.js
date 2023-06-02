@@ -10,12 +10,13 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { mainListItems } from "./AdminNav";
 import { Avatar } from "@mui/material";
 import { ADMIN } from "../../constants/PageURL";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Link } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -26,7 +27,7 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
+      <Link to="/" style={{ textDecoration: "none", color: "black" }}>
         PETMILY
       </Link>{" "}
       {new Date().getFullYear()}
@@ -142,9 +143,9 @@ const Layout = () => {
             >
               {title}
             </Typography>
-            <Avatar alt="Remy Sharp" src="/broken-image.jpg">
-              A
-            </Avatar>
+            <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+              <LogoutIcon />
+            </Link>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -156,24 +157,13 @@ const Layout = () => {
               px: [1],
             }}
           >
-            {/* <img
-              src="/images/petLogo.png"
-              alt="random"
-              width="110px"
-              height="40px"
-              style={{ marginRight: "60px" }}
-            /> */}
             <IconButton onClick={toggleDrawer}>
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
 
           <Divider />
-          <List component="nav">
-            {mainListItems}
-            {/* <Divider sx={{ my: 1 }} /> */}
-            {/* {secondaryListItems} */}
-          </List>
+          <List component="nav">{mainListItems}</List>
         </Drawer>
         <Box
           component="main"

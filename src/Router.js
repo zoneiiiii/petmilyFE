@@ -347,6 +347,10 @@ const Router = () => {
               element={<Page.Admin.AdminQnA />}
             />
             <Route
+              path={BROWSER_PATH.ADMIN.QNA_DETAIL()}
+              element={<Page.Admin.AdminQnADetail />}
+            />
+            <Route
               path={BROWSER_PATH.ADMIN.DONATION}
               element={<Page.Admin.AdminDonation />}
             />
