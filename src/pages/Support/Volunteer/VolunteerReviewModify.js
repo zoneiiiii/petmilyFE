@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Loading from "../../../components/Loading/LoadingPage";
 import * as S from "./VolunteerReviewModify.styled";
+import styled from "styled-components";
 import {
   TextField,
   Typography,
@@ -9,6 +10,7 @@ import {
   FormHelperText,
   Modal,
   Alert,
+  Button,
 } from "@mui/material";
 import { SUPPORT } from "../../../constants/PageURL";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -151,110 +153,161 @@ const VolunteerReviewModify = () => {
   }
 
   return (
-    <>
-      <S.TitleContainer>
-        <S.Title>✍ 게시글 수정</S.Title>
-        <Typography variant="subtitle3">봉사 후기 게시판</Typography>
-      </S.TitleContainer>
-      <S.Container>
-        <ThemeProvider theme={CustomTheme}>
-          <S.FormWrapper>
-            <form onSubmit={handleSubmit}>
-              <S.FormRowWithError>
-                <TextField
-                  label="제목"
-                  value={title}
-                  size="small"
-                  fullWidth
-                  onChange={(e) => {
-                    setTitleError(false);
-                    setTitle(e.target.value);
-                  }}
-                />
-                <S.ErrorMsg>
-                  <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
-                    {titleError ? "제목을 입력해 주세요." : null}
-                  </FormHelperText>
-                </S.ErrorMsg>
-              </S.FormRowWithError>
-
-              <S.FormRow>
-                <S.ImageWrapper>
-                  <span>이미지 첨부</span>
-                  <S.CommonSpace />
-                  <S.CommonButton component="label">
-                    사진 업로드
-                    <input type="file" hidden onChange={handleFileChange} />
-                  </S.CommonButton>
-                </S.ImageWrapper>
-              </S.FormRow>
-
-              <S.FormRow>
-                {previewUrl && (
-                  <S.PreviewWrapper>
-                    <img
-                      src={previewUrl}
-                      alt="미리보기"
-                      style={{ width: "150px" }}
+    <ThemeProvider theme={CustomTheme}>
+      <Section className="result">
+        <MainContainer className="result-container">
+          <S.TitleContainer>
+            <Board>✍ 게시글 수정</Board>
+            <Typography variant="subtitle3">봉사 후기 게시판</Typography>
+          </S.TitleContainer>
+          <S.Container>
+            <ThemeProvider theme={CustomTheme}>
+              <S.FormWrapper>
+                <form onSubmit={handleSubmit}>
+                  <S.FormRowWithError>
+                    <TextField
+                      label="제목"
+                      value={title}
+                      size="small"
+                      fullWidth
+                      onChange={(e) => {
+                        setTitleError(false);
+                        setTitle(e.target.value);
+                      }}
                     />
-                  </S.PreviewWrapper>
-                )}
-              </S.FormRow>
+                    <S.ErrorMsg>
+                      <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                        {titleError ? "제목을 입력해 주세요." : null}
+                      </FormHelperText>
+                    </S.ErrorMsg>
+                  </S.FormRowWithError>
 
-              <S.FormRowWithError>
-                <S.EditorWrapper>
-                  <CKEditor
-                    editor={ClassicEditor}
-                    data={content}
-                    onChange={(event, editor) => {
-                      const data = editor.getData();
-                      setContent(data);
-                    }}
-                    config={{
-                      className: "WriteEditor",
-                      placeholder: "내용을 입력하세요.",
-                      extraPlugins: [MyCustomUploadAdapterPlugin],
-                    }}
-                  />
-                </S.EditorWrapper>
-                <S.ErrorMsg>
-                  <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
-                    {contentError ? "내용을 입력해 주세요." : null}
-                  </FormHelperText>
-                </S.ErrorMsg>
-              </S.FormRowWithError>
+                  <S.FormRow>
+                    <S.ImageWrapper>
+                      <span>이미지 첨부</span>
+                      <S.CommonSpace />
+                      <S.CommonButton component="label">
+                        사진 업로드
+                        <input type="file" hidden onChange={handleFileChange} />
+                      </S.CommonButton>
+                    </S.ImageWrapper>
+                  </S.FormRow>
 
-              <S.FormRow>
-                <S.ButtonGroup>
-                  <S.WriteButton
-                    type="submit"
-                    onClick={handleSubmit}
-                    variant="contained"
-                  >
-                    수정
-                  </S.WriteButton>
-                  <S.ButtonSpace />
-                  <S.WriteButton onClick={handleCancel} variant="contained">
-                    취소
-                  </S.WriteButton>
-                </S.ButtonGroup>
-              </S.FormRow>
-            </form>
-          </S.FormWrapper>
-          <Modal
-            open={openModal}
-            onClose={handleModalClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Alert sx={modalStyle} severity="success">
-              수정 완료!
-            </Alert>
-          </Modal>
-        </ThemeProvider>
-      </S.Container>
-    </>
+                  <S.FormRow>
+                    {previewUrl && (
+                      <S.PreviewWrapper>
+                        <img
+                          src={previewUrl}
+                          alt="미리보기"
+                          style={{ width: "150px" }}
+                        />
+                      </S.PreviewWrapper>
+                    )}
+                  </S.FormRow>
+
+                  <S.FormRowWithError>
+                    <S.EditorWrapper>
+                      <CKEditor
+                        editor={ClassicEditor}
+                        data={content}
+                        onChange={(event, editor) => {
+                          const data = editor.getData();
+                          setContent(data);
+                        }}
+                        config={{
+                          className: "WriteEditor",
+                          placeholder: "내용을 입력하세요.",
+                          extraPlugins: [MyCustomUploadAdapterPlugin],
+                        }}
+                      />
+                    </S.EditorWrapper>
+                    <S.ErrorMsg>
+                      <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                        {contentError ? "내용을 입력해 주세요." : null}
+                      </FormHelperText>
+                    </S.ErrorMsg>
+                  </S.FormRowWithError>
+
+                  <S.FormRow>
+                    <S.ButtonGroup>
+                      <WriteButton
+                        type="submit"
+                        onClick={handleSubmit}
+                        variant="contained"
+                      >
+                        수정
+                      </WriteButton>
+                      <S.ButtonSpace />
+                      <ResetButton onClick={handleCancel} variant="contained">
+                        취소
+                      </ResetButton>
+                    </S.ButtonGroup>
+                  </S.FormRow>
+                </form>
+              </S.FormWrapper>
+              <Modal
+                open={openModal}
+                onClose={handleModalClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Alert sx={modalStyle} severity="success">
+                  수정 완료!
+                </Alert>
+              </Modal>
+            </ThemeProvider>
+          </S.Container>
+        </MainContainer>
+      </Section>
+    </ThemeProvider>
   );
 };
 
 export default VolunteerReviewModify;
+const Section = styled.section`
+  background: #f8f9fa;
+  padding: 30px 0 40px 0;
+`;
+
+const MainContainer = styled.div`
+  width: 60vw;
+  // width: 1150px;
+  max-width: 1150px;
+  min-width: 790px;
+  border-radius: 8px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(233, 236, 239);
+  border-image: initial;
+  margin: 0px auto 20px;
+  background: rgb(255, 255, 255);
+`;
+const Board = styled.h1`
+  margin-top: 2vw;
+  text-align: center;
+`;
+const WriteButton = styled(Button)`
+  && {
+    color: #fff;
+    background-color: #fbd385;
+    width: auto;
+    height: 30px;
+    margin-top: 10px;
+    margin-left: auto;
+    &:hover {
+      background-color: #ffbe3f;
+    }
+  }
+`;
+const ResetButton = styled(Button)`
+  && {
+    color: #fff;
+    background-color: #bfbfbf;
+    width: auto;
+    height: 30px;
+    margin-top: 10px;
+    &:hover {
+      background-color: #b2b0b0;
+    }
+  }
+`;

@@ -8,6 +8,7 @@ import {
   Alert,
   ThemeProvider,
   FormHelperText,
+  Button,
 } from "@mui/material";
 import { ADOPT } from "../../constants/PageURL";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -130,106 +131,109 @@ const AdoptReviewModify = () => {
   };
 
   return (
-    <>
-      <S.TitleContainer>
-        <S.Title>게시글 수정</S.Title>
-      </S.TitleContainer>
-      <S.Container>
-        <ThemeProvider theme={CustomTheme}>
-          <S.FormWrapper>
-            <form onSubmit={handleSubmit}>
-              <FormRow>
-                <TextField
-                  label="제목"
-                  value={title}
-                  size="small"
-                  fullWidth
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              </FormRow>
-              <FormHelperText sx={{ color: "red" }}>
-                {subjectError}
-              </FormHelperText>
+    <ThemeProvider theme={CustomTheme}>
+      <Section className="result">
+        <MainContainer className="result-container">
+          <Board>게시글 수정</Board>
 
-              <S.FormRow>
-                <S.ImageWrapper>
-                  <span>이미지 첨부</span>
-                  <S.CommonSpace />
-                  <S.CommonButton component="label">
-                    사진 업로드
-                    <input type="file" hidden onChange={handleFileChange} />
-                  </S.CommonButton>
-                </S.ImageWrapper>
-              </S.FormRow>
-              <S.FormRow>
-                {previewUrl && (
-                  <S.PreviewWrapper>
-                    <img
-                      src={previewUrl}
-                      alt="미리보기"
-                      style={{ width: "150px" }}
+          <S.Container>
+            <ThemeProvider theme={CustomTheme}>
+              <S.FormWrapper>
+                <form onSubmit={handleSubmit}>
+                  <FormRow>
+                    <TextField
+                      label="제목"
+                      value={title}
+                      size="small"
+                      fullWidth
+                      onChange={(e) => setTitle(e.target.value)}
                     />
-                  </S.PreviewWrapper>
-                )}
-              </S.FormRow>
+                  </FormRow>
+                  <FormHelperText sx={{ color: "red" }}>
+                    {subjectError}
+                  </FormHelperText>
 
-              <FormRow>
-                <S.EditorWrapper>
-                  <CKEditor
-                    editor={ClassicEditor}
-                    data={content}
-                    onChange={(event, editor) => {
-                      const data = editor.getData();
-                      setContent(data);
-                    }}
-                    config={{
-                      className: "WriteEditor",
-                      placeholder: "내용을 입력하세요.",
-                      extraPlugins: [MyCustomUploadAdapterPlugin],
-                    }}
-                  />
-                </S.EditorWrapper>
-              </FormRow>
-              <FormHelperText sx={{ color: "red" }}>
-                {contentError}
-              </FormHelperText>
+                  <S.FormRow>
+                    <S.ImageWrapper>
+                      <span>이미지 첨부</span>
+                      <S.CommonSpace />
+                      <S.CommonButton component="label">
+                        사진 업로드
+                        <input type="file" hidden onChange={handleFileChange} />
+                      </S.CommonButton>
+                    </S.ImageWrapper>
+                  </S.FormRow>
+                  <S.FormRow>
+                    {previewUrl && (
+                      <S.PreviewWrapper>
+                        <img
+                          src={previewUrl}
+                          alt="미리보기"
+                          style={{ width: "150px" }}
+                        />
+                      </S.PreviewWrapper>
+                    )}
+                  </S.FormRow>
 
-              <S.FormRow>
-                <S.ButtonGroup>
-                  <S.WriteButton
-                    type="submit"
-                    variant="contained"
-                    onClick={handleSubmit}
-                  >
-                    수정
-                  </S.WriteButton>
-                  <S.ButtonSpace />
-                  <S.WriteButton onClick={handleCancel} variant="contained">
-                    취소
-                  </S.WriteButton>
-                </S.ButtonGroup>
-              </S.FormRow>
-            </form>
-          </S.FormWrapper>
-        </ThemeProvider>
-      </S.Container>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        {formAble ? (
-          <Alert sx={modalStyle} severity="success">
-            수정 완료!
-          </Alert>
-        ) : (
-          <Alert sx={modalStyle} severity="warning">
-            제목과 내용을 모두 입력해주세요.
-          </Alert>
-        )}
-      </Modal>
-    </>
+                  <FormRow>
+                    <S.EditorWrapper>
+                      <CKEditor
+                        editor={ClassicEditor}
+                        data={content}
+                        onChange={(event, editor) => {
+                          const data = editor.getData();
+                          setContent(data);
+                        }}
+                        config={{
+                          className: "WriteEditor",
+                          placeholder: "내용을 입력하세요.",
+                          extraPlugins: [MyCustomUploadAdapterPlugin],
+                        }}
+                      />
+                    </S.EditorWrapper>
+                  </FormRow>
+                  <FormHelperText sx={{ color: "red" }}>
+                    {contentError}
+                  </FormHelperText>
+
+                  <S.FormRow>
+                    <S.ButtonGroup>
+                      <WriteButton
+                        type="submit"
+                        variant="contained"
+                        onClick={handleSubmit}
+                      >
+                        수정
+                      </WriteButton>
+                      <S.ButtonSpace />
+                      <ResetButton onClick={handleCancel} variant="contained">
+                        취소
+                      </ResetButton>
+                    </S.ButtonGroup>
+                  </S.FormRow>
+                </form>
+              </S.FormWrapper>
+            </ThemeProvider>
+          </S.Container>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            {formAble ? (
+              <Alert sx={modalStyle} severity="success">
+                수정 완료!
+              </Alert>
+            ) : (
+              <Alert sx={modalStyle} severity="warning">
+                제목과 내용을 모두 입력해주세요.
+              </Alert>
+            )}
+          </Modal>
+        </MainContainer>
+      </Section>
+    </ThemeProvider>
   );
 };
 export default AdoptReviewModify;
@@ -238,4 +242,65 @@ export const FormRow = styled.div`
   width: 100%;
   margin-bottom: 10px;
   align-items: center;
+`;
+const Section = styled.section`
+  background: #f8f9fa;
+  padding: 30px 0 40px 0;
+`;
+
+const MainContainer = styled.div`
+  width: 60vw;
+  // width: 1150px;
+  max-width: 1150px;
+  min-width: 790px;
+  border-radius: 8px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(233, 236, 239);
+  border-image: initial;
+  margin: 0px auto 20px;
+  background: rgb(255, 255, 255);
+`;
+const Board = styled.h1`
+  margin-top: 2vw;
+  text-align: center;
+`;
+
+const WriteButton = styled(Button)`
+  && {
+    color: #fff;
+    background-color: #fbd385;
+    width: auto;
+    height: 30px;
+    margin-top: 10px;
+    margin-left: auto;
+    &:hover {
+      background-color: #ffbe3f;
+    }
+  }
+`;
+
+const CommonSpace = styled.div`
+  width: 10px;
+  height: auto;
+  display: inline-block;
+`;
+
+const ButtonsSpace = styled.div`
+  width: 5px;
+  height: auto;
+  display: inline-block;
+`;
+
+const ResetButton = styled(Button)`
+  && {
+    color: #fff;
+    background-color: #bfbfbf;
+    width: auto;
+    height: 30px;
+    margin-top: 10px;
+    &:hover {
+      background-color: #b2b0b0;
+    }
+  }
 `;

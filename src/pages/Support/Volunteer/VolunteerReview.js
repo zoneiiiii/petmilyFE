@@ -5,11 +5,12 @@ import VolunteerReviewCard from "../../../components/Support/Volunteer/Volunteer
 import VolunteerPagination from "../../../components/Support/Volunteer/VolunteerPagination";
 import axios from "axios";
 import { SUPPORT } from "../../../constants/PageURL";
-import { ThemeProvider } from "@mui/material";
+import { Container, Grid, ThemeProvider } from "@mui/material";
 import { CustomTheme } from "../../../assets/Theme/CustomTheme";
 import { AuthContext } from "../../../contexts/AuthContexts";
 import { useNavigate, useLocation } from "react-router-dom";
 import NotFound from "../../NotFound/NotFound";
+import styled from "styled-components";
 
 const VolunteerReview = () => {
   const { loggedIn } = useContext(AuthContext);
@@ -89,35 +90,72 @@ const VolunteerReview = () => {
   }
 
   return (
-    <S.Container>
-      <S.Title>봉사 후기 게시판</S.Title>
-      <S.CardContainer>
-        {data.length === 0 ? (
-          <S.NoDataContainer>게시글이 없습니다.</S.NoDataContainer>
-        ) : (
-          <S.CardGrid>
-            {data.map((card) => (
-              <VolunteerReviewCard {...card} key={card.boardNum} />
-            ))}
-          </S.CardGrid>
-        )}
-      </S.CardContainer>
-      <ThemeProvider theme={CustomTheme}>
-        <VolunteerPagination
-          count={pageCount}
-          page={page}
-          onChange={handleChange}
-        />
-        {loggedIn && (
-          <S.ButtonContainer>
-            <Link to={SUPPORT.VOLUNTEER_REVIEW_WRITE}>
-              <S.VolunteerButton>글쓰기</S.VolunteerButton>
-            </Link>
-          </S.ButtonContainer>
-        )}
-      </ThemeProvider>
-    </S.Container>
+    <ThemeProvider theme={CustomTheme}>
+      <Section className="result">
+        <MainContainer className="result-container">
+          <ContainerBox>
+            <Top>봉사 후기 게시판</Top>
+            <Container sx={{ py: "30px" }} maxWidth="60vw">
+              <Grid container spacing={4} columns={8}>
+                {data.length === 0 ? (
+                  <S.NoDataContainer>게시글이 없습니다.</S.NoDataContainer>
+                ) : (
+                  <>
+                    {data.map((card) => (
+                      <Grid item xs={10} sm={6} md={2} key={card.boardNum}>
+                        <VolunteerReviewCard {...card} key={card.boardNum} />
+                      </Grid>
+                    ))}
+                  </>
+                )}
+              </Grid>
+            </Container>
+            {loggedIn && (
+              // <S.ButtonContainer>
+              <>
+                <Link to={SUPPORT.VOLUNTEER_REVIEW_WRITE}>
+                  <S.VolunteerButton>글쓰기</S.VolunteerButton>
+                </Link>
+              </>
+              // </S.ButtonContainer>
+            )}
+            <VolunteerPagination
+              count={pageCount}
+              page={page}
+              onChange={handleChange}
+            />
+          </ContainerBox>
+        </MainContainer>
+      </Section>
+    </ThemeProvider>
   );
 };
 
 export default VolunteerReview;
+const Section = styled.section`
+  background: #f8f9fa;
+  padding: 30px 0 40px 0;
+`;
+
+const MainContainer = styled.div`
+  width: 1008px;
+  // width: 1150px;
+  max-width: 1150px;
+  min-width: 790px;
+  border-radius: 8px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(233, 236, 239);
+  border-image: initial;
+  margin: 0px auto 20px;
+  background: rgb(255, 255, 255);
+`;
+
+const Top = styled.h1`
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+`;
+
+const ContainerBox = styled.div``;

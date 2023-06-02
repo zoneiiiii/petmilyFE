@@ -5,16 +5,24 @@ import {
   Box,
   Typography,
   ThemeProvider,
+  Paper,
 } from "@mui/material";
 import CustomButton from "../../Login/CustomButton";
 import { CustomTheme } from "../../../assets/Theme/CustomTheme";
 import axios from "axios";
 import { Admin } from "../../ImportPages";
-
+import Container from "@mui/material/Container";
 import { ADMIN } from "../../../constants/PageURL";
 import { useState, useEffect } from "react";
 const Style = {
-  width: "300px",
+  width: "100px",
+  fontSize: "15px",
+  marginBottom: "5px",
+};
+const fontStyle = {
+  fontSize: "15px",
+  marginBottom: "5px",
+  marginRight: "5px",
 };
 
 const divtyle = {
@@ -48,6 +56,9 @@ const AdminAdoptInfo = () => {
       console.error("Error handling fail:", error);
     }
   };
+  const handleOnClick = () => {
+    document.location.href = ADMIN.ADOPT;
+  };
   useEffect(() => {
     axios
       .get(`/pet/${state.petName}`)
@@ -62,161 +73,284 @@ const AdminAdoptInfo = () => {
 
   return (
     <ThemeProvider theme={CustomTheme}>
-      <div
-        style={{
-          // textAlign: "center",
-
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          margin: "50px auto",
+      <Container
+        sx={{
+          mt: 4,
+          mb: 4,
         }}
       >
-        <Typography
-          component="h1"
-          variant="h4"
-          fontWeight="bold"
-          fontSize="40px"
-          sx={{ marginBttom: "20px" }}
-        >
-          입양 관리
-        </Typography>
-        <Box style={{ width: "1000px", border: "2px solid", padding: "20px" }}>
-          <Typography component="h1" variant="h4" fontWeight="bold">
-            입양 신청자 정보
-          </Typography>
-          <div style={divtyle}>
+        <Paper sx={{ mb: 2 }}>
+          <Box style={{ border: "1px solid", padding: "20px" }}>
             <Typography
-              component="h3"
+              component="h1"
               variant="h4"
               fontWeight="bold"
-              sx={Style}
+              style={{ fontSize: "25px", marginBottom: "5px" }}
             >
-              이름 :
+              입양 신청자 정보
             </Typography>
-            <Typography component="h3" variant="h4" fontWeight="bold">
-              {state.adopterName}
-            </Typography>
-          </div>
-          <div style={divtyle}>
+            <div style={divtyle}>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={Style}
+              >
+                이름
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={fontStyle}
+              >
+                :
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={fontStyle}
+              >
+                {state.adopterName}
+              </Typography>
+            </div>
+            <div style={divtyle}>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={Style}
+              >
+                주소
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={fontStyle}
+              >
+                :
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={fontStyle}
+              >
+                {state.adopterAddr}
+              </Typography>
+            </div>
+            <div style={divtyle}>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={Style}
+              >
+                생년월일
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={fontStyle}
+              >
+                :
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={fontStyle}
+              >
+                {state.adopterBirth}
+              </Typography>
+            </div>
+            <div style={divtyle}>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={Style}
+              >
+                이메일
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={fontStyle}
+              >
+                :
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={fontStyle}
+              >
+                {state.adopterEmail}
+              </Typography>
+            </div>
+            <div style={divtyle}>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={Style}
+              >
+                전화번호
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={fontStyle}
+              >
+                :
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={fontStyle}
+              >
+                {state.adopterTel}
+              </Typography>
+            </div>
+          </Box>
+        </Paper>
+        <Paper>
+          <Box
+            style={{
+              border: "1px solid",
+              padding: "20px",
+            }}
+          >
             <Typography
-              component="h3"
+              component="h1"
               variant="h4"
               fontWeight="bold"
-              sx={Style}
+              style={{ fontSize: "25px", marginBottom: "5px" }}
             >
-              주소:
+              유기동물 정보
             </Typography>
-            <Typography component="h3" variant="h4" fontWeight="bold">
-              {state.adopterAddr}
-            </Typography>
-          </div>
-          <div style={divtyle}>
-            <Typography
-              component="h3"
-              variant="h4"
-              fontWeight="bold"
-              sx={Style}
-            >
-              생년월일 :
-            </Typography>
-            <Typography component="h3" variant="h4" fontWeight="bold">
-              {state.adopterBirth}
-            </Typography>
-          </div>
-          <div style={divtyle}>
-            <Typography
-              component="h3"
-              variant="h4"
-              fontWeight="bold"
-              sx={Style}
-            >
-              이메일 :
-            </Typography>
-            <Typography component="h3" variant="h4" fontWeight="bold">
-              {state.adopterEmail}
-            </Typography>
-          </div>
-          <div style={divtyle}>
-            <Typography
-              component="h3"
-              variant="h4"
-              fontWeight="bold"
-              sx={Style}
-            >
-              전화번호 :
-            </Typography>
-            <Typography component="h3" variant="h4" fontWeight="bold">
-              {state.adopterTel}
-            </Typography>
-          </div>
-        </Box>
-        <Box
-          style={{
-            marginTop: "20px",
-            width: "1000px",
-            border: "2px solid",
-            padding: "20px",
-          }}
-        >
-          <Typography component="h1" variant="h4" fontWeight="bold">
-            유기동물 정보
-          </Typography>
-          <div style={divtyle}>
-            <Typography
-              component="h3"
-              variant="h4"
-              fontWeight="bold"
-              sx={Style}
-            >
-              번호 :
-            </Typography>
-            <Typography component="h3" variant="h4" fontWeight="bold">
-              {data.petName}
-            </Typography>
-          </div>
-          <div style={divtyle}>
-            <Typography
-              component="h3"
-              variant="h4"
-              fontWeight="bold"
-              sx={Style}
-            >
-              보호소 이름:
-            </Typography>
-            <Typography component="h3" variant="h4" fontWeight="bold">
-              {data.shelterName}
-            </Typography>
-          </div>
-          <div style={divtyle}>
-            <Typography
-              component="h3"
-              variant="h4"
-              fontWeight="bold"
-              sx={Style}
-            >
-              보호소 주소 :
-            </Typography>
-            <Typography component="h3" variant="h4" fontWeight="bold">
-              {data.shelterAddr}
-            </Typography>
-          </div>
-          <div style={divtyle}>
-            <Typography
-              component="h3"
-              variant="h4"
-              fontWeight="bold"
-              sx={Style}
-            >
-              보호소 주소 :
-            </Typography>
-            <Typography component="h3" variant="h4" fontWeight="bold">
-              {data.shelterTel}
-            </Typography>
-          </div>
-        </Box>
+            <div style={divtyle}>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={Style}
+              >
+                번호
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={fontStyle}
+              >
+                :
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={fontStyle}
+              >
+                {data.petName}
+              </Typography>
+            </div>
+            <div style={divtyle}>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={Style}
+              >
+                보호소 이름
+              </Typography>
+
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={fontStyle}
+              >
+                :
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={fontStyle}
+              >
+                {data.shelterName}
+              </Typography>
+            </div>
+            <div style={divtyle}>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={Style}
+              >
+                보호소 주소
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={fontStyle}
+              >
+                :
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={fontStyle}
+              >
+                {data.shelterAddr}
+              </Typography>
+            </div>
+            <div style={divtyle}>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={Style}
+              >
+                보호소 주소
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={fontStyle}
+              >
+                :
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h4"
+                fontWeight="bold"
+                sx={fontStyle}
+              >
+                {data.shelterTel}
+              </Typography>
+            </div>
+          </Box>
+        </Paper>
         {state.adoptState === "wait" ? (
-          <div style={{ display: "flex" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "20px",
+            }}
+          >
             <CustomButton
               value="글쓰기"
               label="승인"
@@ -233,7 +367,14 @@ const AdminAdoptInfo = () => {
             component="h4"
             variant="h4"
             fontWeight="bold"
-            style={{ color: "blue", marginTop: "20px" }}
+            style={{
+              color: "blue",
+              marginTop: "20px",
+              fontSize: "20px",
+              textAlign: "center",
+              cursor: "pointer",
+            }}
+            onClick={handleOnClick}
           >
             입양 승인
           </Typography>
@@ -242,12 +383,19 @@ const AdminAdoptInfo = () => {
             component="h4"
             variant="h4"
             fontWeight="bold"
-            style={{ color: "red", marginTop: "20px" }}
+            style={{
+              color: "red",
+              marginTop: "20px",
+              fontSize: "20px",
+              textAlign: "center",
+              cursor: "pointer",
+            }}
+            onClick={handleOnClick}
           >
             입양 반려
           </Typography>
         )}
-      </div>
+      </Container>
     </ThemeProvider>
   );
 };
