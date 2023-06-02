@@ -13,6 +13,8 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Typography from "@mui/material/Typography";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import { ADMIN } from "../../../constants/PageURL";
+import { Link } from "react-router-dom";
 
 const dummyData = [
   { date: "2023-01-01", quantity: 5, cost: 15000 },
@@ -180,7 +182,12 @@ const OrderChart = () => {
 
   return (
     <div>
-      <Typography variant="h6" component="div" style={{ marginBottom: "16px" }}>
+      <Typography
+        variant="h6"
+        component="div"
+        color="primary"
+        style={{ marginBottom: "16px" }}
+      >
         주문 통계
       </Typography>
       <ToggleButtonGroup
@@ -215,13 +222,14 @@ const OrderChart = () => {
             년별
           </ToggleButton>
         </ToggleButtonGroup>
-      </div>
-      {period === "day" && (
-        <div>
+        {period === "day" && (
           <Select
             value={selectedMonth}
             onChange={handleMonthChange}
             style={{ marginLeft: "16px" }}
+            sx={{
+              height: "45px",
+            }}
           >
             {getMonths().map((month) => (
               <MenuItem key={month} value={month}>
@@ -229,8 +237,9 @@ const OrderChart = () => {
               </MenuItem>
             ))}
           </Select>
-        </div>
-      )}
+        )}
+      </div>
+
       <ResponsiveContainer width="100%" height={300}>
         <AreaChart
           data={selectedMonth ? selectedData : aggregateData(dummyData, period)}
@@ -253,7 +262,9 @@ const OrderChart = () => {
           />
         </AreaChart>
       </ResponsiveContainer>
-      <div style={{ marginTop: "80px" }} />
+      <div style={{ textAlign: "right", marginTop: "30px" }}>
+        <Link to={ADMIN.ORDER}>주문 관리 이동</Link>
+      </div>
     </div>
   );
 };

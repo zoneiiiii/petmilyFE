@@ -16,6 +16,8 @@ const Donate = () => {
   const [memberDonaions, setMemberDonations] = useState([]); //회원 기부내역
   const [nonMemberDonaions, setNonMemberDonations] = useState([]); //비회원 기부내역
   const [totalCost, setTotalCost] = useState(0);
+  const [memberTotalCost, setMemberTotalCost] = useState(0);
+  const [nonMemberTotalCost, setNonMemberTotalCost] = useState(0);
 
   useEffect(() => {
     Promise.all([
@@ -32,13 +34,25 @@ const Donate = () => {
         },
       }),
       axios.get("/donate/total"),
+      axios.get("/donate/total/member"),
+      axios.get("/donate/total/non-member"),
     ])
-      .then(([memberRes, nonMemberRes, totalRes]) => {
-        setMemberDonations(memberRes.data.content);
-        setNonMemberDonations(nonMemberRes.data.content);
-        setTotalCost(totalRes.data);
-        setIsLoading(false);
-      })
+      .then(
+        ([
+          memberRes,
+          nonMemberRes,
+          totalRes,
+          memberTotalRes,
+          nonMemberTotalRes,
+        ]) => {
+          setMemberDonations(memberRes.data.content);
+          setNonMemberDonations(nonMemberRes.data.content);
+          setTotalCost(totalRes.data);
+          setMemberTotalCost(memberTotalRes.data);
+          setNonMemberTotalCost(nonMemberTotalRes.data);
+          setIsLoading(false);
+        }
+      )
       .catch((error) => {
         console.error("axios 오류 : ", error);
         setIsLoading(false);
@@ -68,6 +82,9 @@ const Donate = () => {
         <S.RecentDonations>
           <S.DonationColumn>
             <S.TableTitle>비회원 기부 내역</S.TableTitle>
+            <div style={{ textAlign: "center" }}>
+              비회원 누적 기부금 : <b>{formatCurrency(nonMemberTotalCost)}</b>
+            </div>
             <S.Table>
               <thead>
                 <S.TableRow>
@@ -95,6 +112,9 @@ const Donate = () => {
           </S.DonationColumn>
           <S.DonationColumn>
             <S.TableTitle>회원 기부 내역</S.TableTitle>
+            <div style={{ textAlign: "center" }}>
+              회원 누적 기부금 : <b>{formatCurrency(memberTotalCost)}</b>
+            </div>
             <S.Table>
               <thead>
                 <S.TableRow>

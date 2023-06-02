@@ -5,7 +5,6 @@ import {
   Line,
   XAxis,
   YAxis,
-  Label,
   ResponsiveContainer,
   Legend,
   BarChart,
@@ -21,40 +20,6 @@ import MenuItem from "@mui/material/MenuItem";
 import { ADMIN } from "../../../constants/PageURL";
 import { Link } from "react-router-dom";
 const MAX_DISPLAYED_DAILY_DATA = 31;
-
-// const data = [
-//   { date: "2023-05-01", total: 50000, member: 30000, nonMember: 20000 },
-//   { date: "2023-05-02", total: 70000, member: 40000, nonMember: 30000 },
-//   { date: "2023-05-03", total: 0, member: 0, nonMember: 0 },
-//   { date: "2023-05-04", total: 110000, member: 60000, nonMember: 50000 },
-//   { date: "2023-05-05", total: 130000, member: 70000, nonMember: 60000 },
-//   //   { date: "2023-05-06", total: 150000, member: 80000, nonMember: 70000 },
-//   //   { date: "2023-05-07", total: 170000, member: 90000, nonMember: 80000 },
-//   //   { date: "2023-05-08", total: 190000, member: 100000, nonMember: 90000 },
-//   //   { date: "2023-05-09", total: 210000, member: 110000, nonMember: 100000 },
-//   //   { date: "2023-05-10", total: 230000, member: 120000, nonMember: 110000 },
-//   //   { date: "2023-05-11", total: 250000, member: 130000, nonMember: 120000 },
-//   //   { date: "2023-05-12", total: 270000, member: 140000, nonMember: 130000 },
-//   //   { date: "2023-05-13", total: 290000, member: 150000, nonMember: 140000 },
-//   //   { date: "2023-05-14", total: 310000, member: 160000, nonMember: 150000 },
-//   //   { date: "2023-05-15", total: 330000, member: 170000, nonMember: 160000 },
-//   //   { date: "2023-05-16", total: 350000, member: 180000, nonMember: 170000 },
-//   //   { date: "2023-05-17", total: 370000, member: 190000, nonMember: 180000 },
-//   //   { date: "2023-05-18", total: 390000, member: 200000, nonMember: 190000 },
-//   //   { date: "2023-05-19", total: 410000, member: 210000, nonMember: 200000 },
-//   //   { date: "2023-05-20", total: 50000, member: 20000, nonMember: 30000 },
-//   //   { date: "2023-05-21", total: 50000, member: 20000, nonMember: 30000 },
-//   //   { date: "2023-05-22", total: 50000, member: 20000, nonMember: 30000 },
-//   //   { date: "2023-05-23", total: 50000, member: 20000, nonMember: 30000 },
-//   //   { date: "2023-05-24", total: 50000, member: 20000, nonMember: 30000 },
-//   //   { date: "2023-05-25", total: 50000, member: 20000, nonMember: 30000 },
-//   //   { date: "2023-05-26", total: 50000, member: 20000, nonMember: 30000 },
-//   //   { date: "2023-05-27", total: 50000, member: 20000, nonMember: 30000 },
-//   //   { date: "2023-05-28", total: 50000, member: 20000, nonMember: 30000 },
-//   //   { date: "2023-05-29", total: 50000, member: 20000, nonMember: 30000 },
-//   //   { date: "2023-05-30", total: 50000, member: 20000, nonMember: 30000 },
-//   //   { date: "2023-05-31", total: 50000, member: 20000, nonMember: 30000 },
-// ];
 
 const groupByMonth = (data) => {
   const groupedData = data.reduce((result, item) => {
@@ -247,7 +212,12 @@ const DonationChart = () => {
 
   return (
     <div>
-      <Typography variant="h6" component="div" style={{ marginBottom: "16px" }}>
+      <Typography
+        variant="h6"
+        component="div"
+        color="primary"
+        style={{ marginBottom: "16px" }}
+      >
         기부 통계
       </Typography>
       <ToggleButtonGroup
@@ -285,13 +255,14 @@ const DonationChart = () => {
             년별
           </ToggleButton>
         </ToggleButtonGroup>
-      </div>
-      <div>
         {dataGroup === "daily" && (
           <Select
             value={selectedMonth}
             onChange={handleMonthChange}
             style={{ marginLeft: "16px" }}
+            sx={{
+              height: "45px",
+            }}
           >
             {Object.keys(groupByMonthAndDay(donationsData)).map((month) => (
               <MenuItem key={month} value={month}>
@@ -301,6 +272,7 @@ const DonationChart = () => {
           </Select>
         )}
       </div>
+
       <ResponsiveContainer width="100%" height={300}>
         <LineChart
           data={getChartData()}
