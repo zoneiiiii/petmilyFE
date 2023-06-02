@@ -89,12 +89,15 @@ const MyPageQnADetail = () => {
               <TableCell sx={{ width: 780, fontWeight: "bold" }}>
                 {qnaData.qnaSubject}
               </TableCell>
-              <TableCell sx={{ color: "lightgray" }}>{qnaData.qnaDate}</TableCell>
+              <TableCell sx={{ color: "lightgray" }}>
+                {qnaData.qnaDate}
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             <TableRow>
-              <TableCell colSpan={2} 
+              <TableCell
+                colSpan={2}
                 dangerouslySetInnerHTML={createMarkup(qnaData.qnaContent)}
               />
             </TableRow>
@@ -104,7 +107,7 @@ const MyPageQnADetail = () => {
           <TableBody>
             <TableRow>
               <TableCell colSpan={2} sx={{ fontWeight: "bold" }}>
-              관리자 답변
+                관리자 답변
               </TableCell>
             </TableRow>
             <TableRow>
@@ -122,7 +125,7 @@ const MyPageQnADetail = () => {
                   sx={{ height: 100, color: "gray" }}
                   align="center"
                 >
-                  관리자의 답변~~
+                  {qnaData.adminAnswer}
                 </TableCell>
               )}
             </TableRow>

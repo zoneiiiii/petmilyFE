@@ -94,11 +94,12 @@ const OrderComplete = ({ isSuccess, errorMsg, reset }) => {
   }
 };
 const OrderStyle = styled.div`
-  width: 70vw;
+  max-width: 1008px;
   margin: 0 auto;
-  padding-top: 20px;
   h1 {
     text-align: center;
+    margin-top: 30px;
+    margin-bottom: 20px;
   }
   .success {
     width: 200px;

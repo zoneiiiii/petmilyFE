@@ -224,26 +224,26 @@ const Cart = () => {
                 align="center"
               >
                 총 주문금액 :
-                  <span className="tot">
-                    {totalPrice
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                  </span>
-                  원 + 배송비
-                  <span className="tot">
-                    {shippingCost
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                  </span>
-                  원 =
-                  <span className="tot">
-                    {(totalPrice + shippingCost)
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                  </span>
-                  원
-                  <br/>
-                  <span className="notice">※ 50,000원 이상 구매 시 무료 배송</span>
+                <span className="tot">
+                  {totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </span>
+                원 + 배송비
+                <span className="tot">
+                  {shippingCost
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </span>
+                원 =
+                <span className="tot">
+                  {(totalPrice + shippingCost)
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </span>
+                원
+                <br />
+                <span className="notice">
+                  ※ 50,000원 이상 구매 시 무료 배송
+                </span>
               </TableCell>
             </TableRow>
           </TableBody>
@@ -257,7 +257,9 @@ const Cart = () => {
             <Button className="continue">계속 쇼핑하기</Button>
           </Link>
           <Link to={SHOP.ORDER} style={{ textDecoration: "none" }}>
-            <Button className="order">구매하기</Button>
+            <Button variant="contained" color="error">
+              구매하기
+            </Button>
           </Link>
         </div>
       </CartStyle>
@@ -265,17 +267,18 @@ const Cart = () => {
   );
 };
 const CartStyle = styled.div`
-  width: 70vw;
+  max-width: 1008px;
   margin: 0 auto;
-  padding-top: 20px;
   h1 {
     text-align: center;
+    margin-top: 30px;
+    margin-bottom: 20px;
   }
   .tot {
     font-weight: bold;
   }
   .notice {
-    font-size:small;
+    font-size: small;
     color: darkgray;
   }
   .continue {
