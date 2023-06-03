@@ -131,16 +131,21 @@ const MyPageVolunteer = () => {
           >
             봉사 후기
           </Typography>
-          <CardGrid>
-            {review.map((card) => (
-              <VolunteerReviewCard {...card} key={card.boardNum} />
-            ))}
-          </CardGrid>
-          <VolunteerPagination
-            count={pageCount}
-            page={page}
-            onChange={handleChange}
-          />
+          <MainContainer className="result-container">
+            <Grid container spacing={4} columns={8}>
+              {review &&
+                review.map((card) => (
+                  <Grid item xs={10} sm={6} md={2} key={card.boardNum}>
+                    <VolunteerReviewCard {...card} key={card.boardNum} />
+                  </Grid>
+                ))}
+            </Grid>
+            <VolunteerPagination
+              count={pageCount}
+              page={page}
+              onChange={handleChange}
+            />
+          </MainContainer>
         </ThemeProvider>
       </>
     );
@@ -156,13 +161,10 @@ const titleSx = {
   lineHeight: "50px",
 };
 
-const CardGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
+const MainContainer = styled.div`
   width: 940px;
-  max-width: 1200px;
-  justify-items: center; // 변경된 부분
+  // width: 1150px;
+  max-width: 1150px;
+  min-width: 790px;
 `;
-
 export default MyPageVolunteer;

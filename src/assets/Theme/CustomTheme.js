@@ -6,6 +6,9 @@ export const CustomTheme = createTheme({
       main: "#FBD385",
       contrastText: "#fff",
     },
+    warning: { main: "#bfbfbf", contrastText: "#fff" },
+    error: { main: "#ff8282", contrastText: "#fff" },
+
     fbd385: {
       main: "#FBD385",
       contrastText: "#fff",

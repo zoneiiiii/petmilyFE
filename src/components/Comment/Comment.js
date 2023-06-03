@@ -359,17 +359,17 @@ const Comment = ({ boardId, boardNum }) => {
                   )}
                 {comment.memberNum === userNum && ( //댓글 작성자와 현재 로그인한 사용자가 같을 경우에만 표시
                   <>
-                    <S.UpdateButton
-                      onClick={() => handleEditClick(comment.commentNum)}
-                    >
-                      수정
-                    </S.UpdateButton>
-                    <S.ReplyButtonSpace />
                     <S.DeleteButton
                       onClick={() => handleDeleteClick(comment.commentNum)}
                     >
                       삭제
                     </S.DeleteButton>
+                    <S.ReplyButtonSpace />
+                    <S.UpdateButton
+                      onClick={() => handleEditClick(comment.commentNum)}
+                    >
+                      수정
+                    </S.UpdateButton>
                   </>
                 )}
               </S.Reply>

@@ -633,6 +633,14 @@ export const ADMIN = {
    */
   QNA: "/a/qna",
 
+  /**1:1 문의 상세 페이지 URL
+   * @return "/a/qna/ +id"
+   */
+  QNA_DETAIL: (id) => {
+    if (id === undefined) return "/a/qna/:id";
+    else return "/a/qna/" + id;
+  },
+
   /**상품 관리 페이지 URL
    * @return "/a/product"
    */

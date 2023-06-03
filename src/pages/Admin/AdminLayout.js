@@ -1,5 +1,5 @@
-import { Outlet } from "react-router-dom";
-import { useState } from "react";
+import { Outlet, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -10,11 +10,13 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { mainListItems } from "./AdminNav";
 import { Avatar } from "@mui/material";
+import { ADMIN } from "../../constants/PageURL";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Link } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -25,7 +27,7 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
+      <Link to="/" style={{ textDecoration: "none", color: "black" }}>
         PETMILY
       </Link>{" "}
       {new Date().getFullYear()}
@@ -82,11 +84,34 @@ const Drawer = styled(MuiDrawer, {
 
 const defaultTheme = createTheme();
 
+const pages = [
+  { title: "회원관리", path: ADMIN.MEMBER },
+  { title: "입양관리", path: ADMIN.ADOPT },
+  { title: "대시보드", path: ADMIN.ADMINLAYOUT },
+  { title: "1:1문의", path: ADMIN.QNA },
+  { title: "상품관리", path: ADMIN.PRODUCT },
+  { title: "상품입력", path: ADMIN.PRODUCT_WRITE },
+  { title: "주문/배송관리", path: ADMIN.ORDER },
+  { title: "기부관리", path: ADMIN.DONATION },
+  { title: "게시글관리", path: ADMIN.BOARD },
+];
+
 const Layout = () => {
+  const { pathname } = useLocation();
   const [open, setOpen] = useState(true);
+  const [title, setTitle] = useState("");
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  useEffect(() => {
+    setTitle(
+      pages.find(
+        (page) =>
+          pathname === page.path ||
+          (page.path !== ADMIN.ADMINLAYOUT && pathname.includes(page.path))
+      ).title
+    );
+  }, [pathname]);
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
@@ -116,11 +141,11 @@ const Layout = () => {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              PETMILY
+              {title}
             </Typography>
-            <Avatar alt="Remy Sharp" src="/broken-image.jpg">
-              A
-            </Avatar>
+            <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+              <LogoutIcon />
+            </Link>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -132,24 +157,13 @@ const Layout = () => {
               px: [1],
             }}
           >
-            {/* <img
-              src="/images/petLogo.png"
-              alt="random"
-              width="110px"
-              height="40px"
-              style={{ marginRight: "60px" }}
-            /> */}
             <IconButton onClick={toggleDrawer}>
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
 
           <Divider />
-          <List component="nav">
-            {mainListItems}
-            {/* <Divider sx={{ my: 1 }} /> */}
-            {/* {secondaryListItems} */}
-          </List>
+          <List component="nav">{mainListItems}</List>
         </Drawer>
         <Box
           component="main"

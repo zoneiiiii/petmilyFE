@@ -186,7 +186,8 @@ const Notice = () => {
                       sx={{
                         ...tdSx,
                         textAlign: "left",
-                        width: "60%",
+                        // width: "60%",
+                        maxWidth: "648px",
                       }}
                     >
                       <StyledLink
@@ -250,7 +251,7 @@ const Notice = () => {
             count={totalPage}
             defaultPage={nowPage}
             page={nowPage}
-            color="fbd385"
+            color="primary"
             showFirstButton
             showLastButton
             onChange={handleChangePage}
@@ -287,8 +288,14 @@ const tdSx = {
   textAlign: "center",
 };
 const StyledLink = styled(Link)`
+  display: block;
   text-decoration: none;
   color: black;
+  max-width: 648px;
+  text-align: start;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   :hover {
     text-decoration: underline;
   }

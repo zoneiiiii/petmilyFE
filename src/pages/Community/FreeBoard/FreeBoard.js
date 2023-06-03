@@ -23,7 +23,6 @@ import NotFound from "../../NotFound/NotFound";
 import Loading from "../../../components/Loading/LoadingPage";
 import { AuthContext } from "../../../contexts/AuthContexts";
 import { CustomTheme } from "../../../assets/Theme/CustomTheme";
-import { fontWeight } from "@mui/system";
 
 const theme = createTheme({
     palette: {
@@ -247,7 +246,7 @@ const FreeBoard = () => {
                                         <StyledTableCell align="center" sx={{ minWidth: 200, background: '#FBD385' }}>제목</StyledTableCell>
                                         <StyledTableCell align="center" sx={{ minWidth: 40, maxWidth: 40, background: '#FBD385' }}>작성자</StyledTableCell>
                                         <StyledTableCell align="center" sx={{ minWidth: 50, background: '#FBD385' }}>조회수</StyledTableCell>
-                                        <StyledTableCell align="center" sx={{ minWidth: 10, background: '#FBD385' }} onClick={handleSortRequest}>
+                                        <StyledTableCell align="center" sx={{ minWidth: 90, background: '#FBD385' }} onClick={handleSortRequest}>
                                             <TableSortLabel active={false} direction={orderDirection}>
                                                 작성일
                                             </TableSortLabel>
