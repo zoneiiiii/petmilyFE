@@ -78,6 +78,14 @@ const AdminAdopt = () => {
         adopterTel: adopt.adopterTel,
         adoptState: adopt.adoptState,
         adopterBirth: adopt.adopterBirth,
+        petImg: adopt.petImg,
+        petAge: adopt.petAge,
+        petSpecies: adopt.petSpecies,
+        shelterName: adopt.shelterName,
+        shelterTel: adopt.shelterTel,
+        shelterAddr: adopt.shelterAddr,
+        sexCd: adopt.sexCd,
+        neuterYn: adopt.neuterYn,
       },
     });
   };
@@ -177,7 +185,7 @@ const AdminAdopt = () => {
                         onClick={() => handleOnClick(adopt.adoptNum, adopt)}
                       >
                         <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                          {data.length - index}
+                          {data.length - ((page - 1) * rowsPerPage + index)}
                         </StyledTableCell>
                         <StyledTableCell align="center" sx={{ minWidth: 30 }}>
                           {adopt.adopterName}
