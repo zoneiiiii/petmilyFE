@@ -73,7 +73,7 @@ const FleaWrite = () => {
   const [cost, setCost] = useState(""); // 상품 가격
   const [content, setContent] = useState(""); // 상품 설명
   const [selectedCategory, setSelectedCategory] = useState('');  // 상품 카테고리
-  const [selectedStatus, setSelectedStatus] = useState(""); // 거래 완료 여부
+  const [selectedStatus, setSelectedStatus] = useState("판매중"); // 거래 완료 여부
   const [img, setImg] = useState("")  // 이미지 첨부
   // const [method, setMethod] = useState("") // 거래 방법
 
