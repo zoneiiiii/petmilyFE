@@ -29,6 +29,11 @@ const divtyle = {
   display: "flex",
 };
 const AdminAdoptInfo = () => {
+  const currentDate = new Date();
+
+  const isoCurrentDate = new Date(
+    currentDate.getTime() + 9 * 60 * 60 * 1000
+  ).toISOString();
   const location = useLocation();
   const state = location?.state || 0;
   const [adoptState, setAdoptState] = useState();
@@ -38,6 +43,7 @@ const AdminAdoptInfo = () => {
     axios
       .put(`/adopt/${state.adoptNum}`, {
         adoptState: "success",
+        approvedDate: isoCurrentDate,
       })
       .then(() => {
         alert("승인완료");
@@ -49,6 +55,7 @@ const AdminAdoptInfo = () => {
       await axios.delete(`/pet/${state.petName}`);
       await axios.put(`/adopt/${state.adoptNum}`, {
         adoptState: "fail",
+        approvedDate: isoCurrentDate,
       });
       alert("반려완료");
       document.location.href = ADMIN.ADOPT;
@@ -59,17 +66,17 @@ const AdminAdoptInfo = () => {
   const handleOnClick = () => {
     document.location.href = ADMIN.ADOPT;
   };
-  useEffect(() => {
-    axios
-      .get(`/pet/${state.petName}`)
-      .then((response) => {
-        setData(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("error");
-      });
-  }, [state.petName]);
+  // useEffect(() => {
+  //   axios
+  //     .get(`/pet/${state.petName}`)
+  //     .then((response) => {
+  //       setData(response.data);
+  //       console.log(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("error");
+  //     });
+  // }, [state.petName]);
 
   return (
     <ThemeProvider theme={CustomTheme}>
@@ -259,7 +266,7 @@ const AdminAdoptInfo = () => {
                 fontWeight="bold"
                 sx={fontStyle}
               >
-                {data.petName}
+                {state.petName}
               </Typography>
             </div>
             <div style={divtyle}>
@@ -286,7 +293,7 @@ const AdminAdoptInfo = () => {
                 fontWeight="bold"
                 sx={fontStyle}
               >
-                {data.shelterName}
+                {state.shelterName}
               </Typography>
             </div>
             <div style={divtyle}>
@@ -312,7 +319,7 @@ const AdminAdoptInfo = () => {
                 fontWeight="bold"
                 sx={fontStyle}
               >
-                {data.shelterAddr}
+                {state.shelterAddr}
               </Typography>
             </div>
             <div style={divtyle}>
@@ -338,7 +345,7 @@ const AdminAdoptInfo = () => {
                 fontWeight="bold"
                 sx={fontStyle}
               >
-                {data.shelterTel}
+                {state.shelterTel}
               </Typography>
             </div>
           </Box>
