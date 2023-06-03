@@ -87,7 +87,7 @@ const AdoptApplication = () => {
   const [data, setData] = useState([]);
   const [name, setName] = useState();
   const { loggedIn } = useContext(AuthContext);
-  const [adopterAddr, setAdopterAddr] = useState();
+  const [adopterAddr, setAdopterAddr] = useState("");
   const [adopterEmail, setAdopterEmail] = useState();
   const [adopterTel, setAdopterTel] = useState();
   const [adopterBirth, setAdopterBirth] = useState();
@@ -549,28 +549,7 @@ const AdoptApplication = () => {
             marginTop: "40px",
             marignBottom: "20px",
           }}
-        >
-          {/* <Typography
-            component="h5"
-            variant="h5"
-            sx={{
-              color: "black",
-            }}
-          >
-            입양 체크리스트를 꼭 확인 후 신청해 주세요!
-          </Typography>
-          <Button
-            style={{
-              color: "gray",
-              fontSize: "medium",
-
-              height: "20px",
-            }}
-            onClick={() => navigate(ADOPT.CHECKLIST)}
-          >
-            체크리스트 보러가기.
-          </Button> */}
-        </div>
+        ></div>
 
         <Container
           style={{
@@ -640,7 +619,7 @@ const AdoptApplication = () => {
                     value={adopterAddr}
                     required
                     fullWidth
-                    // InputProps={{ readOnly: true }}
+                    InputProps={{ readOnly: true }}
                   />
                   <S.ButtonSpace />
                   <S.WriteButton onClick={handlePostcodeOpen}>
