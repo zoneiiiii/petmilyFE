@@ -223,7 +223,7 @@ const CardWritter = styled.p`
 
 const CardStatus = styled.div`
 position: absolute;
-top: 185px;
+top: 184px;
 right: 8px;
 display: flex;
 align-items: center;
