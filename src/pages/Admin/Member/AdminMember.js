@@ -122,17 +122,17 @@ const AdminMember = () => {
     return (
       <ThemeProvider theme={CustomTheme}>
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          <Paper sx={{ p: 1, mb: 2 }}>
-            <Box
-              display={"flex"}
-              justifyContent={"space-between"}
-              mt={2}
-              mb={2}
-            >
-              <Box display={"flex"} justifyContent={"flex-end"}>
-                총 회원수 : {totalMembers} 명
-              </Box>
-            </Box>
+          <Paper
+            sx={{
+              p: 1,
+              mb: 2,
+              fontWeight: "bold",
+              textAlign: "center",
+              height: "57px",
+              lineHeight: "46px",
+            }}
+          >
+            총 회원수 : {totalMembers} 명
           </Paper>
           <Paper>
             <Table>

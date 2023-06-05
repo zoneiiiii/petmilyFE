@@ -13,7 +13,6 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { mainListItems } from "./AdminNav";
-import { Avatar } from "@mui/material";
 import { ADMIN } from "../../constants/PageURL";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link } from "react-router-dom";
@@ -82,7 +81,14 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-const defaultTheme = createTheme();
+const defaultTheme = createTheme({
+  typography: {
+    fontFamily: "GmarketSansMedium",
+    button: {
+      fontWeight: "bold",
+    },
+  },
+});
 
 const pages = [
   { title: "회원관리", path: ADMIN.MEMBER },

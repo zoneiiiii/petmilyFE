@@ -4,6 +4,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { SHOP } from "../../constants/PageURL";
 import axios from "axios";
+import DOMPurify from "dompurify";
 
 const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
@@ -68,12 +69,17 @@ const ProductDetail = () => {
     setIsModalOpen(false);
     window.location.href = SHOP.CART;
   };
+  const createMarkup = (html) => {
+    return {
+      __html: DOMPurify.sanitize(html),
+    };
+  };
 
   return (
     <ThemeProvider theme={theme}>
       <ProductWrapper>
         <ProductContainer>
-          <ProductImage src="/images/product.png" />
+          <ProductImage src={products.imgThumbnail} />
           <ProductInfo>
             <ProductTitle>{products.productName}</ProductTitle>
             <ProductPrice>
@@ -107,7 +113,9 @@ const ProductDetail = () => {
       <Line />
       <ProductDescription>제품 상세 정보</ProductDescription>
       <Line />
-      <ProductDetailImage src="/images/productdetail.png" />
+      <ProductDetailContent
+        dangerouslySetInnerHTML={createMarkup(products.productContent)}
+      />
 
       {isModalOpen && (
         <Modal>
@@ -197,7 +205,7 @@ const ProductContainer = styled.div`
   display: flex;
   justify-content: center;
   border: 1px solid #ccc;
-  width: 1350px;
+  width: 1008px;
 `;
 
 const ProductImage = styled.img`
@@ -268,7 +276,7 @@ const ButtonsWrapper = styled.div`
 const Line = styled.hr`
   border: 1px solid rgba(224, 224, 224, 1);
   width: 100%;
-  max-width: 1350px;
+  max-width: 1008px;
   margin-top: 1rem;
   margin-bottom: 1rem;
 `;
@@ -280,9 +288,9 @@ const ProductDescription = styled.div`
   font-size: 1rem;
 `;
 
-const ProductDetailImage = styled.img`
+const ProductDetailContent = styled.div`
   display: block;
-  margin: auto;
+  margin: 0 auto;
 `;
 
 export default ProductDetail;

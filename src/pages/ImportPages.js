@@ -99,6 +99,7 @@ import AdminMember from "./Admin/Member/AdminMember";
 import AdminOrder from "./Admin//Orders/AdminOrder";
 import AdminProduct from "./Admin/Products/AdminProduct";
 import AdminProductWrite from "./Admin/Products/AdminProductWrite";
+import AdminProductModify from "./Admin/Products/AdminProductModify";
 import AdminQnA from "./Admin/QnA/AdminQnA";
 import AdminQnADetail from "./Admin/QnA/AdminQnADetail";
 import AdminAdoptDetail from "./Admin/Adopt/AdmingAdoptInfo";
@@ -359,6 +360,7 @@ export const Community = {
  ** AdminOrder
  ** AdminProduct
  ** AdminProductWrite
+ ** AdminProductModify
  ** AdminQnA
  ** AdminQnADetail
  ** AdminDonation
@@ -373,6 +375,7 @@ export const Admin = {
   AdminOrder: AdminOrder,
   AdminProduct: AdminProduct,
   AdminProductWrite: AdminProductWrite,
+  AdminProductModify: AdminProductModify,
   AdminQnA: AdminQnA,
   AdminQnADetail: AdminQnADetail,
   AdminDonation: AdminDonation,

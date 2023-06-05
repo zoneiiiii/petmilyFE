@@ -99,10 +99,17 @@ const AdminDonation = () => {
   } else {
     return (
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-        <Paper sx={{ p: 1, mb: 2 }}>
-          <S.TotalDonation>
-            누적 기부금 : {formatCurrency(totalCost)}
-          </S.TotalDonation>
+        <Paper
+          sx={{
+            p: 1,
+            mb: 2,
+            fontWeight: "bold",
+            textAlign: "center",
+            height: "57px",
+            lineHeight: "46px",
+          }}
+        >
+          누적 기부금 : {formatCurrency(totalCost)}
         </Paper>
         <S.RecentDonations>
           <Paper

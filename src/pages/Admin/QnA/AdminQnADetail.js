@@ -216,7 +216,11 @@ const AdminQnADetail = () => {
               <StyledTableRow>
                 <StyledTableCell align="center" colSpan={3}>
                   <ButtonStyle>
-                    <Button className="write" onClick={handleOpen}>
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      onClick={handleOpen}
+                    >
                       답변 작성
                     </Button>
                   </ButtonStyle>
@@ -250,10 +254,20 @@ const AdminQnADetail = () => {
             {contentError ? "내용을 입력해 주세요." : null}
           </FormHelperText>
           <ButtonStyle>
-            <Button className="write" onClick={handleUpdate}>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ width: "90px", height: "30px", mt: "10px", mr: "10px" }}
+              onClick={handleUpdate}
+            >
               글쓰기
             </Button>
-            <Button className="quit" onClick={handleReset}>
+            <Button
+              variant="contained"
+              color="warning"
+              sx={{ width: "90px", height: "30px", mt: "10px" }}
+              onClick={handleReset}
+            >
               취소
             </Button>
           </ButtonStyle>
@@ -275,32 +289,6 @@ const AdminQnADetail = () => {
 const ButtonStyle = styleds.div`
   margin-top: 5px;
   text-align: center;
-  .write {
-    background-color: #fbd385;
-    color: white;
-    width: 90px;
-    height: 30px;
-    margin-top: 10px;
-    margin-right: 10px;
-    &:hover {
-      background-color: #facc73;
-    }
-    &:focus {
-      background-color: #facc73;
-    }
-  }
-  .quit {
-    background-color: #bfbfbf;
-    color: white;
-    width: 90px;
-    height: 30px;
-    margin-top: 10px;
-    &:hover {
-      background-color: #b2b0b0;
-    }
-    &:focus {
-      background-color: #b2b0b0;
-    }
   }
 `;
 export default AdminQnADetail;
