@@ -175,7 +175,7 @@ const FleaWrite = () => {
                 setContent(data.boardContent);
                 setCost(data.boardCost);
                 setSelectedCategory(data.boardCategory);
-                setSelectedStatus(data.boardStatus);
+                setSelectedStatus(data.boardStatus ? "판매중" : "판매완료");
                 setThumbnail(data.imgThumbnail);
             } catch (error) {
                 console.error("Error fetching data : ", error);
@@ -343,7 +343,7 @@ const FleaWrite = () => {
                                                     판매중
                                                 </ToggleButton>
                                                 <ToggleButton
-                                                    value="판매 완료"
+                                                    value="판매완료"
                                                     sx={{
                                                         width: "80px",
                                                         "&.Mui-selected": {
@@ -356,7 +356,7 @@ const FleaWrite = () => {
                                                         },
                                                     }}
                                                 >
-                                                    판매 완료
+                                                    판매완료
                                                 </ToggleButton>
                                             </ToggleButtonGroup>
                                         </FormControl>

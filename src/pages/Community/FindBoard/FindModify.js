@@ -17,7 +17,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { MyCustomUploadAdapterPlugin } from "../../../components/common/UploadAdapter";
 import { COMMUNITY } from "../../../constants/PageURL";
 import Loading from "../../../components/Loading/LoadingPage";
-import sigungu from "../Missing/sigungu";
+import hangjungdong from "../Missing/hangjungdong";
 import axios from "axios";
 
 const ITEM_HEIGHT = 50;
@@ -50,47 +50,28 @@ const FindModify = () => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [species, setSpecies] = useState("");
-    const [location, setLocation] = useState("서울시"); // 미구현 상태(임시 주소)
     const [age, setAge] = useState("");
     const [gender, setGender] = useState("");
+    const [location, setLocation] = useState("");
 
+    /* 지역 SELECT START */
+    const { sido, sigugun, dong } = hangjungdong;
     const [val1, setVal1] = useState("");
     const [val2, setVal2] = useState("");
     const [val3, setVal3] = useState("");
-    // const { sido, sigugun, dong } = sigungu;
-    const { sido = [], sigugun = [], dong = [] } = sigungu;
-    const [formAble, setFormAble] = useState(false);
-    const [open, setOpen] = useState(false);
-    const handleClose = () => setOpen(false);
-    const handleOpen = () => {
-        if (
-            title === undefined ||
-            title === "" ||
-            content === undefined ||
-            content === "" ||
-            species === undefined ||
-            species === "" ||
-            location === undefined ||
-            location === "" ||
-            age === undefined ||
-            age === "" ||
-            gender === undefined ||
-            gender === ""
-        ) {
-            setFormAble(false);
-            setOpen(true);
-        } else {
-            setFormAble(true);
-            setOpen(true);
-            console.log(title);
-            console.log(content);
-            console.log(species);
-            console.log(location);
-            console.log(age);
-            console.log(gender);
-            document.location.href = COMMUNITY.FIND;
-        }
-    };
+
+    useEffect(() => {
+        const sidoObj = hangjungdong.sido.find(i => i.sido === val1);
+        const sidoCodeNm = sidoObj ? sidoObj.codeNm : null; // sidoObj가 존재하면 codeNm을, 존재하지 않으면 null을 반환
+        const sigugunObj = hangjungdong.sigugun.find(i => i.sigugun === val2 && i.sido === val1);
+        const sigugunCodeNm = sigugunObj ? sigugunObj.codeNm : null; // sigugunObj 존재하면 codeNm을, 존재하지 않으면 null을 반환
+        const dongObj = hangjungdong.dong.find(i => i.dong === val3 && i.sigugun === val2 && i.sido === val1);
+        const dongCodeNm = dongObj ? dongObj.codeNm : null; // dongObj 존재하면 codeNm을, 존재하지 않으면 null을 반환
+        setLocation(sidoCodeNm + " " + sigugunCodeNm + " " + dongCodeNm);
+        console.log("시 선택:", location);  // 테스트용(삭제)
+
+    }, [val1, val2, val3, location]);
+    /* 지역 SELECT END */
 
     const handleCancel = () => {
         setTitle("");
@@ -121,7 +102,7 @@ const FindModify = () => {
             setSpeciesError(true);
             isError = true;
         }
-        if (location === "") {
+        if (location === "" || location.includes(null)) {
             setLocationError(true);
             isError = true;
         }
@@ -295,93 +276,45 @@ const FindModify = () => {
                                     <SelectContainer>
                                         <p className="title">목격 지역</p>
                                         <nav id="hot-articles-navigation" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '2rem' }}>
-                                            <select name="region1" id="region1" onChange={(e) => setVal1(e.target.value)} className="hot-articles-nav-select">
-                                                <option value="선택">지역을 선택하세요</option>
-                                                <option value="서울특별시">서울특별시</option>
-                                                <option value="부산광역시">부산광역시</option>
-                                                <option value="대구광역시">대구광역시</option>
-                                                <option value="인천광역시">인천광역시</option>
-                                                <option value="광주광역시">광주광역시</option>
-                                                <option value="대전광역시">대전광역시</option>
-                                                <option value="울산광역시">울산광역시</option>
-                                                <option value="세종특별자치시">세종특별자치시</option>
-                                                <option value="경기도">경기도</option>
-                                                <option value="강원도">강원도</option>
-                                                <option value="충청북도">충청북도</option>
-                                                <option value="충청남도">충청남도</option>
-                                                <option value="전라북도">전라북도</option>
-                                                <option value="전라남도">전라남도</option>
-                                                <option value="경상북도">경상북도</option>
-                                                <option value="경상남도">경상남도</option>
-                                                <option value="제주특별자치도">제주특별자치도</option></select>
-                                            <select name="region2" id="region2" onChange={(e) => setVal2(e.target.value)} className="hot-articles-nav-select">
-                                                <option value="">동네를 선택하세요</option>
-                                                <option value="강남구">강남구</option>
-                                                <option value="강동구">강동구</option>
-                                                <option value="강북구">강북구</option>
-                                                <option value="강서구">강서구</option>
-                                                <option value="관악구">관악구</option>
-                                                <option value="광진구">광진구</option>
-                                                <option value="구로구">구로구</option>
-                                                <option value="금천구">금천구</option>
-                                                <option value="노원구">노원구</option>
-                                                <option value="도봉구">도봉구</option>
-                                                <option value="동대문구">동대문구</option>
-                                                <option value="동작구">동작구</option>
-                                                <option value="마포구">마포구</option>
-                                                <option value="서대문구">서대문구</option>
-                                                <option value="서초구">서초구</option>
-                                                <option value="성동구">성동구</option>
-                                                <option value="성북구">성북구</option>
-                                                <option value="송파구">송파구</option>
-                                                <option value="양천구">양천구</option>
-                                                <option value="영등포구">영등포구</option>
-                                                <option value="용산구">용산구</option>
-                                                <option value="은평구">은평구</option>
-                                                <option value="종로구">종로구</option>
-                                                <option value="중구">중구</option>
-                                                <option value="중랑구">중랑구</option></select>
-
-                                            <select name="region3" id="region3" onChange={(e) => setVal3(e.target.value)} className="hot-articles-nav-select">
-                                                <option value="">동을 선택하세요</option>
-                                                <option value="개포1동">개포1동</option>
-                                                <option value="개포동">개포동</option>
-                                                <option value="율현동">율현동</option>
-                                                <option value="대치4동">대치4동</option>
-                                                <option value="일원1동">일원1동</option>
-                                                <option value="논현동">논현동</option>
-                                                <option value="도곡2동">도곡2동</option>
-                                                <option value="대치동">대치동</option>
-                                                <option value="청담동">청담동</option>
-                                                <option value="대치1동">대치1동</option>
-                                                <option value="논현2동">논현2동</option>
-                                                <option value="삼성1동">삼성1동</option>
-                                                <option value="삼성동">삼성동</option>
-                                                <option value="역삼2동">역삼2동</option>
-                                                <option value="역삼동">역삼동</option>
-                                                <option value="일원동">일원동</option>
-                                                <option value="개포3동">개포3동</option>
-                                                <option value="도곡동">도곡동</option>
-                                                <option value="압구정동">압구정동</option>
-                                                <option value="신사동">신사동</option>
-                                                <option value="논현1동">논현1동</option>
-                                                <option value="개포2동">개포2동</option>
-                                                <option value="수서동">수서동</option>
-                                                <option value="역삼1동">역삼1동</option>
-                                                <option value="세곡동">세곡동</option>
-                                                <option value="자곡동">자곡동</option>
-                                                <option value="도곡1동">도곡1동</option>
-                                                <option value="개포4동">개포4동</option>
-                                                <option value="대치2동">대치2동</option>
-                                                <option value="일원본동">일원본동</option>
-                                                <option value="삼성2동">삼성2동</option></select>
+                                            {/* <h1>{`${val1}-${val2}-${val3}`}</h1> */}
+                                            <select onChange={(e) => setVal1(e.target.value)}>
+                                                <option value="">선택</option>
+                                                {sido.map((el) => (
+                                                    <option key={el.sido} value={el.sido}>
+                                                        {el.codeNm}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            <select onChange={(e) => setVal2(e.target.value)}>
+                                                <option value="">선택</option>
+                                                {sigugun
+                                                    .filter((el) => el.sido === val1)
+                                                    .map((el) => (
+                                                        <option key={el.sigugun} value={el.sigugun}>
+                                                            {el.codeNm}
+                                                        </option>
+                                                    ))}
+                                            </select>
+                                            <select onChange={(e) => {
+                                                setVal3(e.target.value);
+                                                setLocationError(false);
+                                            }} >
+                                                <option value="">선택</option>
+                                                {dong
+                                                    .filter((el) => el.sido === val1 && el.sigugun === val2)
+                                                    .map((el) => (
+                                                        <option key={el.dong} value={el.dong}>
+                                                            {el.codeNm}
+                                                        </option>
+                                                    ))}
+                                            </select>
                                         </nav>
                                     </SelectContainer>
                                 </FormRow>
                                 <FormRow>
                                     <ErrorMsg>
                                         <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
-                                            {speciesError ? "지역을 선택해 주세요." : null}
+                                            {locationError ? "지역을 선택해 주세요." : null}
                                         </FormHelperText>
                                     </ErrorMsg>
                                 </FormRow>

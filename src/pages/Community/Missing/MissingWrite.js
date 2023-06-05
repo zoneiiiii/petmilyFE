@@ -19,7 +19,7 @@ import { CustomTheme } from "../../../assets/Theme/CustomTheme";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { MyCustomUploadAdapterPlugin } from "../../../components/common/UploadAdapter";
-import sigungu from "./sigungu";
+import hangjungdong from "./hangjungdong";
 import { COMMUNITY } from "../../../constants/PageURL";
 import axios from "axios";
 
@@ -51,63 +51,29 @@ const MissingWrite = () => {
   const [content, setContent] = useState("");
   const [name, setName] = useState("");
   const [species, setSpecies] = useState("");
-  const [location, setLocation] = useState("서울시"); // 미구현 상태(임시 주소)
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("실종");
+  const [location, setLocation] = useState("");
 
-  // const [val1, setVal1] = useState("");
-  // const [val2, setVal2] = useState("");
-  // const [val3, setVal3] = useState("");
-  // const { sido, sigugun, dong } = sigungu;
-  // const { sido = [], sigugun = [], dong = [] } = sigungu;
-  const [sidos, setSidos] = useState([]);
-  const [siguguns, setSiguguns] = useState([]);
-  const [dongs, setDongs] = useState([]);
-  const [weatherUrl, setWeatherUrl] = useState("");
-  const [selectedSido, setSelectedSido] = useState("");
-  const [selectedSigugun, setSelectedSigugun] = useState("");
+  /* 지역 SELECT START */
+  const { sido, sigugun, dong } = hangjungdong;
+  const [val1, setVal1] = useState("");
+  const [val2, setVal2] = useState("");
+  const [val3, setVal3] = useState("");
 
   useEffect(() => {
-    axios
-      .get(
-        "<https://zelkun.tistory.com/attachment/cfile8.uf@99BB7A3D5D45C065343307.js>"
-      )
-      .then((res) => {
-        const hangjungdong = res.data.match(/var hangjungdong = (.+);/)[1];
-        const parsedData = JSON.parse(hangjungdong);
-        setSidos(parsedData.sido);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+    const sidoObj = hangjungdong.sido.find(i => i.sido === val1);
+    const sidoCodeNm = sidoObj ? sidoObj.codeNm : null; // sidoObj가 존재하면 codeNm을, 존재하지 않으면 null을 반환
+    const sigugunObj = hangjungdong.sigugun.find(i => i.sigugun === val2 && i.sido === val1);
+    const sigugunCodeNm = sigugunObj ? sigugunObj.codeNm : null; // sigugunObj 존재하면 codeNm을, 존재하지 않으면 null을 반환
+    const dongObj = hangjungdong.dong.find(i => i.dong === val3 && i.sigugun === val2 && i.sido === val1);
+    const dongCodeNm = dongObj ? dongObj.codeNm : null; // dongObj 존재하면 codeNm을, 존재하지 않으면 null을 반환
+    setLocation(sidoCodeNm + " " + sigugunCodeNm + " " + dongCodeNm);
+    console.log("시 선택:", location);  // 콘솔 테스트용(삭제)
 
-  const handleSidoChange = (e) => {
-    const selectedSido = e.target.value;
-    const filteredSiguguns = sidos.find(
-      (sido) => sido.sido === selectedSido
-    ).sigugun;
-    setSiguguns(filteredSiguguns);
-  };
-
-  const handleSigugunChange = (e) => {
-    const selectedSigugun = e.target.value;
-    const filteredDongs = dongs.filter(
-      (dong) => dong.sido === selectedSido && dong.sigugun === selectedSigugun
-    );
-    setDongs(filteredDongs);
-  };
-
-  const handleDongChange = (e) => {
-    const sido = selectedSido;
-    const sigugun = selectedSigugun;
-    const dong = e.target.value;
-    const dongCode = sido + sigugun + dong + "00";
-    const url = `https://www.weather.go.kr/weather/process/timeseries-dfs-body-ajax.jsp?myPointCode=${dongCode}&unit=K`;
-    setWeatherUrl(url);
-  };
-
-  const [formAble, setFormAble] = useState(false);
-  const [open, setOpen] = useState(false);
+  }, [val1, val2, val3, location]);
+  /* 지역 SELECT END */
 
   const handleReset = () => {
     setTitle("");
@@ -150,7 +116,7 @@ const MissingWrite = () => {
       setSpeciesError(true);
       isError = true;
     }
-    if (location === "") {
+    if (location === "" || location.includes(null)) {
       setLocationError(true);
       isError = true;
     }
@@ -257,7 +223,7 @@ const MissingWrite = () => {
           <Board>게시글 작성</Board>
           <Grid sx={{ minWidth: 700, mt: 5, mb: 10 }}>
             <form onSubmit={handleSubmit}>
-              <div style={{ margin: "auto", maxWidth: "700px" }}>
+              <div style={{ margin: 'auto', maxWidth: '700px' }}>
                 <FormRowWithError>
                   <TextField
                     label="제목"
@@ -275,9 +241,7 @@ const MissingWrite = () => {
                     </FormHelperText>
                   </ErrorMsg>
                 </FormRowWithError>
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
+                <div style={{ display: "flex", justifyContent: 'space-between' }}>
                   <FormRowWithError>
                     <TextField
                       label="이름"
@@ -318,82 +282,52 @@ const MissingWrite = () => {
                 <FormRow>
                   <SelectContainer>
                     <p className="title">실종 지역</p>
-                    <div>
-                      <select id="sido" onChange={handleSidoChange}>
-                        <option value="">선택</option>
-                        {sidos.map((sido) => (
-                          <option key={sido.codeNm} value={sido.sido}>
-                            {sido.codeNm}
-                          </option>
-                        ))}
-                      </select>
-                      <select id="sigugun" onChange={handleSigugunChange}>
-                        <option value="">선택</option>
-                        {siguguns.map((sigugun) => (
-                          <option key={sigugun.codeNm} value={sigugun.sigugun}>
-                            {sigugun.codeNm}
-                          </option>
-                        ))}
-                      </select>
-                      <select id="dong" onChange={handleDongChange}>
-                        <option value="">선택</option>
-                        {dongs.map((dong) => (
-                          <option key={dong.codeNm} value={dong.dong}>
-                            {dong.codeNm}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    {/* <div>
-                      <iframe id="iframe" style={{ width: '100%', height: '500px' }} src={weatherUrl} />
-                    </div> */}
 
-                    {/* <div style={{ margin: 'auto' }}>
-                      <h1>{`${val1}-${val2}-${val3}`}</h1>
-                      <select onChange={(e) => setVal1(e.target.value)}>
-                        <option value="">선택</option>
-                        {sido.map((el) => (
-                          <option key={el.sido} value={el.sido}>
-                            {el.codeNm}
-                          </option>
-                        ))}
-                      </select>
-                      <select onChange={(e) => setVal2(e.target.value)}>
-                        <option value="">선택</option>
-                        {sigugun
-                          .filter((el) => el.sido === val1)
-                          .map((el) => (
-                            <option key={el.sigugun} value={el.sigugun}>
+                    <div style={{ margin: 'auto' }}>
+                      <nav id="hot-articles-navigation" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '2rem' }}>
+                        <select onChange={(e) => setVal1(e.target.value)}>
+                          <option value="">선택</option>
+                          {sido.map((el) => (
+                            <option key={el.sido} value={el.sido}>
                               {el.codeNm}
                             </option>
                           ))}
-                      </select>
-                      <select onChange={(e) => setVal3(e.target.value)}>
-                        <option value="">선택</option>
-                        {dong
-                          .filter(
-                            (el) => el.sido === val1 && el.sigugun === val2
-                          )
-                          .map((el) => (
-                            <option key={el.dong} value={el.dong}>
-                              {el.codeNm}
-                            </option>
-                          ))}
-                      </select>
-                    </div> */}
+                        </select>
+                        <select onChange={(e) => setVal2(e.target.value)}>
+                          <option value="">선택</option>
+                          {sigugun
+                            .filter((el) => el.sido === val1)
+                            .map((el) => (
+                              <option key={el.sigugun} value={el.sigugun}>
+                                {el.codeNm}
+                              </option>
+                            ))}
+                        </select>
+                        <select onChange={(e) => {
+                          setVal3(e.target.value);
+                          setLocationError(false);
+                        }} >
+                          <option value="">선택</option>
+                          {dong
+                            .filter((el) => el.sido === val1 && el.sigugun === val2)
+                            .map((el) => (
+                              <option key={el.dong} value={el.dong}>
+                                {el.codeNm}
+                              </option>
+                            ))}
+                        </select>
+                      </nav>
+                    </div>
                   </SelectContainer>
-                  {/* <SelectContainer>
-                  <p className="title">분류</p>
-                  <Select
-                    size="small"
-                    value={species}
-                    onChange={(e) => setSpecies(e.target.value)}
-                  >
-                    <MenuItem value="---">---</MenuItem>
-                    <MenuItem value="강아지">강아지</MenuItem>
-                    <MenuItem value="고양이">고양이</MenuItem>
-                  </Select>
-                </SelectContainer> */}
+                </FormRow>
+                <FormRow>
+                  <ErrorMsg>
+                    <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                      {locationError ? "지역을 선택해 주세요." : null}
+                    </FormHelperText>
+                  </ErrorMsg>
+                </FormRow>
+                <FormRow>
                   <SelectContainer>
                     <p className="title">나이</p>
                     <Select
@@ -420,6 +354,7 @@ const MissingWrite = () => {
                       ))}
                     </Select>
                   </SelectContainer>
+                  <CommonSpace />
                   <SelectContainer>
                     <p className="title">성별</p>
                     <Select
@@ -435,46 +370,10 @@ const MissingWrite = () => {
                       <MenuItem value="암컷">암컷</MenuItem>
                     </Select>
                   </SelectContainer>
-                </FormRow>
-                <FormRow>
-                  <ErrorMsg>
-                    <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
-                      {ageError ? "지역을 선택해 주세요." : null}
-                    </FormHelperText>
-                  </ErrorMsg>
-                  <ErrorMsg>
-                    <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
-                      {ageError ? "나이를 선택해 주세요." : null}
-                    </FormHelperText>
-                  </ErrorMsg>
-                  <ErrorMsg>
-                    <FormHelperText
-                      sx={{ color: "red", fontSize: "15px", float: "right" }}
-                    >
-                      {genderError ? "성별을 선택해 주세요." : null}
-                    </FormHelperText>
-                  </ErrorMsg>
-                </FormRow>
 
-                <FormRow>
-                  <FileContainer>
-                    <p className="title">대표 이미지</p>
-                    <label htmlFor="file">
-                      <div className="btn-upload">파일 선택</div>
-                    </label>
-                    <input
-                      type="file"
-                      hidden
-                      onChange={handleFileChange}
-                      className="file"
-                      id="file"
-                    />
-                  </FileContainer>
-
-                  {/* <ToggleButton /> */}
                   <StatusWrapper>
                     실종 상태
-                    <CommonSpace />
+                    <CommonSpace2 />
                     <FormControl>
                       <ToggleButtonGroup
                         size="small"
@@ -522,6 +421,33 @@ const MissingWrite = () => {
                   </StatusWrapper>
                 </FormRow>
                 <FormRow>
+                  <ErrorMsg>
+                    <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                      {ageError ? "나이를 선택해 주세요." : null}
+                    </FormHelperText>
+                  </ErrorMsg>
+                  <ErrorMsg>
+                    <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                      {genderError ? "성별을 선택해 주세요." : null}
+                    </FormHelperText>
+                  </ErrorMsg>
+                  <ErrorMsg>
+                    <FormHelperText sx={{ color: "red", fontSize: "15px", float: "right" }}>
+                      {statusError ? "실종상태 선택해 주세요." : null}
+                    </FormHelperText>
+                  </ErrorMsg>
+                </FormRow>
+
+                <FormRow>
+                  <FileContainer>
+                    <p className="title">대표 이미지</p>
+                    <label htmlFor="file">
+                      <div className="btn-upload">파일 선택</div>
+                    </label>
+                    <input type="file" hidden onChange={handleFileChange} className="file" id="file" />
+                  </FileContainer>
+                </FormRow>
+                <FormRow>
                   {previewUrl && (
                     <PreviewWrapper>
                       <img
@@ -531,14 +457,6 @@ const MissingWrite = () => {
                       />
                     </PreviewWrapper>
                   )}
-
-                  <ErrorMsg>
-                    <FormHelperText
-                      sx={{ color: "red", fontSize: "15px", float: "right" }}
-                    >
-                      {statusError ? "실종 상태를 선택해 주세요." : null}
-                    </FormHelperText>
-                  </ErrorMsg>
                 </FormRow>
 
                 <FormRowWithError>
@@ -571,14 +489,16 @@ const MissingWrite = () => {
                     type="submit"
                     onClick={handleSubmit}
                     variant="contained"
-                  >
-                    글쓰기
+                  >글쓰기
                   </WriteButton>
                   <ButtonsSpace />
 
-                  <ResetButton variant="contained" onClick={handleReset}>
-                    취소
+                  <ResetButton
+                    variant="contained"
+                    onClick={handleReset}
+                  >취소
                   </ResetButton>
+
                 </ButtonsContainer>
               </div>
 
@@ -593,35 +513,36 @@ const MissingWrite = () => {
                 </Alert>
               </Modal>
             </form>
-          </Grid>
+          </Grid >
         </MainContainer>
-      </Section>
-    </ThemeProvider>
+      </Section >
+    </ThemeProvider >
   );
+
 };
 
 const Section = styled.section`
-  background: #f8f9fa;
-  padding: 30px 0 40px 0;
-`;
+background: #f8f9fa;
+padding: 30px 0 40px 0;
+`
 
 const MainContainer = styled.div`
-  width: 60vw;
-  // width: 1150px;
-  max-width: 1150px;
-  min-width: 790px;
-  border-radius: 8px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgb(233, 236, 239);
-  border-image: initial;
-  margin: 0px auto 20px;
-  background: rgb(255, 255, 255);
-`;
+width: 60vw;
+// width: 1150px;
+max-width: 1150px;
+min-width: 790px;
+border-radius: 8px;
+border-width: 1px;
+border-style: solid;
+border-color: rgb(233, 236, 239);
+border-image: initial;
+margin: 0px auto 20px;
+background: rgb(255, 255, 255);
+`
 
 const Board = styled.h1`
-  margin-top: 2vw;
-  text-align: center;
+margin-top: 2vw;
+text-align: center;
 `;
 
 const FormRowWithError = styled.div`
@@ -646,115 +567,122 @@ const SelectContainer = styled.div`
     font-weight: bold;
     color: #474747;
   }
-`;
+`
 
 const FileContainer = styled.div`
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  margin-bottom: 10px;
-
-  .title {
-    font-weight: bold;
-    color: #474747;
-    margin-right: 50px;
-  }
-
-  .btn-upload {
-    width: 150px;
-    height: 30px;
-    background: #ffffff;
-    border: 1px solid #000000;
-    border-radius: 10px;
-    font-weight: 500;
-    cursor: pointer;
     display: flex;
+    gap: 1rem;
     align-items: center;
-    justify-content: center;
-    &:hover {
-      background: #fbd385;
-      border: 1px solid #fbd385;
-      color: #fff;
-    }
-  }
-  .file {
-    display: none;
-  }
+    margin-bottom: 10px;
+
+    .title {
+        font-weight: bold;
+        color: #474747;
+        margin-right: 50px;
+}
+
+    .btn-upload {
+        width: 150px;
+        height: 30px;
+        background: #ffffff;
+        border: 1px solid #000000;
+        border-radius: 10px;
+        font-weight: 500;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        &:hover {
+            background: #fbd385;
+            border: 1px solid #fbd385;
+            color: #fff;
+}
+}
+            .file {
+                display: none;
+}
 `;
 
 const FormRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 16px;
-  align-items: center;
+display: flex;
+justify-content: space-between;
+width: 100%;
+margin-bottom: 10px;
+align-items: center;
 `;
 
 const PreviewWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  margin-left: 16px;
+display: flex;
+align-items: center;
+margin-left: 16px;
 `;
 
+
 const EditorWrapper = styled.div`
-  .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
-    min-height: 500px;
-    min-width: 700px;
-  }
+.ck.ck-editor__editable:not(.ck-editor__nested-editable) {
+min-height: 500px;
+min-width: 700px;
+}
 `;
 
 const StatusWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-grow: 1;
+display: flex;
+align-items: center;
+justify-content: flex-end;
+flex-grow: 1;
 `;
 
 const ButtonsContainer = styled.div`
-  margin-top: 10px;
-  margin-bottom: 10px;
-  min-width: 700px;
-  display: flex;
-  justify-content: flex-end;
+margin-top: 10px;
+margin-bottom: 10px;
+min-width: 700px;
+display: flex;
+justify-content: flex-end;
 `;
 
 const WriteButton = styled(Button)`
-  && {
-    color: #fff;
-    background-color: #fbd385;
-    width: auto;
-    height: 30px;
-    margin-top: 10px;
-    margin-left: auto;
-    &:hover {
-      background-color: #ffbe3f;
-    }
-  }
+&& {
+color: #fff;
+background-color: #fbd385;
+width: auto;
+height: 30px;
+margin-top: 10px;
+margin-left: auto;
+&:hover {
+  background-color: #ffbe3f;
+}
+}
 `;
 
 const CommonSpace = styled.div`
-  width: 10px;
-  height: auto;
-  display: inline-block;
+width: 140px;
+height: auto;
+display: inline-block;
+`;
+
+const CommonSpace2 = styled.div`
+width: 20px;
+height: auto;
+display: inline-block;
 `;
 
 const ButtonsSpace = styled.div`
-  width: 5px;
-  height: auto;
-  display: inline-block;
+width: 5px;
+height: auto;
+display: inline-block;
 `;
 
 const ResetButton = styled(Button)`
-  && {
-    color: #fff;
-    background-color: #bfbfbf;
-    width: auto;
-    height: 30px;
-    margin-top: 10px;
-    &:hover {
-      background-color: #b2b0b0;
-    }
-  }
+&& {
+color: #fff;
+background-color: #bfbfbf;
+width: auto;
+height: 30px;
+margin-top: 10px;
+&:hover {
+  background-color: #b2b0b0;
+}
+}
 `;
 
 export default MissingWrite;

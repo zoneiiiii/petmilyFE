@@ -10,171 +10,171 @@ import NotFound from "../../NotFound/NotFound";
 import Loading from "../../../components/Loading/LoadingPage";
 import { COMMUNITY } from "../../../constants/PageURL";
 import {
-    Button,
-    ThemeProvider,
+  Button,
+  ThemeProvider,
 } from "@mui/material";
 import { CustomTheme } from "../../../assets/Theme/CustomTheme";
 
 const formatDate = (dateString) => {
-    //날짜 변환함수
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const hour = String(date.getHours()).padStart(2, "0");
-    const minute = String(date.getMinutes()).padStart(2, "0");
-    return `${year}.${month}.${day} ${hour}:${minute}`;
+  //날짜 변환함수
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hour = String(date.getHours()).padStart(2, "0");
+  const minute = String(date.getMinutes()).padStart(2, "0");
+  return `${year}.${month}.${day} ${hour}:${minute}`;
 };
 
 const FreeDetail = () => {
-    const [data, setData] = useState([]); // DB 데이터 가져오는 변수
-    const [isLoading, setIsLoading] = useState(true); //로딩 상태
-    const { id } = useParams(); //게시글 id
-    const { userNum } = useContext(AuthContext); // 로그인 상태 체크
-    const navigate = useNavigate();
-    // const [totalComents, setTotalComments] = useState(0); // 댓글 갯수 관리 변수
+  const [data, setData] = useState([]); // DB 데이터 가져오는 변수
+  const [isLoading, setIsLoading] = useState(true); //로딩 상태
+  const { id } = useParams(); //게시글 id
+  const { userNum } = useContext(AuthContext); // 로그인 상태 체크
+  const navigate = useNavigate();
+  // const [totalComents, setTotalComments] = useState(0); // 댓글 갯수 관리 변수
 
-    // // 댓글 갯수 호출
-    // const getData = (totalComents) => {
-    //     setTotalComments(totalComents);
-    //     console.log(totalComents);
-    // }
+  // // 댓글 갯수 호출
+  // const getData = (totalComents) => {
+  //     setTotalComments(totalComents);
+  //     console.log(totalComents);
+  // }
 
-    const profile = {
-        profileImg: data.memberImg, // 사용자 프로필 이미지
-        profileNickname: data.memberNickName, // 사용자 닉네임
-        region: "관악구 신림동"
-    }
+  const profile = {
+    profileImg: data.memberImg, // 사용자 프로필 이미지
+    profileNickname: data.memberNickName, // 사용자 닉네임
+    region: "관악구 신림동"
+  }
 
-    /* axios start */
-    useEffect(() => {
-        //게시글 Detail 호출
-        const fetchPost = async () => {
-            try {
-                const response = await axios.get(
-                    `http://localhost:8080/board/free/${id}`
-                ); //게시글 Detail 데이터  호출
-                setData(response.data);
-            } catch (error) {
-                console.error("Error fetching data : ", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchPost();
-    }, [id]);
-    /* axios end */
-
-    if (isLoading) {
-        return <Loading />; // 로딩 중일 때 표시할 컴포넌트
-    }
-
-    if (!data) {
-        return <NotFound />; //존재하지 않는 번호를 넣었을 때 표시할 컴포넌트
-    }
-
-    const handleEdit = () => {
-        //수정
-        navigate(COMMUNITY.FREE_MODIFY(id));
+  /* axios start */
+  useEffect(() => {
+    //게시글 Detail 호출
+    const fetchPost = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/board/free/${id}`
+        ); //게시글 Detail 데이터  호출
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data : ", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
+    fetchPost();
+  }, [id]);
+  /* axios end */
 
-    const handleDelete = async () => {
-        // 삭제
-        const result = window.confirm("정말 삭제하시겠습니까?");
-        if (result) {
-            try {
-                await axios.delete(`http://localhost:8080/board/free/${id}`, {
-                    withCredentials: true,
-                });
-                alert("게시물이 삭제되었습니다.");
-                navigate(COMMUNITY.FREE);
-            } catch (error) {
-                if (error.response) {
-                    alert("해당 게시글을 삭제할 권한이 없습니다.");
-                } else {
-                    console.error("Error deleting post: ", error);
-                }
-            }
-        }
-    };
+  if (isLoading) {
+    return <Loading />; // 로딩 중일 때 표시할 컴포넌트
+  }
 
-    const handleReturn = () => {
-        // 돌아가기
+  if (!data) {
+    return <NotFound />; //존재하지 않는 번호를 넣었을 때 표시할 컴포넌트
+  }
+
+  const handleEdit = () => {
+    //수정
+    navigate(COMMUNITY.FREE_MODIFY(id));
+  };
+
+  const handleDelete = async () => {
+    // 삭제
+    const result = window.confirm("정말 삭제하시겠습니까?");
+    if (result) {
+      try {
+        await axios.delete(`http://localhost:8080/board/free/${id}`, {
+          withCredentials: true,
+        });
+        alert("게시물이 삭제되었습니다.");
         navigate(COMMUNITY.FREE);
+      } catch (error) {
+        if (error.response) {
+          alert("해당 게시글을 삭제할 권한이 없습니다.");
+        } else {
+          console.error("Error deleting post: ", error);
+        }
+      }
     }
+  };
 
-    const createMarkup = (html) => {
-        return {
-            __html: DOMPurify.sanitize(html),
-        };
+  const handleReturn = () => {
+    // 돌아가기
+    navigate(COMMUNITY.FREE);
+  }
+
+  const createMarkup = (html) => {
+    return {
+      __html: DOMPurify.sanitize(html),
     };
+  };
 
 
 
-    return (
-        <ThemeProvider theme={CustomTheme}>
-            <Section className="result">
-                <MainContainer className="result-container">
-                    <Container>
-                        <Top>자유게시판</Top>
-                        <Head>
-                            <hr />
-                            <p className="title">{data.freeSubject}</p>
-                            <div className="subtitle">
-                                {/* 유저 프로필사진 & 닉네임 */}
-                                <section className="article-profile">
-                                    <h3 className="hide">프로필</h3>
-                                    <div className="space-between">
-                                        <div style={{ display: 'flex' }}>
-                                            <div className="article-profile-image">
-                                                <img alt="프로필 이미지" src={profile.profileImg} />
-                                            </div>
-                                            <div className="article-profile-left">
-                                                <div className="nickname">{profile.profileNickname}</div>
-                                                {/* <div className="region">{profile.region}</div> */}
-                                            </div>
-                                            <p className="date">{formatDate(data.freeDate)}</p>
-                                            <p className="cnt">조회수: {data.freeCount}</p>
-                                        </div>
-                                    </div>
-                                </section>
-                            </div>
+  return (
+    <ThemeProvider theme={CustomTheme}>
+      <Section className="result">
+        <MainContainer className="result-container">
+          <Container>
+            <Top>자유게시판</Top>
+            <Head>
+              <hr />
+              <p className="title">{data.freeSubject}</p>
+              <div className="subtitle">
+                {/* 유저 프로필사진 & 닉네임 */}
+                <section className="article-profile">
+                  <h3 className="hide">프로필</h3>
+                  <div className="space-between">
+                    <div style={{ display: 'flex' }}>
+                      <div className="article-profile-image">
+                        <img alt="프로필 이미지" src={profile.profileImg} />
+                      </div>
+                      <div className="article-profile-left">
+                        <div className="nickname">{profile.profileNickname}</div>
+                        {/* <div className="region">{profile.region}</div> */}
+                      </div>
+                      <p className="date">{formatDate(data.freeDate)}</p>
+                      <p className="cnt">조회수: {data.freeCount}</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
 
-                        </Head>
-                        <hr /><br />
-                        <Body>
-                            <DetailMiddle
-                                dangerouslySetInnerHTML={createMarkup(data.freeContent)}
-                            />
-                            <ButtonsContainer>
-                                {data.memberNum === userNum && (
-                                    <div>
-                                        <EditButton onClick={handleEdit} variant="contained">
-                                            수정
-                                        </EditButton>
-                                        <ButtonsSpace />
-                                        <DeleteButton onClick={handleDelete} variant="contained">
-                                            삭제
-                                        </DeleteButton>
-                                        <ButtonsSpace />
-                                    </div>
-                                )}
-                                <ReturnButton onClick={handleReturn} variant="contained">
-                                    돌아가기
-                                </ReturnButton>
-                            </ButtonsContainer>
-                        </Body>
+            </Head>
+            <hr /><br />
+            <Body>
+              <DetailMiddle
+                dangerouslySetInnerHTML={createMarkup(data.freeContent)}
+              />
+              <ButtonsContainer>
+                {data.memberNum === userNum && (
+                  <div>
+                    <EditButton onClick={handleEdit} variant="contained">
+                      수정
+                    </EditButton>
+                    <ButtonsSpace />
+                    <DeleteButton onClick={handleDelete} variant="contained">
+                      삭제
+                    </DeleteButton>
+                    <ButtonsSpace />
+                  </div>
+                )}
+                <ReturnButton onClick={handleReturn} variant="contained">
+                  돌아가기
+                </ReturnButton>
+              </ButtonsContainer>
+            </Body>
 
-                        <Comments>
-                            <hr />
-                            <p className="comment">댓글</p>
-                            <Comment boardId="free" boardNum={id} />
-                        </Comments>
-                    </Container>
-                </MainContainer>
-            </Section>
-        </ThemeProvider>
-    );
+            <Comments>
+              <hr />
+              <p className="comment">댓글</p>
+              <Comment boardId="free" boardNum={id} />
+            </Comments>
+          </Container>
+        </MainContainer>
+      </Section>
+    </ThemeProvider>
+  );
 }
 
 const Section = styled.section`
@@ -290,7 +290,7 @@ const Body = styled.div`
 `;
 
 const Comments = styled.div`
-    margin: 150px auto 20px auto;
+    margin: 20px auto 20px auto;
     font-size: 2rem;
     font-weight: 700;
 `;
