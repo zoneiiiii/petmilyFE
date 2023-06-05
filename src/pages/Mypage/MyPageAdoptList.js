@@ -2,9 +2,7 @@ import {
   Box,
   Button,
   IconButton,
-  Input,
   InputAdornment,
-  Modal,
   Popover,
   Table,
   TableBody,
@@ -21,16 +19,18 @@ import CloseIcon from "@mui/icons-material/Close";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import dayjs from "dayjs";
 
 const MyPageAdoptList = () => {
-  const [pets, setPets] = useState([]);
+  const [adopts, setAdopts] = useState([]);
   const [isRerendered, setIsRerendered] = useState(false);
   useEffect(() => {
     if (!isRerendered)
       axios
         .get("/mypage/adoptList/getList")
         .then((response) => {
-          if (response.data !== null) setPets(response.data);
+          console.log(response.data);
+          if (response.data !== null) setAdopts(response.data);
         })
         .catch((error) => console.error("에러발생:", error))
         .finally(() => setIsRerendered(true));
@@ -46,13 +46,13 @@ const MyPageAdoptList = () => {
       >
         입양 내역
       </Typography>
-      {pets.length > 0 ? (
-        pets.map((pet, index) => {
+      {adopts.length > 0 ? (
+        adopts.map((adopt, index) => {
           return (
             <PetData
-              pet={pet}
-              pets={pets}
-              setPets={setPets}
+              adopt={adopt}
+              adopts={adopts}
+              setAdopts={setAdopts}
               key={index}
               setIsRerendered={setIsRerendered}
             />
@@ -78,21 +78,21 @@ const MyPageAdoptList = () => {
 };
 
 const PetData = (props) => {
-  const { pet, pets, setPets, index, setIsRerendered } = props;
-  const [petName, setPetName] = useState(pet.petName ? pet.petName : "");
-  const [petImg, setPetImg] = useState(pet.petImg ? pet.petImg : "");
+  const { adopt, adopts, setAdopts, index, setIsRerendered } = props;
+  const [petName, setPetName] = useState(adopt.petName ? adopt.petName : "");
+  const [petImg, setPetImg] = useState(adopt.petImg ? adopt.petImg : "");
   const [petNameOpen, setPetNameOpen] = useState(false);
   const [petNameAnchorEl, setPetNameAnchorEl] = useState(null);
   const textFieldRef = useRef();
   const fileInputRef = useRef();
 
   useEffect(() => {
-    if (pet) {
-      console.log(pet);
-      setPetName(pet.petName ? pet.petName : "");
-      setPetImg(pet.petImg ? pet.petImg : "");
+    if (adopt) {
+      console.log(adopt);
+      setPetName(adopt.petName ? adopt.petName : "");
+      setPetImg(adopt.petImg ? adopt.petImg : "");
     }
-  }, [pet]);
+  }, [adopt]);
 
   const handleOpenNamePopover = (event) => {
     setPetNameAnchorEl(event.currentTarget.parentNode);
@@ -107,14 +107,14 @@ const PetData = (props) => {
     if (petName.length > 0) {
       axios
         .post("/mypage/adoptList/update/name", {
-          petNum: pet.petNum,
+          petNum: adopt.petNum,
           petName: petName,
-          petImg: pet.petImg,
+          petImg: adopt.petImg,
         })
         .then((response) => {
-          const newPets = [...pets];
+          const newPets = [...adopts];
           newPets[index] = response.data;
-          setPets(newPets);
+          setAdopts(newPets);
         })
         .catch((error) => console.error("에러발생:", error))
         .finally(() => {
@@ -142,14 +142,14 @@ const PetData = (props) => {
           setPetImg(response.data);
           axios
             .post("/mypage/adoptList/update/img", {
-              petNum: pet.petNum,
-              petName: pet.petName,
+              petNum: adopt.petNum,
+              petName: adopt.petName,
               petImg: response.data,
             })
             .then((response2) => {
-              const newPets = [...pets];
+              const newPets = [...adopts];
               newPets[index] = response2.data;
-              setPets(newPets);
+              setAdopts(newPets);
             })
             .catch((error) => console.error("에러발생:", error));
         })
@@ -163,7 +163,6 @@ const PetData = (props) => {
   };
 
   const imgSize = "200px";
-  const id = petNameOpen ? "simple-popover" : undefined;
   return (
     <Table>
       <TableBody>
@@ -192,7 +191,7 @@ const PetData = (props) => {
                 <TableHead>
                   <TableRow>
                     <TableCell sx={PetNameSx} colSpan={4}>
-                      {pet.petName}
+                      {adopt.petName}
                       <Button onClick={handleOpenNamePopover}>
                         <EditIcon />
                       </Button>
@@ -255,40 +254,48 @@ const PetData = (props) => {
                 <TableBody>
                   <TableRow>
                     <TableCell sx={thSx}>나이</TableCell>
-                    <TableCell sx={tdSx}>{pet.petAge} 살</TableCell>
+                    <TableCell sx={tdSx}>{adopt.petAge}</TableCell>
                     <TableCell sx={thSx}>성별</TableCell>
                     <TableCell sx={tdSx}>
-                      {pet.sexCd === "M"
+                      {adopt.sexCd === "M"
                         ? "수컷"
-                        : pet.sexCd === "F"
+                        : adopt.sexCd === "F"
                         ? "암컷"
                         : "미상"}
                     </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell sx={thSx}>품종</TableCell>
-                    <TableCell sx={tdSx}>{pet.petSpecies}</TableCell>
+                    <TableCell sx={tdSx}>{adopt.petSpecies}</TableCell>
                     <TableCell sx={thSx}>중성화여부</TableCell>
                     <TableCell sx={tdSx}>
-                      {pet.neuterYn === "U" ? "미상" : pet.neuterYn}
+                      {adopt.neuterYn === "U" ? "미상" : adopt.neuterYn}
                     </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell sx={thSx}>신청일자</TableCell>
-                    <TableCell sx={tdSx}>{pet.applicationDate}</TableCell>
+                    <TableCell sx={tdSx}>
+                      {dayjs(adopt.adoptDate).format("YYYY/MM/DD")}
+                    </TableCell>
                     <TableCell sx={thSx}>승인일자</TableCell>
-                    <TableCell sx={tdSx}>{pet.approvedDate}</TableCell>
+                    <TableCell sx={tdSx}>
+                      {adopt.adoptState === "success"
+                        ? dayjs(adopt.approvedDate).format("YYYY/MM/DD")
+                        : adopt.adoptState === "wait"
+                        ? "승인 대기중"
+                        : "입양 반려"}
+                    </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell sx={thSx}>관할 보호소</TableCell>
-                    <TableCell sx={tdSx}>{pet.shelterName}</TableCell>
+                    <TableCell sx={tdSx}>{adopt.shelterName}</TableCell>
                     <TableCell sx={thSx}>보호소 연락처</TableCell>
-                    <TableCell sx={tdSx}>{pet.shelterTel}</TableCell>
+                    <TableCell sx={tdSx}>{adopt.shelterTel}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell sx={thSx}>보호소 주소</TableCell>
                     <TableCell sx={tdSx} colSpan={3}>
-                      {pet.shelterAddr}
+                      {adopt.shelterAddr}
                     </TableCell>
                   </TableRow>
                 </TableBody>
