@@ -80,7 +80,7 @@ const MyPageQnADetail = () => {
         1:1 문의
       </Typography>
       <Grid style={{ width: "940px" }}>
-        <Table sx={{ mt: 1 }}>
+        <Table sx={{ mt: -4 }}>
           <TableHead>
             <TableRow>
               <TableCell colSpan={2}></TableCell>

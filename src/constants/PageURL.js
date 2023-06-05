@@ -651,6 +651,16 @@ export const ADMIN = {
    */
   PRODUCT_WRITE: "/a/product/write",
 
+  /**상품 수정 페이지 URL
+   ** 사용법: ADMIN.PRODUCT_MODIFY(id)
+   * @return "/a/product/modify:id" (id 없음)
+   * @return "/a/product/modify/" + id (id 존재)
+   */
+  PRODUCT_MODIFY: (id) => {
+    if (id === undefined) return "/a/product/modify/:id";
+    else return "/a/product/modify/" + id;
+  },
+
   /**주문 관리 페이지 URL
    * @return "/a/order"
    */

@@ -10,7 +10,15 @@ import DonationChart from "./DonationChart";
 import Adopt from "./Adopt";
 import Board from "./Board";
 
-const defaultTheme = createTheme();
+const defaultTheme = createTheme({
+  typography: {
+    fontFamily: "GmarketSansMedium",
+    button: {
+      fontWeight: "bold",
+    },
+    // 다른 폰트 스타일 속성도 추가할 수 있습니다.
+  },
+});
 
 export default function AdminDashboard() {
   return (
