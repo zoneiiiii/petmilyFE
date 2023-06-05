@@ -4,6 +4,11 @@ import Comment from "../../../components/Comment/Comment";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
   ThemeProvider,
 } from "@mui/material";
 import { CustomTheme } from "../../../assets/Theme/CustomTheme";
@@ -115,7 +120,7 @@ const FindDetail = () => {
           <Container>
             <Top>목격 제보 게시판</Top>
             <Head>
-              <hr />
+              <Horizon />
               <p className="title">{data.boardSubject}</p>
               <div className="subtitle">
                 {/* 유저 프로필사진 & 닉네임 */}
@@ -138,7 +143,59 @@ const FindDetail = () => {
               </div>
 
             </Head>
-            <hr /><br />
+            <Horizon />
+            <DetailTop>
+              <ImageSection>
+                <Thumbnail src={data.imgThumbnail} alt="Thumbnail" />
+              </ImageSection>
+              <InfoSection>
+                <DetailInfo>
+                  <TitleSection>
+                    <h1>{data.volunteerSubject}</h1>
+                  </TitleSection>
+                  <TableContainer align="center" sx={{ width: "100%" }}>
+                    <Table sx={{ maxWidth: 700 }}>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell
+                            align="center"
+                            sx={{
+                              fontWeight: "bold",
+                              width: "100px",
+                            }}
+                          >
+                            목격지역
+                          </TableCell>
+                          <TableCell>{data.boardLocation}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                            품종
+                          </TableCell>
+                          <TableCell>
+                            {data.boardSpecies}
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                            성별
+                          </TableCell>
+                          <TableCell>{data.boardGender}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                            나이
+                          </TableCell>
+                          <TableCell>{data.boardAge}살</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </DetailInfo>
+              </InfoSection>
+            </DetailTop>
+            <Horizon />
+            {/* <hr /><br />
             <Body>
               <div>
                 <br />
@@ -156,28 +213,28 @@ const FindDetail = () => {
                   width: "auto !important",
                   height: "auto",
                 }}
-              />
-              <DetailMiddle
-                dangerouslySetInnerHTML={createMarkup(data.boardContent)}
-              />
-              <ButtonsContainer>
-                {data.memberNum === userNum && (
-                  <div>
-                    <EditButton onClick={handleEdit} variant="contained">
-                      수정
-                    </EditButton>
-                    <ButtonsSpace />
-                    <DeleteButton onClick={handleDelete} variant="contained">
-                      삭제
-                    </DeleteButton>
-                    <ButtonsSpace />
-                  </div>
-                )}
-                <ReturnButton onClick={handleReturn} variant="contained">
-                  돌아가기
-                </ReturnButton>
-              </ButtonsContainer>
-            </Body>
+              /> */}
+            <DetailMiddle
+              dangerouslySetInnerHTML={createMarkup(data.boardContent)}
+            />
+            <ButtonsContainer>
+              {data.memberNum === userNum && (
+                <div>
+                  <EditButton onClick={handleEdit} variant="contained">
+                    수정
+                  </EditButton>
+                  <ButtonsSpace />
+                  <DeleteButton onClick={handleDelete} variant="contained">
+                    삭제
+                  </DeleteButton>
+                  <ButtonsSpace />
+                </div>
+              )}
+              <ReturnButton onClick={handleReturn} variant="contained">
+                돌아가기
+              </ReturnButton>
+            </ButtonsContainer>
+            {/* </Body> */}
 
 
             <Comments>
@@ -299,12 +356,8 @@ const Head = styled.div`
   }
 `;
 
-const Body = styled.div`
-    margin: auto;
-`;
-
 const Comments = styled.div`
-    // margin: 150px auto 20px auto;
+    margin: 20px auto 20px auto;
     font-size: 2rem;
     font-weight: 700;
 `;
@@ -373,6 +426,55 @@ const ReturnButton = styled(Button)`
       background-color: #b2b0b0;
     }
   }
+`;
+
+const DetailTop = styled.div`
+  display: flex;
+  // height: 45vh;
+  min-height: 400px;
+  // min-width: 1050px;
+
+  padding-top: 7px;
+  margin-bottom: 7px;
+`;
+
+const ImageSection = styled.div`
+  width: 50%;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+`;
+
+const TitleSection = styled.div`
+  align-items: center;
+  display: flex;
+  justify-content: center;
+`;
+
+const Horizon = styled.hr`
+  border-width: 1px 0px 0px 0px;
+  border-style: solid;
+  color: #ccc;
+  margin-top: 5px;
+  height: 1px;
+  // min-width: 1050px;
+`;
+
+const InfoSection = styled.div`
+  width: 50%;
+`;
+
+const Thumbnail = styled.img`
+  width: 90%;
+  height: 90%;
+
+  object-fit: cover;
+`;
+
+const DetailInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 export default FindDetail;

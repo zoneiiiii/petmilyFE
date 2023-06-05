@@ -1,9 +1,14 @@
 import styled from "styled-components";
 import React, { useState, useEffect, useContext } from "react";
 import Comment from "../../../components/Comment/Comment";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
   ThemeProvider,
 } from "@mui/material";
 import { CustomTheme } from "../../../assets/Theme/CustomTheme";
@@ -12,9 +17,7 @@ import axios from "axios";
 import { AuthContext } from "../../../contexts/AuthContexts";
 import NotFound from "../../NotFound/NotFound";
 import Loading from "../../../components/Loading/LoadingPage";
-import CustomButton from "../../Login/CustomButton";
 import { COMMUNITY } from "../../../constants/PageURL";
-
 
 const MissingDetail = () => {
   const [data, setData] = useState([]); // DB 데이터 가져오는 변수
@@ -118,7 +121,7 @@ const MissingDetail = () => {
           <Container>
             <Top>실종 동물 게시판</Top>
             <Head>
-              <hr />
+              <Horizon />
               <p className="title">{data.boardSubject}</p>
               <div className="subtitle">
                 {/* 유저 프로필사진 & 닉네임 */}
@@ -140,50 +143,93 @@ const MissingDetail = () => {
                 </section>
               </div>
             </Head>
-            <hr /><br />
-            <Body>
-              <div>
-                <p># 실종 지역 : {data.boardLocation}</p>
-                <p># 종류 : {data.boardSpecies}</p>
-                <p># 이름 : {data.boardName}</p>
-                <p># 성별 : {data.boardGender}</p>
-                <p># 나이 : {data.boardAge} 살</p>
-              </div>
-              <img
-                src={data.imgThumbnail}
-                alt="img"
-                style={{
-                  maxWidth: "100%",
-                  maxHeight: "100%",
-                  width: "auto !important",
-                  height: "auto",
-                }}
-              />
-              <DetailMiddle
-                dangerouslySetInnerHTML={createMarkup(data.boardContent)}
-              />
-              <ButtonsContainer>
-                {data.memberNum === userNum && (
-                  <div>
-                    <EditButton onClick={handleEdit} variant="contained">
-                      수정
-                    </EditButton>
-                    <ButtonsSpace />
-                    <DeleteButton onClick={handleDelete} variant="contained">
-                      삭제
-                    </DeleteButton>
-                    <ButtonsSpace />
-                  </div>
-                )}
-                <ReturnButton onClick={handleReturn} variant="contained">
-                  돌아가기
-                </ReturnButton>
-              </ButtonsContainer>
-            </Body>
+            <Horizon />
+            <DetailTop>
+              <ImageSection>
+                <Thumbnail src={data.imgThumbnail} alt="Thumbnail" />
+              </ImageSection>
+              <InfoSection>
+                <DetailInfo>
+                  <TitleSection>
+                    <h1>{data.volunteerSubject}</h1>
+                  </TitleSection>
+                  <TableContainer align="center" sx={{ width: "100%" }}>
+                    <Table sx={{ maxWidth: 700 }}>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell
+                            align="center"
+                            sx={{
+                              fontWeight: "bold",
+                              width: "100px",
+                            }}
+                          >
+                            실종지역
+                          </TableCell>
+                          <TableCell>{data.boardLocation}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                            실종상태
+                          </TableCell>
+                          <TableCell>
+                            {data.boardStatus ? "실종" : "완료"}
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                            품종
+                          </TableCell>
+                          <TableCell>{data.boardSpecies}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                            이름
+                          </TableCell>
+                          <TableCell>{data.boardName}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                            성별
+                          </TableCell>
+                          <TableCell>{data.boardGender}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                            나이
+                          </TableCell>
+                          <TableCell>{data.boardAge}살</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </DetailInfo>
+              </InfoSection>
+            </DetailTop>
+            <Horizon />
+            <DetailMiddle
+              dangerouslySetInnerHTML={createMarkup(data.boardContent)}
+            />
+            <ButtonsContainer>
+              {data.memberNum === userNum && (
+                <div>
+                  <EditButton onClick={handleEdit} variant="contained">
+                    수정
+                  </EditButton>
+                  <ButtonsSpace />
+                  <DeleteButton onClick={handleDelete} variant="contained">
+                    삭제
+                  </DeleteButton>
+                  <ButtonsSpace />
+                </div>
+              )}
+              <ReturnButton onClick={handleReturn} variant="contained">
+                돌아가기
+              </ReturnButton>
+            </ButtonsContainer>
 
             <Comments>
-              <hr />
-              <p className="comment">댓글</p>
+              <Horizon />
               <Comment boardId="missing" boardNum={id} />
             </Comments>
           </Container>
@@ -301,12 +347,8 @@ const Head = styled.div`
   }
 `;
 
-const Body = styled.div`
-    margin: auto;
-`;
-
 const Comments = styled.div`
-    margin: 150px auto 20px auto;
+    margin: 20px auto 20px auto;
     font-size: 2rem;
     font-weight: 700;
 `;
@@ -375,6 +417,55 @@ const ReturnButton = styled(Button)`
       background-color: #b2b0b0;
     }
   }
+`;
+
+const DetailTop = styled.div`
+  display: flex;
+  // height: 45vh;
+  min-height: 400px;
+  // min-width: 1050px;
+
+  padding-top: 7px;
+  margin-bottom: 7px;
+`;
+
+const ImageSection = styled.div`
+  width: 50%;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+`;
+
+const TitleSection = styled.div`
+  align-items: center;
+  display: flex;
+  justify-content: center;
+`;
+
+const Horizon = styled.hr`
+  border-width: 1px 0px 0px 0px;
+  border-style: solid;
+  color: #ccc;
+  margin-top: 5px;
+  height: 1px;
+  // min-width: 1050px;
+`;
+
+const InfoSection = styled.div`
+  width: 50%;
+`;
+
+const Thumbnail = styled.img`
+width: 90% !important;
+height: 90%;
+
+  object-fit: cover;
+`;
+
+const DetailInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 export default MissingDetail;
