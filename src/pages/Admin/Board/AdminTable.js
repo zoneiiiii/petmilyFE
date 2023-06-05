@@ -14,9 +14,11 @@ import {
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { CustomTheme } from "../../../assets/Theme/CustomTheme";
+import LoadingPage from "../../Loading/LoadingPage";
 
 const AdminTable = (props) => {
   const {
+    data,
     board,
     category,
     page,
@@ -29,16 +31,16 @@ const AdminTable = (props) => {
     board ? Array(board.length).fill(false) : []
   );
   const [allChecked, setAllChecked] = useState(false);
-
   useEffect(() => {
     console.log(checkboxes);
     console.log(allChecked);
   });
 
   useEffect(() => {
-    console.log(board);
-    console.log(category);
-  }, [board, category]);
+    console.log("data:", data);
+    console.log("board:", board);
+    console.log("category:", category);
+  }, [data, board, category]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -69,26 +71,26 @@ const AdminTable = (props) => {
     console.log("deleteBuffer:", deleteBuffer);
   };
 
-  return (
+  return category.value === "" || data ? (
     <ThemeProvider theme={CustomTheme}>
-      <Paper>
-        <Table>
-          <TableHead>
-            <TableRow sx={{ textAlign: "center" }}>
-              <TableCell sx={{ width: "45px" }}>
-                <Checkbox onClick={handleAllCheckboxClick} />
-              </TableCell>
-              <TableCell sx={TableHeadSx}>No</TableCell>
-              <TableCell sx={TableHeadSx}>카테고리</TableCell>
-              <TableCell sx={TableHeadSx}>제목</TableCell>
-              <TableCell sx={TableHeadSx}>작성자</TableCell>
-              <TableCell sx={TableHeadSx}>작성날짜</TableCell>
-              <TableCell sx={TableHeadSx}>내용</TableCell>
-            </TableRow>
-          </TableHead>
+      <Table>
+        <TableHead>
+          <TableRow sx={{ textAlign: "center" }}>
+            <TableCell sx={{ width: "45px" }}>
+              <Checkbox onClick={handleAllCheckboxClick} />
+            </TableCell>
+            <TableCell sx={TableHeadSx}>No</TableCell>
+            <TableCell sx={TableHeadSx}>카테고리</TableCell>
+            <TableCell sx={TableHeadSx}>제목</TableCell>
+            <TableCell sx={TableHeadSx}>작성자</TableCell>
+            <TableCell sx={TableHeadSx}>작성날짜</TableCell>
+            <TableCell sx={TableHeadSx}>내용</TableCell>
+          </TableRow>
+        </TableHead>
+        {category.value && (
           <TableBody>
-            {board &&
-              board.map((item, index) => {
+            {data.board &&
+              data.board.map((item, index) => {
                 return (
                   <TableRow key={index}>
                     <TableCell width={"fit-content"}>
@@ -99,10 +101,10 @@ const AdminTable = (props) => {
                       />
                     </TableCell>
                     <TableCell sx={{ ...TableBodySx, width: "50px" }}>
-                      {item.num}
+                      {item.boardNum}
                     </TableCell>
                     <TableCell sx={{ ...TableBodySx, width: "150px" }}>
-                      {category.value}
+                      {item.boardId}
                     </TableCell>
                     <TableCell
                       sx={{
@@ -117,7 +119,7 @@ const AdminTable = (props) => {
                       {item.subject}
                     </TableCell>
                     <TableCell sx={{ ...TableBodySx, width: "120px" }}>
-                      {item.writer}
+                      {item.memberId}
                     </TableCell>
                     <TableCell sx={{ ...TableBodySx, width: "220px" }}>
                       {dayjs(item.postDate).format("YYYY/MM/DD HH:mm:ss")}
@@ -129,7 +131,9 @@ const AdminTable = (props) => {
                 );
               })}
           </TableBody>
-        </Table>
+        )}
+      </Table>
+      {category.value && (
         <Box sx={{ p: 2, display: "flex", justifyContent: "space-between" }}>
           <Box>
             <Button variant="contained" color="error" onClick={onDelete}>
@@ -138,15 +142,17 @@ const AdminTable = (props) => {
           </Box>
           <TablePagination
             component="div"
-            count={totalElements}
-            page={page}
+            count={data.totalElements}
+            page={data.page}
             onPageChange={handleChangePage}
             rowsPerPage={rowsPerPage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Box>
-      </Paper>
+      )}
     </ThemeProvider>
+  ) : (
+    <LoadingPage />
   );
 };
 
