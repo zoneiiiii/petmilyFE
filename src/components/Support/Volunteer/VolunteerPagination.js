@@ -12,8 +12,8 @@ const VolunteerPagination = ({ count, page, onChange }) => {
           showFirstButton
           showLastButton
           count={count}
-          page={page} o
-          nChange={onChange}
+          page={page}
+          onChange={onChange}
         />
       </S.Container>
     </ThemeProvider>

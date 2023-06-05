@@ -254,11 +254,11 @@ const FreeBoard = () => {
                                 </TableHead>
                                 <TableBody>
                                     {lists
-                                        .map((list) => {
+                                        .map((list, index) => {
                                             return (
                                                 <StyledTableRow key={list.boardNum} className={classes.content}>
                                                     <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                                                        {list.boardNum}
+                                                        {data.length - ((page - 1) * itemsPerPage + index)}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center" sx={{ minWidth: 300 }}>
                                                         <Link

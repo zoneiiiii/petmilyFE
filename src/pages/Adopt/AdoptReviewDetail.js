@@ -27,6 +27,7 @@ const AdoptReviewDetail = () => {
   const [data, setData] = useState([]);
   const [writeId, setWriteId] = useState(false);
   const number = location.state;
+
   const formatDate = () => {
     console.log(data.reviewDate);
     const date = new Date(data.reviewDate);
@@ -36,6 +37,11 @@ const AdoptReviewDetail = () => {
     console.log(`${year}년 ${month}월 ${day}일`);
     return `${year}년 ${month}월 ${day}일`;
   };
+
+  const profile = {
+    profileImg: data.memberImg, // 사용자 프로필 이미지
+    profileNickname: data.memberNickName, // 사용자 닉네임
+  }
 
   const createMarkup = (html) => {
     return {
@@ -75,7 +81,7 @@ const AdoptReviewDetail = () => {
                   <div className="space-between">
                     <div style={{ display: "flex" }}>
                       <div className="article-profile-image">
-                        {/* <img alt="프로필 이미지" src={data.revieImg} /> */}
+                        {/* <img alt="프로필 이미지" src={profile.profileImg} /> */}
                       </div>
                       <div className="article-profile-left">
                         <div className="nickname">{number.nickName}</div>
@@ -105,7 +111,7 @@ const AdoptReviewDetail = () => {
                       }}
                       style={{ textDecoration: "none" }}
                     >
-                      <EditButton label="수정" value="삭제">
+                      <EditButton label="수정" value="삭제" variant="contained">
                         수정
                       </EditButton>
                     </Link>
@@ -114,6 +120,7 @@ const AdoptReviewDetail = () => {
                       <DeleteButton
                         label="삭제"
                         value="삭제"
+                        variant="contained"
                         onClick={() => {
                           axios.delete(`/board/review/${data.boardNum}`);
                           alert("삭제완료");
@@ -128,7 +135,7 @@ const AdoptReviewDetail = () => {
                   ""
                 )}
                 <Link to={ADOPT.REVIEW} style={{ textDecoration: "none" }}>
-                  <ReturnButton label="돌아가기" value="작성취소">
+                  <ReturnButton label="돌아가기" value="작성취소" variant="contained">
                     돌아가기
                   </ReturnButton>
                 </Link>
@@ -321,13 +328,13 @@ const ButtonsSpace = styled.div`
 const EditButton = styled(Button)`
   && {
     color: #fff;
-    background-color: #fbd385;
+    background-color: #FBD385;
     width: auto;
     height: 30px;
     margin-top: 5px;
     margin-bottom: 5px;
     &:hover {
-      background-color: #ffbe3f;
+      background-color: #AF935D;
     }
   }
 `;
@@ -341,7 +348,7 @@ const DeleteButton = styled(Button)`
     margin-top: 5px;
     margin-bottom: 5px;
     &:hover {
-      background-color: #ed4f4f;
+      background-color: #B25B5B;
     }
   }
 `;
@@ -355,7 +362,7 @@ const ReturnButton = styled(Button)`
     margin-top: 5px;
     margin-bottom: 5px;
     &:hover {
-      background-color: #b2b0b0;
+      background-color: #858585;
     }
   }
 `;

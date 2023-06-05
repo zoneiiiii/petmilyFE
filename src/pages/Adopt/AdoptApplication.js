@@ -60,17 +60,31 @@ const CustomTextField = styled(TextField)({
   },
 });
 const CustomizedButton = styled(Button)`
-  background-color: #fbd385;
+  background-color: #FBD385;
   color: white;
   width: 90px;
   height: 40px;
   margin-top: 10px;
   &:hover {
-    background-color: #facc73;
+    background-color: #AF935D;
   }
   &:focus {
-    background-color: #facc73;
+    background-color: #FBD385;
   }
+`;
+
+const ResetButton = styled(Button)`
+background-color: #bfbfbf;
+color: white;
+width: 90px;
+height: 40px;
+margin-top: 10px;
+&:hover {
+  background-color: #858585;
+}
+&:focus {
+  background-color: #bfbfbf;
+}
 `;
 
 const AdoptApplication = () => {
@@ -693,13 +707,13 @@ const AdoptApplication = () => {
               >
                 신청
               </CustomizedButton>
-              <CustomizedButton
+              <ResetButton
                 type="submit"
                 variant="contained"
                 onClick={() => navigate(ADOPT.ADOPT)}
               >
                 취소
-              </CustomizedButton>
+              </ResetButton>
             </Grid>
           </Box>
         </Container>

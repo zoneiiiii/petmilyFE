@@ -69,11 +69,11 @@ export const CommentContent = styled.span`
 export const CommentButton = styled(Button)`
   && {
     color: #fff;
-    background-color: #fbd385;
+    background-color: #FBD385;
     width: auto;
     margin-left: auto;
     &:hover {
-      background-color: #ffbe3f;
+      background-color: #AF935D;
     }
   }
 `;

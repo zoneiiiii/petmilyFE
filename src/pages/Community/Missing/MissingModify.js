@@ -414,7 +414,7 @@ const MissingModify = () => {
                                                             color: "#fff",
                                                         },
                                                         "&.Mui-selected:hover": {
-                                                            backgroundColor: "#FF4646",
+                                                            backgroundColor: "#B25B5B",
                                                             color: "#fff",
                                                         },
                                                     }}
@@ -664,13 +664,13 @@ const ButtonsContainer = styled.div`
 const WriteButton = styled(Button)`
     && {
     color: #fff;
-    background-color: #fbd385;
+    background-color: #FBD385;
     width: auto;
     height: 30px;
     margin-top: 10px;
     margin-left: auto;
     &:hover {
-      background-color: #ffbe3f;
+      background-color: #AF935D;
     }
     }
     `;
@@ -701,7 +701,7 @@ const ResetButton = styled(Button)`
     height: 30px;
     margin-top: 10px;
     &:hover {
-      background-color: #b2b0b0;
+      background-color: #858585;
     }
     }
     `;

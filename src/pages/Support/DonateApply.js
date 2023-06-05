@@ -428,7 +428,7 @@ const DonateApply = () => {
                     paymentMethod === "신용카드" ? "#FBD385" : "",
                   ":hover": {
                     borderColor: "#FBD385",
-                    backgroundColor: "#FBD385",
+                    backgroundColor: "#AF935D",
                     color: "#FFFFFF",
                   },
                 }}
@@ -447,7 +447,7 @@ const DonateApply = () => {
                     paymentMethod === "계좌이체" ? "#FBD385" : "",
                   ":hover": {
                     borderColor: "#FBD385",
-                    backgroundColor: "#FBD385",
+                    backgroundColor: "#AF935D",
                     color: "#FFFFFF",
                   },
                 }}
@@ -467,7 +467,7 @@ const DonateApply = () => {
                     paymentMethod === "카카오페이" ? "#FBD385" : "",
                   ":hover": {
                     borderColor: "#FBD385",
-                    backgroundColor: "#FBD385",
+                    backgroundColor: "#AF935D",
                     color: "#FFFFFF",
                   },
                 }}
@@ -481,7 +481,10 @@ const DonateApply = () => {
           <Button
             variant="contained"
             size="large"
-            style={{ backgroundColor: "#FBD385", fontWeight: "bold" }}
+            style={{
+              backgroundColor: "#FBD385",
+              fontWeight: "bold",
+            }}
             onClick={handlePayment}
           >
             신청

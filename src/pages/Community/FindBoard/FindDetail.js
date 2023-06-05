@@ -389,13 +389,13 @@ const ButtonsSpace = styled.div`
 const EditButton = styled(Button)`
   && {
     color: #fff;
-    background-color: #fbd385;
+    background-color: #FBD385;
     width: auto;
     height: 30px;
     margin-top: 5px;
     margin-bottom: 5px;
     &:hover {
-      background-color: #ffbe3f;
+      background-color: #AF935D;
     }
   }
 `;
@@ -409,7 +409,7 @@ const DeleteButton = styled(Button)`
     margin-top: 5px;
     margin-bottom: 5px;
     &:hover {
-      background-color: #ed4f4f;
+      background-color: #B25B5B;
     }
   }
 `;
@@ -423,7 +423,7 @@ const ReturnButton = styled(Button)`
     margin-top: 5px;
     margin-bottom: 5px;
     &:hover {
-      background-color: #b2b0b0;
+      background-color: #858585;
     }
   }
 `;

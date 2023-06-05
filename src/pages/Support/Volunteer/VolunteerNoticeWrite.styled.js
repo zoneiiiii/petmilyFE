@@ -106,7 +106,7 @@ export const CommonButton = styled(Button)`
     background-color: #fbd385;
     width: auto;
     &:hover {
-      background-color: #ffbe3f;
+      background-color: #AF935D;
     }
   }
 `;
@@ -118,7 +118,7 @@ export const WriteButton = styled(Button)`
     width: auto;
     margin-left: auto;
     &:hover {
-      background-color: #ffbe3f;
+      background-color: #AF935D;
     }
   }
 `;
@@ -130,7 +130,7 @@ export const CancleButton = styled(Button)`
     width: auto;
     margin-left: auto;
     &:hover {
-      background-color: #7f7f7f;
+      background-color: #858585;
     }
   }
 `;

@@ -27,6 +27,9 @@ const DonateButton = styled(Link)`
   color: #ffffff;
   text-decoration: none;
   border-radius: 5px;
+  &:hover {
+      background-color: #AF935D;
+    }
 `;
 
 const TotalDonation = styled.p`
