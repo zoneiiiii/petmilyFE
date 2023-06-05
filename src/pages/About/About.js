@@ -8,6 +8,19 @@ const About = () => {
   return (
     <ThemeProvider theme={CustomTheme}>
       <Box display={"flex"} justifyContent={"center"} flexWrap={"wrap"}>
+        <Box align="center" mt={15}>
+          <img
+            alt="로고"
+            src="/images/petLogo.png"
+            width="230px"
+            height="70px"
+            style={{ marginTop: 10 }}
+          />
+          <p style={{ fontSize: "1.5rem", color: "gray", marginTop: 10 }}>
+            펫밀리, <strong style={{ color: "black" }}>입양의 가치</strong>를
+            알리다.
+          </p>
+        </Box>
         <Box sx={BoxSx}>
           <img alt="소개1" src="/images/About/about1.png" />
           <Typography

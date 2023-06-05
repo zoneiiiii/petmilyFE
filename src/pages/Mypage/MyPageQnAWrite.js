@@ -188,10 +188,20 @@ const MyPageQnAWrite = () => {
           </TableBody>
         </Table>
         <ButtonStyle>
-          <Button className="write" onClick={handleSubmit}>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ width: "90px", height: "30px", mt: "10px", mr: "10px" }}
+            onClick={handleSubmit}
+          >
             글쓰기
           </Button>
-          <Button className="quit" onClick={handleReset}>
+          <Button
+            variant="contained"
+            color="warning"
+            sx={{ width: "90px", height: "30px", mt: "10px" }}
+            onClick={handleReset}
+          >
             취소
           </Button>
         </ButtonStyle>
@@ -230,33 +240,6 @@ const EditorWrapper = styled.div`
 const ButtonStyle = styled.div`
   margin-top: 5px;
   text-align: center;
-  .write {
-    background-color: #fbd385;
-    color: white;
-    width: 90px;
-    height: 30px;
-    margin-top: 10px;
-    margin-right: 10px;
-    &:hover {
-      background-color: #facc73;
-    }
-    &:focus {
-      background-color: #facc73;
-    }
-  }
-  .quit {
-    background-color: #bfbfbf;
-    color: white;
-    width: 90px;
-    height: 30px;
-    margin-top: 10px;
-    &:hover {
-      background-color: #b2b0b0;
-    }
-    &:focus {
-      background-color: #b2b0b0;
-    }
-  }
 `;
 
 export default MyPageQnAWrite;

@@ -37,6 +37,7 @@ const AdminQnA = () => {
         setData(response.data.content);
         setPage(parseInt(response.data.number));
         setTotalElements(parseInt(response.data.totalElements));
+        console.log(totalElements);
       })
       .catch((error) => {
         console.error("axios 오류 : ", error);
@@ -52,7 +53,6 @@ const AdminQnA = () => {
     setPage(0);
   };
 
-  const qnaTotal = data.length;
   if (data.length === 0) {
     return (
       <ThemeProvider theme={CustomTheme}>
@@ -91,7 +91,7 @@ const AdminQnA = () => {
               lineHeight: "46px",
             }}
           >
-            총 문의 수 : {qnaTotal}
+            총 문의 수 : {totalElements} 건
           </Paper>
           <Paper>
             <Table
