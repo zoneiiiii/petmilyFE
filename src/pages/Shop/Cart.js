@@ -293,19 +293,19 @@ const Cart = () => {
                 sx={{ height: 150, color: "black", fontSize: "18px" }}
                 align="center"
               >
-                총 주문금액 :
+                총 주문금액 :{" "}
                 <span className="tot">
                   {selectedTotalPrice
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </span>
-                원 + 배송비
+                원 + 배송비{" "}
                 <span className="tot">
                   {shippingCost
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </span>
-                원 =
+                원 ={" "}
                 <span className="tot">
                   {(selectedTotalPrice + shippingCost)
                     .toString()
@@ -358,7 +358,7 @@ const CartStyle = styled.div`
     margin: 50px auto;
     margin-right: 20px;
     &:hover {
-      background-color: #ffffff;
+      background-color: #fffdfa;
       color: #ffc149;
     }
   }
@@ -368,10 +368,10 @@ const CartStyle = styled.div`
     color: white;
     margin: 50px auto;
     &:hover {
-      background-color: #facc73;
+      background-color: #af935d;
     }
     &:focus {
-      background-color: #facc73;
+      background-color: #af935d;
     }
   }
   .prodDelete {
@@ -380,10 +380,10 @@ const CartStyle = styled.div`
     color: white;
     margin-bottom: -20px;
     &:hover {
-      background-color: #facc73;
+      background-color: #af935d;
     }
     &:focus {
-      background-color: #facc73;
+      background-color: #af935d;
     }
   }
   .plus_minus {
