@@ -34,11 +34,22 @@ const ProductDetail = () => {
     setQuantity(Number(event.target.value));
   };
 
-  const handleBuy = () => {};
+  const navigate = useNavigate();
+  const handleBuy = () => {
+    const productToBuy = {
+      boardNum: products.boardNum,
+      productName: products.productName,
+      productCost: products.productCost,
+      thumbnailImg: products.imgThumbnail,
+      quantity: quantity,
+    };
+
+    navigate(SHOP.ORDER, { state: { items: [productToBuy] } });
+  };
 
   const handleCart = () => {
     setIsModalOpen(true);
-    console.log(products);
+    // console.log(products);
     axios.post("/shop/product/addCart", {
       boardNum: products.boardNum,
       memberId: sessionStorage.getItem("id"),
@@ -87,9 +98,7 @@ const ProductDetail = () => {
               </QuantitySelect>
             </ProductQuantity>
             <ButtonsWrapper>
-              <Link to={SHOP.ORDER} style={{ textDecoration: "none" }}>
-                <BuyButton onClick={handleBuy}>구매하기</BuyButton>
-              </Link>
+              <BuyButton onClick={handleBuy}>구매하기</BuyButton>
               <CartButton onClick={handleCart}>장바구니</CartButton>
             </ButtonsWrapper>
           </ProductInfo>
