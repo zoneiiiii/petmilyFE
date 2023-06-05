@@ -328,7 +328,7 @@ const Cart = () => {
           <Link to={SHOP.PRODUCT} style={{ textDecoration: "none" }}>
             <Button className="continue">계속 쇼핑하기</Button>
           </Link>
-          <Button variant="contained" color="error" onClick={handlePurchase}>
+          <Button className="order" onClick={handlePurchase}>
             구매하기
           </Button>
         </div>

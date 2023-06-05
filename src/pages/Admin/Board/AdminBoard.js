@@ -26,10 +26,12 @@ import dayjs from "dayjs";
 import BoardCategorySelector from "./BoardCategorySelector";
 import SearchBox from "./SearchBox";
 import AdminTable from "./AdminTable";
+import { fetchData } from "./FetchBoardData";
 
 const AdminBoard = () => {
   const [category, setCategory] = useState({ value: "", path: "" });
   const [board, setBoard] = useState(null);
+  const [data, setData] = useState(null);
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState();
   const [search_mode, setSearch_mode] = useState();
@@ -38,7 +40,25 @@ const AdminBoard = () => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    if (category.value.length > 0) getData();
+    if (category.value.length > 0) {
+      // getData();
+      fetchData({
+        category: category.value,
+        page: page,
+        rowsPerPage: rowsPerPage,
+        search: search,
+        search_mode: search_mode,
+      })
+        .then((response) => {
+          // console.log("response:", response);
+          setData(response);
+          // setBoard(response.data.content);
+          // setPage(response.data.number);
+          // setTotalElements(response.data.totalElements);
+        })
+        .catch((error) => console.error("에러발생:", error));
+      // setBoard(BoardApis.getNoticeList({ path: category.path }));
+    }
     console.log("after getData page", page);
   }, [category, page, rowsPerPage]);
 
@@ -46,7 +66,7 @@ const AdminBoard = () => {
     axios
       .get(setQuery(category, page, rowsPerPage))
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         setBoard(
           response.data.length !== 0 && response.data.content.length !== 0
             ? response.data.content
@@ -131,15 +151,18 @@ const AdminBoard = () => {
             <SearchBox />
           </Box>
         </Paper>
-        <AdminTable
-          board={board}
-          category={category}
-          page={page}
-          setPage={setPage}
-          totalElements={totalElements}
-          rowsPerPage={rowsPerPage}
-          setRowsPerPage={setRowsPerPage}
-        />
+        <Paper>
+          <AdminTable
+            data={data}
+            board={board}
+            category={category}
+            page={page}
+            setPage={setPage}
+            totalElements={totalElements}
+            rowsPerPage={rowsPerPage}
+            setRowsPerPage={setRowsPerPage}
+          />
+        </Paper>
         {/* <Paper>
           <Table>
             <TableHead>

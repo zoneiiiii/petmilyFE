@@ -41,8 +41,8 @@ const CategoryItem = styled.li`
 `;
 
 const ProductImage = styled.img`
-  width: 100%;
-  height: auto;
+  width: auto;
+  height: 264px;
   margin-bottom: 10px;
 `;
 
