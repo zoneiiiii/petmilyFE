@@ -61,8 +61,7 @@ const Section = styleds.section`
 `
 
 const MainContainer = styleds.div`
-  width: 60vw;
-  // width: 1150px;
+  width: 1008px;
   max-width: 1150px;
   min-width: 790px;
   border-radius: 8px;

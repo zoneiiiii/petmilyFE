@@ -11,6 +11,7 @@ import { AuthContext } from "../../../contexts/AuthContexts";
 import { useNavigate, useLocation } from "react-router-dom";
 import NotFound from "../../NotFound/NotFound";
 import styled from "styled-components";
+import CustomButton from "../../Login/CustomButton";
 
 const VolunteerNotice = () => {
   const { loggedIn } = useContext(AuthContext);
@@ -116,16 +117,17 @@ const VolunteerNotice = () => {
                   </>
                 )}
               </Grid>
+              {loggedIn && (
+                // <S.ButtonContainer>
+                <>
+                  <Link to={SUPPORT.VOLUNTEER_NOTICE_WRITE}>
+                    <CustomButton>글쓰기</CustomButton>
+                  </Link>
+                </>
+                // </S.ButtonContainer>
+              )}
             </Container>
-            {loggedIn && (
-              // <S.ButtonContainer>
-              <>
-                <Link to={SUPPORT.VOLUNTEER_NOTICE_WRITE}>
-                  <S.VolunteerButton>글쓰기</S.VolunteerButton>
-                </Link>
-              </>
-              // </S.ButtonContainer>
-            )}
+
 
             <VolunteerPagination
               count={pageCount}
@@ -216,4 +218,6 @@ const CardCount = styled.p`
   margin-right: 10px;
 `;
 
-const ContainerBox = styled.div``;
+const ContainerBox = styled.div`
+  margin-bottom: 20px;
+`

@@ -227,6 +227,7 @@ margin-left: 10px
 `
 
 const ContainerBox = styled.div`
+    margin-bottom: 20px;
     
 `
 

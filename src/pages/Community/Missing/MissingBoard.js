@@ -223,7 +223,7 @@ const CardWritter = styled.p`
 
 const CardStatus = styled.div`
 position: absolute;
-top: 184px;
+top: 183px;
 right: 8px;
 display: flex;
 align-items: center;
@@ -255,6 +255,7 @@ const CardDate = styled.p`
       `
 
 const ContainerBox = styled.div`
-      `
+  margin-bottom: 20px;
+`
 
 export default MissingBoard;

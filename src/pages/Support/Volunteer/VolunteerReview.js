@@ -109,16 +109,17 @@ const VolunteerReview = () => {
                   </>
                 )}
               </Grid>
+              {loggedIn && (
+                // <S.ButtonContainer>
+                <>
+                  <Link to={SUPPORT.VOLUNTEER_REVIEW_WRITE}>
+                    <S.VolunteerButton>글쓰기</S.VolunteerButton>
+                  </Link>
+                </>
+                // </S.ButtonContainer>
+              )}
             </Container>
-            {loggedIn && (
-              // <S.ButtonContainer>
-              <>
-                <Link to={SUPPORT.VOLUNTEER_REVIEW_WRITE}>
-                  <S.VolunteerButton>글쓰기</S.VolunteerButton>
-                </Link>
-              </>
-              // </S.ButtonContainer>
-            )}
+
             <VolunteerPagination
               count={pageCount}
               page={page}
@@ -158,4 +159,6 @@ const Top = styled.h1`
   margin-bottom: 2rem;
 `;
 
-const ContainerBox = styled.div``;
+const ContainerBox = styled.div`
+  margin-bottom: 20px;
+`
