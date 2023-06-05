@@ -142,6 +142,8 @@ const MissingBoard = () => {
               page={page}
               count={maxPageNum}
               onChange={handleChange}
+              showFirstButton
+              showLastButton
               sx={{
                 display: "flex",
                 justifyContent: "center",
@@ -204,7 +206,7 @@ const CardTitle = styled.p`
   font-size: 1.1rem;
   margin: 0.3em 0.5em 0em 0.5em;
   line-height: 1.2em;
-  height: 2.4em;
+  height: 2.3em;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -220,7 +222,7 @@ const CardWritter = styled.p`
 
 const CardStatus = styled.div`
 position: absolute;
-top: 183px;
+top: 184px;
 right: 8px;
 display: flex;
 align-items: center;

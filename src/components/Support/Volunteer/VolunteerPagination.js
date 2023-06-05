@@ -7,7 +7,14 @@ const VolunteerPagination = ({ count, page, onChange }) => {
   return (
     <ThemeProvider theme={CustomTheme}>
       <S.Container>
-        <S.StyledPagination color="primary" count={count} page={page} onChange={onChange} />
+        <S.StyledPagination
+          color="primary"
+          showFirstButton
+          showLastButton
+          count={count}
+          page={page} o
+          nChange={onChange}
+        />
       </S.Container>
     </ThemeProvider>
   );

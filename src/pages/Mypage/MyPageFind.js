@@ -162,6 +162,8 @@ const MyPageFind = () => {
           count={pageCount}
           page={page}
           onChange={handleChange}
+          showFirstButton
+          showLastButton
           color="primary"
           sx={{
             display: "flex",

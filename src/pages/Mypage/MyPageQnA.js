@@ -238,6 +238,8 @@ const MyPageQnA = () => {
                 justifyContent: "center",
               }}
               onChange={handleChange}
+              showFirstButton
+              showLastButton
               component="div"
               count={pageCount}
             />

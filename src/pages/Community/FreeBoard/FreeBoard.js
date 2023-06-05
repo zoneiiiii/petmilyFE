@@ -305,6 +305,8 @@ const FreeBoard = () => {
                                 page={page}
                                 count={maxPageNum}
                                 onChange={handleChange}
+                                showFirstButton
+                                showLastButton
                                 sx={{
                                     display: "flex",
                                     justifyContent: "center",

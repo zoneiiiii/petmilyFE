@@ -162,6 +162,8 @@ const MyPageAdoptReview = () => {
           page={page}
           color="primary"
           onChange={handleChange}
+          showFirstButton
+          showLastButton
           sx={{
             display: "flex",
             justifyContent: "center",
