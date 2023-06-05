@@ -1,13 +1,15 @@
 import React from 'react';
 import * as S from './VolunteerPagination.styled';
-import { Pagination } from '@mui/material';
-
+import { ThemeProvider } from "@mui/material";
+import { CustomTheme } from "../../../assets/Theme/CustomTheme";
 
 const VolunteerPagination = ({ count, page, onChange }) => {
   return (
-    <S.Container>
-      <S.StyledPagination count={count} page={page} onChange={onChange}/>
-    </S.Container>
+    <ThemeProvider theme={CustomTheme}>
+      <S.Container>
+        <S.StyledPagination color="primary" count={count} page={page} onChange={onChange} />
+      </S.Container>
+    </ThemeProvider>
   );
 };
 

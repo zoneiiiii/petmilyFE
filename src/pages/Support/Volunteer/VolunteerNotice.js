@@ -117,18 +117,17 @@ const VolunteerNotice = () => {
                   </>
                 )}
               </Grid>
-              {loggedIn && (
-                // <S.ButtonContainer>
-                <>
-                  <Link to={SUPPORT.VOLUNTEER_NOTICE_WRITE}>
-                    <CustomButton>글쓰기</CustomButton>
-                  </Link>
-                </>
-                // </S.ButtonContainer>
+
+              {loggedIn === true ? (
+                <Link to={SUPPORT.VOLUNTEER_NOTICE_WRITE}>
+                  <CustomButton label="글쓰기" value="글쓰기">
+                    글쓰기
+                  </CustomButton>
+                </Link>
+              ) : (
+                <></>
               )}
             </Container>
-
-
             <VolunteerPagination
               count={pageCount}
               page={page}
