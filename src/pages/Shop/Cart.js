@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SHOP } from "../../constants/PageURL";
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AddCircle, RemoveCircle } from "@material-ui/icons";
 import {
   Table,
@@ -17,66 +17,92 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
+import axios from "axios";
 
 const Cart = () => {
   //데이터 초기값 설정
-  const [items, setItems] = useState([
-    {
-      id: 1,
-      img: (
-        <img
-          src="https://source.unsplash.com/random/?programming"
-          alt="img"
-          style={{ width: 100, height: 100 }}
-        />
-      ),
-      name: "하네스",
-      price: 10000,
-      quantity: 2,
-      checked: false,
-    },
-    {
-      id: 2,
-      img: (
-        <img
-          src="https://source.unsplash.com/random/?programming"
-          alt="img"
-          style={{ width: 100, height: 100 }}
-        />
-      ),
-      name: "커스텀 그립톡",
-      price: 20000,
-      quantity: 1,
-      checked: false,
-    },
-    {
-      id: 3,
-      img: (
-        <img
-          src="https://source.unsplash.com/random/?programming"
-          alt="img"
-          style={{ width: 100, height: 100 }}
-        />
-      ),
-      name: "유기농 강아지 사료 3kg",
-      price: 30000,
-      quantity: 3,
-      checked: false,
-    },
-  ]);
-  const [selected, setSelected] = useState([]);
-  //수량 조절
-  const handleQuantityChange = (itemId, newQuantity) => {
-    const updatedItems = items.map((item) => {
-      if (item.id === itemId) {
-        return {
+  const [items, setItems] = useState([]);
+  const [selectedTotalPrice, setSelectedTotalPrice] = useState(0); //선택된 항목의 가격 계산
+  const [isClicking, setIsClicking] = useState(false); // 클릭 상태 관리 (수량 증가 감소 버튼 빠르게 연속으로 누르면 가격이 이상해짐)
+  useEffect(() => {
+    axios
+      .get("/cart", {
+        withCredentials: true,
+      })
+      .then((response) => {
+        const itemsWithChecked = response.data.map((item) => ({
           ...item,
-          quantity: newQuantity,
-        };
-      }
-      return item;
-    });
-    setItems(updatedItems);
+          checked: true,
+        }));
+        setItems(itemsWithChecked);
+        const selectedItems = itemsWithChecked.filter((item) => item.checked);
+        const selectedTotalPrice = selectedItems.reduce(
+          (acc, item) => acc + item.productCost * item.quantity,
+          0
+        );
+        setSelectedTotalPrice(selectedTotalPrice);
+      })
+      .catch((error) => {
+        console.error("cart 정보 가져오기 실패", error);
+      });
+  }, []);
+
+  const handleQuantityPlus = (cartNum, newQuantity) => {
+    if (newQuantity < 1 || isClicking) return; // 음수 안나오게 설정 및 중복 클릭 방지
+    setIsClicking(true);
+    axios
+      .put(`/cart/${cartNum}/increase`, null, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        const updatedItems = items.map((item) => {
+          if (item.cartNum === cartNum) {
+            const priceChange =
+              item.productCost * (newQuantity - item.quantity);
+            setSelectedTotalPrice((prev) => prev + priceChange);
+            return {
+              ...item,
+              quantity: newQuantity,
+            };
+          }
+          return item;
+        });
+        setItems(updatedItems);
+        setIsClicking(false);
+      })
+      .catch((error) => {
+        console.error("수량 증가 실패", error);
+        setIsClicking(false);
+      });
+  };
+
+  const handleQuantityMinus = (cartNum, newQuantity) => {
+    if (newQuantity < 1 || isClicking) return;
+    setIsClicking(true);
+    axios
+      .put(`/cart/${cartNum}/decrease`, null, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        const updatedItems = items.map((item) => {
+          if (item.cartNum === cartNum) {
+            const priceChange =
+              item.productCost * (item.quantity - newQuantity);
+            setSelectedTotalPrice((prev) => prev - priceChange);
+            return {
+              ...item,
+              quantity: newQuantity,
+            };
+          }
+          return item;
+        });
+        setItems(updatedItems);
+        setIsClicking(false);
+      })
+      .catch((error) => {
+        console.error("수량 감소 실패", error);
+        setIsClicking(false);
+      });
   };
   //전체선택 기능
   const handleToggleAll = () => {
@@ -86,16 +112,27 @@ const Cart = () => {
       checked: !allChecked,
     }));
     setItems(updatedItems);
+
+    const selectedItems = updatedItems.filter((item) => item.checked);
+    const selectedTotalPrice = selectedItems.reduce(
+      (acc, item) => acc + item.productCost * item.quantity,
+      0
+    );
+    setSelectedTotalPrice(selectedTotalPrice);
   };
   const allChecked = items.every((item) => item.checked);
   const indeterminate = !allChecked && items.some((item) => item.checked);
   //체크박스 기능
   const handleToggle = (itemId) => {
     const updatedItems = items.map((item) => {
-      if (item.id === itemId) {
+      if (item.cartNum === itemId) {
+        const isChecked = !item.checked;
+        const priceChange =
+          (isChecked ? 1 : -1) * item.productCost * item.quantity;
+        setSelectedTotalPrice((prev) => prev + priceChange);
         return {
           ...item,
-          checked: !item.checked,
+          checked: isChecked,
         };
       }
       return item;
@@ -105,15 +142,42 @@ const Cart = () => {
   //체크된 상품 삭제(백엔드 하면서 수정 필요)
   const handleDeleteSelected = (e) => {
     e.preventDefault(); // 폼의 기본 동작 방지
-    setItems(items.filter((item) => !selected.includes(item.id)));
-    setSelected([]);
+    const selectedItems = items.filter((item) => item.checked);
+
+    axios
+      .delete("/cart", {
+        data: selectedItems.map((item) => item.cartNum),
+      })
+      .then(() => {
+        // 성공적으로 삭제하면 항목 목록을 갱신
+        const updatedItems = items.filter((item) => !item.checked);
+        setItems(updatedItems);
+
+        const deletedItemsTotalPrice = selectedItems.reduce(
+          (acc, item) => acc + item.productCost * item.quantity,
+          0
+        );
+        setSelectedTotalPrice((prev) => prev - deletedItemsTotalPrice);
+      })
+      .catch((error) => {
+        console.error("선택한 항목을 삭제하는데 실패", error);
+      });
   };
   //장바구니 총 가격
   const totalPrice = items.reduce((acc, item) => {
-    return acc + item.price * item.quantity;
+    return acc + item.productCost * item.quantity;
   }, 0);
   //배송비 설정
-  const shippingCost = totalPrice >= 50000 ? 0 : 2500;
+  const shippingCost = selectedTotalPrice >= 50000 ? 0 : 2500;
+
+  const navigate = useNavigate();
+
+  // 구매 페이지로 이동하는 함수
+  const handlePurchase = () => {
+    // 선택된 항목들을 구매 페이지로 전달
+    const selectedItems = items.filter((item) => item.checked);
+    navigate(SHOP.ORDER, { state: { items: selectedItems } });
+  };
 
   return (
     <ThemeProvider theme={CustomTheme}>
@@ -159,18 +223,24 @@ const Cart = () => {
           </TableHead>
           <TableBody>
             {items.map((item) => (
-              <React.Fragment key={item.id}>
+              <React.Fragment key={item.cartNum}>
                 <TableRow>
                   <TableCell>
                     <Checkbox
                       edge="start"
                       checked={item.checked}
-                      onClick={() => handleToggle(item.id)}
+                      onClick={() => handleToggle(item.cartNum)}
                       tabIndex={-1}
                     />
                   </TableCell>
-                  <TableCell align="center">{item.img}</TableCell>
-                  <TableCell align="center">{item.name}</TableCell>
+                  <TableCell align="center">
+                    <img
+                      src={item.thumbnailImg}
+                      alt="img"
+                      style={{ width: 100, height: 100 }}
+                    />
+                  </TableCell>
+                  <TableCell align="center">{item.productName}</TableCell>
                   <TableCell align="center">
                     {
                       <React.Fragment>
@@ -178,7 +248,7 @@ const Cart = () => {
                           size="small"
                           className="plus_minus"
                           onClick={() =>
-                            handleQuantityChange(item.id, item.quantity - 1)
+                            handleQuantityMinus(item.cartNum, item.quantity - 1)
                           }
                         >
                           <RemoveCircle />
@@ -189,7 +259,7 @@ const Cart = () => {
                           className="plus_minus"
                           sx={{ color: "#FF8282" }}
                           onClick={() =>
-                            handleQuantityChange(item.id, item.quantity + 1)
+                            handleQuantityPlus(item.cartNum, item.quantity + 1)
                           }
                         >
                           <AddCircle />
@@ -198,12 +268,12 @@ const Cart = () => {
                     }
                   </TableCell>
                   <TableCell align="center" sx={{ fontSize: "16px" }}>
-                    <Typography>{`${item.price
+                    <Typography>{`${item.productCost
                       .toString()
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원`}</Typography>
                   </TableCell>
                   <TableCell align="center">
-                    <Typography>{`${(item.price * item.quantity)
+                    <Typography>{`${(item.productCost * item.quantity)
                       .toString()
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원`}</Typography>
                   </TableCell>
@@ -225,7 +295,9 @@ const Cart = () => {
               >
                 총 주문금액 :
                 <span className="tot">
-                  {totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  {selectedTotalPrice
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </span>
                 원 + 배송비
                 <span className="tot">
@@ -235,7 +307,7 @@ const Cart = () => {
                 </span>
                 원 =
                 <span className="tot">
-                  {(totalPrice + shippingCost)
+                  {(selectedTotalPrice + shippingCost)
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </span>
@@ -256,11 +328,9 @@ const Cart = () => {
           <Link to={SHOP.PRODUCT} style={{ textDecoration: "none" }}>
             <Button className="continue">계속 쇼핑하기</Button>
           </Link>
-          <Link to={SHOP.ORDER} style={{ textDecoration: "none" }}>
-            <Button variant="contained" color="error">
-              구매하기
-            </Button>
-          </Link>
+          <Button variant="contained" color="error" onClick={handlePurchase}>
+            구매하기
+          </Button>
         </div>
       </CartStyle>
     </ThemeProvider>
