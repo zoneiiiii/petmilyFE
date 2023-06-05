@@ -103,10 +103,16 @@ const MissingBoard = () => {
                               height: "100%",
                               display: "flex",
                               flexDirection: "column",
+                              position: "relative",
                               border: "1px solid rgb(233, 236, 239)",
                               boxShadow: "1px 1px 4px 0px rgb(233, 236, 239)",
                             }}
                           >
+                            <CardStatus>
+                              {(card.boardStatus === true) ?
+                                (<p style={{ color: "#FF4646" }}>실종</p>) :
+                                (<p style={{ color: "#858585" }}>완료</p>)}
+                            </CardStatus>
                             <CardImage src={card.imgThumbnail} />
                             <div>
                               <CardTitle>{card.boardSubject}</CardTitle>
@@ -211,6 +217,25 @@ const CardWritter = styled.p`
   color: #888;
   margin-left: 10px;
 `;
+
+const CardStatus = styled.div`
+position: absolute;
+top: 184px;
+right: 8px;
+display: flex;
+align-items: center;
+
+font-size: 13px;
+height: 18px;
+width: auto;
+padding: 2px 4px 0 4px;
+
+// color: #888;
+background-color: white;
+// color: white;
+border: 1px outset #BFBFBF;
+border-radius: 10%;
+`
 
 const CardCount = styled.p`
   font-size: 14px;

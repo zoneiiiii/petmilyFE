@@ -185,7 +185,7 @@ const DonateApply = () => {
     //아임포트 nice pg사 api 연동
     /* 1. 가맹점 식별하기 */
     const { IMP } = window;
-    const merchant_uid = `DONATION-C-${Date.now()}`;
+    const merchant_uid = `DONATION-V-${Date.now()}`;
     IMP.init("imp83178746");
     const data = {
       //결제 데이터 정의하기

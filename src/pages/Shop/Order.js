@@ -1,7 +1,7 @@
 import { SHOP } from "../../constants/PageURL";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import React from "react";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { ThemeProvider } from "@mui/material/styles";
 import {
@@ -19,8 +19,29 @@ import {
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import OrderComplete from "./OrderComplete";
+import axios from "axios";
 
 const Order = () => {
+  const location = useLocation();
+  const items =
+    location && location.state && location.state.items
+      ? location.state.items
+      : [];
+
+  const [member, setMember] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/get-userinfo", {
+        withCredentials: true,
+      })
+      .then((response) => {
+        setMember(response.data);
+      })
+      .catch((error) => {
+        console.error("사용자 정보 가져오기 실패", error);
+      });
+  }, []);
   //필수 항목 입력 상태 확인
   const [receiverName, setReceiverName] = useState("");
   const [receiverPhone, setReceiverPhone] = useState("");
@@ -153,12 +174,13 @@ const Order = () => {
     const {
       target: { value },
     } = event;
-    SetShippingNote(typeof value === "string" ? value.split(",") : value);
+    // SetShippingNote(typeof value === "string" ? value.split(",") : value);
+    SetShippingNote(value);
   };
 
   //장바구니 총 가격
   const totalPrice = items.reduce((acc, item) => {
-    return acc + item.price * item.quantity;
+    return acc + item.productCost * item.quantity;
   }, 0);
   //배송비 설정
   const shippingCost = totalPrice >= 50000 ? 0 : 2500;
@@ -178,77 +200,85 @@ const Order = () => {
     /* 가맹점 식별하기 */
     const { IMP } = window;
     const merchant_uid = `PAYMENT-C-${Date.now()}`;
-    IMP.init("imp15870417");
+    IMP.init("imp83178746");
     const data = {
       //결제 데이터 정의하기
       pg: "kcp",
       pay_method: "card",
       merchant_uid: merchant_uid,
       name: "펫밀리 상품 결제",
-      amount: totalPrice,
-      buyer_email: member[0].email,
-      buyer_name: member[0].name,
-      buyer_tel: member[0].phone,
+      amount: totalPrice + shippingCost,
+      buyer_email: member.memberEmail,
+      buyer_name: member.memberName,
+      buyer_tel: member.memberTel,
       buyer_addr: address + ", " + detailAddress,
       buyer_postcode: zipcode,
     };
     IMP.request_pay(data, callback);
   }
   // const navigate = useNavigate();
+
   function callback(response) {
     //콜백함수 정의하기
     const { success, merchant_uid, imp_uid, error_msg } = response;
 
     if (success) {
-      // //alert("결제 성공");
-      // navigate(SHOP.ORDER_COMPLETE, { state: { orderState: orderCompleted } });
-      // setOrderDate(new Date().toLocaleDateString());
-      // setOrderCompleted(true);
       const currentDate = new Date();
       const isoCurrentDate = new Date(
         currentDate.getTime() + 9 * 60 * 60 * 1000
       ).toISOString();
-      // axios
-      //   .post("/donate/apply", {
-      //     donationDto: {
-      //       donationDonor: donor,
-      //       donationName: name,
-      //       donationTel: tel,
-      //       donationEmail: email,
-      //       donationCost: amount,
-      //       donationDate: isoCurrentDate,
-      //     },
-      //     paymentDto: {
-      //       merchantUid: merchant_uid,
-      //       impUid: imp_uid,
-      //       paymentState: "결제완료",
-      //       amount: amount,
-      //       paymentDate: isoCurrentDate,
-      //     },
-      //   })
-      //   .then((response) => {
-      //     console.log(response.data);
-      setOrderDate(isoCurrentDate);
-      setOrderCompleted(true);
-      setIsSuccess(true);
-      // })
-      // .catch((error) => {
-      //   console.error(error);
-      //   setErrorMsg(error_msg);
-      //   setDonationCompleted(true);
-      //   setIsSuccess(false);
-      // });
+
+      const orderlistDtos = items.map((item) => ({
+        boardNum: item.boardNum,
+        quantity: item.quantity,
+        cost: item.productCost * item.quantity,
+      }));
+
+      const paymentDto = {
+        merchantUid: merchant_uid,
+        impUid: imp_uid,
+        paymentState: "결제완료",
+        amount: totalPrice + shippingCost,
+        paymentDate: isoCurrentDate,
+      };
+
+      const ordersDto = {
+        orderDate: isoCurrentDate,
+        orderState: "배송중",
+        address: address,
+        addressDetail: detailAddress,
+        postal: zipcode,
+        note: shippingNote,
+        recipient: receiverName,
+        recipientTel: receiverPhone,
+      };
+
+      const cartNums = items.map((item) => item.cartNum);
+      const orderRequestDto = {
+        ordersDto,
+        paymentDto,
+        orderlistDtos,
+        cartNums,
+      };
+      axios
+        .post("/order/purchase", orderRequestDto, { withCredentials: true })
+        .then((response) => {
+          const savedOrder = response.data;
+          setOrderDate(isoCurrentDate);
+          setOrderCompleted(true);
+          setIsSuccess(true);
+        })
+        .catch((error) => {
+          console.error(error);
+          setErrorMsg(error_msg);
+          setOrderCompleted(true);
+          setIsSuccess(false);
+        });
     } else {
-      // alert(`결제 실패: ${error_msg}`);
       setErrorMsg(error_msg);
       setOrderCompleted(true);
       setIsSuccess(false);
     }
-    // } else {
-    //   navigate(SHOP.ORDER_COMPLETE, {
-    //     state: { orderState: orderCompleted, error_msg: error_msg },
-    //   });
-    //alert(`결제 실패: ${error_msg}`);
   }
 
   function onClickVbankPayment() {
@@ -256,17 +286,17 @@ const Order = () => {
     /* 가맹점 식별하기 */
     const { IMP } = window;
     const merchant_uid = `PAYMENT-V-${Date.now()}`;
-    IMP.init("imp15870417");
+    IMP.init("imp83178746");
     const data = {
       //결제 데이터 정의하기
       pg: "nice",
       pay_method: "trans",
       merchant_uid: merchant_uid,
       name: "펫밀리 상품 결제",
-      amount: totalPrice,
-      buyer_email: member[0].email,
-      buyer_name: member[0].name,
-      buyer_tel: member[0].phone,
+      amount: totalPrice + shippingCost,
+      buyer_email: member.memberEmail,
+      buyer_name: member.memberName,
+      buyer_tel: member.memberTel,
       buyer_addr: address + ", " + detailAddress,
       buyer_postcode: zipcode,
     };
@@ -277,7 +307,7 @@ const Order = () => {
     //아임포트 카카오페이 pg사 api 연동
     /* 가맹점 식별하기 */
     const { IMP } = window;
-    IMP.init("imp15870417");
+    IMP.init("imp83178746");
     const merchant_uid = `PAYMENT-K-${Date.now()}`;
     const data = {
       //결제 데이터 정의하기
@@ -285,10 +315,10 @@ const Order = () => {
       pay_method: "kakaopay",
       merchant_uid: merchant_uid,
       name: "펫밀리 상품 결제",
-      amount: totalPrice,
-      buyer_email: member[0].email,
-      buyer_name: member[0].name,
-      buyer_tel: member[0].phone,
+      amount: totalPrice + shippingCost,
+      buyer_email: member.memberEmail,
+      buyer_name: member.memberName,
+      buyer_tel: member.memberTel,
       buyer_addr: address + ", " + detailAddress,
       buyer_postcode: zipcode,
     };
@@ -337,20 +367,29 @@ const Order = () => {
                   상품 정보
                 </TableCell>
               </TableRow>
-
               {items.map((item) => (
-                <React.Fragment key={item.id}>
+                <React.Fragment
+                  key={
+                    item.cartNum
+                      ? `cart-${item.cartNum}`
+                      : `board-${item.boardNum}`
+                  }
+                >
                   <TableRow>
                     <TableCell align="center" sx={{ width: "200px" }}>
-                      {item.img}
+                      <img
+                        src={item.thumbnailImg}
+                        alt="img"
+                        style={{ width: 100, height: 100 }}
+                      />
                     </TableCell>
                     <TableCell align="center" sx={{ width: "400px" }}>
-                      {item.name}
+                      {item.productName}
                     </TableCell>
                     <TableCell align="center">수량 : {item.quantity}</TableCell>
                     <TableCell align="center">
                       가격 :
-                      {(item.price * item.quantity)
+                      {(item.productCost * item.quantity)
                         .toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                       원
@@ -366,20 +405,16 @@ const Order = () => {
                   구매자 정보
                 </TableCell>
               </TableRow>
-              {member.map((info) => (
-                <React.Fragment key={info.id}>
-                  <TableRow>
-                    <TableCell colSpan={4} sx={{ height: 100, fontSize: 16 }}>
-                      <p style={{ color: "darkgray", fontStyle: "italic" }}>
-                        이름 : {info.name}
-                        <br />
-                        전화번호 : {info.phone} <br />
-                        이메일 : {info.email}
-                      </p>
-                    </TableCell>
-                  </TableRow>
-                </React.Fragment>
-              ))}
+              <TableRow>
+                <TableCell colSpan={4} sx={{ height: 100, fontSize: 16 }}>
+                  <p style={{ color: "darkgray", fontStyle: "italic" }}>
+                    이름 : {member.memberName}
+                    <br />
+                    전화번호 : {member.memberTel} <br />
+                    이메일 : {member.memberEmail}
+                  </p>
+                </TableCell>
+              </TableRow>
               <TableRow>
                 <TableCell
                   colSpan={3}
@@ -489,7 +524,7 @@ const Order = () => {
                         if (selected.length === 0) {
                           return "배송 시 요청사항을 선택해주세요.";
                         }
-                        return selected.join(", ");
+                        return selected;
                       }}
                     >
                       {memos.map((memo) => (
@@ -656,54 +691,5 @@ const OrderStyle = styled.div`
     }
   }
 `;
-const member = [
-  {
-    id: 1,
-    name: "홍길동",
-    phone: "010-1111-1111",
-    email: "hong@email.com",
-  },
-];
 
-const items = [
-  {
-    id: 1,
-    img: (
-      <img
-        src="https://source.unsplash.com/random/?programming"
-        alt="img"
-        style={{ width: 100, height: 100 }}
-      />
-    ),
-    name: "하네스",
-    price: 10000,
-    quantity: 2,
-  },
-  {
-    id: 2,
-    img: (
-      <img
-        src="https://source.unsplash.com/random/?programming"
-        alt="img"
-        style={{ width: 100, height: 100 }}
-      />
-    ),
-    name: "커스텀 그립톡",
-    price: 20000,
-    quantity: 1,
-  },
-  {
-    id: 3,
-    img: (
-      <img
-        src="https://source.unsplash.com/random/?programming"
-        alt="img"
-        style={{ width: 100, height: 100 }}
-      />
-    ),
-    name: "유기농 강아지 사료 3kg",
-    price: 30000,
-    quantity: 3,
-  },
-];
 export default Order;
