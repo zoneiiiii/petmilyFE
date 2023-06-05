@@ -1,10 +1,16 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import MyPageNav from "./MyPageNav";
 import styled from "styled-components";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import axios from "axios";
+import { ACCOUNT } from "../../constants/PageURL";
+import LoadingPage from "../Loading/LoadingPage";
 
 const MyPage = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const pageRef = useRef();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const ads = [
     { id: 1, image: "/images/Ad1.png", link: "#" },
     { id: 2, image: "/images/Ad2.png", link: "#" },
@@ -15,7 +21,24 @@ const MyPage = () => {
   const randomAdIndex = Math.floor(Math.random() * ads.length);
   const randomAd = ads[randomAdIndex];
 
-  return (
+  useEffect(() => {
+    if (!isLoggedIn) {
+      console.log("axios");
+      axios
+        .get("/check-login")
+        .then((response) => {
+          if (!response.data) {
+            alert("로그인 해주세요.");
+            navigate(ACCOUNT.LOGIN);
+          } else {
+            setIsLoggedIn(true);
+          }
+        })
+        .catch((error) => console.error("에러발생! :", error));
+    }
+  }, [location]);
+
+  return isLoggedIn ? (
     <MyPageLayout className="MyPageLayout">
       <PageSizeLimit>
         <NavContainer>
@@ -33,6 +56,8 @@ const MyPage = () => {
         </AdContainer>
       </PageSizeLimit>
     </MyPageLayout>
+  ) : (
+    <LoadingPage />
   );
 };
 
@@ -40,7 +65,7 @@ const MyPageLayout = styled.div`
   display: flex;
   max-width: 100vw;
   justify-content: center;
-  background: "#ff0000";
+  background: "#f8f9fa";
 `;
 
 const PageSizeLimit = styled.div`
@@ -66,6 +91,7 @@ const MyPageContainer = styled.div`
   min-width: fit-content;
   justify-self: center;
   padding: 40px 20px;
+  background: "#fff";
 `;
 
 const AdContainer = styled.div`

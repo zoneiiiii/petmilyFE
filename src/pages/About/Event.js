@@ -17,16 +17,15 @@ import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ABOUT } from "../../constants/PageURL";
 import styled from "styled-components";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import axios from "axios";
 import dayjs from "dayjs";
 
 const pageWidth = "100%";
 // 검색 방식
 const searchModes = {
-  subject_contents: "subject_contents",
+  subject_contents: "subject_content",
   subject: "subject",
-  contents: "contents",
+  contents: "content",
 };
 
 const Event = () => {
