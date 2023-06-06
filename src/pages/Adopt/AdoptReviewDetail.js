@@ -1,57 +1,32 @@
 import styled from "styled-components";
-import * as React from "react";
-import CustomButton from "../Login/CustomButton";
-import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState, useContext } from "react";
-import { ADOPT } from "../../constants/PageURL";
-import * as S from "../Support/Volunteer/VolunteerNoticeWrite.styled";
-import DOMPurify from "dompurify";
-import axios from "axios";
+import React, { useState, useEffect, useContext } from "react";
+import Comment from "../../components/Comment/Comment";
+import { useParams, useNavigate } from "react-router-dom";
 import {
-  ThemeProvider,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
   Button,
+  ThemeProvider,
+  Avatar,
 } from "@mui/material";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
-import Comment from "../../components/Comment/Comment";
+import DOMPurify from "dompurify";
+import axios from "axios";
 import { AuthContext } from "../../contexts/AuthContexts";
 import NotFound from "../NotFound/NotFound";
 import Loading from "../../components/Loading/LoadingPage";
+import { ADOPT } from "../../constants/PageURL";
 
 const AdoptReviewDetail = () => {
-  const { id } = useParams(); //게시글 id
-  const { userNum } = useContext(AuthContext);
-  const location = useLocation();
-  const [data, setData] = useState([]);
-  const [writeId, setWriteId] = useState(false);
+  const [data, setData] = useState([]); // DB 데이터 가져오는 변수
   const [isLoading, setIsLoading] = useState(true); //로딩 상태
+  const { id } = useParams(); //게시글 id
+  const { userNum } = useContext(AuthContext); // 로그인 상태 체크
   const navigate = useNavigate();
-  const number = location.state;
-
-  const formatDate = () => {
-    console.log(data.reviewDate);
-    const date = new Date(data.reviewDate);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    console.log(`${year}년 ${month}월 ${day}일`);
-    return `${year}년 ${month}월 ${day}일`;
-  };
 
   const profile = {
     profileImg: data.memberImg, // 사용자 프로필 이미지
     profileNickname: data.memberNickName, // 사용자 닉네임
+    region: "관악구 신림동"
   }
-
-  const createMarkup = (html) => {
-    return {
-      __html: DOMPurify.sanitize(html),
-    };
-  };
 
   /* axios start */
   useEffect(() => {
@@ -62,11 +37,6 @@ const AdoptReviewDetail = () => {
           `http://localhost:8080/board/review/${id}`
         ); //게시글 Detail 데이터  호출
         setData(response.data);
-        if (response.data.memberNum === userNum) {
-          setWriteId(true);
-        } else {
-          setWriteId(false);
-        }
       } catch (error) {
         console.error("Error fetching data : ", error);
       } finally {
@@ -74,8 +44,32 @@ const AdoptReviewDetail = () => {
       }
     };
     fetchPost();
-  }, [id, userNum]);
+  }, [id]);
   /* axios end */
+
+  if (isLoading) {
+    return <Loading />; // 로딩 중일 때 표시할 컴포넌트
+  }
+
+  if (!data) {
+    return <NotFound />; //존재하지 않는 번호를 넣었을 때 표시할 컴포넌트
+  }
+
+  const formatDate = (dateString) => {
+    //날짜 변환함수
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hour = String(date.getHours()).padStart(2, "0");
+    const minute = String(date.getMinutes()).padStart(2, "0");
+    return `${year}.${month}.${day} ${hour}:${minute}`;
+  };
+
+  const handleEdit = () => {
+    //수정
+    navigate(ADOPT.REVIEW_MODIFY(id));
+  };
 
   const handleDelete = async () => {
     // 삭제
@@ -86,7 +80,7 @@ const AdoptReviewDetail = () => {
           withCredentials: true,
         });
         alert("게시물이 삭제되었습니다.");
-        navigate(-1);
+        navigate(ADOPT.REVIEW);
       } catch (error) {
         if (error.response) {
           alert("해당 게시글을 삭제할 권한이 없습니다.");
@@ -97,23 +91,17 @@ const AdoptReviewDetail = () => {
     }
   };
 
-  const handleEdit = () => {
-    //수정
-    navigate(ADOPT.REVIEW_MODIFY(id));
-  };
-
   const handleReturn = () => {
     // 돌아가기
-    navigate(-1);
+    navigate(ADOPT.REVIEW);
   }
 
-  if (isLoading) {
-    return <Loading />; // 로딩 중일 때 표시할 컴포넌트
-  }
+  const createMarkup = (html) => {
+    return {
+      __html: DOMPurify.sanitize(html),
+    };
+  };
 
-  if (!data) {
-    return <NotFound />; //존재하지 않는 번호를 넣었을 때 표시할 컴포넌트
-  }
 
   return (
     <ThemeProvider theme={CustomTheme}>
@@ -122,7 +110,7 @@ const AdoptReviewDetail = () => {
           <Container>
             <Top>입양 후기 게시판</Top>
             <Head>
-              <hr />
+              <Horizon />
               <p className="title">{data.reviewSubject}</p>
               <div className="subtitle">
                 {/* 유저 프로필사진 & 닉네임 */}
@@ -131,7 +119,7 @@ const AdoptReviewDetail = () => {
                   <div className="space-between">
                     <div style={{ display: "flex" }}>
                       <div className="article-profile-image">
-                        <img alt="프로필 이미지" src={profile.profileImg} />
+                        <UserImg alt="프로필 이미지" src={profile.profileImg} />
                       </div>
                       <div className="article-profile-left">
                         <div className="nickname">{profile.profileNickname}</div>
@@ -144,37 +132,34 @@ const AdoptReviewDetail = () => {
                 </section>
               </div>
             </Head>
-            <hr />
-            <br />
-            <Body>
-              <DetailMiddle
-                dangerouslySetInnerHTML={createMarkup(data.reviewContent)}
-              />
+            <Horizon />
+            <DetailMiddle
+              dangerouslySetInnerHTML={createMarkup(data.boardContent)}
+            />
+            <ButtonsContainer>
+              {data.memberNum === userNum && (
+                <div>
+                  <EditButton onClick={handleEdit} variant="contained">
+                    수정
+                  </EditButton>
+                  <ButtonsSpace />
+                  <DeleteButton onClick={handleDelete} variant="contained">
+                    삭제
+                  </DeleteButton>
+                  <ButtonsSpace />
+                </div>
+              )}
+              <ReturnButton onClick={handleReturn} variant="contained">
+                돌아가기
+              </ReturnButton>
+            </ButtonsContainer>
 
-              <ButtonsContainer>
-                {writeId ? (
-                  <div>
-                    <EditButton onClick={handleEdit} variant="contained">
-                      수정
-                    </EditButton>
-                    <ButtonsSpace />
-                    <DeleteButton onClick={handleDelete} variant="contained">
-                      삭제
-                    </DeleteButton>
-                    <ButtonsSpace />
-                  </div>
-                ) : (
-                  ""
-                )}
-                <ReturnButton onClick={handleReturn} variant="contained">
-                  돌아가기
-                </ReturnButton>
-              </ButtonsContainer>
-            </Body>
-            <div style={{ width: "100%" }}>
-              <Comment boardId="review" boardNum={id} />
-            </div>
+            <Comments>
+              <Horizon />
+              <Comment boardId="missing" boardNum={id} />
+            </Comments>
           </Container>
+
         </MainContainer>
       </Section>
     </ThemeProvider>
@@ -394,6 +379,24 @@ const ReturnButton = styled(Button)`
     &:hover {
       background-color: #858585;
     }
+  }
+`;
+const Horizon = styled.hr`
+  border-width: 1px 0px 0px 0px;
+  border-style: solid;
+  color: #ccc;
+  margin-top: 5px;
+  height: 1px;
+  // min-width: 1050px;
+`;
+
+const UserImg = styled(Avatar)`
+  && {
+    margin-right: 8px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 5px;
   }
 `;
 

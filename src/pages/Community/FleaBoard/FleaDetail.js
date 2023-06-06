@@ -4,6 +4,7 @@ import styled from "styled-components";
 import {
   Button,
   ThemeProvider,
+  Avatar,
 } from "@mui/material";
 import { CustomTheme } from "../../../assets/Theme/CustomTheme";
 import { COMMUNITY } from '../../../constants/PageURL';
@@ -92,7 +93,7 @@ const FleaDetail = (props) => {
           withCredentials: true,
         });
         alert("게시물이 삭제되었습니다.");
-        navigate(-1);
+        navigate(COMMUNITY.FLEA);
       } catch (error) {
         if (error.response) {
           alert("해당 게시글을 삭제할 권한이 없습니다.");
@@ -105,7 +106,7 @@ const FleaDetail = (props) => {
 
   const handleReturn = () => {
     // 돌아가기
-    navigate(-1);
+    navigate(COMMUNITY.FLEA);
   }
 
   const createMarkup = (html) => {
@@ -133,7 +134,7 @@ const FleaDetail = (props) => {
             <div className="space-between">
               <div style={{ display: 'flex' }}>
                 <div className="article-profile-image">
-                  <img alt="프로필 이미지" src={profile.profileImg} />
+                  <UserImg alt="프로필 이미지" src={profile.profileImg} />
                 </div>
                 <div className="article-profile-left">
                   <div className="nickname">{profile.profileNickname}</div>
@@ -393,6 +394,16 @@ const ReturnButton = styled(Button)`
     &:hover {
       background-color: #858585;
     }
+  }
+`;
+
+const UserImg = styled(Avatar)`
+  && {
+    margin-right: 8px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 5px;
   }
 `;
 

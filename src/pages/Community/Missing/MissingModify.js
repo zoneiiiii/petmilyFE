@@ -188,6 +188,7 @@ const MissingModify = () => {
                 setGender(data.boardGender);
                 setStatus(data.boardStatus ? "실종" : "완료");
                 setThumbnail(data.imgThumbnail);
+                setPreviewUrl(response.data.imgThumbnail);
             } catch (error) {
                 console.error("Error fetching data : ", error);
             } finally {

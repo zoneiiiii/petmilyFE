@@ -171,6 +171,7 @@ const FindModify = () => {
                 setAge(data.boardAge);
                 setGender(data.boardGender);
                 setThumbnail(data.imgThumbnail);
+                setPreviewUrl(response.data.imgThumbnail);
             } catch (error) {
                 console.error("Error fetching data : ", error);
             } finally {
