@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import * as React from "react";
 import CustomButton from "../Login/CustomButton";
-import { Link, useParams, useLocation } from "react-router-dom";
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import { ADOPT } from "../../constants/PageURL";
 import * as S from "../Support/Volunteer/VolunteerNoticeWrite.styled";
@@ -19,13 +19,17 @@ import {
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import Comment from "../../components/Comment/Comment";
 import { AuthContext } from "../../contexts/AuthContexts";
+import NotFound from "../NotFound/NotFound";
+import Loading from "../../components/Loading/LoadingPage";
 
 const AdoptReviewDetail = () => {
-  const { id } = useParams();
+  const { id } = useParams(); //게시글 id
   const { userNum } = useContext(AuthContext);
   const location = useLocation();
   const [data, setData] = useState([]);
   const [writeId, setWriteId] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); //로딩 상태
+  const navigate = useNavigate();
   const number = location.state;
 
   const formatDate = () => {
@@ -48,22 +52,68 @@ const AdoptReviewDetail = () => {
       __html: DOMPurify.sanitize(html),
     };
   };
+
+  /* axios start */
   useEffect(() => {
-    axios
-      .get(`/board/review/${number.boardNum}`)
-      .then((response) => {
+    //게시글 Detail 호출
+    const fetchPost = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/board/review/${id}`
+        ); //게시글 Detail 데이터  호출
         setData(response.data);
-        console.log(response.data);
         if (response.data.memberNum === userNum) {
           setWriteId(true);
         } else {
           setWriteId(false);
         }
-      })
-      .catch((error) => {
-        console.error("error");
-      });
-  }, [userNum]);
+      } catch (error) {
+        console.error("Error fetching data : ", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchPost();
+  }, [id, userNum]);
+  /* axios end */
+
+  const handleDelete = async () => {
+    // 삭제
+    const result = window.confirm("정말 삭제하시겠습니까?");
+    if (result) {
+      try {
+        await axios.delete(`http://localhost:8080/board/review/${id}`, {
+          withCredentials: true,
+        });
+        alert("게시물이 삭제되었습니다.");
+        navigate(-1);
+      } catch (error) {
+        if (error.response) {
+          alert("해당 게시글을 삭제할 권한이 없습니다.");
+        } else {
+          console.error("Error deleting post: ", error);
+        }
+      }
+    }
+  };
+
+  const handleEdit = () => {
+    //수정
+    navigate(ADOPT.REVIEW_MODIFY(id));
+  };
+
+  const handleReturn = () => {
+    // 돌아가기
+    navigate(-1);
+  }
+
+  if (isLoading) {
+    return <Loading />; // 로딩 중일 때 표시할 컴포넌트
+  }
+
+  if (!data) {
+    return <NotFound />; //존재하지 않는 번호를 넣었을 때 표시할 컴포넌트
+  }
 
   return (
     <ThemeProvider theme={CustomTheme}>
@@ -81,10 +131,10 @@ const AdoptReviewDetail = () => {
                   <div className="space-between">
                     <div style={{ display: "flex" }}>
                       <div className="article-profile-image">
-                        {/* <img alt="프로필 이미지" src={profile.profileImg} /> */}
+                        <img alt="프로필 이미지" src={profile.profileImg} />
                       </div>
                       <div className="article-profile-left">
-                        <div className="nickname">{number.nickName}</div>
+                        <div className="nickname">{profile.profileNickname}</div>
                         {/* <div className="region">{profile.region}</div> */}
                       </div>
                       <p className="date">{formatDate(data.reviewDate)}</p>
@@ -104,41 +154,21 @@ const AdoptReviewDetail = () => {
               <ButtonsContainer>
                 {writeId ? (
                   <div>
-                    <Link
-                      to={ADOPT.REVIEW_MODIFY}
-                      state={{
-                        boardNum: data.boardNum,
-                      }}
-                      style={{ textDecoration: "none" }}
-                    >
-                      <EditButton label="수정" value="삭제" variant="contained">
-                        수정
-                      </EditButton>
-                    </Link>
+                    <EditButton onClick={handleEdit} variant="contained">
+                      수정
+                    </EditButton>
                     <ButtonsSpace />
-                    <Link to={ADOPT.REVIEW} style={{ textDecoration: "none" }}>
-                      <DeleteButton
-                        label="삭제"
-                        value="삭제"
-                        variant="contained"
-                        onClick={() => {
-                          axios.delete(`/board/review/${data.boardNum}`);
-                          alert("삭제완료");
-                        }}
-                      >
-                        삭제
-                      </DeleteButton>
-                    </Link>
+                    <DeleteButton onClick={handleDelete} variant="contained">
+                      삭제
+                    </DeleteButton>
                     <ButtonsSpace />
                   </div>
                 ) : (
                   ""
                 )}
-                <Link to={ADOPT.REVIEW} style={{ textDecoration: "none" }}>
-                  <ReturnButton label="돌아가기" value="작성취소" variant="contained">
-                    돌아가기
-                  </ReturnButton>
-                </Link>
+                <ReturnButton onClick={handleReturn} variant="contained">
+                  돌아가기
+                </ReturnButton>
               </ButtonsContainer>
             </Body>
             <div style={{ width: "100%" }}>

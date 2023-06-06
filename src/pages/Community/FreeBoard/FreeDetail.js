@@ -87,7 +87,7 @@ const FreeDetail = () => {
           withCredentials: true,
         });
         alert("게시물이 삭제되었습니다.");
-        navigate(COMMUNITY.FREE);
+        navigate(-1);
       } catch (error) {
         if (error.response) {
           alert("해당 게시글을 삭제할 권한이 없습니다.");
@@ -100,7 +100,7 @@ const FreeDetail = () => {
 
   const handleReturn = () => {
     // 돌아가기
-    navigate(COMMUNITY.FREE);
+    navigate(-1);
   }
 
   const createMarkup = (html) => {

@@ -63,7 +63,7 @@ const VolunteerReviewDetail = () => {
   };
 
   const handleReturn = () => {
-    navigate(SUPPORT.VOLUNTEER_REVIEW);
+    navigate(-1);
   };
 
   const handleDelete = async () => {
@@ -78,7 +78,7 @@ const VolunteerReviewDetail = () => {
           }
         );
         alert("게시물이 삭제되었습니다.");
-        navigate(SUPPORT.VOLUNTEER_REVIEW);
+        navigate(-1);
       } catch (error) {
         console.error("Error deleting post: ", error);
       }

@@ -3,7 +3,16 @@ import { Link } from "react-router-dom";
 import { COMMUNITY } from "../../../constants/PageURL";
 import styled from "styled-components";
 import { CustomTheme } from "../../../assets/Theme/CustomTheme";
-import { ThemeProvider, Grid, Card, Container } from "@mui/material";
+import {
+  ThemeProvider,
+  Grid,
+  Card,
+  Container,
+  Table,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@mui/material';
 import Pagination from "@mui/material/Pagination";
 import SearchBar from "../../../components/common/SearchBar";
 import CustomButton from "../../Login/CustomButton";
@@ -74,87 +83,130 @@ const MissingBoard = () => {
     return `${year}/${month}/${day}`;
   };
 
-  return (
-    <ThemeProvider theme={CustomTheme}>
-      <Section className="result">
-        <MainContainer className="result-container">
-          <ContainerBox>
-            <Top>실종 동물 게시판</Top>
-            <Container sx={{ py: "30px" }} maxWidth="60vw">
-              <SearchContainer>
-                <SearchBar />
-              </SearchContainer>
+  if (data.length === 0) {
+    return (
+      <ThemeProvider theme={CustomTheme}>
+        <Section className="result">
+          <MainContainer className="result-container">
+            <ContainerBox>
+              <Top>실종 제보 게시판</Top>
               <Grid container spacing={4} columns={8}>
-                {data
-                  .slice(
-                    (page - 1) * itemsPerPage,
-                    (page - 1) * itemsPerPage + itemsPerPage
-                  )
-                  .map((card) => {
-                    return (
-                      <Grid item xs={10} sm={6} md={2} key={card.boardNum}>
-                        <Link
-                          to={COMMUNITY.MISSING_DETAIL(card.boardNum)}
-                          style={{ textDecoration: "none" }}
-                        >
-                          <Card
-                            key={card.boardNum}
-                            sx={{
-                              height: "100%",
-                              display: "flex",
-                              flexDirection: "column",
-                              position: "relative",
-                              border: "1px solid rgb(233, 236, 239)",
-                              boxShadow: "1px 1px 4px 0px rgb(233, 236, 239)",
-                            }}
-                          >
-                            <CardStatus>
-                              {(card.boardStatus === true) ?
-                                (<p style={{ color: "#FF4646" }}>실종</p>) :
-                                (<p style={{ color: "#858585" }}>완료</p>)}
-                            </CardStatus>
-                            <CardImage src={card.imgThumbnail} />
-                            <div>
-                              <CardTitle>{card.boardSubject}</CardTitle>
-                              <CardWritter>{card.memberNickName}</CardWritter>
-                              <CardDate>{formatDate(card.boardDate)}</CardDate>
-                              <CardCount>조회 {card.boardCount}</CardCount>
-                            </div>
-                          </Card>
-                        </Link>
-                      </Grid>
-                    );
-                  })}
+                <Table
+                  aria-label="caption table"
+                  overflow="hidden"
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    border: "1px solid lightgray",
+                    margin: "60px 20px 0 50px",
+                    width: "100%"
+                  }}
+                >
+                  <TableHead>
+                    <TableRow>
+                      <TableCell colSpan={4} align="center" sx={{ height: 250 }}>
+                        게시글이 없습니다.
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                </Table>
               </Grid>
-              {loggedIn === true ? (
-                <Link to={COMMUNITY.MISSING_WRITE}>
-                  <CustomButton label="글쓰기" value="글쓰기">
-                    글쓰기
-                  </CustomButton>
-                </Link>
-              ) : (
-                <></>
-              )}
-            </Container>
+            </ContainerBox>
+            {loggedIn === true ?
+              <Link to={COMMUNITY.MISSING_WRITE}>
+                <CustomButton label="글쓰기" value="글쓰기">
+                  글쓰기
+                </CustomButton>
+              </Link> : <></>
+            }
+          </MainContainer>
+        </Section>
+      </ThemeProvider>
+    );
+  } else {
+    return (
+      <ThemeProvider theme={CustomTheme}>
+        <Section className="result">
+          <MainContainer className="result-container">
+            <ContainerBox>
+              <Top>실종 동물 게시판</Top>
+              <Container sx={{ py: "30px" }} maxWidth="60vw">
+                <SearchContainer>
+                  <SearchBar />
+                </SearchContainer>
+                <Grid container spacing={4} columns={8}>
+                  {data
+                    .slice(
+                      (page - 1) * itemsPerPage,
+                      (page - 1) * itemsPerPage + itemsPerPage
+                    )
+                    .map((card) => {
+                      return (
+                        <Grid item xs={10} sm={6} md={2} key={card.boardNum}>
+                          <Link
+                            to={COMMUNITY.MISSING_DETAIL(card.boardNum)}
+                            style={{ textDecoration: "none" }}
+                          >
+                            <Card
+                              key={card.boardNum}
+                              sx={{
+                                height: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                position: "relative",
+                                border: "1px solid rgb(233, 236, 239)",
+                                boxShadow: "1px 1px 4px 0px rgb(233, 236, 239)",
+                              }}
+                            >
+                              <CardStatus>
+                                {(card.boardStatus === true) ?
+                                  (<p style={{ color: "#FF4646" }}>실종</p>) :
+                                  (<p style={{ color: "#858585" }}>완료</p>)}
+                              </CardStatus>
+                              <CardImage src={card.imgThumbnail} />
+                              <div>
+                                <CardTitle>{card.boardSubject}</CardTitle>
+                                <CardWritter>{card.memberNickName}</CardWritter>
+                                <CardDate>{formatDate(card.boardDate)}</CardDate>
+                                <CardCount>조회 {card.boardCount}</CardCount>
+                              </div>
+                            </Card>
+                          </Link>
+                        </Grid>
+                      );
+                    })}
+                </Grid>
+                {loggedIn === true ? (
+                  <Link to={COMMUNITY.MISSING_WRITE}>
+                    <CustomButton label="글쓰기" value="글쓰기">
+                      글쓰기
+                    </CustomButton>
+                  </Link>
+                ) : (
+                  <></>
+                )}
+              </Container>
 
-            <Pagination
-              color="primary"
-              page={page}
-              count={maxPageNum}
-              onChange={handleChange}
-              showFirstButton
-              showLastButton
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                margin: "50px 0 0 0px",
-              }}
-            />
-          </ContainerBox>
-        </MainContainer>
-      </Section>
-    </ThemeProvider>
-  );
+              <Pagination
+                color="primary"
+                page={page}
+                count={maxPageNum}
+                onChange={handleChange}
+                showFirstButton
+                showLastButton
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  margin: "50px 0 0 0px",
+                }}
+              />
+            </ContainerBox>
+          </MainContainer>
+        </Section>
+      </ThemeProvider>
+    );
+  }
 };
 
 const Section = styled.section`

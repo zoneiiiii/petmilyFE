@@ -188,7 +188,6 @@ const MyPageQnA = () => {
                   <StyledTableCell align="center" sx={{ minWidth: 10 }}>
                     {qna.boardNum}
                   </StyledTableCell>
-
                   {/* {page === pageCount ?
                     (<StyledTableCell align="center" sx={{ minWidth: 10 }}>
                       {(pageCount * data.length) - ((page - 1) * data.length + index)}

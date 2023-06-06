@@ -16,12 +16,14 @@ import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { AuthContext } from "../../contexts/AuthContexts";
 import axios from "axios";
 import { COMMUNITY } from "../../constants/PageURL";
+import Loading from "../../components/Loading/LoadingPage";
 
 const MyPageMissing = () => {
   const { userNum } = useContext(AuthContext);
   const [missing, setMissing] = useState([]); // DB 데이터 가져오는 변수
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(0); // 페이지 수 계산
+  const [isLoading, setIsLoading] = useState(true); //로딩 상태
 
   let navigate = useNavigate();
   let location = useLocation();
@@ -53,6 +55,7 @@ const MyPageMissing = () => {
           setMissing(response.data.content);
           setPageCount(totalPages);
           setPage(urlPage);
+          setIsLoading(false);
         })
         .catch((error) => {
           console.error("데이터 수신 오류 :", error);
@@ -99,6 +102,10 @@ const MyPageMissing = () => {
     const day = String(date.getDate()).padStart(2, "0");
     return `${year}/${month}/${day}`;
   };
+
+  if (isLoading) {
+    return <Loading />; // 로딩 중일 때 표시할 컴포넌트
+  }
 
   if (missing.length === 0) {
     return (

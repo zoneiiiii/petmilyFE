@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 import styleds from "styled-components";
 import { styled } from '@mui/material/styles';
+import { Grid } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -214,112 +215,155 @@ const FreeBoard = () => {
         return <NotFound />; //존재하지 않는 번호를 넣었을 때 표시할 컴포넌트
     }
 
-    return (
-        <ThemeProvider theme={CustomTheme}>
-            <Section className="result">
-                <MainContainer className="result-container">
+    if (data.length === 0) {
+        return (
+            <ThemeProvider theme={CustomTheme}>
+                <Section className="result">
+                    <MainContainer className="result-container">
+                        <Container sx={{ py: 0, minWidth: 780 }} maxWidth="lg">
+                            <h1 className={classes.title}>자유 게시판</h1>
+                            <Grid container spacing={4} columns={8}>
+                                <Table
+                                    aria-label="caption table"
+                                    overflow="hidden"
+                                    sx={{
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        border: "1px solid lightgray",
+                                        margin: "60px 20px 20px 50px",
+                                        width: "100%"
+                                    }}
+                                >
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell colSpan={4} align="center" sx={{ height: 250 }}>
+                                                게시글이 없습니다.
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                </Table>
+                            </Grid>
+                        </Container>
+                        {loggedIn === true ?
+                            <Link to={COMMUNITY.FREE_WRITE}>
+                                <CustomButton label="글쓰기" value="글쓰기">
+                                    글쓰기
+                                </CustomButton>
+                            </Link> : <></>
+                        }
+                    </MainContainer>
+                </Section>
+            </ThemeProvider>
+        );
+    } else {
+        return (
+            <ThemeProvider theme={CustomTheme}>
+                <Section className="result">
+                    <MainContainer className="result-container">
 
-                    <Container sx={{ py: 0, minWidth: 780 }} maxWidth="lg">
-                        <h1 className={classes.title}>자유 게시판</h1>
-                        <SearchContainer>
-                            <SearchBar />
-                        </SearchContainer>
-                        <TableContainer className={classes.tablecontainer} component={Paper} >
+                        <Container sx={{ py: 0, minWidth: 780 }} maxWidth="lg">
+                            <h1 className={classes.title}>자유 게시판</h1>
+                            <SearchContainer>
+                                <SearchBar />
+                            </SearchContainer>
+                            <TableContainer className={classes.tablecontainer} component={Paper} >
 
-                            <Table aria-label="customized table" className={classes.table}>
-                                <TableHead>
-                                    {/* <StyledTableRow>
-                                    {columns.map((column) => (
-                                        <StyledTableCell
-                                            key={column.id}
-                                            align={column.align}
-                                            style={{ minWidth: column.minWidth }}
-                                            onClick={handleSortRequest}
-                                        >
-                                            {column.label}
-                                        </StyledTableCell>
-                                    ))}
-                                </StyledTableRow> */}
-                                    <StyledTableRow>
-                                        <StyledTableCell align="center" sx={{ minWidth: 10, background: '#FBD385' }}>No.</StyledTableCell>
-                                        <StyledTableCell align="center" sx={{ minWidth: 200, background: '#FBD385' }}>제목</StyledTableCell>
-                                        <StyledTableCell align="center" sx={{ minWidth: 40, maxWidth: 40, background: '#FBD385' }}>작성자</StyledTableCell>
-                                        <StyledTableCell align="center" sx={{ minWidth: 50, background: '#FBD385' }}>조회수</StyledTableCell>
-                                        <StyledTableCell align="center" sx={{ minWidth: 90, background: '#FBD385' }} onClick={handleSortRequest}>
-                                            <TableSortLabel active={false} direction={orderDirection}>
-                                                작성일
-                                            </TableSortLabel>
-                                        </StyledTableCell>
-                                    </StyledTableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {lists
-                                        .map((list, index) => {
-                                            return (
-                                                <StyledTableRow key={list.boardNum} className={classes.content}>
-                                                    <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                                                        {data.length - ((page - 1) * itemsPerPage + index)}
-                                                    </StyledTableCell>
-                                                    <StyledTableCell align="center" sx={{ minWidth: 300 }}>
-                                                        <Link
-                                                            to={COMMUNITY.FREE_DETAIL(list.boardNum)}
-                                                            className={classes.subject}
-                                                            style={{ textDecoration: "none", color: "black" }}
-                                                        >
-                                                            {list.freeSubject}
-                                                        </Link>
-                                                    </StyledTableCell>
-                                                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                                                        {list.memberNickName}
-                                                    </StyledTableCell>
-                                                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                                                        {list.freeCount}
-                                                    </StyledTableCell>
-                                                    <StyledTableCell align="center" sx={{ minWidth: 30 }}>
-                                                        {list.freeDate}
-                                                    </StyledTableCell>
-                                                </StyledTableRow>
-                                            );
-                                        })}
-                                </TableBody>
-                                <TableFooter>
-                                    <TableRow>
-                                        <TableCell /><TableCell /><TableCell /><TableCell />
-                                        <TableCell>
-                                            {loggedIn === true ?
-                                                <Link className={classes.writelink} to={COMMUNITY.FREE_WRITE}>
-                                                    <CustomButton label="글쓰기" value="글쓰기">
-                                                        글쓰기
-                                                    </CustomButton>
-                                                </Link> : <></>
-                                            }
-                                        </TableCell>
-                                    </TableRow>
-                                </TableFooter>
-                            </Table>
-                        </TableContainer>
-                        <br />
-                        <Stack spacing={2} sx={{ mt: 0 }}>
-                            <Pagination
-                                color="primary"
-                                page={page}
-                                count={maxPageNum}
-                                onChange={handleChange}
-                                showFirstButton
-                                showLastButton
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    margin: '50px 0 0 0px'
-                                }}
-                            />
-                        </Stack>
-                        <br />
-                    </Container>
-                </MainContainer>
-            </Section>
-        </ThemeProvider>
-    );
+                                <Table aria-label="customized table" className={classes.table}>
+                                    <TableHead>
+                                        {/* <StyledTableRow>
+                                        {columns.map((column) => (
+                                            <StyledTableCell
+                                                key={column.id}
+                                                align={column.align}
+                                                style={{ minWidth: column.minWidth }}
+                                                onClick={handleSortRequest}
+                                            >
+                                                {column.label}
+                                            </StyledTableCell>
+                                        ))}
+                                    </StyledTableRow> */}
+                                        <StyledTableRow>
+                                            <StyledTableCell align="center" sx={{ minWidth: 10, background: '#FBD385' }}>No.</StyledTableCell>
+                                            <StyledTableCell align="center" sx={{ minWidth: 200, background: '#FBD385' }}>제목</StyledTableCell>
+                                            <StyledTableCell align="center" sx={{ minWidth: 40, maxWidth: 40, background: '#FBD385' }}>작성자</StyledTableCell>
+                                            <StyledTableCell align="center" sx={{ minWidth: 50, background: '#FBD385' }}>조회수</StyledTableCell>
+                                            <StyledTableCell align="center" sx={{ minWidth: 90, background: '#FBD385' }} onClick={handleSortRequest}>
+                                                <TableSortLabel active={false} direction={orderDirection}>
+                                                    작성일
+                                                </TableSortLabel>
+                                            </StyledTableCell>
+                                        </StyledTableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {lists
+                                            .map((list, index) => {
+                                                return (
+                                                    <StyledTableRow key={list.boardNum} className={classes.content}>
+                                                        <StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                                                            {data.length - ((page - 1) * itemsPerPage + index)}
+                                                        </StyledTableCell>
+                                                        <StyledTableCell align="center" sx={{ minWidth: 300 }}>
+                                                            <Link
+                                                                to={COMMUNITY.FREE_DETAIL(list.boardNum)}
+                                                                className={classes.subject}
+                                                                style={{ textDecoration: "none", color: "black" }}
+                                                            >
+                                                                {list.freeSubject}
+                                                            </Link>
+                                                        </StyledTableCell>
+                                                        <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                                                            {list.memberNickName}
+                                                        </StyledTableCell>
+                                                        <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                                                            {list.freeCount}
+                                                        </StyledTableCell>
+                                                        <StyledTableCell align="center" sx={{ minWidth: 30 }}>
+                                                            {list.freeDate}
+                                                        </StyledTableCell>
+                                                    </StyledTableRow>
+                                                );
+                                            })}
+                                    </TableBody>
+                                    <TableFooter>
+                                        <TableRow>
+                                            <TableCell /><TableCell /><TableCell /><TableCell />
+                                            <TableCell>
+                                                {loggedIn === true ?
+                                                    <Link className={classes.writelink} to={COMMUNITY.FREE_WRITE}>
+                                                        <CustomButton label="글쓰기" value="글쓰기">
+                                                            글쓰기
+                                                        </CustomButton>
+                                                    </Link> : <></>
+                                                }
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableFooter>
+                                </Table>
+                            </TableContainer>
+                            <br />
+                            <Stack spacing={2} sx={{ mt: 0 }}>
+                                <Pagination
+                                    color="primary"
+                                    page={page}
+                                    count={maxPageNum}
+                                    onChange={handleChange}
+                                    showFirstButton
+                                    showLastButton
+                                    sx={{
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        margin: '50px 0 0 0px'
+                                    }}
+                                />
+                            </Stack>
+                            <br />
+                        </Container>
+                    </MainContainer>
+                </Section>
+            </ThemeProvider>
+        );
+    }
 };
 
 export default FreeBoard;

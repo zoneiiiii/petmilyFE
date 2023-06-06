@@ -22,6 +22,7 @@ import axios from "axios";
 import { COMMUNITY } from "../../constants/PageURL";
 import { styled } from "@mui/material/styles";
 import styleds from "styled-components";
+import Loading from "../../components/Loading/LoadingPage";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -112,6 +113,7 @@ const MyPageFree = () => {
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const lists = free.slice(startIndex, endIndex); // 현재 페이지에 해당하는 카드 데이터 계산
+  const [isLoading, setIsLoading] = useState(true); //로딩 상태
   let navigate = useNavigate();
   let location = useLocation();
 
@@ -141,6 +143,7 @@ const MyPageFree = () => {
           setFree(response.data.content);
           setPageCount(totalPages);
           setPage(urlPage);
+          setIsLoading(false);
         })
         .catch((error) => {
           console.error("데이터 수신 오류 :", error);
@@ -199,6 +202,11 @@ const MyPageFree = () => {
     setOrderDirection(orderDirection === "asc" ? "desc" : "asc");
   };
   /* sort end */
+
+  if (isLoading) {
+    return <Loading />; // 로딩 중일 때 표시할 컴포넌트
+  }
+
 
   if (free.length === 0) {
     return (
