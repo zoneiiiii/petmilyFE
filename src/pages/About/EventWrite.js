@@ -25,7 +25,7 @@ import { MyCustomUploadAdapterPlugin } from "../../components/common/UploadAdapt
 import axios from "axios";
 import { CustomDatePicker } from "../../components/common/CustomDatePicker";
 import dayjs from "dayjs";
-import S from "./WriteStyle";
+import S from "../Admin/Board/WriteStyle";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 
 const pageWidth = "100%";
