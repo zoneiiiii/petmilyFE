@@ -12,16 +12,11 @@ import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { useEffect, useRef, useState } from "react";
 
 const SearchBar = ({ setValue, value, onClick, sx, width }) => {
-  const [textValue, setTextValue] = useState("");
-  useEffect(() => {
-    value && setTextValue(value);
-  }, [value]);
   const handleChange = (event) => {
-    setTextValue(event.target.value);
+    setValue(event.target.value);
   };
   const handleClick = () => {
-    setValue(textValue);
-    if (onClick) onClick(textValue);
+    if (onClick) onClick(value);
   };
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -30,7 +25,7 @@ const SearchBar = ({ setValue, value, onClick, sx, width }) => {
   };
   const inputRef = useRef();
   const resetValue = (event) => {
-    setTextValue("");
+    setValue("");
   };
 
   return (
@@ -40,7 +35,7 @@ const SearchBar = ({ setValue, value, onClick, sx, width }) => {
           variant="outlined"
           size="small"
           placeholder="Search..."
-          value={textValue}
+          value={value}
           inputRef={inputRef}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
@@ -50,7 +45,7 @@ const SearchBar = ({ setValue, value, onClick, sx, width }) => {
                 <SearchIcon color="fbd385" />
               </InputAdornment>
             ),
-            endAdornment: textValue && (
+            endAdornment: value && (
               <InputAdornment position="end">
                 <IconButton onClick={resetValue}>
                   <CloseIcon color="fbd385" />
