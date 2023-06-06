@@ -177,13 +177,13 @@ const Event = () => {
                       }}
                     >
                       <StyledLink
-                        to={ABOUT.EVENT_DETAIL({
-                          no: data.num,
+                        to={ABOUT.EVENT_DETAIL(data.num)}
+                        state={{
                           page: nowPage,
                           limit: rowsPerPage,
                           search: searchKeyword,
                           search_mode: searchMode,
-                        })}
+                        }}
                       >
                         <Box
                           sx={{
