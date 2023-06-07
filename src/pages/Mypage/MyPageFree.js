@@ -286,7 +286,7 @@ const MyPageFree = () => {
                       className={classes.content}
                     >
                       <StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                        {free.length - ((page - 1) * itemsPerPage + index)}
+                        {list.boardNum}
                       </StyledTableCell>
                       <StyledTableCell align="center" sx={{ minWidth: 300, maxWidth: 300 }}>
                         <Link
