@@ -12,6 +12,8 @@ const Board = () => {
   const [fleaCount, setFleaCount] = useState(0);
   const [volunteerCount, setVolunteerCount] = useState(0);
   const [volunteerReviewCount, setVolunteerReviewCount] = useState(0);
+  const [noticeCount, setNoticeCount] = useState(0);
+  const [eventCount, setEventCount] = useState(0);
 
   const boardData = [
     { name: "입양후기 게시판", count: adoptCount },
@@ -21,6 +23,8 @@ const Board = () => {
     { name: "매매장터", count: fleaCount },
     { name: "봉사 게시판", count: volunteerCount },
     { name: "봉사후기 게시판", count: volunteerReviewCount },
+    { name: "공지사항", count: noticeCount },
+    { name: "이벤트", count: eventCount },
   ];
 
   useEffect(() => {
@@ -32,6 +36,8 @@ const Board = () => {
       axios.get("/board/flea/count"),
       axios.get("/board/volunteer/count"),
       axios.get("/donate/volunteer/review/count"),
+      axios.get("/notice/count"),
+      axios.get("/event/count"),
     ])
       .then(
         ([
@@ -42,6 +48,8 @@ const Board = () => {
           fleaRes,
           volunteerRes,
           volunteerReviewRes,
+          noticeRes,
+          eventRes,
         ]) => {
           setAdoptCount(adoptRes.data);
           setMissingCount(missingRes.data);
@@ -50,6 +58,8 @@ const Board = () => {
           setFleaCount(fleaRes.data);
           setVolunteerCount(volunteerRes.data);
           setVolunteerReviewCount(volunteerReviewRes.data);
+          setNoticeCount(noticeRes.data);
+          setEventCount(eventRes.data);
         }
       )
       .catch((error) => {
