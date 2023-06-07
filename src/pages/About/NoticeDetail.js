@@ -11,7 +11,7 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { ABOUT } from "../../constants/PageURL";
@@ -21,17 +21,21 @@ import dayjs from "dayjs";
 import DOMPurify from "dompurify";
 import LoadingPage from "../../components/Loading/LoadingPage";
 
-const pageWidth = "90%";
+const pageWidth = "60vw";
+const maxPageWidth = "1150px";
+const minPageWidth = "790px";
 
 const NoticeDetail = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const no = searchParams.get("no");
-  const page = searchParams.get("page");
-  const limit = searchParams.get("limit");
-  const search = searchParams.get("search");
-  const search_mode = searchParams.get("search_mode");
+  const { id } = useParams();
+  const { page, limit, search, search_mode } = location.state;
+  // const searchParams = new URLSearchParams(location.search);
+  // const no = searchParams.get("no");
+  // const page = searchParams.get("page");
+  // const limit = searchParams.get("limit");
+  // const search = searchParams.get("search");
+  // const search_mode = searchParams.get("search_mode");
 
   const [data, setData] = useState({
     no: null,
@@ -48,17 +52,19 @@ const NoticeDetail = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => console.log("re-rendering...", no, page, search));
+  useEffect(() =>
+    console.log("re-rendering...", id, page, search, search_mode)
+  );
   useEffect(() => {
     axios
-      .get("/notice/view?no=" + no)
+      .get("/notice/view?no=" + id)
       .then((response) => {
         console.log(response.data);
         setData(response.data);
       })
       .catch((error) => console.error("에러발생: ", error))
       .finally(setIsLoading(false));
-  }, [no]);
+  }, [id]);
 
   const createMarkup = (html) => {
     return {
@@ -66,15 +72,16 @@ const NoticeDetail = () => {
     };
   };
 
-  const deleteData = () => {
-    // db연결 후 삭제 구현
-  };
-
   return isLoading ? (
     <LoadingPage />
   ) : (
     <ThemeProvider theme={CustomTheme}>
-      <Box width={pageWidth} mt={4}>
+      <Box
+        width={pageWidth}
+        maxWidth={maxPageWidth}
+        minWidth={minPageWidth}
+        mt={4}
+      >
         <Table width={pageWidth}>
           <TableHead>
             <TableRow>
@@ -168,13 +175,20 @@ const NoticeDetail = () => {
                   {data &&
                     (data.nextNo ? (
                       <StyledLink
-                        to={ABOUT.NOTICE_DETAIL({
-                          no: data.nextNo,
+                        to={ABOUT.NOTICE_DETAIL(data.nextNo)}
+                        state={{
                           page: page,
                           limit: limit,
                           search: search,
                           search_mode: search_mode,
-                        })}
+                        }}
+                        // to={ABOUT.NOTICE_DETAIL({
+                        //   no: data.nextNo,
+                        //   page: page,
+                        //   limit: limit,
+                        //   search: search,
+                        //   search_mode: search_mode,
+                        // })}
                       >
                         &#9664; &nbsp;
                         <div className="subject">{data.nextSub}</div>
@@ -187,13 +201,20 @@ const NoticeDetail = () => {
                   {data &&
                     (data.prevNo ? (
                       <StyledLink
-                        to={ABOUT.NOTICE_DETAIL({
-                          no: data.prevNo,
+                        to={ABOUT.NOTICE_DETAIL(data.prevNo)}
+                        state={{
                           page: page,
                           limit: limit,
                           search: search,
                           search_mode: search_mode,
-                        })}
+                        }}
+                        // to={ABOUT.NOTICE_DETAIL({
+                        //   no: data.prevNo,
+                        //   page: page,
+                        //   limit: limit,
+                        //   search: search,
+                        //   search_mode: search_mode,
+                        // })}
                       >
                         <div className="subject">{data && data.prevSub}</div>
                         &nbsp; &#9654;
@@ -206,7 +227,7 @@ const NoticeDetail = () => {
             </TableRow>
           </TableFooter>
         </Table>
-        <Box display={"flex"} justifyContent={"space-between"}>
+        <Box display={"flex"} justifyContent={"flex-end"}>
           <Button
             variant="contained"
             sx={{ mt: 2, width: "100px" }}
@@ -224,29 +245,6 @@ const NoticeDetail = () => {
           >
             목록
           </Button>
-          {
-            <Box display={"flex"} mt={2}>
-              <Button
-                variant="contained"
-                sx={{ ml: 2, width: "100px" }}
-                onClick={() =>
-                  navigate(ABOUT.NOTICE_WRITE, {
-                    state: { data: data, mode: "update" },
-                  })
-                }
-              >
-                수정
-              </Button>
-              <Button
-                variant="contained"
-                sx={{ ml: 2, width: "100px" }}
-                color="error"
-                onClick={deleteData}
-              >
-                삭제
-              </Button>
-            </Box>
-          }
         </Box>
       </Box>
     </ThemeProvider>

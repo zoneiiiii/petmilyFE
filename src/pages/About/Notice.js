@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   FormControl,
   MenuItem,
   Pagination,
@@ -40,7 +39,7 @@ const Notice = () => {
   const [nowPage, setNowPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [searchKeyword, setSearchKeyWord] = useState("");
-  const [searchMode, setSearchMode] = useState();
+  const [searchMode, setSearchMode] = useState(searchModes.subject_content);
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [pagedData, setPagedData] = useState();
 
@@ -147,6 +146,7 @@ const Notice = () => {
             <FormControl sx={FormControlSx} size="small">
               <Select
                 defaultValue={searchModes.subject_content}
+                value={searchMode}
                 onChange={handleChangeSearchMode}
               >
                 <MenuItem value={searchModes.subject_content}>
@@ -191,13 +191,20 @@ const Notice = () => {
                       }}
                     >
                       <StyledLink
-                        to={ABOUT.NOTICE_DETAIL({
-                          no: notice.num,
+                        to={ABOUT.NOTICE_DETAIL(notice.num)}
+                        state={{
                           page: nowPage,
                           limit: rowsPerPage,
                           search: searchKeyword,
                           search_mode: searchMode,
-                        })}
+                        }}
+                        // to={ABOUT.NOTICE_DETAIL({
+                        //   no: notice.num,
+                        //   page: nowPage,
+                        //   limit: rowsPerPage,
+                        //   search: searchKeyword,
+                        //   search_mode: searchMode,
+                        // })}
                       >
                         {notice.subject}
                       </StyledLink>
@@ -222,30 +229,6 @@ const Notice = () => {
               })}
           </TableBody>
         </Table>
-        <Box
-          width={pageWidth}
-          display={"flex"}
-          justifyContent={"flex-end"}
-          mt={2}
-        >
-          <Button
-            variant="contained"
-            sx={{ mr: 3, width: "100px" }}
-            onClick={() => {
-              // axios
-              //   .post("/notice/insert")
-              //   .then((response) => {
-              //     console.log(response);
-              //   })
-              //   .catch((error) => {
-              //     console.error(error);
-              //   });
-              navigate(ABOUT.NOTICE_WRITE);
-            }}
-          >
-            글쓰기
-          </Button>
-        </Box>
         <Box width={pageWidth} display={"flex"} justifyContent={"center"} m={2}>
           <Pagination
             count={totalPage}

@@ -11,12 +11,16 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import Modal from "@mui/material/Modal";
+import Alert from "@mui/material/Alert";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { mainListItems } from "./AdminNav";
-import { ADMIN } from "../../constants/PageURL";
+import { ADMIN, MAIN } from "../../constants/PageURL";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link } from "react-router-dom";
 import ReturnTop from "../../Layout/ReturnTop";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -104,6 +108,7 @@ const pages = [
 ];
 
 const Layout = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = useLocation();
   const [open, setOpen] = useState(true);
@@ -111,6 +116,27 @@ const Layout = () => {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const [openAdminModal, setOpenAdminModal] = useState(false);
+  const handleAdminModalClose = () => {
+    setOpenAdminModal(false);
+    navigate(MAIN);
+  };
+
+  useEffect(() => {
+    axios
+      .get("/admin/check-admin")
+      .then((response) => {
+        if (!response.data) {
+          setOpenAdminModal(true);
+        }
+      })
+      .catch((error) => {
+        console.error("에러발생:", error);
+        alert("에러발생: " + error);
+        navigate(MAIN);
+      });
+  }, []);
 
   useEffect(() => {
     const container = document.getElementById("outlet");
@@ -196,8 +222,34 @@ const Layout = () => {
           <Copyright />
         </Box>
       </Box>
+      <Modal
+        open={openAdminModal}
+        onClose={handleAdminModalClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Alert
+          sx={authModalStyle}
+          severity="error"
+          onClose={handleAdminModalClose}
+        >
+          접근 권한이 없습니다!
+        </Alert>
+      </Modal>
     </ThemeProvider>
   );
+};
+
+const authModalStyle = {
+  // 모달 스타일
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
 };
 
 export default Layout;

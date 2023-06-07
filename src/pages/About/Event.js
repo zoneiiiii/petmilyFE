@@ -177,13 +177,13 @@ const Event = () => {
                       }}
                     >
                       <StyledLink
-                        to={ABOUT.EVENT_DETAIL({
-                          no: data.num,
+                        to={ABOUT.EVENT_DETAIL(data.num)}
+                        state={{
                           page: nowPage,
                           limit: rowsPerPage,
                           search: searchKeyword,
                           search_mode: searchMode,
-                        })}
+                        }}
                       >
                         <Box
                           sx={{
@@ -250,20 +250,6 @@ const Event = () => {
               })}
           </TableBody>
         </Table>
-        <Box
-          width={pageWidth}
-          display={"flex"}
-          justifyContent={"flex-end"}
-          mt={2}
-        >
-          <Button
-            variant="contained"
-            sx={{ mr: 3, width: "100px" }}
-            onClick={() => navigate(ABOUT.EVENT_WRITE)}
-          >
-            글쓰기
-          </Button>
-        </Box>
         <Box width={pageWidth} display={"flex"} justifyContent={"center"} m={2}>
           <Pagination
             count={totalPage}
