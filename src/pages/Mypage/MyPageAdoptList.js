@@ -1,4 +1,5 @@
 import {
+  Grid,
   Box,
   Button,
   IconButton,
@@ -59,19 +60,21 @@ const MyPageAdoptList = () => {
           );
         })
       ) : (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            flexWrap: "wrap",
-            alignContent: "center",
-            fontSize: "1.5rem",
-            fontWeight: 600,
-            height: "400px",
-          }}
-        >
-          입양 내역이 존재하지 않습니다!
-        </Box>
+        <Grid sx={{ width: "940px", height: "50vh" }}>
+          <Table
+            aria-label="caption table"
+            overflow="hidden"
+            sx={{ border: "1px solid lightgray" }}
+          >
+            <TableHead>
+              <TableRow>
+                <TableCell colSpan={4} align="center" sx={{ height: 250 }}>
+                  입양 내역이 존재하지 않습니다.
+                </TableCell>
+              </TableRow>
+            </TableHead>
+          </Table>
+        </Grid>
       )}
     </ThemeProvider>
   );
