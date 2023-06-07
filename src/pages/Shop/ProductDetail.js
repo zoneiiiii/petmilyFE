@@ -3,10 +3,12 @@ import styled from "styled-components";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { SHOP } from "../../constants/PageURL";
+import { AuthContext } from "../../contexts/AuthContexts";
 import axios from "axios";
 import DOMPurify from "dompurify";
 
 const ProductDetail = () => {
+  const { loggedIn } = useContext(AuthContext);
   const [quantity, setQuantity] = useState(1);
   const [cartItems, setCartItems] = useState([]);
   const { id } = useParams();
@@ -37,6 +39,10 @@ const ProductDetail = () => {
 
   const navigate = useNavigate();
   const handleBuy = () => {
+    if (!loggedIn) {
+      alert("로그인 후 이용 가능합니다.");
+      return;
+    }
     const productToBuy = {
       boardNum: products.boardNum,
       productName: products.productName,
@@ -49,6 +55,10 @@ const ProductDetail = () => {
   };
 
   const handleCart = () => {
+    if (!loggedIn) {
+      alert("로그인 후 이용 가능합니다.");
+      return;
+    }
     setIsModalOpen(true);
     // console.log(products);
     axios.post("/shop/product/addCart", {
