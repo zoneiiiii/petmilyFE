@@ -4,7 +4,7 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
-import { ThemeProvider, Typography, Box, Button } from "@mui/material";
+import { ThemeProvider, Typography, Box, Button, Grid } from "@mui/material";
 import SearchBar from "../../components/common/SearchBar";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -68,7 +68,7 @@ const MyPageOrderList = () => {
     setShowMore(true);
   };
 
-  return (
+  return totalPages !== 0 ? (
     <ThemeProvider theme={CustomTheme}>
       <Typography
         className="myOrderListTitle"
@@ -203,6 +203,24 @@ const MyPageOrderList = () => {
           </Button>
         </Box>
       )}
+    </ThemeProvider>
+  ) : (
+    <ThemeProvider theme={CustomTheme}>
+      <Grid sx={{ width: "940px", height: "50vh" }}>
+        <Table
+          aria-label="caption table"
+          overflow="hidden"
+          sx={{ border: "1px solid lightgray" }}
+        >
+          <TableHead>
+            <TableRow>
+              <TableCell colSpan={4} align="center" sx={{ height: 250 }}>
+                주문 내역이 존재하지 않습니다.
+              </TableCell>
+            </TableRow>
+          </TableHead>
+        </Table>
+      </Grid>
     </ThemeProvider>
   );
 };
