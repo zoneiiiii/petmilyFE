@@ -184,6 +184,7 @@ const FleaDetail = (props) => {
           </section>
 
           <section className="comment">
+            <h2 className="comment">댓글</h2>
             <Comment boardId="flea" boardNum={id} />
           </section>
         </Container>
