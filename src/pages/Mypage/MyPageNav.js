@@ -2,20 +2,44 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { MYPAGE } from "../../constants/PageURL";
+import axios from "axios";
 
 const noProfile = "/images/emptyProfile.png";
 const MyPageNav = () => {
+  const [member, setMember] = useState({
+    memberNum: null,
+    memberNickname: "",
+    memberImg: noProfile,
+  });
+
+  useState(() => {
+    if (member.memberNum === null) {
+      axios.get("/mypage/getNavInfo").then((response) => {
+        if (response.data) {
+          const newMember = {
+            memberNum: response.data.memberNum,
+            memberNickname: response.data.memberNickname,
+            memberImg: response.data.memberImg
+              ? response.data.memberImg
+              : noProfile,
+          };
+          setMember(newMember);
+        }
+      });
+    }
+  }, [member]);
+
   return (
     <MyPageNavStyle className="MyPageNav">
       <img
         className="ProfileImg"
-        src={member.img ? member.img : noProfile}
+        src={member.memberImg}
         alt="profile"
         width={"160px"}
         height={"160px"}
         style={{ borderRadius: "50%" }}
       />
-      <NickName>{member.nickname}</NickName>
+      <NickName>{member.memberNickname}</NickName>
       <NavList
         title={"My Page"}
         navList={[

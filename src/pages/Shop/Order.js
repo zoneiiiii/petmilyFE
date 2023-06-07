@@ -425,7 +425,7 @@ const Order = () => {
                 <TableCell align="right">*필수 항목</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell sx={{ width: 50 }}>받는 사람*</TableCell>
+                <TableCell sx={{ width: 70 }}>받는 사람*</TableCell>
                 <TableCell colSpan={3}>
                   <TextField
                     id="outlined-basic"
@@ -441,7 +441,7 @@ const Order = () => {
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell sx={{ width: 50 }}>연락처*</TableCell>
+                <TableCell sx={{ width: 70 }}>연락처*</TableCell>
                 <TableCell colSpan={3}>
                   <TextField
                     id="outlined-basic"
@@ -461,7 +461,7 @@ const Order = () => {
                 </TableCell>
               </TableRow>
               <TableRow rowSpan={2}>
-                <TableCell sx={{ width: 50 }}>주소*</TableCell>
+                <TableCell sx={{ width: 70 }}>주소*</TableCell>
                 <TableCell colSpan={3} sx={{ height: 100 }}>
                   <TextField
                     id="outlined-basic"
@@ -619,19 +619,19 @@ const Order = () => {
                   sx={{ height: 150, color: "black", fontSize: "18px" }}
                   align="center"
                 >
-                  총 주문금액 :
+                  총 주문금액 :{" "}
                   <span>
                     {totalPrice
                       .toString()
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                   </span>
-                  원 + 배송비
+                  원 + 배송비{" "}
                   <span>
                     {shippingCost
                       .toString()
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                   </span>
-                  원 =
+                  원 ={" "}
                   <span>
                     {(totalPrice + shippingCost)
                       .toString()
@@ -673,10 +673,10 @@ const OrderStyle = styled.div`
     color: white;
     margin: 50px auto;
     &:hover {
-      background-color: #facc73;
+      background-color: #af935d;
     }
     &:focus {
-      background-color: #facc73;
+      background-color: #af935d;
     }
   }
   .address {
@@ -684,10 +684,10 @@ const OrderStyle = styled.div`
     color: white;
     margin-left: 10px;
     &:hover {
-      background-color: #facc73;
+      background-color: #af935d;
     }
     &:focus {
-      background-color: #facc73;
+      background-color: #af935d;
     }
   }
 `;

@@ -301,8 +301,6 @@ const Router = () => {
               path={BROWSER_PATH.COMMUNITY.MISSING_WRITE}
               element={<Page.Community.MissingWrite />}
             />
-
-            <Route path="*" element={<Page.Main.NotFound />} />
           </Route>
           {/* Admin */}
           <Route
@@ -343,6 +341,10 @@ const Router = () => {
               element={<Page.Admin.AdminProductWrite />}
             />
             <Route
+              path={BROWSER_PATH.ADMIN.PRODUCT_MODIFY()}
+              element={<Page.Admin.AdminProductModify />}
+            />
+            <Route
               path={BROWSER_PATH.ADMIN.QNA}
               element={<Page.Admin.AdminQnA />}
             />
@@ -355,6 +357,7 @@ const Router = () => {
               element={<Page.Admin.AdminDonation />}
             />
           </Route>
+          <Route path="*" element={<Page.Main.NotFound />} />
         </Routes>
       </React.Suspense>
     </BrowserRouter>

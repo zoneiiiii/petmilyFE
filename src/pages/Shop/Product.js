@@ -41,8 +41,8 @@ const CategoryItem = styled.li`
 `;
 
 const ProductImage = styled.img`
-  width: 100%;
-  height: auto;
+  width: auto;
+  height: 264px;
   margin-bottom: 10px;
 `;
 
@@ -60,7 +60,7 @@ const ProductPrice = styled.p`
 const Line = styled.hr`
   border: 1px solid rgba(224, 224, 224, 1);
   width: 95%;
-  max-width: 1350px;
+  max-width: 1008px;
 `;
 
 const categories = ["사료", "간식", "외출용품", "목욕/미용", "굿즈"];

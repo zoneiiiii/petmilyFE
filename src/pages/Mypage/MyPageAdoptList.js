@@ -17,9 +17,24 @@ import Avatar from "@mui/material/Avatar";
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import axios from "axios";
+import dayjs from "dayjs";
 
 const MyPageAdoptList = () => {
+  const [adopts, setAdopts] = useState([]);
+  const [isRerendered, setIsRerendered] = useState(false);
+  useEffect(() => {
+    if (!isRerendered)
+      axios
+        .get("/mypage/adoptList/getList")
+        .then((response) => {
+          console.log(response.data);
+          if (response.data !== null) setAdopts(response.data);
+        })
+        .catch((error) => console.error("에러발생:", error))
+        .finally(() => setIsRerendered(true));
+  }, [isRerendered]);
   return (
     <ThemeProvider theme={CustomTheme}>
       <Typography
@@ -31,54 +46,142 @@ const MyPageAdoptList = () => {
       >
         입양 내역
       </Typography>
-      {pets.map((pet, index) => {
-        return <PetData pet={pet} key={index} />;
-      })}
+      {adopts.length > 0 ? (
+        adopts.map((adopt, index) => {
+          return (
+            <PetData
+              adopt={adopt}
+              adopts={adopts}
+              setAdopts={setAdopts}
+              key={index}
+              setIsRerendered={setIsRerendered}
+            />
+          );
+        })
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            flexWrap: "wrap",
+            alignContent: "center",
+            fontSize: "1.5rem",
+            fontWeight: 600,
+            height: "400px",
+          }}
+        >
+          입양 내역이 존재하지 않습니다!
+        </Box>
+      )}
     </ThemeProvider>
   );
 };
 
 const PetData = (props) => {
-  const [pet, setPet] = useState(props.pet);
-  const [petName, setPetName] = useState(pet.petName);
-  const [petImg, setPetImg] = useState(pet.petImg);
-  const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const { adopt, adopts, setAdopts, index, setIsRerendered } = props;
+  const [petName, setPetName] = useState(adopt.petName ? adopt.petName : "");
+  const [petImg, setPetImg] = useState(adopt.petImg ? adopt.petImg : "");
+  const [petNameOpen, setPetNameOpen] = useState(false);
+  const [petNameAnchorEl, setPetNameAnchorEl] = useState(null);
   const textFieldRef = useRef();
-  const handleOpen = (event) => {
-    setAnchorEl(event.currentTarget.parentNode);
-    setOpen(true);
+  const fileInputRef = useRef();
+
+  useEffect(() => {
+    if (adopt) {
+      console.log(adopt);
+      setPetName(adopt.petName ? adopt.petName : "");
+      setPetImg(adopt.petImg ? adopt.petImg : "");
+    }
+  }, [adopt]);
+
+  const handleOpenNamePopover = (event) => {
+    setPetNameAnchorEl(event.currentTarget.parentNode);
+    setPetNameOpen(true);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
-    setOpen(false);
-  };
+
   const changeName = (event) => {
     setPetName(event.target.value);
   };
+
+  const updateName = () => {
+    if (petName.length > 0) {
+      axios
+        .post("/mypage/adoptList/update/name", {
+          petNum: adopt.petNum,
+          petName: petName,
+          petImg: adopt.petImg,
+        })
+        .then((response) => {
+          const newPets = [...adopts];
+          newPets[index] = response.data;
+          setAdopts(newPets);
+        })
+        .catch((error) => console.error("에러발생:", error))
+        .finally(() => {
+          handleCloseNamePopover();
+          setIsRerendered(false);
+        });
+    }
+  };
+
   const resetPetName = (event) => {
     setPetName("");
     textFieldRef.current.focus();
   };
-  const updateName = () => {
-    if (petName.length > 0) setPet({ ...pet, petName: petName });
-    //axios써서 데이터 db에 업데이트 필요
-    handleClose();
+  const handleCloseNamePopover = () => {
+    setPetNameAnchorEl(null);
+    setPetNameOpen(false);
   };
-  const changeImg = () => {};
+  const handleImgUpload = (event) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", event.target.files[0]);
+      axios
+        .post("/upload", formData)
+        .then((response) => {
+          setPetImg(response.data);
+          axios
+            .post("/mypage/adoptList/update/img", {
+              petNum: adopt.petNum,
+              petName: adopt.petName,
+              petImg: response.data,
+            })
+            .then((response2) => {
+              const newPets = [...adopts];
+              newPets[index] = response2.data;
+              setAdopts(newPets);
+            })
+            .catch((error) => console.error("에러발생:", error));
+        })
+        .catch((error) => console.error("에러발생:", error))
+        .finally(() => {
+          setIsRerendered(false);
+        });
+    } catch (error) {
+      console.error("에러발생:", error);
+    }
+  };
 
   const imgSize = "200px";
-  const id = open ? "simple-popover" : undefined;
   return (
     <Table>
       <TableBody>
         <TableRow>
           <TableCell width={imgSize}>
-            <Button sx={{ m: 0, p: 0, borderRadius: 100 }} onClick={changeImg}>
+            <Button
+              sx={{ m: 0, p: 0, borderRadius: 100 }}
+              onClick={() => fileInputRef.current.click()}
+            >
               <Avatar
                 alt="petProfile"
                 src={petImg}
                 sx={{ width: imgSize, height: imgSize }}
+              />
+              <input
+                type="file"
+                style={{ display: "none" }}
+                ref={fileInputRef}
+                onChange={handleImgUpload}
               />
             </Button>
           </TableCell>
@@ -88,14 +191,14 @@ const PetData = (props) => {
                 <TableHead>
                   <TableRow>
                     <TableCell sx={PetNameSx} colSpan={4}>
-                      {pet.petName}
-                      <Button onClick={handleOpen}>
+                      {adopt.petName}
+                      <Button onClick={handleOpenNamePopover}>
                         <EditIcon />
                       </Button>
                       <Popover
-                        open={open}
-                        anchorEl={anchorEl}
-                        onClose={handleClose}
+                        open={petNameOpen}
+                        anchorEl={petNameAnchorEl}
+                        onClose={handleCloseNamePopover}
                         anchorOrigin={{
                           vertical: "bottom",
                           horizontal: "left",
@@ -120,7 +223,7 @@ const PetData = (props) => {
                               endAdornment: (
                                 <InputAdornment position="end">
                                   <IconButton onClick={resetPetName}>
-                                    <CloseIcon color="fbd385" />
+                                    <CloseIcon color="primary" />
                                   </IconButton>
                                 </InputAdornment>
                               ),
@@ -139,7 +242,7 @@ const PetData = (props) => {
                           <Button
                             variant="contained"
                             sx={{ height: "40px" }}
-                            onClick={handleClose}
+                            onClick={handleCloseNamePopover}
                           >
                             취소
                           </Button>
@@ -151,32 +254,48 @@ const PetData = (props) => {
                 <TableBody>
                   <TableRow>
                     <TableCell sx={thSx}>나이</TableCell>
-                    <TableCell sx={tdSx}>{pet.petAge} 살</TableCell>
+                    <TableCell sx={tdSx}>{adopt.petAge}</TableCell>
                     <TableCell sx={thSx}>성별</TableCell>
-                    <TableCell sx={tdSx}>{pet.petSex}</TableCell>
+                    <TableCell sx={tdSx}>
+                      {adopt.sexCd === "M"
+                        ? "수컷"
+                        : adopt.sexCd === "F"
+                        ? "암컷"
+                        : "미상"}
+                    </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell sx={thSx}>분류</TableCell>
-                    <TableCell sx={tdSx}>{pet.category}</TableCell>
-                    <TableCell sx={thSx}>세부 종</TableCell>
-                    <TableCell sx={tdSx}>{pet.petSpecies}</TableCell>
+                    <TableCell sx={thSx}>품종</TableCell>
+                    <TableCell sx={tdSx}>{adopt.petSpecies}</TableCell>
+                    <TableCell sx={thSx}>중성화여부</TableCell>
+                    <TableCell sx={tdSx}>
+                      {adopt.neuterYn === "U" ? "미상" : adopt.neuterYn}
+                    </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell sx={thSx}>신청일자</TableCell>
-                    <TableCell sx={tdSx}>{pet.applicationDate}</TableCell>
+                    <TableCell sx={tdSx}>
+                      {dayjs(adopt.adoptDate).format("YYYY/MM/DD")}
+                    </TableCell>
                     <TableCell sx={thSx}>승인일자</TableCell>
-                    <TableCell sx={tdSx}>{pet.approvedDate}</TableCell>
+                    <TableCell sx={tdSx}>
+                      {adopt.adoptState === "success"
+                        ? dayjs(adopt.approvedDate).format("YYYY/MM/DD")
+                        : adopt.adoptState === "wait"
+                        ? "승인 대기중"
+                        : "입양 반려"}
+                    </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell sx={thSx}>관할 보호소</TableCell>
-                    <TableCell sx={tdSx}>{pet.shelterName}</TableCell>
+                    <TableCell sx={tdSx}>{adopt.shelterName}</TableCell>
                     <TableCell sx={thSx}>보호소 연락처</TableCell>
-                    <TableCell sx={tdSx}>{pet.shelterTel}</TableCell>
+                    <TableCell sx={tdSx}>{adopt.shelterTel}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell sx={thSx}>보호소 주소</TableCell>
                     <TableCell sx={tdSx} colSpan={3}>
-                      {pet.shelterAddr}
+                      {adopt.shelterAddr}
                     </TableCell>
                   </TableRow>
                 </TableBody>
@@ -206,7 +325,7 @@ const PetNameSx = {
   border: "none",
 };
 const thSx = {
-  fontSize: "1rem",
+  fontSize: "0.8rem",
   textAlign: "center",
   fontWeight: 600,
   backgroundColor: "#fbd385",
@@ -214,7 +333,7 @@ const thSx = {
   width: "100px",
 };
 const tdSx = {
-  fontSize: "1rem",
+  fontSize: "0.8rem",
   fontWeight: 600,
   borderBottom: "2px solid #ffbd59",
 };

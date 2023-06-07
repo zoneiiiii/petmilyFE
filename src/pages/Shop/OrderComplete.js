@@ -107,10 +107,10 @@ const OrderStyle = styled.div`
     color: white;
     margin-top: 70px;
     &:hover {
-      background-color: #facc73;
+      background-color: #af935d;
     }
     &:focus {
-      background-color: #facc73;
+      background-color: #af935d;
     }
   }
 `;
