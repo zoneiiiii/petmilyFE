@@ -72,6 +72,23 @@ const AdminProduct = () => {
   //   }
   //   // }
   // };
+
+  // const handleDelete = async () => {
+  //   // 삭제
+  //   const result = window.confirm("정말 삭제하시겠습니까?");
+  //   if (result) {
+  //     try {
+  //       await axios.delete(
+  //         `http://localhost:8080/shop/product/delete/${}`
+  //       );
+  //       alert("상품이 삭제되었습니다.");
+  //       navigate(ADMIN.PRODUCT);
+  //     } catch (error) {
+  //       console.error("Error deleting post: ", error);
+  //     }
+  //   }
+  // };
+
   if (products.length === 0) {
     return (
       <ThemeProvider theme={CustomTheme}>
@@ -88,6 +105,19 @@ const AdminProduct = () => {
                 <TableRow>
                   <TableCell colSpan={4} align="center" sx={{ height: 250 }}>
                     상품 내역이 없습니다.
+                    <br />
+                    <Link
+                      to={ADMIN.PRODUCT_WRITE}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        sx={{ mb: 3, width: "100px" }}
+                      >
+                        상품 등록
+                      </Button>
+                    </Link>
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -162,6 +192,7 @@ const AdminProduct = () => {
                         <Link
                           to={ADMIN.PRODUCT_MODIFY(item.boardNum)}
                           style={{ textDecoration: "none" }}
+                          state={{ boardNum: item.boardNum }}
                         >
                           <Button
                             variant="contained"
@@ -176,14 +207,14 @@ const AdminProduct = () => {
                             수정
                           </Button>
                         </Link>
-                        <Button
+                        {/* <Button
                           variant="contained"
                           color="error"
                           sx={{ width: "50px", height: "30px", mt: "10px" }}
                           // onClick={handleDelete(item.boardNum)}
                         >
                           삭제
-                        </Button>
+                        </Button> */}
                       </ButtonStyle>
                     </TableCell>
                   </TableRow>
@@ -204,8 +235,8 @@ const AdminProduct = () => {
               <Link to={ADMIN.PRODUCT_WRITE} style={{ textDecoration: "none" }}>
                 <Button
                   variant="contained"
-                  color="primary"
-                  sx={{ mb: 3, width: "100px" }}
+                  color="warning"
+                  sx={{ mb: 3, width: "200px" }}
                 >
                   상품 등록
                 </Button>

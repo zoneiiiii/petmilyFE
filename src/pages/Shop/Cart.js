@@ -178,163 +178,237 @@ const Cart = () => {
     const selectedItems = items.filter((item) => item.checked);
     navigate(SHOP.ORDER, { state: { items: selectedItems } });
   };
-
-  return (
-    <ThemeProvider theme={CustomTheme}>
-      <CartStyle>
-        <h1>🛒 장바구니</h1>
-        <Button className="prodDelete" onClick={handleDeleteSelected}>
-          선택상품 삭제
-        </Button>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell colSpan={6}></TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell colSpan={2} sx={{ fontWeight: "bold" }}>
-                <Checkbox
-                  edge="start"
-                  checked={allChecked}
-                  indeterminate={indeterminate}
-                  onClick={handleToggleAll}
-                  tabIndex={-1}
-                />
-                전체선택
-              </TableCell>
-
-              <TableCell align="center" sx={{ fontWeight: "bold" }}>
-                상품명
-              </TableCell>
-              <TableCell align="center" sx={{ fontWeight: "bold" }}>
-                수량
-              </TableCell>
-              <TableCell align="center" sx={{ fontWeight: "bold" }}>
-                상품가격
-              </TableCell>
-              <TableCell align="center" sx={{ fontWeight: "bold" }}>
-                총 상품가격
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell colSpan={6} />
-            </TableRow>
-            <TableRow></TableRow>
-          </TableHead>
-          <TableBody>
-            {items.map((item) => (
-              <React.Fragment key={item.cartNum}>
-                <TableRow>
-                  <TableCell>
-                    <Checkbox
-                      edge="start"
-                      checked={item.checked}
-                      onClick={() => handleToggle(item.cartNum)}
-                      tabIndex={-1}
-                    />
-                  </TableCell>
-                  <TableCell align="center">
-                    <img
-                      src={item.thumbnailImg}
-                      alt="img"
-                      style={{ width: 100, height: 100 }}
-                    />
-                  </TableCell>
-                  <TableCell align="center">{item.productName}</TableCell>
-                  <TableCell align="center">
-                    {
-                      <React.Fragment>
-                        <IconButton
-                          size="small"
-                          className="plus_minus"
-                          onClick={() =>
-                            handleQuantityMinus(item.cartNum, item.quantity - 1)
-                          }
-                        >
-                          <RemoveCircle />
-                        </IconButton>
-                        {` ${item.quantity} `}
-                        <IconButton
-                          size="small"
-                          className="plus_minus"
-                          sx={{ color: "#FF8282" }}
-                          onClick={() =>
-                            handleQuantityPlus(item.cartNum, item.quantity + 1)
-                          }
-                        >
-                          <AddCircle />
-                        </IconButton>
-                      </React.Fragment>
-                    }
-                  </TableCell>
-                  <TableCell align="center" sx={{ fontSize: "16px" }}>
-                    <Typography>{`${item.productCost
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원`}</Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Typography>{`${(item.productCost * item.quantity)
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원`}</Typography>
-                  </TableCell>
-                </TableRow>
-              </React.Fragment>
-            ))}
-          </TableBody>
-        </Table>
-        <Table sx={{ mt: 3 }}>
-          <TableBody>
-            <TableRow>
-              <TableCell />
-            </TableRow>
-            <TableRow>
-              <TableCell
-                colSpan={2}
-                sx={{ height: 150, color: "black", fontSize: "18px" }}
-                align="center"
-              >
-                총 주문금액 :{" "}
-                <span className="tot">
-                  {selectedTotalPrice
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                </span>
-                원 + 배송비{" "}
-                <span className="tot">
-                  {shippingCost
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                </span>
-                원 ={" "}
-                <span className="tot">
-                  {(selectedTotalPrice + shippingCost)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                </span>
-                원
-                <br />
-                <span className="notice">
-                  ※ 50,000원 이상 구매 시 무료 배송
-                </span>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-        <div
-          style={{
-            textAlign: "center",
-          }}
-        >
-          <Link to={SHOP.PRODUCT} style={{ textDecoration: "none" }}>
-            <Button className="continue">계속 쇼핑하기</Button>
-          </Link>
-          <Button className="order" onClick={handlePurchase}>
-            구매하기
+  if (items.length === 0) {
+    return (
+      <ThemeProvider theme={CustomTheme}>
+        <CartStyle>
+          <h1>🛒 장바구니</h1>
+          <Button className="prodDelete" onClick={handleDeleteSelected}>
+            선택상품 삭제
           </Button>
-        </div>
-      </CartStyle>
-    </ThemeProvider>
-  );
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell colSpan={6}></TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell colSpan={2} sx={{ fontWeight: "bold" }}>
+                  <Checkbox
+                    edge="start"
+                    checked={allChecked}
+                    indeterminate={indeterminate}
+                    onClick={handleToggleAll}
+                    tabIndex={-1}
+                  />
+                  전체선택
+                </TableCell>
+
+                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                  상품명
+                </TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                  수량
+                </TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                  상품가격
+                </TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                  총 상품가격
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell colSpan={6} />
+              </TableRow>
+              <TableRow></TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell
+                  colSpan={6}
+                  align="center"
+                  sx={{ height: 200, color: "gray" }}
+                >
+                  장바구니가 비어 있습니다.
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+          <div
+            style={{
+              textAlign: "center",
+            }}
+          >
+            <Link to={SHOP.PRODUCT} style={{ textDecoration: "none" }}>
+              <Button className="continue">계속 쇼핑하기</Button>
+            </Link>
+          </div>
+        </CartStyle>
+      </ThemeProvider>
+    );
+  } else {
+    return (
+      <ThemeProvider theme={CustomTheme}>
+        <CartStyle>
+          <h1>🛒 장바구니</h1>
+          <Button className="prodDelete" onClick={handleDeleteSelected}>
+            선택상품 삭제
+          </Button>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell colSpan={6}></TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell colSpan={2} sx={{ fontWeight: "bold" }}>
+                  <Checkbox
+                    edge="start"
+                    checked={allChecked}
+                    indeterminate={indeterminate}
+                    onClick={handleToggleAll}
+                    tabIndex={-1}
+                  />
+                  전체선택
+                </TableCell>
+
+                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                  상품명
+                </TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                  수량
+                </TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                  상품가격
+                </TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                  총 상품가격
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell colSpan={6} />
+              </TableRow>
+              <TableRow></TableRow>
+            </TableHead>
+            <TableBody>
+              {items.map((item) => (
+                <React.Fragment key={item.cartNum}>
+                  <TableRow>
+                    <TableCell>
+                      <Checkbox
+                        edge="start"
+                        checked={item.checked}
+                        onClick={() => handleToggle(item.cartNum)}
+                        tabIndex={-1}
+                      />
+                    </TableCell>
+                    <TableCell align="center">
+                      <img
+                        src={item.thumbnailImg}
+                        alt="img"
+                        style={{ width: 100, height: 100 }}
+                      />
+                    </TableCell>
+                    <TableCell align="center">{item.productName}</TableCell>
+                    <TableCell align="center">
+                      {
+                        <React.Fragment>
+                          <IconButton
+                            size="small"
+                            className="plus_minus"
+                            onClick={() =>
+                              handleQuantityMinus(
+                                item.cartNum,
+                                item.quantity - 1
+                              )
+                            }
+                          >
+                            <RemoveCircle />
+                          </IconButton>
+                          {` ${item.quantity} `}
+                          <IconButton
+                            size="small"
+                            className="plus_minus"
+                            sx={{ color: "#FF8282" }}
+                            onClick={() =>
+                              handleQuantityPlus(
+                                item.cartNum,
+                                item.quantity + 1
+                              )
+                            }
+                          >
+                            <AddCircle />
+                          </IconButton>
+                        </React.Fragment>
+                      }
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontSize: "16px" }}>
+                      <Typography>{`${item.productCost
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원`}</Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography>{`${(item.productCost * item.quantity)
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원`}</Typography>
+                    </TableCell>
+                  </TableRow>
+                </React.Fragment>
+              ))}
+            </TableBody>
+          </Table>
+          <Table sx={{ mt: 3 }}>
+            <TableBody>
+              <TableRow>
+                <TableCell />
+              </TableRow>
+              <TableRow>
+                <TableCell
+                  colSpan={2}
+                  sx={{ height: 150, color: "black", fontSize: "18px" }}
+                  align="center"
+                >
+                  총 주문금액 :{" "}
+                  <span className="tot">
+                    {selectedTotalPrice
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  </span>
+                  원 + 배송비{" "}
+                  <span className="tot">
+                    {shippingCost
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  </span>
+                  원 ={" "}
+                  <span className="tot">
+                    {(selectedTotalPrice + shippingCost)
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  </span>
+                  원
+                  <br />
+                  <span className="notice">
+                    ※ 50,000원 이상 구매 시 무료 배송
+                  </span>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+          <div
+            style={{
+              textAlign: "center",
+            }}
+          >
+            <Link to={SHOP.PRODUCT} style={{ textDecoration: "none" }}>
+              <Button className="continue">계속 쇼핑하기</Button>
+            </Link>
+            <Button className="order" onClick={handlePurchase}>
+              구매하기
+            </Button>
+          </div>
+        </CartStyle>
+      </ThemeProvider>
+    );
+  }
 };
 const CartStyle = styled.div`
   max-width: 1008px;
