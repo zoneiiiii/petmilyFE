@@ -161,7 +161,7 @@ const VolunteerReviewWrite = () => {
 
                   <S.FormRow>
                     <S.ImageWrapper>
-                      <span>이미지 첨부</span>
+                      <span>대표 이미지</span>
                       <S.CommonSpace />
                       <S.CommonButton component="label">
                         사진 업로드

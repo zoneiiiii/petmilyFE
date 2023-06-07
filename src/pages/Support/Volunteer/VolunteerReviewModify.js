@@ -187,7 +187,7 @@ const VolunteerReviewModify = () => {
                       <span>이미지 첨부</span>
                       <S.CommonSpace />
                       <S.CommonButton component="label">
-                        사진 업로드
+                        대표 이미지
                         <input type="file" hidden onChange={handleFileChange} />
                       </S.CommonButton>
                     </S.ImageWrapper>
