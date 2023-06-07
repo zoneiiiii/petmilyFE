@@ -157,54 +157,54 @@ export const ABOUT = {
 
   /**
    ** 이벤트 상세 페이지 URL
-   ** 사용법: ABOUT.EVENT_DETAIL({page: page, limit: limit, search: search, search_mode: search_mode})
-   ** parameter 우선순위: page > limit = search = search_mode
-   * @return "/about/event/view" (parameter 없음)
-   * @return "/about/event/view?page=" + page (page만 존재)
-   * @return "/about/event/view?page=" + page + "&search=" + search + "&search_mode=" + search_mode (page, search 존재)
-   * @return "/about/event/view?page=" + page + "&limit=" + limit (page, limit 존재)
-   * @return "/about/event/view?page=" + page + "&limit=" + limit + "&search=" + search + "&search_mode=" + search_mode (모두 존재)
+   ** 사용법: ABOUT.EVENT_DETAIL(id)
+   * @return "/about/event/view/:id" (id 없음)
+   * @return "/about/event/view/" + id (id 존재)
    **/
-  EVENT_DETAIL: (props) => {
-    if (!props || !props.no) return "/about/event/view";
-    else if (!props.page) return "/about/event/view?no=" + props.no;
-    else if (!props.limit) {
-      if (!props.search)
-        return "/about/event/view?no=" + props.no + "&page=" + props.page;
-      else
-        return (
-          "/about/event/view?no=" +
-          props.no +
-          "&page=" +
-          props.page +
-          "&search=" +
-          props.search +
-          "&search_mode=" +
-          props.search_mode
-        );
-    } else if (!props.search)
-      return (
-        "/about/event/view?no=" +
-        props.no +
-        "&page=" +
-        props.page +
-        "&limit=" +
-        props.limit
-      );
-    else
-      return (
-        "/about/event/view?no=" +
-        props.no +
-        "&page=" +
-        props.page +
-        "&limit=" +
-        props.limit +
-        "&search=" +
-        props.search +
-        "&search_mode=" +
-        props.search_mode
-      );
+  EVENT_DETAIL: (id) => {
+    if (id === undefined) return "/about/event/view/:id";
+    else return "/about/event/view/" + id;
   },
+  // EVENT_DETAIL: (props) => {
+  //   if (!props || !props.no) return "/about/event/view";
+  //   else if (!props.page) return "/about/event/view?no=" + props.no;
+  //   else if (!props.limit) {
+  //     if (!props.search)
+  //       return "/about/event/view?no=" + props.no + "&page=" + props.page;
+  //     else
+  //       return (
+  //         "/about/event/view?no=" +
+  //         props.no +
+  //         "&page=" +
+  //         props.page +
+  //         "&search=" +
+  //         props.search +
+  //         "&search_mode=" +
+  //         props.search_mode
+  //       );
+  //   } else if (!props.search)
+  //     return (
+  //       "/about/event/view?no=" +
+  //       props.no +
+  //       "&page=" +
+  //       props.page +
+  //       "&limit=" +
+  //       props.limit
+  //     );
+  //   else
+  //     return (
+  //       "/about/event/view?no=" +
+  //       props.no +
+  //       "&page=" +
+  //       props.page +
+  //       "&limit=" +
+  //       props.limit +
+  //       "&search=" +
+  //       props.search +
+  //       "&search_mode=" +
+  //       props.search_mode
+  //     );
+  // },
 
   /**이벤트 작성 페이지 URL
    * @return "/about/event/write"
@@ -250,53 +250,13 @@ export const ABOUT = {
 
   /**
    ** 공지사항 상세 페이지 URL
-   ** 사용법: ABOUT.NOTICE_DETAIL({page: page, limit: limit, search: search, search_mode: search_mode})
-   ** parameter 우선순위: page > limit = search = search_mode
-   * @return "/about/notice/view" (parameter 없음)
-   * @return "/about/notice/view?page=" + page (page만 존재)
-   * @return "/about/notice/view?page=" + page + "&search=" + search + "&search_mode=" + search_mode (page, search 존재)
-   * @return "/about/notice/view?page=" + page + "&limit=" + limit (page, limit 존재)
-   * @return "/about/notice/view?page=" + page + "&limit=" + limit + "&search=" + search + "&search_mode=" + search_mode (모두 존재)
+   ** 사용법: ABOUT.NOTICE_DETAIL(id)
+   * @return "/about/notice/view/:id" (id 없음)
+   * @return "/about/notice/view/" + id (id 존재)
    **/
-  NOTICE_DETAIL: (props) => {
-    if (!props || !props.no) return "/about/notice/view";
-    else if (!props.page) return "/about/notice/view?no=" + props.no;
-    else if (!props.limit) {
-      if (!props.search)
-        return "/about/notice/view?no=" + props.no + "&page=" + props.page;
-      else
-        return (
-          "/about/notice/view?no=" +
-          props.no +
-          "&page=" +
-          props.page +
-          "&search=" +
-          props.search +
-          "&search_mode=" +
-          props.search_mode
-        );
-    } else if (!props.search)
-      return (
-        "/about/notice/view?no=" +
-        props.no +
-        "&page=" +
-        props.page +
-        "&limit=" +
-        props.limit
-      );
-    else
-      return (
-        "/about/notice/view?no=" +
-        props.no +
-        "&page=" +
-        props.page +
-        "&limit=" +
-        props.limit +
-        "&search=" +
-        props.search +
-        "&search_mode=" +
-        props.search_mode
-      );
+  NOTICE_DETAIL: (id) => {
+    if (id === undefined) return "/about/notice/view/:id";
+    else return "/about/notice/view/" + id;
   },
 
   /**공지사항 작성페이지 URL

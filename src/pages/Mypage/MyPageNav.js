@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { MYPAGE } from "../../constants/PageURL";
 import axios from "axios";
+import { Avatar } from "@mui/material";
 
 const noProfile = "/images/emptyProfile.png";
 const MyPageNav = () => {
@@ -19,9 +20,7 @@ const MyPageNav = () => {
           const newMember = {
             memberNum: response.data.memberNum,
             memberNickname: response.data.memberNickname,
-            memberImg: response.data.memberImg
-              ? response.data.memberImg
-              : noProfile,
+            memberImg: response.data.memberImg,
           };
           setMember(newMember);
         }
@@ -31,12 +30,11 @@ const MyPageNav = () => {
 
   return (
     <MyPageNavStyle className="MyPageNav">
-      <img
+      <Avatar
+        sx={{ width: "160px", height: "160px" }}
         className="ProfileImg"
         src={member.memberImg}
         alt="profile"
-        width={"160px"}
-        height={"160px"}
         style={{ borderRadius: "50%" }}
       />
       <NickName>{member.memberNickname}</NickName>

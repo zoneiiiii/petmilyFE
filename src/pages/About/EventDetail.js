@@ -11,7 +11,7 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { ABOUT } from "../../constants/PageURL";
@@ -21,17 +21,21 @@ import LoadingPage from "../../components/Loading/LoadingPage";
 import dayjs from "dayjs";
 import DOMPurify from "dompurify";
 
-const pageWidth = "90%";
+const pageWidth = "60vw";
+const maxPageWidth = "1150px";
+const minPageWidth = "790px";
 
 const EventDetail = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const no = searchParams.get("no");
-  const page = searchParams.get("page");
-  const limit = searchParams.get("limit");
-  const search = searchParams.get("search");
-  const search_mode = searchParams.get("search_mode");
+  const { page, limit, search, search_mode } = location.state;
+  const { id } = useParams();
+  // const searchParams = new URLSearchParams(location.search);
+  // const no = searchParams.get("no");
+  // const page = searchParams.get("page");
+  // const limit = searchParams.get("limit");
+  // const search = searchParams.get("search");
+  // const search_mode = searchParams.get("search_mode");
 
   const [data, setData] = useState({
     no: null,
@@ -49,17 +53,17 @@ const EventDetail = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => console.log("re-rendering...", no, page, search));
+  useEffect(() => console.log("re-rendering...", id, page, search));
   useEffect(() => {
     axios
-      .get("/event/view?no=" + no)
+      .get("/event/view?no=" + id)
       .then((response) => {
         console.log(response.data);
         setData(response.data);
       })
       .catch((error) => console.error("에러발생: ", error))
       .finally(setIsLoading(false));
-  }, [no]);
+  }, [id]);
 
   const createMarkup = (html) => {
     return {
@@ -75,7 +79,12 @@ const EventDetail = () => {
     <LoadingPage />
   ) : (
     <ThemeProvider theme={CustomTheme}>
-      <Box width={pageWidth} mt={4}>
+      <Box
+        width={pageWidth}
+        maxWidth={maxPageWidth}
+        minWidth={minPageWidth}
+        mt={4}
+      >
         <Table width={pageWidth}>
           <TableHead>
             <TableRow>
@@ -164,13 +173,13 @@ const EventDetail = () => {
                   {data &&
                     (data.nextNo ? (
                       <StyledLink
-                        to={ABOUT.EVENT_DETAIL({
-                          no: data.nextNo,
+                        to={ABOUT.EVENT_DETAIL(data.nextNo)}
+                        state={{
                           page: page,
                           limit: limit,
                           search: search,
                           search_mode: search_mode,
-                        })}
+                        }}
                       >
                         &#9664; &nbsp;
                         <div className="subject">{data.nextSub}</div>
@@ -183,13 +192,13 @@ const EventDetail = () => {
                   {data &&
                     (data.prevNo ? (
                       <StyledLink
-                        to={ABOUT.EVENT_DETAIL({
-                          no: data.prevNo,
+                        to={ABOUT.EVENT_DETAIL(data.prevNo)}
+                        state={{
                           page: page,
                           limit: limit,
                           search: search,
                           search_mode: search_mode,
-                        })}
+                        }}
                       >
                         <div className="subject">{data && data.prevSub}</div>
                         &nbsp; &#9654;
@@ -202,7 +211,7 @@ const EventDetail = () => {
             </TableRow>
           </TableFooter>
         </Table>
-        <Box display={"flex"} justifyContent={"space-between"}>
+        <Box display={"flex"} justifyContent={"flex-end"}>
           <Button
             variant="contained"
             sx={{ mt: 2, width: "100px" }}
@@ -220,27 +229,6 @@ const EventDetail = () => {
           >
             목록
           </Button>
-          <Box display={"flex"} mt={2}>
-            <Button
-              variant="contained"
-              sx={{ ml: 2, width: "100px" }}
-              onClick={() =>
-                navigate(ABOUT.EVENT_WRITE, {
-                  state: { data: data, mode: "update" },
-                })
-              }
-            >
-              수정
-            </Button>
-            <Button
-              variant="contained"
-              sx={{ ml: 2, width: "100px" }}
-              color="error"
-              onClick={deleteData}
-            >
-              삭제
-            </Button>
-          </Box>
         </Box>
       </Box>
     </ThemeProvider>
