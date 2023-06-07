@@ -13,15 +13,11 @@ import BoardSelector from "./BoardSelector";
 import SearchBox from "./SearchBox";
 import AdminBoardTable from "./AdminBoardTable";
 import { fetchData } from "./FetchBoardData";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { MAIN } from "../../../constants/PageURL";
 import EventWriteModal from "./EventWriteModal";
 import NoticeWriteModal from "./NoticeWriteModal";
 
 const defaultSearchMode = "subject_content";
 const AdminBoard = () => {
-  const navigate = useNavigate();
   const [boardName, setBoardName] = useState("");
   const [data, setData] = useState(null);
   const [page, setPage] = useState(0);
@@ -29,12 +25,6 @@ const AdminBoard = () => {
   const [search_mode, setSearch_mode] = useState(defaultSearchMode);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [reload, setReload] = useState(true);
-
-  const [openAdminModal, setOpenAdminModal] = useState(false);
-  const handleAdminModalClose = () => {
-    setOpenAdminModal(false);
-    navigate(MAIN);
-  };
 
   const initOption = () => {
     setPage(0);
@@ -53,21 +43,6 @@ const AdminBoard = () => {
     console.log("rowsPerPage:", rowsPerPage);
     console.log("reload:", reload);
   });
-
-  useEffect(() => {
-    axios
-      .get("/admin/check-admin")
-      .then((response) => {
-        if (!response.data) {
-          setOpenAdminModal(true);
-        }
-      })
-      .catch((error) => {
-        console.error("에러발생:", error);
-        alert("에러발생: " + error);
-        navigate(MAIN);
-      });
-  }, []);
 
   useEffect(() => {
     console.log(boardName, page, rowsPerPage);
@@ -131,21 +106,6 @@ const AdminBoard = () => {
           />
         </Paper>
         <Modal
-          open={openAdminModal}
-          onClose={handleAdminModalClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Alert
-            sx={authModalStyle}
-            severity="error"
-            onClose={handleAdminModalClose}
-          >
-            접근 권한이 없습니다!
-          </Alert>
-        </Modal>
-
-        <Modal
           p={0}
           m={0}
           open={openWriteModal}
@@ -183,18 +143,6 @@ const modalStyle = {
   display: "flex",
   justifyContent: "center",
   alignContent: "center",
-};
-
-const authModalStyle = {
-  // 모달 스타일
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
 };
 
 export default AdminBoard;
