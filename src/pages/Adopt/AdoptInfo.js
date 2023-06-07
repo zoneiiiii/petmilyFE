@@ -42,7 +42,7 @@ const AdoptInfo = () => {
       {loading ? (
         <div>Loading...</div>
       ) : (
-        <div style={{ marginTop: "10px" }}>
+        <div style={{ marginTop: "20px" }}>
           {data.map((loc, index) => (
             <AdoptInfoDetail
               key={index}

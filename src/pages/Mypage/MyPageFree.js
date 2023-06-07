@@ -144,13 +144,14 @@ const MyPageFree = () => {
           setPageCount(totalPages);
           setPage(urlPage);
           setIsLoading(false);
+
         })
         .catch((error) => {
           console.error("데이터 수신 오류 :", error);
         });
       window.scrollTo(0, 0);
     }
-  }, [location, navigate, location.search, userNum]);
+  }, [location, navigate, location.search, userNum, isLoading]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -203,9 +204,9 @@ const MyPageFree = () => {
   };
   /* sort end */
 
-  if (isLoading) {
-    return <Loading />; // 로딩 중일 때 표시할 컴포넌트
-  }
+  // if (isLoading) {
+  //   return <Loading />; // 로딩 중일 때 표시할 컴포넌트
+  // }
 
 
   if (free.length === 0) {

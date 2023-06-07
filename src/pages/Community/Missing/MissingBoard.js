@@ -212,7 +212,7 @@ const MissingBoard = () => {
 const Section = styled.section`
   background: #f8f9fa;
   padding: 30px 0 40px 0;
-  min-height: 1550px;
+  min-height: 1050px;
 `;
 
 const MainContainer = styled.div`
