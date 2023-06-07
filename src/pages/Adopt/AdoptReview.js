@@ -56,9 +56,9 @@ const AdoptReview = () => {
           <ContainerBox>
             <Top>입양 후기 게시판</Top>
             <Container sx={{ py: "30px" }} maxWidth="60vw">
-              <SearchContainer>
+              {/* <SearchContainer>
                 <SearchBar />
-              </SearchContainer>
+              </SearchContainer> */}
               <Grid container spacing={4} columns={8}>
                 {/* <Grid item xs={12} sm={6} md={4} lg={3}> */}
                 {data
@@ -200,6 +200,7 @@ const AdoptReview = () => {
 const Section = styled.section`
   background: #f8f9fa;
   padding: 30px 0 40px 0;
+  min-height: 1550px;
 `;
 
 const MainContainer = styled.div`
