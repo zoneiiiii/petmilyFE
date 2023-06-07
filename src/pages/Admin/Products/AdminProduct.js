@@ -200,8 +200,6 @@ const AdminProduct = () => {
                             sx={{
                               width: "50px",
                               height: "30px",
-                              mt: "10px",
-                              mr: "10px",
                             }}
                           >
                             수정
@@ -249,7 +247,6 @@ const AdminProduct = () => {
   }
 };
 const ButtonStyle = styled.div`
-  margin-top: 5px;
   text-align: center;
   }
 `;
