@@ -251,6 +251,7 @@ const Order = () => {
         note: shippingNote,
         recipient: receiverName,
         recipientTel: receiverPhone,
+        totalCost: totalPrice + shippingCost,
       };
 
       const cartNums = items.map((item) => item.cartNum);
