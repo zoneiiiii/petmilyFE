@@ -470,7 +470,7 @@ const VolunteerNoticeModify = () => {
                                 color: "#fff",
                               },
                               "&.Mui-selected:hover": {
-                                backgroundColor: "#ffbe3f",
+                                backgroundColor: "#AF935D",
                                 color: "#fff",
                               },
                             }}
@@ -486,7 +486,7 @@ const VolunteerNoticeModify = () => {
                                 color: "#fff",
                               },
                               "&.Mui-selected:hover": {
-                                backgroundColor: "#ffbe3f",
+                                backgroundColor: "#AF935D",
                                 color: "#fff",
                               },
                             }}
@@ -599,7 +599,7 @@ const ResetButton = styled(Button)`
     height: 30px;
     margin-top: 10px;
     &:hover {
-      background-color: #b2b0b0;
+      background-color: #858585;
     }
   }
 `;
@@ -612,7 +612,7 @@ const WriteButton = styled(Button)`
     margin-top: 10px;
     margin-left: auto;
     &:hover {
-      background-color: #ffbe3f;
+      background-color: #AF935D;
     }
   }
 `;

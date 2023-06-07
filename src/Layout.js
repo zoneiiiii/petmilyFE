@@ -14,7 +14,7 @@ const Layout = () => {
         <Outlet />
       </div>
       <ReturnTop />
-      <Footer />
+      <Footer className="footer" />
     </div>
   );
 };

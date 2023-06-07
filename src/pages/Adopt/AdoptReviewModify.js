@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import * as S from "../Support/Volunteer/VolunteerNoticeWrite.styled";
 import styled from "styled-components";
 import {
@@ -44,6 +44,7 @@ const AdoptReviewModify = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [file, setFile] = useState(null);
+  const { id } = useParams();
   const boardNum = location.state;
 
   // 사진 미리보기
@@ -77,7 +78,7 @@ const AdoptReviewModify = () => {
   };
   useEffect(() => {
     axios
-      .get(`/board/review/${boardNum.boardNum}`)
+      .get(`/board/review/${id}`)
       .then((response) => {
         setData(response.data);
         setPreviewUrl(response.data.imgThumbnail);
@@ -111,7 +112,7 @@ const AdoptReviewModify = () => {
       }
 
       axios
-        .put(`/board/review/${boardNum.boardNum}`, {
+        .put(`/board/review/${id}`, {
           reviewSubject: title,
           reviewContent: content,
           imgThumbnail: imageUrl,
@@ -269,13 +270,13 @@ const Board = styled.h1`
 const WriteButton = styled(Button)`
   && {
     color: #fff;
-    background-color: #fbd385;
+    background-color: #FBD385;
     width: auto;
     height: 30px;
     margin-top: 10px;
     margin-left: auto;
     &:hover {
-      background-color: #ffbe3f;
+      background-color: #AF935D;
     }
   }
 `;
@@ -300,7 +301,7 @@ const ResetButton = styled(Button)`
     height: 30px;
     margin-top: 10px;
     &:hover {
-      background-color: #b2b0b0;
+      background-color: #858585;
     }
   }
 `;

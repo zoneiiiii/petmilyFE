@@ -87,7 +87,7 @@ export const CommonButton = styled(Button)`
     background-color: #fbd385;
     width: auto;
     &:hover {
-      background-color: #ffbe3f;
+      background-color: #AF935D;
     }
   }
 `;

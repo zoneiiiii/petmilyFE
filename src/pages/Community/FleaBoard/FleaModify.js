@@ -177,6 +177,7 @@ const FleaWrite = () => {
                 setSelectedCategory(data.boardCategory);
                 setSelectedStatus(data.boardStatus ? "판매중" : "판매완료");
                 setThumbnail(data.imgThumbnail);
+                setPreviewUrl(response.data.imgThumbnail);
             } catch (error) {
                 console.error("Error fetching data : ", error);
             } finally {
@@ -335,7 +336,7 @@ const FleaWrite = () => {
                                                             color: "#fff",
                                                         },
                                                         "&.Mui-selected:hover": {
-                                                            backgroundColor: "#ffbe3f",
+                                                            backgroundColor: "#AF935D",
                                                             color: "#fff",
                                                         },
                                                     }}
@@ -561,7 +562,7 @@ const CommonButton = styled(Button)`
     background-color: #fbd385;
     width: auto;
     &:hover {
-      background-color: #facc73;
+      background-color: #AF935D;
     }
   }
 `;
@@ -603,7 +604,7 @@ const WriteButton = styled(Button)`
     margin-top: 10px;
     margin-left: auto;
     &:hover {
-      background-color: #ffbe3f;
+      background-color: #AF935D;
     }
   }
 `;
@@ -628,7 +629,7 @@ const ResetButton = styled(Button)`
     height: 30px;
     margin-top: 10px;
     &:hover {
-      background-color: #b2b0b0;
+      background-color: #858585;
     }
   }
 `;
