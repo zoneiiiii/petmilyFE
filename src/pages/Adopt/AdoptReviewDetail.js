@@ -153,6 +153,7 @@ const AdoptReviewDetail = () => {
 
             <Comments>
               <Horizon />
+              <h2 className="comment">댓글</h2>
               <Comment boardId="missing" boardNum={id} />
             </Comments>
           </Container>
@@ -308,7 +309,7 @@ const Body = styled.div`
 
 const Comments = styled.div`
   // margin: 150px auto 20px auto;
-  font-size: 2rem;
+  // font-size: 2rem;
   font-weight: 700;
 `;
 

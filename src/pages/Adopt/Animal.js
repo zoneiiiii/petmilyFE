@@ -121,8 +121,11 @@ function Animal({
 }
 export default Animal;
 const CardImage = styled.img`
-  width: 175px;
-  height: 200px;
+width: auto;
+height: 196px;
+object-fit: cover;
+border: 1px solid #ccc;
+  border-radius: 0.5rem;
 `;
 
 const CardTitle = styled.p`

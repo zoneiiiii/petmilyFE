@@ -117,9 +117,9 @@ const FleaBoard = () => {
                     <MainContainer>
                         <Top>중고장터</Top>
                         <Container maxWidth="60vw">
-                            <SearchContainer>
+                            {/* <SearchContainer>
                                 <SearchBar />
-                            </SearchContainer>
+                            </SearchContainer> */}
                             <Grid container spacing={4} columns={8}>
                                 {visibleItems.map((item, index) => {
                                     return (
@@ -179,6 +179,7 @@ const Section = styled.section`
     // margin-top: 24px;
     background: #f8f9fa;
     padding: 30px 0 40px 0;
+    min-height: 1050px;
 `
 
 const SearchContainer = styled.div`

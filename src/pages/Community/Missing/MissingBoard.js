@@ -132,9 +132,9 @@ const MissingBoard = () => {
             <ContainerBox>
               <Top>실종 동물 게시판</Top>
               <Container sx={{ py: "30px" }} maxWidth="60vw">
-                <SearchContainer>
+                {/* <SearchContainer>
                   <SearchBar />
-                </SearchContainer>
+                </SearchContainer> */}
                 <Grid container spacing={4} columns={8}>
                   {data
                     .slice(
@@ -212,6 +212,7 @@ const MissingBoard = () => {
 const Section = styled.section`
   background: #f8f9fa;
   padding: 30px 0 40px 0;
+  min-height: 1050px;
 `;
 
 const MainContainer = styled.div`

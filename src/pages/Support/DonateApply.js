@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import * as S from "./DonateApply.styled";
 import { TextField, ThemeProvider } from "@mui/material";
 import Button from "@mui/material/Button";
 import DonateApplyComplete from "./DonateApplyComplete";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import axios from "axios";
+import Donate from "./Donate";
+import { SUPPORT } from "../../constants/PageURL";
 
 const DonateApply = () => {
+  const navigate = useNavigate();
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [donationCompleted, setDonationCompleted] = useState(false); //danateApplyComplete 렌더함수
@@ -238,6 +242,7 @@ const DonateApply = () => {
     setTelErrorMsg("");
     setEmailErrorMsg("");
     setErrorMsg("");
+    navigate(SUPPORT.DONATE);
     window.scrollTo(0, 0);
   };
 

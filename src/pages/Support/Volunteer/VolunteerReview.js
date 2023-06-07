@@ -137,6 +137,7 @@ export default VolunteerReview;
 const Section = styled.section`
   background: #f8f9fa;
   padding: 30px 0 40px 0;
+  min-height: 1550px;
 `;
 
 const MainContainer = styled.div`
