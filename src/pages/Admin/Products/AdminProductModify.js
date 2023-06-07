@@ -289,7 +289,7 @@ const AdminProductModify = () => {
                           <MenuItem value="사료">사료</MenuItem>
                           <MenuItem value="간식">간식</MenuItem>
                           <MenuItem value="외출용품">외출용품</MenuItem>
-                          <MenuItem value="목용/미용">목욕/미용</MenuItem>
+                          <MenuItem value="목욕/미용">목욕/미용</MenuItem>
                           <MenuItem value="굿즈">굿즈</MenuItem>
                         </Select>
                         <S.ErrorMsg>
