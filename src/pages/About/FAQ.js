@@ -144,7 +144,9 @@ const FAQ = () => {
                         {faq.question}
                       </AccordionSummary>
                       <AccordionDetails>
-                        <Typography>{faq.answer}</Typography>
+                        <Typography style={{ textUnderlineOffset: "5px" }}>
+                          {faq.answer}
+                        </Typography>
                       </AccordionDetails>
                     </Accordion>
                   </TableCell>
