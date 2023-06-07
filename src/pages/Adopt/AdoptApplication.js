@@ -13,6 +13,7 @@ import {
   DialogContent,
   DialogTitle,
   ThemeProvider,
+  Avatar,
 } from "@mui/material";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import * as React from "react";
@@ -85,6 +86,16 @@ margin-top: 10px;
 &:focus {
   background-color: #bfbfbf;
 }
+`;
+
+const UserImg = styled(Avatar)`
+  && {
+    margin-right: 8px;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    margin-right: 20px;
+  }
 `;
 
 const AdoptApplication = () => {
@@ -425,20 +436,22 @@ const AdoptApplication = () => {
             </div>
           ) : (
             <div>
-              <img
+              <UserImg alt="프로필 이미지" src={data.memberImg} />
+              {/* <img
                 className="ProfileImg"
                 src={data.memberImg}
                 alt="profile"
                 width={"250px"}
                 height={"250px"}
                 style={{ borderRadius: "50%", marginRight: "20px" }}
-              />
+              /> */}
               <Typography
                 component="h4"
                 variant="h5"
                 sx={{
                   color: "black",
                   mt: "30px",
+                  mr: "15px"
                 }}
               >
                 {data.memberNickname}

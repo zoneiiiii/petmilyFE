@@ -2,11 +2,7 @@ import styled from "styled-components";
 import React, { useState, useEffect, useContext } from "react";
 import Comment from "../../components/Comment/Comment";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  Button,
-  ThemeProvider,
-  Avatar,
-} from "@mui/material";
+import { Button, ThemeProvider, Avatar } from "@mui/material";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import DOMPurify from "dompurify";
 import axios from "axios";
@@ -25,8 +21,8 @@ const AdoptReviewDetail = () => {
   const profile = {
     profileImg: data.memberImg, // 사용자 프로필 이미지
     profileNickname: data.memberNickName, // 사용자 닉네임
-    region: "관악구 신림동"
-  }
+    region: "관악구 신림동",
+  };
 
   /* axios start */
   useEffect(() => {
@@ -94,14 +90,13 @@ const AdoptReviewDetail = () => {
   const handleReturn = () => {
     // 돌아가기
     navigate(ADOPT.REVIEW);
-  }
+  };
 
   const createMarkup = (html) => {
     return {
       __html: DOMPurify.sanitize(html),
     };
   };
-
 
   return (
     <ThemeProvider theme={CustomTheme}>
@@ -122,7 +117,9 @@ const AdoptReviewDetail = () => {
                         <UserImg alt="프로필 이미지" src={profile.profileImg} />
                       </div>
                       <div className="article-profile-left">
-                        <div className="nickname">{profile.profileNickname}</div>
+                        <div className="nickname">
+                          {profile.profileNickname}
+                        </div>
                         {/* <div className="region">{profile.region}</div> */}
                       </div>
                       <p className="date">{formatDate(data.reviewDate)}</p>
@@ -134,7 +131,7 @@ const AdoptReviewDetail = () => {
             </Head>
             <Horizon />
             <DetailMiddle
-              dangerouslySetInnerHTML={createMarkup(data.boardContent)}
+              dangerouslySetInnerHTML={createMarkup(data.reviewContent)}
             />
             <ButtonsContainer>
               {data.memberNum === userNum && (
@@ -156,10 +153,10 @@ const AdoptReviewDetail = () => {
 
             <Comments>
               <Horizon />
+              <h2 className="comment">댓글</h2>
               <Comment boardId="missing" boardNum={id} />
             </Comments>
           </Container>
-
         </MainContainer>
       </Section>
     </ThemeProvider>
@@ -312,7 +309,7 @@ const Body = styled.div`
 
 const Comments = styled.div`
   // margin: 150px auto 20px auto;
-  font-size: 2rem;
+  // font-size: 2rem;
   font-weight: 700;
 `;
 
@@ -343,13 +340,13 @@ const ButtonsSpace = styled.div`
 const EditButton = styled(Button)`
   && {
     color: #fff;
-    background-color: #FBD385;
+    background-color: #fbd385;
     width: auto;
     height: 30px;
     margin-top: 5px;
     margin-bottom: 5px;
     &:hover {
-      background-color: #AF935D;
+      background-color: #af935d;
     }
   }
 `;
@@ -363,7 +360,7 @@ const DeleteButton = styled(Button)`
     margin-top: 5px;
     margin-bottom: 5px;
     &:hover {
-      background-color: #B25B5B;
+      background-color: #b25b5b;
     }
   }
 `;

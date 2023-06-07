@@ -350,6 +350,13 @@ const MissingModify = () => {
                                     </SelectContainer>
                                 </FormRow>
                                 <FormRow>
+                                    <ErrorMsg>
+                                        <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
+                                            {locationError ? "지역을 선택해 주세요." : null}
+                                        </FormHelperText>
+                                    </ErrorMsg>
+                                </FormRow>
+                                <FormRow>
                                     <SelectContainer>
                                         <p className="title">나이</p>
                                         <Select

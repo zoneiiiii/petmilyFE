@@ -103,9 +103,9 @@ const MyPageMissing = () => {
     return `${year}/${month}/${day}`;
   };
 
-  if (isLoading) {
-    return <Loading />; // 로딩 중일 때 표시할 컴포넌트
-  }
+  // if (isLoading) {
+  //   return <Loading />; // 로딩 중일 때 표시할 컴포넌트
+  // }
 
   if (missing.length === 0) {
     return (

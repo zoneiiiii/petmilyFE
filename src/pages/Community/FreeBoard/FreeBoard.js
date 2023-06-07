@@ -59,6 +59,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const Section = styleds.section`
   background: #f8f9fa;
   padding: 30px 0 40px 0;
+  min-height: 1000px;
 `
 
 const MainContainer = styleds.div`
@@ -264,9 +265,9 @@ const FreeBoard = () => {
 
                         <Container sx={{ py: 0, minWidth: 780 }} maxWidth="lg">
                             <h1 className={classes.title}>자유 게시판</h1>
-                            <SearchContainer>
+                            {/* <SearchContainer>
                                 <SearchBar />
-                            </SearchContainer>
+                            </SearchContainer> */}
                             <TableContainer className={classes.tablecontainer} component={Paper} >
 
                                 <Table aria-label="customized table" className={classes.table}>

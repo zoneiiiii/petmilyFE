@@ -34,11 +34,13 @@ const CarouselMain = ({ images }) => {
               />
             </Link>
           ) : (
-            <img
-              src={image}
-              alt={`Slide ${index}`}
-              style={{ height: "400px", width: "100%", objectFit: "cover" }}
-            />
+            <Link to="/adopt">
+              <img
+                src={image}
+                alt={`Slide ${index}`}
+                style={{ height: "400px", width: "100%", objectFit: "cover" }}
+              />
+            </Link>
           )}
         </Paper>
       ))}

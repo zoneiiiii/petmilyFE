@@ -168,7 +168,7 @@ const FreeDetail = () => {
 
             <Comments>
               <hr />
-              <p className="comment">댓글</p>
+              <h2 className="comment">댓글</h2>
               <Comment boardId="free" boardNum={id} />
             </Comments>
           </Container>
@@ -292,7 +292,7 @@ const Body = styled.div`
 
 const Comments = styled.div`
     margin: 20px auto 20px auto;
-    font-size: 2rem;
+    // font-size: 2rem;
     font-weight: 700;
 `;
 
