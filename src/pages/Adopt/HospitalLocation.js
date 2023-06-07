@@ -8,6 +8,7 @@ import Box from "@mui/material/Box";
 import { useNavigate } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
+import CallIcon from "@mui/icons-material/Call";
 const { kakao } = window;
 let curLatitude = "";
 let curLongitude = "";
@@ -290,13 +291,37 @@ const HospitalLocation = () => {
                   </h3>
                 )}
 
-                <h5 class="tel" style={{ fontSize: "medium" }}>
-                  Tel. {item.phone}
+                <h5
+                  class="tel"
+                  style={{
+                    fontSize: "small",
+                    color: "gray",
+                    marginLeft: "20px",
+                    marginTop: "-5px",
+                  }}
+                >
+                  ☎️ {item.phone ? item.phone : "등록된 번호가 없습니다."}
                 </h5>
-                <h5 class="tel" style={{ fontSize: "medium" }}>
+                <h5
+                  class="tel"
+                  style={{
+                    fontSize: "medium",
+                    color: "gray",
+                    marginTop: "-5px",
+                    marginLeft: "20px",
+                  }}
+                >
                   지번 주소: {item.address_name}
                 </h5>
-                <h5 class="tel" style={{ fontSize: "medium" }}>
+                <h5
+                  class="tel"
+                  style={{
+                    fontSize: "medium",
+                    color: "gray",
+                    marginTop: "-20px",
+                    marginLeft: "20px",
+                  }}
+                >
                   도로명 주소: {item.road_address_name}
                 </h5>
               </Grid>

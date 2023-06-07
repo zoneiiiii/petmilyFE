@@ -69,12 +69,15 @@ const ShelterLocation = () => {
       alert("GPS를 지원하지 않습니다");
     }
   }
+  const mounted = useRef(false);
 
   useLayoutEffect(() => {
     getLocation();
+    fetchData();
   }, []);
 
   useEffect(() => {
+    console.log("current1 " + curLatitude + " " + curLongitude);
     const container = document.getElementById("map");
     const options = {
       center: new kakao.maps.LatLng(curLatitude, curLongitude),
@@ -178,6 +181,7 @@ const ShelterLocation = () => {
       var h3 = document.createElement("h3");
       h3.style.lineHeight = "25px";
       h3.style.marginTop = "30px";
+      h3.style.marginLeft = "5px";
       h3.innerText = index + 1 + ". " + places.place_name;
 
       h3.addEventListener("mouseenter", function () {
@@ -199,31 +203,46 @@ const ShelterLocation = () => {
       if (places.phone) {
         var tel = document.createElement("h5");
         tel.className = "tel";
-        tel.style.fontSize = "medium";
-        tel.innerText = "Tel. " + places.phone;
+        tel.style.fontSize = "small";
+        tel.style.color = "gray";
+        tel.style.marginLeft = "20px";
+        tel.style.marginTop = "-5px";
+        tel.innerText = "☎️ " + places.phone;
         el.appendChild(tel);
       } else {
         var tel = document.createElement("h5");
         tel.className = "tel";
-        tel.style.fontSize = "medium";
-        tel.innerText = "Tel. 등록된 번호가 없습니다";
+        tel.style.fontSize = "small";
+        tel.style.color = "gray";
+        tel.style.marginLeft = "20px";
+        tel.style.marginTop = "-5px";
+        tel.innerText = "☎️ 등록된 번호가 없습니다";
         el.appendChild(tel);
       }
 
       if (places.road_address_name) {
         var address = document.createElement("h5");
         address.style.fontSize = "medium";
+        address.style.color = "gray";
+        address.style.marginLeft = "20px";
+        address.style.marginTop = "-5px";
         address.innerText = "지번 주소: " + places.address_name;
         el.appendChild(address);
 
         var roadAddress = document.createElement("h5");
         roadAddress.className = "jibun gray";
         roadAddress.style.fontSize = "medium";
+        roadAddress.style.color = "gray";
+        roadAddress.style.marginLeft = "20px";
+        roadAddress.style.marginTop = "-20px";
         roadAddress.innerText = "도로명 주소: " + places.road_address_name;
         el.appendChild(roadAddress);
       } else {
         var address = document.createElement("h5");
         address.style.fontSize = "medium";
+        address.style.color = "gray";
+        address.style.marginLeft = "20px";
+        address.style.marginTop = "-5px";
         address.innerText = "지번 주소: " + places.address_name;
         el.appendChild(address);
       }
@@ -295,13 +314,13 @@ const ShelterLocation = () => {
         var el = document.createElement("a");
         el.href = "#";
         el.style.cssText =
-          "display:flex;justify-content:center;align-items:center;margin-right:15px;width:25px;height:25px;";
+          "display:flex;justify-content:center;align-items:center;margin-right:15px;width:25px;height:25px;color:black;text-decoration:none;";
         el.innerHTML = i;
 
         if (i === pagination.current) {
           el.className = "on";
           el.style.cssText =
-            "display:flex;justify-content:center;align-items:center;color:white;margin-right:15px;background-color:#FBD385;width:25px;height:25px;border-radius:50%;";
+            "display:flex;justify-content:center;align-items:center;color:white;margin-right:15px;background-color:#FBD385;width:25px;height:25px;border-radius:50%;text-decoration:none;";
         } else {
           el.onclick = (function (i) {
             return function () {
@@ -334,6 +353,26 @@ const ShelterLocation = () => {
       }
     }
   }, [place, firstData, dragend, data3]);
+
+  // 시/도 코드 파싱
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `http://apis.data.go.kr/1543061/abandonmentPublicSrvc/sido?numOfRows=20&pageNo=1&serviceKey=AhrFaZaAefMdQ7n5tWepAOM5tzLw5%2BCiT3stOXtEl3uTyXNtr0xlgtAn6WZppVVYaZdAuyqJvj%2FS65SSV4iapw%3D%3D&_type=json`
+      );
+      const data2 = response.data.response.body.items.item;
+      const location = data2.map((item) => ({
+        name: item.orgdownNm,
+        code: item.orgCd,
+      }));
+      setData(location);
+    } catch (e) {
+      setError(e);
+    }
+    setLoading(false);
+  };
+  // 시/군/구 코드 파싱
 
   return (
     <ThemeProvider theme={CustomTheme}>

@@ -3,9 +3,9 @@ import styled from "styled-components";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { SHOP } from "../../constants/PageURL";
-import { AuthContext } from "../../contexts/AuthContexts";
 import axios from "axios";
 import DOMPurify from "dompurify";
+import { AuthContext } from "../../contexts/AuthContexts";
 
 const ProductDetail = () => {
   const { loggedIn } = useContext(AuthContext);
@@ -177,12 +177,18 @@ const ModalButtonsWrapper = styled.div`
 const ContinueShoppingButton = styled.button`
   padding: 10px 20px;
   margin-right: 10px;
-  background-color: #ccc;
+  background-color: #bfbfbf;
   border: none;
   border-radius: 4px;
   font-size: 16px;
   color: #fff;
   cursor: pointer;
+  &:hover {
+    background-color: #858585;
+  }
+  &:focus {
+    background-color: #858585;
+  }
 `;
 
 const GoToCartButton = styled.button`
@@ -193,6 +199,12 @@ const GoToCartButton = styled.button`
   font-size: 16px;
   color: #fff;
   cursor: pointer;
+  &:hover {
+    background-color: #af935d;
+  }
+  &:focus {
+    background-color: #af935d;
+  }
 `;
 
 const theme = createTheme({
@@ -221,19 +233,20 @@ const ProductContainer = styled.div`
 const ProductImage = styled.img`
   width: 550px;
   height: 600px;
-  margin-right: 7rem;
+  margin-right: 3rem;
   padding-top: 25px;
 `;
 
 const ProductInfo = styled.div`
   display: flex;
   flex-direction: column;
-  margin-left: 8rem;
+  margin-left: 4rem;
 `;
 
 const ProductTitle = styled.h2`
   font-size: 2rem;
   margin-bottom: 1rem;
+  padding-top: 1rem;
 `;
 
 const ProductPrice = styled.p`
@@ -270,11 +283,23 @@ const Button = styled.button`
 const CartButton = styled(Button)`
   background-color: #fbd385;
   color: #fff;
+  &:hover {
+    background-color: #af935d;
+  }
+  &:focus {
+    background-color: #af935d;
+  }
 `;
 
 const BuyButton = styled(Button)`
   background-color: #fbd385;
   color: #fff;
+  &:hover {
+    background-color: #af935d;
+  }
+  &:focus {
+    background-color: #af935d;
+  }
 `;
 
 const ButtonsWrapper = styled.div`
@@ -299,8 +324,7 @@ const ProductDescription = styled.div`
 `;
 
 const ProductDetailContent = styled.div`
-  display: block;
-  margin: 0 auto;
+  text-align: center;
 `;
 
 export default ProductDetail;
