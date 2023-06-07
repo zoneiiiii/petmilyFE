@@ -65,7 +65,9 @@ const AdminAdopt = () => {
           setCount(countsResponse.data);
           setTotalAdopts(countsResponse.data.totalCount);
           console.log(listResponse.data);
+
           setData(listResponse.data.content);
+          console.log(data.length);
         })
       )
       .catch((error) => {
