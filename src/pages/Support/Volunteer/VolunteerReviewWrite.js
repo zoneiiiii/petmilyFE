@@ -272,7 +272,7 @@ const WriteButton = styled(Button)`
     margin-top: 10px;
     margin-left: auto;
     &:hover {
-      background-color: #ffbe3f;
+      background-color: #AF935D;
     }
   }
 `;
@@ -284,7 +284,7 @@ const ResetButton = styled(Button)`
     height: 30px;
     margin-top: 10px;
     &:hover {
-      background-color: #b2b0b0;
+      background-color: #858585;
     }
   }
 `;

@@ -289,12 +289,20 @@ export const ADOPT = {
     else return "/adopt/review/" + id;
   },
 
+  /**입양 후기 수정 페이지 URL
+   * **사용법: COMMUNITY.REVIEW_MODIFY(id)
+   * @return "/board/review/modify/:id" (id 없음)
+   * @return "/board/review/modify/ + id (id 존재)
+   */
+  REVIEW_MODIFY: (id) => {
+    if (id === undefined) return "/board/review/modify/:id";
+    else return "/board/review/modify/" + id;
+  },
+
   /**입양 후기 작성 페이지 URL
    * @return "/adopt/review/write"
    */
   REVIEW_WRITE: "/adopt/review/write",
-
-  REVIEW_MODIFY: "/adopt/review/modify",
 
   /**입양 신청 페이지 URL
    * @return "/adopt/application"

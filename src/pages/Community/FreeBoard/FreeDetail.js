@@ -12,6 +12,7 @@ import { COMMUNITY } from "../../../constants/PageURL";
 import {
   Button,
   ThemeProvider,
+  Avatar,
 } from "@mui/material";
 import { CustomTheme } from "../../../assets/Theme/CustomTheme";
 
@@ -127,7 +128,7 @@ const FreeDetail = () => {
                   <div className="space-between">
                     <div style={{ display: 'flex' }}>
                       <div className="article-profile-image">
-                        <img alt="프로필 이미지" src={profile.profileImg} />
+                        <UserImg alt="프로필 이미지" src={profile.profileImg} />
                       </div>
                       <div className="article-profile-left">
                         <div className="nickname">{profile.profileNickname}</div>
@@ -322,13 +323,13 @@ const ButtonsSpace = styled.div`
 const EditButton = styled(Button)`
   && {
     color: #fff;
-    background-color: #fbd385;
+    background-color: #FBD385;
     width: auto;
     height: 30px;
     margin-top: 5px;
     margin-bottom: 5px;
     &:hover {
-      background-color: #ffbe3f;
+      background-color: #AF935D;
     }
   }
 `;
@@ -342,7 +343,7 @@ const DeleteButton = styled(Button)`
     margin-top: 5px;
     margin-bottom: 5px;
     &:hover {
-      background-color: #ed4f4f;
+      background-color: #B25B5B;
     }
   }
 `;
@@ -356,8 +357,18 @@ const ReturnButton = styled(Button)`
     margin-top: 5px;
     margin-bottom: 5px;
     &:hover {
-      background-color: #b2b0b0;
+      background-color: #858585;
     }
+  }
+`;
+
+const UserImg = styled(Avatar)`
+  && {
+    margin-right: 8px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 5px;
   }
 `;
 

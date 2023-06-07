@@ -5,7 +5,7 @@
 
 .main {
   padding-top: 5px;
-  min-height: calc(100vh - 180px);
+  min-height: calc(1200px - 180px);
 }
 
 @font-face {

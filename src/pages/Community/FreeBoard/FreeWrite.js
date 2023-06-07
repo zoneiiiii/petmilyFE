@@ -159,7 +159,7 @@ const FreeWrite = () => {
                     <Board>게시글 작성</Board>
                     <Grid sx={{ minWidth: 700, mt: 5, }}>
                         <form onSubmit={handleSubmit}>
-                            <div style={{ margin: '50px auto', maxWidth: '700px' }}>
+                            <div style={{ margin: '50px auto', maxWidth: '720px' }}>
                                 <FormRowWithError>
                                     <TextField
                                         label="제목"
@@ -344,7 +344,7 @@ const WriteButton = styled(Button)`
     margin-top: 10px;
     margin-left: auto;
     &:hover {
-      background-color: #ffbe3f;
+      background-color: #AF935D;
     }
   }
 `;
@@ -363,7 +363,7 @@ const ResetButton = styled(Button)`
     height: 30px;
     margin-top: 10px;
     &:hover {
-      background-color: #b2b0b0;
+      background-color: #858585;
     }
   }
 `;

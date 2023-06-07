@@ -11,6 +11,7 @@ import { AuthContext } from "../../../contexts/AuthContexts";
 import { useNavigate, useLocation } from "react-router-dom";
 import NotFound from "../../NotFound/NotFound";
 import styled from "styled-components";
+import CustomButton from "../../Login/CustomButton";
 
 const VolunteerReview = () => {
   const { loggedIn } = useContext(AuthContext);
@@ -109,16 +110,17 @@ const VolunteerReview = () => {
                   </>
                 )}
               </Grid>
-            </Container>
-            {loggedIn && (
-              // <S.ButtonContainer>
-              <>
+              {loggedIn === true ? (
                 <Link to={SUPPORT.VOLUNTEER_REVIEW_WRITE}>
-                  <S.VolunteerButton>글쓰기</S.VolunteerButton>
+                  <CustomButton label="글쓰기" value="글쓰기">
+                    글쓰기
+                  </CustomButton>
                 </Link>
-              </>
-              // </S.ButtonContainer>
-            )}
+              ) : (
+                <></>
+              )}
+            </Container>
+
             <VolunteerPagination
               count={pageCount}
               page={page}
@@ -158,4 +160,6 @@ const Top = styled.h1`
   margin-bottom: 2rem;
 `;
 
-const ContainerBox = styled.div``;
+const ContainerBox = styled.div`
+  margin-bottom: 20px;
+`

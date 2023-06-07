@@ -183,11 +183,18 @@ const MyPageQnA = () => {
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {data.map((qna) => (
+              {data.map((qna, index) => (
                 <StyledTableRow key={qna.boardNum}>
                   <StyledTableCell align="center" sx={{ minWidth: 10 }}>
                     {qna.boardNum}
                   </StyledTableCell>
+                  {/* {page === pageCount ?
+                    (<StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                      {(pageCount * data.length) - ((page - 1) * data.length + index)}
+                    </StyledTableCell>)
+                    : (<StyledTableCell align="center" sx={{ minWidth: 10 }}>
+                      {(pageCount * data.length) - ((page) * data.length + index) + 4}
+                    </StyledTableCell>)} */}
                   <StyledTableCell align="center" sx={{ minWidth: 300 }}>
                     <Link
                       to={MYPAGE.QNA_DETAIL(qna.boardNum)}
@@ -238,6 +245,8 @@ const MyPageQnA = () => {
                 justifyContent: "center",
               }}
               onChange={handleChange}
+              showFirstButton
+              showLastButton
               component="div"
               count={pageCount}
             />

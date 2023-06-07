@@ -133,7 +133,7 @@ const VolunteerReviewDetail = () => {
                   <S.ButtonsSpace />
                 </>
               )}
-              <S.ReturnButton onClick={handleReturn}>돌아가기</S.ReturnButton>
+              <S.ReturnButton onClick={handleReturn} variant="contained">돌아가기</S.ReturnButton>
             </S.ButtonsContainer>
             <S.DetailBottom>
               <S.horizon />

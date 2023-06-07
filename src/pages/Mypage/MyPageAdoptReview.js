@@ -18,12 +18,14 @@ import { ADOPT } from "../../constants/PageURL";
 import { AuthContext } from "../../contexts/AuthContexts";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import Loading from "../../components/Loading/LoadingPage";
 
 const MyPageAdoptReview = () => {
   const { userNum } = useContext(AuthContext);
   const [reviewData, setReviewData] = useState([]);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(0); // 페이지 수 계산
+  const [isLoading, setIsLoading] = useState(true); //로딩 상태
 
   let navigate = useNavigate();
   let location = useLocation();
@@ -51,6 +53,7 @@ const MyPageAdoptReview = () => {
           setReviewData(response.data.content);
           setPageCount(totalPages);
           setPage(urlPage);
+          setIsLoading(false);
         })
         .catch((error) => {
           console.error("데이터 수신 오류 :", error);
@@ -88,6 +91,10 @@ const MyPageAdoptReview = () => {
       { replace: true }
     );
   };
+
+  if (isLoading) {
+    return <Loading />; // 로딩 중일 때 표시할 컴포넌트
+  }
 
   if (reviewData.length === 0) {
     return (
@@ -162,6 +169,8 @@ const MyPageAdoptReview = () => {
           page={page}
           color="primary"
           onChange={handleChange}
+          showFirstButton
+          showLastButton
           sx={{
             display: "flex",
             justifyContent: "center",

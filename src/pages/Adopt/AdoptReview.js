@@ -120,6 +120,8 @@ const AdoptReview = () => {
               page={page}
               count={maxPageNum}
               onChange={handleChange}
+              showFirstButton
+              showLastButton
               sx={{
                 display: "flex",
                 justifyContent: "center",
@@ -271,6 +273,8 @@ const CardCount = styled.p`
   margin-right: 10px;
 `;
 
-const ContainerBox = styled.div``;
+const ContainerBox = styled.div`
+  margin-bottom: 20px;
+`
 
 export default AdoptReview;

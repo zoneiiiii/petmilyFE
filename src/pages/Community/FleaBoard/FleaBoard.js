@@ -7,6 +7,10 @@ import {
     Grid,
     Card,
     Container,
+    Table,
+    TableCell,
+    TableHead,
+    TableRow,
 } from '@mui/material';
 import { COMMUNITY } from '../../../constants/PageURL';
 import SearchBar from "../../../components/common/SearchBar";
@@ -67,54 +71,34 @@ const FleaBoard = () => {
         return `${year}/${month}/${day}`;
     };
 
-    return (
-        <ThemeProvider theme={CustomTheme}>
-            <Section className="result">
-                <MainContainer>
-                    <Top>중고장터</Top>
-
-                    <Container maxWidth="60vw">
-                        <SearchContainer>
-                            <SearchBar />
-                        </SearchContainer>
+    if (data.length === 0) {
+        return (
+            <ThemeProvider theme={CustomTheme}>
+                <Section className="result">
+                    <MainContainer>
+                        <Top>중고장터</Top>
                         <Grid container spacing={4} columns={8}>
-                            {visibleItems.map((item, index) => {
-                                return (
-                                    <Grid item xs={10} sm={6} md={2} key={item.boardNum}>
-                                        <Link to={COMMUNITY.FLEA_DETAIL(item.boardNum)} style={{ textDecoration: "none" }}>
-                                            <Card
-                                                sx={{
-                                                    height: "100%",
-                                                    display: "flex",
-                                                    flexDirection: "column",
-                                                    border: "1px solid rgb(233, 236, 239)",
-                                                    boxShadow: "1px 1px 4px 0px rgb(233, 236, 239)"
-                                                }}
-                                            >
-                                                <CardImage src={item.imgThumbnail} />
-                                                <div>
-                                                    <CardTitle>{item.boardSubject}</CardTitle>
-                                                </div>
-                                                <div>
-                                                    <CardCost>{(item.boardCost).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원</CardCost>
-                                                    <CardDate>{formatDate(item.boardDate)}</CardDate>
-                                                    <CardStatus>
-                                                        {(item.boardStatus === true) ?
-                                                            (<p>판매중</p>) :
-                                                            (<p style={{ color: "lightgray" }}>판매완료</p>)}
-                                                    </CardStatus>
-                                                </div>
-                                            </Card>
-                                        </Link>
-                                    </Grid>
-                                );
-                            })}
+                            <Table
+                                aria-label="caption table"
+                                overflow="hidden"
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    border: "1px solid lightgray",
+                                    margin: "60px 20px 30px 50px",
+                                    width: "100%"
+                                }}
+                            >
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell colSpan={4} align="center" sx={{ height: 250 }}>
+                                            게시글이 없습니다.
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                            </Table>
                         </Grid>
-                        {!isLastPage && (
-                            <MoreItem>
-                                <MoreBtn onClick={handleLoadMore}>더보기</MoreBtn>
-                            </MoreItem>
-                        )}
                         {loggedIn === true ?
                             <Link to={COMMUNITY.FLEA_WRITE}>
                                 <CustomButton label="글쓰기" value="글쓰기">
@@ -122,11 +106,73 @@ const FleaBoard = () => {
                                 </CustomButton>
                             </Link> : <></>
                         }
-                    </Container>
-                </MainContainer>
-            </Section>
-        </ThemeProvider>
-    );
+                    </MainContainer>
+                </Section>
+            </ThemeProvider>
+        );
+    } else {
+        return (
+            <ThemeProvider theme={CustomTheme}>
+                <Section className="result">
+                    <MainContainer>
+                        <Top>중고장터</Top>
+                        <Container maxWidth="60vw">
+                            <SearchContainer>
+                                <SearchBar />
+                            </SearchContainer>
+                            <Grid container spacing={4} columns={8}>
+                                {visibleItems.map((item, index) => {
+                                    return (
+                                        <Grid item xs={10} sm={6} md={2} key={item.boardNum}>
+                                            <Link to={COMMUNITY.FLEA_DETAIL(item.boardNum)} style={{ textDecoration: "none" }}>
+                                                <Card
+                                                    sx={{
+                                                        height: "100%",
+                                                        display: "flex",
+                                                        flexDirection: "column",
+                                                        border: "1px solid rgb(233, 236, 239)",
+                                                        boxShadow: "1px 1px 4px 0px rgb(233, 236, 239)"
+                                                    }}
+                                                >
+                                                    <CardImage src={item.imgThumbnail} />
+                                                    <div>
+                                                        <CardTitle>{item.boardSubject}</CardTitle>
+                                                    </div>
+                                                    <div>
+                                                        <CardCost>{(item.boardCost).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원</CardCost>
+                                                        <CardDate>{formatDate(item.boardDate)}</CardDate>
+                                                        <CardStatus>
+                                                            {(item.boardStatus === true) ?
+                                                                (<p>판매중</p>) :
+                                                                (<p style={{ color: "lightgray" }}>판매완료</p>)}
+                                                        </CardStatus>
+                                                    </div>
+                                                </Card>
+                                            </Link>
+                                        </Grid>
+                                    );
+                                })}
+                            </Grid>
+                            {!isLastPage && (
+                                <MoreItem>
+                                    <MoreBtn onClick={handleLoadMore}>더보기</MoreBtn>
+                                </MoreItem>
+                            )}
+                            {loggedIn === true ?
+                                <Link to={COMMUNITY.FLEA_WRITE}>
+                                    <CustomButton label="글쓰기" value="글쓰기">
+                                        글쓰기
+                                    </CustomButton>
+                                </Link> : <></>
+                            }
+                        </Container>
+                    </MainContainer>
+                </Section>
+            </ThemeProvider>
+        );
+    }
+
+
 }
 
 const Section = styled.section`

@@ -393,7 +393,7 @@ const MissingWrite = () => {
                               color: "#fff",
                             },
                             "&.Mui-selected:hover": {
-                              backgroundColor: "#FF4646",
+                              backgroundColor: "#B25B5B",
                               color: "#fff",
                             },
                           }}
@@ -643,13 +643,13 @@ justify-content: flex-end;
 const WriteButton = styled(Button)`
 && {
 color: #fff;
-background-color: #fbd385;
+background-color: #FBD385;
 width: auto;
 height: 30px;
 margin-top: 10px;
 margin-left: auto;
 &:hover {
-  background-color: #ffbe3f;
+  background-color: #AF935D;
 }
 }
 `;
@@ -680,7 +680,7 @@ width: auto;
 height: 30px;
 margin-top: 10px;
 &:hover {
-  background-color: #b2b0b0;
+  background-color: #858585;
 }
 }
 `;

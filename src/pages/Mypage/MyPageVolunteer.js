@@ -15,12 +15,14 @@ import axios from "axios";
 import VolunteerReviewCard from "../../components/Support/Volunteer/VolunteerReviewCard";
 import VolunteerPagination from "../../components/Support/Volunteer/VolunteerPagination";
 import styled from "styled-components";
+import Loading from "../../components/Loading/LoadingPage";
 
 const MyPageVolunteer = () => {
   const { userNum } = useContext(AuthContext);
   const [review, setReview] = useState([]);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(0); // 페이지 수 계산
+  const [isLoading, setIsLoading] = useState(true); //로딩 상태
 
   let navigate = useNavigate();
   let location = useLocation();
@@ -51,6 +53,7 @@ const MyPageVolunteer = () => {
           setReview(response.data.content);
           setPageCount(totalPages);
           setPage(urlPage);
+          setIsLoading(false);
         })
         .catch((error) => {
           console.error("데이터 수신 오류 :", error);
@@ -88,6 +91,10 @@ const MyPageVolunteer = () => {
       { replace: true }
     );
   };
+
+  if (isLoading) {
+    return <Loading />; // 로딩 중일 때 표시할 컴포넌트
+  }
 
   if (review.length === 0) {
     return (
