@@ -103,7 +103,7 @@ const HospitalLocation = () => {
         // LatLngBounds 객체에 좌표를 추가
         let bounds = new kakao.maps.LatLngBounds();
         setItem(data);
-        for (let i = 0; i < data.length; i++) {
+        for (let i = 0; i < data.length - 1; i++) {
           displayMarker(data[i]);
           bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
         }
@@ -234,7 +234,7 @@ const HospitalLocation = () => {
               width: "1000px",
             }}
           >
-            {item.map((item, index) => (
+            {item.slice(0, -1).map((item, index) => (
               <Grid
                 item
                 xs={6}
