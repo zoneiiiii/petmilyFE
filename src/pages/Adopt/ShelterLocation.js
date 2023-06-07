@@ -69,15 +69,12 @@ const ShelterLocation = () => {
       alert("GPS를 지원하지 않습니다");
     }
   }
-  const mounted = useRef(false);
 
   useLayoutEffect(() => {
     getLocation();
-    fetchData();
   }, []);
 
   useEffect(() => {
-    console.log("current1 " + curLatitude + " " + curLongitude);
     const container = document.getElementById("map");
     const options = {
       center: new kakao.maps.LatLng(curLatitude, curLongitude),
@@ -91,7 +88,7 @@ const ShelterLocation = () => {
     map.setZoomable(false); //줌 막기
     const ps = new kakao.maps.services.Places();
 
-    ps.keywordSearch("유기동물", placesSearchCB);
+    ps.keywordSearch("유기동물", placesSearchCB, { size: 14 });
 
     // 키워드 검색 완료 시 호출되는 콜백함수
     function placesSearchCB(data, status, pagination) {
@@ -337,26 +334,6 @@ const ShelterLocation = () => {
       }
     }
   }, [place, firstData, dragend, data3]);
-
-  // 시/도 코드 파싱
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(
-        `http://apis.data.go.kr/1543061/abandonmentPublicSrvc/sido?numOfRows=20&pageNo=1&serviceKey=AhrFaZaAefMdQ7n5tWepAOM5tzLw5%2BCiT3stOXtEl3uTyXNtr0xlgtAn6WZppVVYaZdAuyqJvj%2FS65SSV4iapw%3D%3D&_type=json`
-      );
-      const data2 = response.data.response.body.items.item;
-      const location = data2.map((item) => ({
-        name: item.orgdownNm,
-        code: item.orgCd,
-      }));
-      setData(location);
-    } catch (e) {
-      setError(e);
-    }
-    setLoading(false);
-  };
-  // 시/군/구 코드 파싱
 
   return (
     <ThemeProvider theme={CustomTheme}>
