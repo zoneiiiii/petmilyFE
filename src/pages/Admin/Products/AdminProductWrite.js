@@ -50,7 +50,6 @@ const AdminProductWrite = () => {
   const handleModalClose = () => {
     // 모달닫는 함수
     setOpenModal(false);
-    alert("등록 완료!");
     navigate(ADMIN.PRODUCT);
   };
 

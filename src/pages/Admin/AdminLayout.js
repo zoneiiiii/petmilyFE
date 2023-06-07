@@ -1,5 +1,5 @@
 import { Outlet, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -16,6 +16,7 @@ import { mainListItems } from "./AdminNav";
 import { ADMIN } from "../../constants/PageURL";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link } from "react-router-dom";
+import ReturnTop from "../../Layout/ReturnTop";
 
 function Copyright(props) {
   return (
@@ -103,12 +104,19 @@ const pages = [
 ];
 
 const Layout = () => {
+  const location = useLocation();
   const { pathname } = useLocation();
   const [open, setOpen] = useState(true);
   const [title, setTitle] = useState("");
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  useEffect(() => {
+    const container = document.getElementById("outlet");
+    if (container) container.scrollTo(0, 0);
+  }, [location]);
+
   useEffect(() => {
     setTitle(
       pages.find(
@@ -122,7 +130,7 @@ const Layout = () => {
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar position="absolute" open={open}>
+        <AppBar position="fixed" open={open}>
           <Toolbar
             sx={{
               pr: "24px", // keep right padding when drawer closed
@@ -167,11 +175,11 @@ const Layout = () => {
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
-
           <Divider />
           <List component="nav">{mainListItems}</List>
         </Drawer>
         <Box
+          id="outlet"
           component="main"
           sx={{
             backgroundColor: (theme) =>

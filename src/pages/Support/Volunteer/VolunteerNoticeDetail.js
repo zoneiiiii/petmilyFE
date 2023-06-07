@@ -245,7 +245,7 @@ const VolunteerNoticeDetail = () => {
           </S.DetailBottom> */}
 
             <div style={{ width: "100%" }}>
-              <Comment boardId="review" boardNum={id} />
+              <Comment boardId="volunteer" boardNum={id} />
             </div>
           </Container>
         </S.DetailContainer>
