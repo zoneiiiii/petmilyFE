@@ -310,6 +310,7 @@ const AdoptApplication = () => {
           flexDirection: "column",
           alignItems: "center",
           marginTop: "30px",
+          marginBottom: "50px"
         }}
       >
         {state === 0 ? (
