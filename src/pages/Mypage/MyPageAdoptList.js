@@ -110,7 +110,7 @@ const PetData = (props) => {
     if (petName.length > 0) {
       axios
         .post("/mypage/adoptList/update/name", {
-          petNum: adopt.petNum,
+          adoptNum: adopt.adoptNum,
           petName: petName,
           petImg: adopt.petImg,
         })
@@ -145,7 +145,7 @@ const PetData = (props) => {
           setPetImg(response.data);
           axios
             .post("/mypage/adoptList/update/img", {
-              petNum: adopt.petNum,
+              adoptNum: adopt.adoptNum,
               petName: adopt.petName,
               petImg: response.data,
             })
