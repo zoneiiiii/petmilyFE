@@ -15,8 +15,7 @@ import { CustomTheme } from "../../../assets/Theme/CustomTheme";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import LoadingPage from "../../../components/Loading/LoadingPage";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ADMIN, SHOP } from "../../../constants/PageURL";
 
 const AdminProduct = () => {
@@ -60,34 +59,6 @@ const AdminProduct = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
-  // const handleDelete = (boardNum) => {
-  //   //삭제 axios
-  //   //if (window.confirm("정말 삭제하시겠습니까?")) {
-  //   try {
-  //     axios.delete(`/shop/product/${boardNum}`);
-  //     console.log(boardNum);
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  //   // }
-  // };
-
-  // const handleDelete = async () => {
-  //   // 삭제
-  //   const result = window.confirm("정말 삭제하시겠습니까?");
-  //   if (result) {
-  //     try {
-  //       await axios.delete(
-  //         `http://localhost:8080/shop/product/delete/${}`
-  //       );
-  //       alert("상품이 삭제되었습니다.");
-  //       navigate(ADMIN.PRODUCT);
-  //     } catch (error) {
-  //       console.error("Error deleting post: ", error);
-  //     }
-  //   }
-  // };
 
   if (products.length === 0) {
     return (
@@ -205,14 +176,6 @@ const AdminProduct = () => {
                             수정
                           </Button>
                         </Link>
-                        {/* <Button
-                          variant="contained"
-                          color="error"
-                          sx={{ width: "50px", height: "30px", mt: "10px" }}
-                          // onClick={handleDelete(item.boardNum)}
-                        >
-                          삭제
-                        </Button> */}
                       </ButtonStyle>
                     </TableCell>
                   </TableRow>

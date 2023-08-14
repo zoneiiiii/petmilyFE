@@ -168,18 +168,7 @@ function ModifyInfo() {
     };
     reader.readAsDataURL(e.target.files[0]);
   };
-  // const [previewUrl, setPreviewUrl] = useState(null);
-  // const onChange = (event) => {
-  //   const selectedFile = event.target.files[0];
-  //   if (selectedFile) {
-  //     setFile(selectedFile);
-  //     const reader = new FileReader();
-  //     reader.onload = (event) => {
-  //       setPreviewUrl(event.target.result);
-  //     };
-  //     reader.readAsDataURL(selectedFile);
-  //   }
-  // };
+
   //이미지 업로드
   const uploadImage = async (file) => {
     const formData = new FormData();
@@ -196,19 +185,19 @@ function ModifyInfo() {
   };
 
   //엔터 키 이벤트
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      if (e.target.name === "nickname" && passRef.current) {
-        passRef.current.focus();
-      } else if (e.target.name === "pw" && confirmRef.current) {
-        confirmRef.current.focus();
-      } else if (e.target.name === "confirmPw" && emailRef.current) {
-        emailRef.current.focus();
-      } else if (e.target.name === "email" && phoneRef.current) {
-        phoneRef.current.focus();
-      }
-    }
-  };
+  // const handleKeyPress = (e) => {
+  //   if (e.key === "Enter") {
+  //     if (e.target.name === "nickname" && passRef.current) {
+  //       passRef.current.focus();
+  //     } else if (e.target.name === "pw" && confirmRef.current) {
+  //       confirmRef.current.focus();
+  //     } else if (e.target.name === "confirmPw" && emailRef.current) {
+  //       emailRef.current.focus();
+  //     } else if (e.target.name === "email" && phoneRef.current) {
+  //       phoneRef.current.focus();
+  //     }
+  //   }
+  // };
 
   //수정 전 마지막 항목 엔터키 이벤트
   const checkenterSubmit = (e) => {
@@ -379,7 +368,7 @@ function ModifyInfo() {
                   onChange={onChangeNickname}
                   value={nickname || ""}
                   ref={nickRef}
-                  onKeyPress={handleKeyPress}
+                  //  onKeyPress={handleKeyPress}
                 />
                 <FormHelperText sx={{ color: "red" }}>
                   {nicknameError}
@@ -397,7 +386,7 @@ function ModifyInfo() {
                   onChange={onChangePassword}
                   value={password || ""}
                   ref={passRef}
-                  onKeyPress={handleKeyPress}
+                  //  onKeyPress={handleKeyPress}
                 />
                 <FormHelperText sx={{ color: "red" }}>
                   {passwordError}
@@ -414,7 +403,7 @@ function ModifyInfo() {
                   value={confirmPw || ""}
                   onChange={onChangePasswordConfirm}
                   ref={confirmRef}
-                  onKeyPress={handleKeyPress}
+                  //  onKeyPress={handleKeyPress}
                 />
                 <FormHelperText sx={{ color: "red" }}>
                   {confirmPwError}
@@ -430,7 +419,7 @@ function ModifyInfo() {
                   onChange={onChangeEmail}
                   value={email || ""}
                   ref={emailRef}
-                  onKeyPress={handleKeyPress}
+                  // onKeyPress={handleKeyPress}
                 />
                 <FormHelperText sx={{ color: "red" }}>
                   {emailError}
@@ -450,7 +439,7 @@ function ModifyInfo() {
                   }}
                   value={phone || ""}
                   ref={phoneRef}
-                  onKeyPress={checkenterSubmit}
+                  //onKeyPress={checkenterSubmit}
                 />
                 <FormHelperText sx={{ color: "red" }}>
                   {phoneError}

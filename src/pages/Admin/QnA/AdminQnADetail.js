@@ -165,9 +165,9 @@ const AdminQnADetail = () => {
                 </StyledTableCell>
                 <StyledTableCell
                   align="right"
-                  sx={{ fontWeight: "bold", width: "160px" }}
+                  sx={{ fontWeight: "bold", width: "180px" }}
                 >
-                  회원번호 : {qnaData.memberNum}
+                  작성자 : {qnaData.memberId}
                 </StyledTableCell>
                 <StyledTableCell
                   align="right"
@@ -215,15 +215,19 @@ const AdminQnADetail = () => {
               </StyledTableRow>
               <StyledTableRow>
                 <StyledTableCell align="center" colSpan={3}>
-                  <ButtonStyle>
-                    <Button
-                      color="primary"
-                      variant="contained"
-                      onClick={handleOpen}
-                    >
-                      답변 작성
-                    </Button>
-                  </ButtonStyle>
+                  {qnaData.qnaStatus === false ? (
+                    <ButtonStyle>
+                      <Button
+                        color="primary"
+                        variant="contained"
+                        onClick={handleOpen}
+                      >
+                        답변 작성
+                      </Button>
+                    </ButtonStyle>
+                  ) : (
+                    ""
+                  )}
                 </StyledTableCell>
               </StyledTableRow>
             </TableHead>

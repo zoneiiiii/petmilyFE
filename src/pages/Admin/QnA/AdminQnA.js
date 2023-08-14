@@ -5,7 +5,7 @@ import Paper from "@mui/material/Paper";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TablePagination from "@mui/material/TablePagination";
-import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import { Link } from "react-router-dom";
 import { ADMIN } from "../../../constants/PageURL";
@@ -51,6 +51,30 @@ const AdminQnA = () => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const handleDeleteButtonClick = (boardNum) => {
+    if (window.confirm("정말로 삭제하시겠습니까?")) {
+      handleDeleteBoard(boardNum);
+      alert("삭제가 완료되었습니다.");
+    }
+  };
+
+  const handleDeleteBoard = async (boardNum) => {
+    try {
+      await axios.delete(`/board/qna/${boardNum}`);
+      // 삭제 후 목록을 다시 불러옴
+      const response = await axios.get("/board/qna", {
+        params: {
+          page: page,
+          size: rowsPerPage,
+        },
+      });
+      setData(response.data.content);
+      setTotalElements(parseInt(response.data.totalElements));
+    } catch (error) {
+      console.error("삭제 실패:", error);
+    }
   };
 
   if (data.length === 0) {
@@ -117,19 +141,26 @@ const AdminQnA = () => {
                     align="center"
                     sx={{ fontWeight: "bold", width: "160px" }}
                   >
-                    작성날짜
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{ fontWeight: "bold", width: "110px" }}
-                  >
-                    회원번호
+                    작성자
                   </TableCell>
                   <TableCell
                     align="center"
                     sx={{ fontWeight: "bold", width: "160px" }}
                   >
+                    작성날짜
+                  </TableCell>
+
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", width: "160px" }}
+                  >
                     답변상태
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", width: "160px" }}
+                  >
+                    관리
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -137,6 +168,7 @@ const AdminQnA = () => {
                 {data.map((qna) => (
                   <TableRow key={qna.boardNum}>
                     <TableCell align="center">{qna.boardNum}</TableCell>
+
                     <TableCell align="center">
                       <Link
                         to={ADMIN.QNA_DETAIL(qna.boardNum)}
@@ -148,9 +180,9 @@ const AdminQnA = () => {
                         {qna.qnaSubject}
                       </Link>
                     </TableCell>
-
+                    <TableCell align="center">{qna.memberId}</TableCell>
                     <TableCell align="center">{qna.qnaDate}</TableCell>
-                    <TableCell align="center">{qna.memberNum}</TableCell>
+
                     {qna.qnaStatus === false ? (
                       <TableCell
                         align="center"
@@ -172,6 +204,16 @@ const AdminQnA = () => {
                         답변완료
                       </TableCell>
                     )}
+                    <TableCell align="center">
+                      <Button
+                        variant="contained"
+                        color="error"
+                        size="small"
+                        onClick={() => handleDeleteButtonClick(qna.boardNum)}
+                      >
+                        삭제
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

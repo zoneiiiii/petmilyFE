@@ -82,7 +82,7 @@ const OrderComplete = ({ isSuccess, errorMsg, reset }) => {
             </TableBody>
           </Table>
           <div style={{ textAlign: "center" }}>
-            <Link to={SHOP.ORDER} style={{ textDecoration: "none" }}>
+            <Link to={SHOP.CART} style={{ textDecoration: "none" }}>
               <Button className="success" onClick={handleClick}>
                 돌아가기
               </Button>

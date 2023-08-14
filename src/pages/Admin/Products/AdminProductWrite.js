@@ -201,9 +201,7 @@ const AdminProductWrite = () => {
                       />
                       <S.ErrorMsg>
                         <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
-                          {costError
-                            ? "가격을 입력해 주세요. (양수입력)"
-                            : null}
+                          {costError ? "가격을 입력해 주세요." : null}
                         </FormHelperText>
                       </S.ErrorMsg>
                     </S.FormRowWithError>
@@ -227,9 +225,7 @@ const AdminProductWrite = () => {
                       />
                       <S.ErrorMsg>
                         <FormHelperText sx={{ color: "red", fontSize: "15px" }}>
-                          {amountError
-                            ? "수량을 입력해 주세요. (양수입력)"
-                            : null}
+                          {amountError ? "수량을 입력해 주세요." : null}
                         </FormHelperText>
                       </S.ErrorMsg>
                     </S.FormRowWithError>
