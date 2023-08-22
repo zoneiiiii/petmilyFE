@@ -13,16 +13,6 @@ import {
 import * as React from "react";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 const AdoptProcess = () => {
-  // return (
-  //   <Box display={"flex"} justifyContent={"center"} pt={5} pb={20}>
-  //     <img
-  //       alt="AdoptProcess"
-  //       src="/images/About/adoptprocess.png"
-  //       width={"100%"}
-  //     />
-  //   </Box>
-  // );
-  // };
   const steps = [
     {
       label: "유기동물 정보 확인",
@@ -112,21 +102,13 @@ const AdoptProcess = () => {
                     sx={{
                       fontSize: "18px",
                       fontWeight: "bold",
-                      fontFamily: "GmarketSansMedium",
                     }}
                   >
                     {step.label}
                   </Typography>
                 </StepLabel>
                 <StepContent>
-                  <Typography
-                    sx={{
-                      fontSize: "16px",
-                      fontFamily: "GmarketSansMedium",
-                    }}
-                  >
-                    {step.description}
-                  </Typography>
+                  {step.description}
                   {step.img}
                   <Box sx={{ mb: 2 }}>
                     <div>
@@ -155,7 +137,6 @@ const AdoptProcess = () => {
               <Typography
                 sx={{
                   fontSize: "18px",
-                  fontFamily: "GmarketSansMedium",
                 }}
               >
                 모든 절차를 확인하셨습니다. 감사합니다 :)

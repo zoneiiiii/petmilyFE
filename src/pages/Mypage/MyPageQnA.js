@@ -21,7 +21,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.white,
     color: theme.palette.common.black,
-    fontWeight: "bold",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -32,9 +31,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  // "td,th": {
-  //   border: "1px solid lightgray",
-  // },
 }));
 
 const MyPageQnA = () => {
@@ -48,7 +44,6 @@ const MyPageQnA = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     let urlPage = Number(params.get("page"));
-
     if (urlPage < 1 || isNaN(urlPage)) {
       urlPage = 1;
       params.set("page", urlPage);
@@ -60,7 +55,7 @@ const MyPageQnA = () => {
 
     if (userNum) {
       axios
-        .get(`http://localhost:8080/board/qna/list/${userNum}?${requestParams}`)
+        .get(`/board/qna/list/${userNum}?${requestParams}`)
         .then((response) => {
           const totalPages = response.data.totalPages;
           if (urlPage > totalPages) {
@@ -78,6 +73,7 @@ const MyPageQnA = () => {
       window.scrollTo(0, 0);
     }
   }, [location, navigate, location.search, userNum]);
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
 
@@ -183,18 +179,11 @@ const MyPageQnA = () => {
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {data.map((qna, index) => (
+              {data.map((qna) => (
                 <StyledTableRow key={qna.boardNum}>
                   <StyledTableCell align="center" sx={{ minWidth: 10 }}>
                     {qna.boardNum}
                   </StyledTableCell>
-                  {/* {page === pageCount ?
-                    (<StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                      {(pageCount * data.length) - ((page - 1) * data.length + index)}
-                    </StyledTableCell>)
-                    : (<StyledTableCell align="center" sx={{ minWidth: 10 }}>
-                      {(pageCount * data.length) - ((page) * data.length + index) + 4}
-                    </StyledTableCell>)} */}
                   <StyledTableCell align="center" sx={{ minWidth: 300 }}>
                     <Link
                       to={MYPAGE.QNA_DETAIL(qna.boardNum)}

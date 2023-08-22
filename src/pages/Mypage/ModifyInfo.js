@@ -53,11 +53,9 @@ function ModifyInfo() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8080/memberInfo/${memberNum}`
-        );
+        const response = await axios.get(`/memberInfo/${memberNum}`);
         const data = response.data;
-        console.log(response);
+        //console.log(response);
         setNickname(data.memberNickname);
         setEmail(data.memberEmail);
         setPhone(data.memberTel);
@@ -71,8 +69,7 @@ function ModifyInfo() {
       }
     };
     fetchPost();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [memberNum]);
 
   // 닉네임
   const onChangeNickname = (e) => {
@@ -184,28 +181,6 @@ function ModifyInfo() {
     }
   };
 
-  //엔터 키 이벤트
-  // const handleKeyPress = (e) => {
-  //   if (e.key === "Enter") {
-  //     if (e.target.name === "nickname" && passRef.current) {
-  //       passRef.current.focus();
-  //     } else if (e.target.name === "pw" && confirmRef.current) {
-  //       confirmRef.current.focus();
-  //     } else if (e.target.name === "confirmPw" && emailRef.current) {
-  //       emailRef.current.focus();
-  //     } else if (e.target.name === "email" && phoneRef.current) {
-  //       phoneRef.current.focus();
-  //     }
-  //   }
-  // };
-
-  //수정 전 마지막 항목 엔터키 이벤트
-  const checkenterSubmit = (e) => {
-    if (e.key === "Enter") {
-      submitCheck();
-    }
-  };
-
   //submitCheck
   const submitCheck = () => {
     if (!nickname) {
@@ -237,7 +212,7 @@ function ModifyInfo() {
         memberTel: phone,
       });
       const { data } = response;
-      console.log(data);
+      //console.log(data);
       if (data === 1) {
         setNicknameError("이미 사용중인 닉네임입니다.");
         nickRef.current = "";
@@ -257,16 +232,12 @@ function ModifyInfo() {
         setNickAble(true);
         setEmailAble(true);
         setPhoneAble(true);
-        setEmailError("");
-        setPhoneError("");
-        setNicknameError("");
       }
     } catch (err) {
       console.log("Error >>", err);
     }
     //이미지 업로드
     let imageUrl = Image;
-    //"https://via.placeholder.com/150";
     if (file) {
       const uploadedUrl = await uploadImage(file);
       if (uploadedUrl) {
@@ -274,7 +245,6 @@ function ModifyInfo() {
       }
     }
     //유효성검사 통과 시 수정 폼 submit
-    console.log(nickAble, pwAble, confirmAble, emailAble, phoneAble, checkAble);
     if (
       !nickAble ||
       !pwAble ||
@@ -297,7 +267,7 @@ function ModifyInfo() {
 
       try {
         const res = await axios.put(`/update/${memberNum}`, memberData);
-        console.log(res.data);
+        //console.log(res.data);
         if (res.data) {
           alert("수정 성공");
           document.location.href = "/mypage";
@@ -307,8 +277,6 @@ function ModifyInfo() {
       } catch (err) {
         console.log("Error >>", err);
       }
-
-      console.log(`submit->${nickname},${password},${email},${phone},${Image}`);
     }
   };
 
@@ -368,7 +336,6 @@ function ModifyInfo() {
                   onChange={onChangeNickname}
                   value={nickname || ""}
                   ref={nickRef}
-                  //  onKeyPress={handleKeyPress}
                 />
                 <FormHelperText sx={{ color: "red" }}>
                   {nicknameError}
@@ -386,7 +353,6 @@ function ModifyInfo() {
                   onChange={onChangePassword}
                   value={password || ""}
                   ref={passRef}
-                  //  onKeyPress={handleKeyPress}
                 />
                 <FormHelperText sx={{ color: "red" }}>
                   {passwordError}
@@ -403,7 +369,6 @@ function ModifyInfo() {
                   value={confirmPw || ""}
                   onChange={onChangePasswordConfirm}
                   ref={confirmRef}
-                  //  onKeyPress={handleKeyPress}
                 />
                 <FormHelperText sx={{ color: "red" }}>
                   {confirmPwError}
@@ -419,7 +384,6 @@ function ModifyInfo() {
                   onChange={onChangeEmail}
                   value={email || ""}
                   ref={emailRef}
-                  // onKeyPress={handleKeyPress}
                 />
                 <FormHelperText sx={{ color: "red" }}>
                   {emailError}
@@ -439,7 +403,6 @@ function ModifyInfo() {
                   }}
                   value={phone || ""}
                   ref={phoneRef}
-                  //onKeyPress={checkenterSubmit}
                 />
                 <FormHelperText sx={{ color: "red" }}>
                   {phoneError}

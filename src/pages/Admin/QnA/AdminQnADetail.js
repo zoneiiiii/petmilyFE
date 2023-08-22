@@ -136,12 +136,10 @@ const AdminQnADetail = () => {
         qnaStatus: 1,
         adminAnswer: content,
       });
-      console.log(qnaData.boardNum);
       setSubmitOpen(true);
       setTimeout(() => {
         handleReset();
       }, 1000);
-      //navigate(ADMIN.QNA);
     } catch (error) {
       console.error("데이터 전송 실패 : ", error);
     }

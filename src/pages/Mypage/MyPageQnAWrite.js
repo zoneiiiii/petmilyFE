@@ -37,7 +37,6 @@ const MyPageQnAWrite = () => {
   const [subject, setSubject] = useState("");
   const [subjectError, setSubjectError] = useState(false);
   const [contentError, setContentError] = useState(false);
-  // const [data, setData] = useState("");
   const [file, setFile] = useState("");
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
@@ -75,9 +74,6 @@ const MyPageQnAWrite = () => {
     }
   };
 
-  // const location = useLocation();
-  // const memberNum = location.state.num;
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const isError = validate();
@@ -104,7 +100,6 @@ const MyPageQnAWrite = () => {
       qnaImg: imageUrl,
       qnaDate: isoCurrentDate,
       qnaStatus: false,
-      // memberNum: userNum,
     };
 
     try {
@@ -141,7 +136,6 @@ const MyPageQnAWrite = () => {
         >
           <TableBody>
             <TableRow>
-              {/* <TableCell sx={{ fontWeight: "bold" }}>제목</TableCell> */}
               <TableCell>
                 <TextField
                   type="text"
@@ -161,7 +155,6 @@ const MyPageQnAWrite = () => {
               </TableCell>
             </TableRow>
             <TableRow>
-              {/* <TableCell sx={{ fontWeight: "bold" }}>내용</TableCell> */}
               <TableCell sx={{ width: "828px" }}>
                 <EditorWrapper>
                   <CKEditor

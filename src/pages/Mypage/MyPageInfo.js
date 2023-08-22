@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import styled from "styled-components";
 import { CustomTheme } from "../../assets/Theme/CustomTheme";
 import { MYPAGE } from "../../constants/PageURL";
 import axios from "axios";
@@ -32,7 +31,7 @@ function MyInfo() {
     if (value === "male") return "남자";
     if (value === "female") return "여자";
   };
-  // const columnWidth = 100;
+
   return (
     <ThemeProvider theme={CustomTheme}>
       <Typography
@@ -82,10 +81,6 @@ function MyInfo() {
                 <TableCell sx={thSx}>ID</TableCell>
                 <TableCell sx={tdSx}>{data && data.memberId}</TableCell>
               </TableRow>
-              {/* <TableRow>
-                <TableCell sx={thSx}>PW</TableCell>
-                <TableCell sx={tdSx}>{data && "*".repeat(data.memberPw)}</TableCell>
-              </TableRow> */}
               <TableRow>
                 <TableCell sx={thSx}>이름</TableCell>
                 <TableCell sx={tdSx}>{data && data.memberName}</TableCell>
