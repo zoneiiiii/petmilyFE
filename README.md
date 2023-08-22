@@ -1,2 +1,4 @@
 # PETMILY
 팀프로젝트 - 유기동물 입양 중개 플랫폼 펫밀리입니다🐶🐱
+![Fishbone Brainstorming의 사본](https://github.com/zoneiiiii/petmilyFE/assets/128220837/bfc4088f-1ef3-40f2-a63d-71da65548420)
+https://youtu.be/GhTMTFGhz8Y
